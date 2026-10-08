@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#140f2e">
+<title>Rift Tamers — Monster Summoning RPG</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--card:#231d4a;--txt:#efeaff;--mut:#a59fd0;--gold:#ffd166;--acc:#7c5cff}
+html,body{height:100%;color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;background:#140f2e}
+body{overflow:hidden;background:radial-gradient(circle at 20% 0%,#3b2a85 0%,#1b1340 45%,#0d0922 100%)}
+button{font-family:inherit}
+#app{max-width:980px;margin:0 auto;height:100%;display:flex;flex-direction:column}
+#topbar{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(10,6,30,.75);border-bottom:1px solid #3a3070;flex-wrap:nowrap}
+.brand{font-weight:900;font-size:17px;cursor:pointer;white-space:nowrap;background:linear-gradient(90deg,#ffd166,#ff7ad9,#7cc6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ver{font-size:10px;font-weight:700;padding:1px 5px;border-radius:6px;background:#3a2f80;-webkit-text-fill-color:#d8d0ff;margin-left:4px;vertical-align:middle}
+#curbar{display:flex;gap:6px;margin-left:auto;flex-wrap:nowrap;overflow-x:auto}
+.cur{background:#1d1745;border:1px solid #3d3380;border-radius:20px;padding:3px 8px;font-size:12px;font-weight:700;white-space:nowrap}
+.icon-btn{background:#2e2660;border:1px solid #4a3f8f;color:#fff;border-radius:10px;padding:5px 8px;cursor:pointer;font-size:16px}
+#view{flex:1;overflow-y:auto;padding:12px 12px 24px;-webkit-overflow-scrolling:touch}
+#tabs{display:flex;background:rgba(10,6,30,.95);border-top:1px solid #3a3070;padding-bottom:env(safe-area-inset-bottom)}
+#tabs button{flex:1;padding:6px 0 7px;background:none;border:0;color:var(--mut);font-size:10.5px;display:flex;flex-direction:column;align-items:center;gap:1px;position:relative;cursor:pointer}
+#tabs button b{font-size:21px;transition:transform .15s}
+#tabs button.on{color:#fff}#tabs button.on b{transform:scale(1.18)}
+#tabs button.on::after{content:"";position:absolute;top:0;left:25%;right:25%;height:3px;border-radius:3px;background:linear-gradient(90deg,#ffd166,#ff7ad9)}
+.dot{position:absolute;top:4px;right:calc(50% - 18px);width:9px;height:9px;border-radius:50%;background:#ff4d6d;box-shadow:0 0 6px #ff4d6d}
+.btn{background:linear-gradient(180deg,#8a6bff,#5b3fd6);border:0;color:#fff;font-weight:800;padding:9px 14px;border-radius:10px;cursor:pointer;box-shadow:0 3px 0 #3a2696;font-size:14px;transition:transform .05s}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #3a2696}
+.btn.gold{background:linear-gradient(180deg,#ffe08a,#f29e1f);color:#3a2400;box-shadow:0 3px 0 #a3620b}
+.btn.green{background:linear-gradient(180deg,#5ee09a,#1f9d55);box-shadow:0 3px 0 #136b3a}
+.btn.red{background:linear-gradient(180deg,#ff7a8a,#c9304a);box-shadow:0 3px 0 #82192b}
+.btn.ghost{background:#2e2660;box-shadow:none;border:1px solid #4a3f8f}
+.btn.sm{padding:5px 9px;font-size:12px}
+.btn:disabled{opacity:.45;filter:grayscale(.6);cursor:not-allowed}
+.card{background:linear-gradient(180deg,#2a2259,#211a48);border:1px solid #3d3380;border-radius:14px;padding:12px;margin-bottom:12px}
+.sec{font-size:15px;margin:6px 0 8px;color:#e3dbff;display:flex;align-items:center;gap:6px}
+.mut{color:var(--mut);font-size:12.5px}
+.row-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.row-btns.c{justify-content:center}
+.subtabs{display:flex;gap:6px;margin-bottom:10px}
+.subtabs button{flex:1;padding:8px;border-radius:10px;border:1px solid #4a3f8f;background:#211a48;color:var(--mut);font-weight:700;cursor:pointer}
+.subtabs button.on{background:#4b3aa8;color:#fff}
+.stars{color:var(--gold);font-size:11px;letter-spacing:-1px;text-shadow:0 0 3px #000,0 1px 0 #000;white-space:nowrap}
+.av{border-radius:50%;display:grid;place-items:center;position:relative;line-height:1;user-select:none}
+.el-fire .av,.av.el-fire{background:radial-gradient(circle at 35% 30%,#ffc29e,#e2491f 65%,#7a1a0a)}
+.el-water .av,.av.el-water{background:radial-gradient(circle at 35% 30%,#bfe6ff,#2b84e0 65%,#0f2f6e)}
+.el-wind .av,.av.el-wind{background:radial-gradient(circle at 35% 30%,#d3ffd9,#2fb36b 65%,#0e4a2a)}
+.el-light .av,.av.el-light{background:radial-gradient(circle at 35% 30%,#fffbe0,#f0c94a 65%,#8a6a10)}
+.el-dark .av,.av.el-dark{background:radial-gradient(circle at 35% 30%,#e3c9ff,#7a3fd1 65%,#2a0e55)}
+.av.unknown{background:radial-gradient(circle,#3a3366,#1a1535);filter:grayscale(1)}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:8px}
+.mc{background:#2a2259;border:2px solid var(--rc,#555);border-radius:12px;padding:6px 3px 5px;text-align:center;position:relative;cursor:pointer;transition:transform .1s}
+.mc:hover{transform:translateY(-2px)}
+.mc .av{width:52px;height:52px;font-size:30px;margin:0 auto 2px}
+.mc .nm{font-size:10.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc .lv{font-size:10.5px;color:#cfc8ff}
+.mc.sel{outline:3px solid #7cff9e;box-shadow:0 0 12px #7cff9e}
+.mc .badge{position:absolute;top:2px;right:4px;font-size:12px}
+.mc .badge.l{left:4px;right:auto}
+.elb{position:absolute;bottom:-3px;right:-3px;font-size:13px;background:#120d2c;border-radius:50%;width:20px;height:20px;display:grid;place-items:center;border:1px solid #4a3f8f}
+.r1{--rc:#8a9096}.r2{--rc:#5fc287}.r3{--rc:#4cb8e0}.r4{--rc:#c77dff}.r5{--rc:#ffd166}.r6{--rc:#ff7ad9}
+.r5.mc,.r6.mc{box-shadow:0 0 10px #ffd16655}
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(5,2,20,.78);display:flex;align-items:center;justify-content:center;z-index:70;padding:12px;animation:fade .2s}
+.modal{background:linear-gradient(180deg,#2c2463,#1c1641);border:1px solid #5a4bb0;border-radius:16px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;padding:16px;position:relative;animation:pop .25s;box-shadow:0 10px 50px #000a}
+.modal h3{margin-bottom:8px;padding-right:30px}
+.modal .x{position:absolute;top:8px;right:10px;background:none;border:0;color:#fff;font-size:22px;cursor:pointer}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+#toast-root{position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
+.toast{background:#120d2c;border:1px solid #7c5cff;padding:8px 14px;border-radius:20px;font-size:13px;font-weight:700;animation:toast 2.6s forwards;box-shadow:0 4px 20px #000a;text-align:center;max-width:90vw}
+@keyframes toast{0%{opacity:0;transform:translateY(-10px)}10%{opacity:1;transform:none}85%{opacity:1}100%{opacity:0}}
+/* home */
+.hero{border-radius:18px;padding:22px 16px;text-align:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#5b2bd6,#c23d9a 55%,#ff9a3d);margin-bottom:12px;box-shadow:0 8px 30px #0008}
+.hero h1{font-size:34px;font-weight:900;letter-spacing:1px;text-shadow:0 3px 0 #2a0f5e,0 0 20px #fff6}
+.hero p{font-weight:700;opacity:.9}
+.parade{font-size:30px;white-space:nowrap;margin-top:10px;animation:bob 2.4s ease-in-out infinite}
+.parade span{display:inline-block;margin:0 4px;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tip{background:#1a1440;border-left:4px solid #ffd166;padding:10px;border-radius:8px;font-size:13px}
+.prog{height:8px;background:#0007;border-radius:5px;overflow:hidden}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,#7c5cff,#ff7ad9)}
+/* summon */
+.scard{border-radius:14px;padding:12px;margin-bottom:12px;position:relative;overflow:hidden;border:1px solid #ffffff22}
+.scard h3{font-size:17px}
+.scard .big{font-size:42px;float:right;filter:drop-shadow(0 0 8px #fff8)}
+.rates{width:100%;font-size:12px;border-collapse:collapse;margin-top:6px}
+.rates td{padding:3px 6px;border-bottom:1px solid #ffffff15}
+details summary{cursor:pointer;font-size:12.5px;font-weight:700;margin-top:6px;color:#e8e2ff}
+.sum-ov{position:fixed;inset:0;z-index:90;background:radial-gradient(circle,#2a1a5e,#05020f 75%);display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden}
+.sum-ov canvas{position:absolute;inset:0;width:100%;height:100%}
+.mcircle{position:absolute;width:280px;height:280px;border-radius:50%;border:3px solid #9b8cff;box-shadow:0 0 40px #7c5cff inset,0 0 30px #7c5cff;animation:spin 3s linear infinite;background:repeating-conic-gradient(from 0deg,#7c5cff30 0 10deg,transparent 10deg 20deg)}
+.mcircle.b{width:190px;height:190px;animation-duration:2s;animation-direction:reverse;border-style:dashed}
+.orb{position:absolute;width:46px;height:46px;border-radius:50%;background:radial-gradient(circle,#fff 0%,var(--oc,#9b8cff) 55%,transparent 72%);animation:orb 1.7s ease-in forwards}
+@keyframes orb{0%{transform:scale(.3)}75%{transform:scale(2.4)}100%{transform:scale(9);opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sflash{position:absolute;inset:0;background:var(--oc);animation:sflash .7s forwards;pointer-events:none}
+@keyframes sflash{0%{opacity:.95}100%{opacity:0}}
+.rays{position:absolute;width:900px;height:900px;border-radius:50%;background:repeating-conic-gradient(var(--oc) 0 6deg,transparent 6deg 18deg);opacity:.22;animation:spin 10s linear infinite;pointer-events:none}
+.reveal{position:relative;z-index:2;text-align:center;animation:flipIn .6s cubic-bezier(.2,1.4,.4,1)}
+.reveal .av{width:150px;height:150px;font-size:92px;margin:0 auto 10px;box-shadow:0 0 50px var(--oc)}
+.reveal h2{font-size:28px;text-shadow:0 2px 0 #000}
+.reveal .stars{font-size:30px;letter-spacing:2px}
+.reveal .stars span{display:inline-block;animation:starIn .35s backwards}
+@keyframes starIn{from{transform:scale(3);opacity:0}to{transform:none;opacity:1}}
+@keyframes flipIn{0%{transform:rotateY(90deg) scale(.5);opacity:0}100%{transform:none;opacity:1}}
+.newtag{display:inline-block;background:#ff4d6d;color:#fff;font-weight:900;font-size:12px;padding:2px 8px;border-radius:8px;margin-left:6px;animation:bob 1s infinite}
+.rtitle{font-size:34px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#fff3b0,#ffd166,#ff7ad9,#7cc6ff,#fff3b0);background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 1.5s linear infinite;margin-bottom:8px}
+@keyframes shine{to{background-position:200% 0}}
+.multi{position:relative;z-index:2;display:grid;grid-template-columns:repeat(5,minmax(0,110px));gap:10px;padding:10px;max-width:640px}
+.multi .mc{animation:flipIn .5s backwards;background:#1d1745ee}
+.sum-btns{position:relative;z-index:3;margin-top:18px;display:flex;gap:10px}
+.skip{position:absolute;top:14px;right:14px;z-index:5}
+.shake{animation:shake .45s}
+@keyframes shake{0%,100%{transform:none}20%{transform:translate(-6px,3px)}40%{transform:translate(6px,-3px)}60%{transform:translate(-4px,2px)}80%{transform:translate(4px,-1px)}}
+/* monster detail */
+.mhead{display:flex;gap:14px;align-items:center}
+.mhead .av{width:92px;height:92px;font-size:56px;flex:none}
+.stat-t{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}
+.stat-t td{padding:4px 6px;border-bottom:1px solid #ffffff12}
+.stat-t td:last-child{text-align:right}
+.plus{color:#7cff9e;font-size:11.5px}
+.skill{background:#1a1440;border-radius:10px;padding:8px;margin-bottom:6px;font-size:12.5px}
+.skill b{font-size:13.5px}
+.cdtag{float:right;font-size:11px;background:#3a2f80;padding:1px 6px;border-radius:6px}
+.sockets{display:flex;gap:8px;margin:6px 0}
+.sock{flex:1;min-height:62px;border:2px dashed #5a4bb0;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:11.5px;padding:4px;text-align:center;background:#1a1440}
+.sock.full{border-style:solid;border-color:var(--gc,#7c5cff)}
+.sock .gi{font-size:22px}
+.xpbar{height:10px;background:#0008;border-radius:6px;overflow:hidden;margin:4px 0}
+.xpbar i{display:block;height:100%;background:linear-gradient(90deg,#5ec8ff,#7cff9e)}
+.desc{font-style:italic;color:#d7cfff;font-size:13px;background:#ffffff0a;padding:8px;border-radius:8px;margin:8px 0}
+.glist{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.gcard{background:#1a1440;border:2px solid var(--gc);border-radius:12px;padding:8px;cursor:pointer;font-size:12px;position:relative}
+.gcard .gi{font-size:22px;float:left;margin-right:6px}
+/* team */
+.tslots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.tslot{min-height:120px;border:2px dashed #5a4bb0;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#1a1440;position:relative;padding:6px 2px;text-align:center}
+.tslot.lead{border-color:#ffd166;background:linear-gradient(180deg,#3a2f20,#1a1440)}
+.tslot .av{width:56px;height:56px;font-size:32px}
+.tslot .crown{position:absolute;top:-12px;font-size:20px}
+/* adventure */
+.area{border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer;color:#fff;position:relative;overflow:hidden;box-shadow:0 4px 18px #0007;border:1px solid #ffffff30}
+.area h3{font-size:19px;text-shadow:0 2px 0 #0008}
+.area .bossi{position:absolute;right:12px;top:8px;font-size:52px;opacity:.9;filter:drop-shadow(0 0 10px #000)}
+.area.locked{filter:grayscale(1) brightness(.55);cursor:not-allowed}
+.path{position:relative;display:flex;flex-direction:column;align-items:center;gap:18px;padding:18px 0}
+.path::before{content:"";position:absolute;top:30px;bottom:30px;left:50%;border-left:4px dashed #ffffff40}
+.node{position:relative;width:78px;height:78px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;cursor:pointer;border:3px solid #fff8;box-shadow:0 4px 14px #0009;z-index:1;background:radial-gradient(circle at 35% 30%,#9b8cff,#4b3aa8)}
+.node.cleared{background:radial-gradient(circle at 35% 30%,#7cff9e,#1f9d55)}
+.node.boss{width:96px;height:96px;background:radial-gradient(circle at 35% 30%,#ff9aa8,#b0203a);font-size:34px}
+.node.locked{filter:grayscale(1) brightness(.5);cursor:not-allowed}
+.node .stars{font-size:13px}
+.node.next{animation:pulseN 1.2s infinite}
+@keyframes pulseN{0%,100%{box-shadow:0 0 0 0 #ffd166aa}50%{box-shadow:0 0 0 12px #ffd16600}}
+.wave-prev{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:4px 0}
+.wave-prev .av{width:38px;height:38px;font-size:22px}
+.wave-prev .av.bs{width:52px;height:52px;font-size:32px;box-shadow:0 0 12px #ff4d6d}
+/* events */
+.evcard{border-radius:14px;padding:14px;margin-bottom:12px;position:relative;overflow:hidden;border:1px solid #ffffff30}
+.evcard.closed{filter:grayscale(.85) brightness(.6)}
+.evcard .big{position:absolute;right:12px;top:10px;font-size:46px}
+.tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:10px;background:#0006;margin:2px 4px 2px 0}
+.tag.live{background:#ff4d6d;animation:bob 1.2s infinite}
+/* quests */
+.q{display:flex;align-items:center;gap:10px;background:#1a1440;border-radius:12px;padding:10px;margin-bottom:8px}
+.q .qi{font-size:24px}
+.q .qb{flex:1;min-width:0}
+.q .qb b{font-size:13.5px}
+.q.done{opacity:.55}
+.login-row{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.lday{background:#1a1440;border:2px solid #3d3380;border-radius:10px;padding:6px 2px;text-align:center;font-size:10.5px}
+.lday .li{font-size:20px}
+.lday.got{opacity:.45}
+.lday.today{border-color:#ffd166;box-shadow:0 0 10px #ffd16688}
+/* battle */
+#battle{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;overflow:hidden}
+#battle .bgfx{position:absolute;inset:0;z-index:-1}
+.b-top{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#0006;gap:8px}
+.b-top .wave{font-weight:900;font-size:14px;text-align:center;flex:1}
+.b-field{flex:1;display:flex;flex-direction:column;justify-content:space-around;padding:6px;max-width:900px;margin:0 auto;width:100%;position:relative}
+.brow{display:flex;justify-content:center;gap:8px}
+.unit{width:min(23.5%,160px);background:rgba(15,10,40,.78);border:2px solid #4a3f8f;border-radius:12px;padding:6px 5px 5px;text-align:center;position:relative;transition:transform .2s,opacity .5s,filter .5s;cursor:pointer}
+.unit .av{width:56px;height:56px;font-size:32px;margin:0 auto}
+.unit.boss{width:min(30%,190px);border-color:#ff4d6d}
+.unit.boss .av{width:78px;height:78px;font-size:48px}
+.unit .un{font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+.unit.active{border-color:#ffd166;box-shadow:0 0 18px #ffd166}
+.unit.tgt{border-color:#7cff9e;box-shadow:0 0 14px #7cff9e;animation:tg 1s infinite}
+@keyframes tg{50%{box-shadow:0 0 4px #7cff9e}}
+.unit.dead{opacity:.28;filter:grayscale(1)}
+.unit.hit .av{animation:shake .3s}
+.ally .unit.lunge{transform:translateY(-22px) scale(1.06)}
+.enemy .unit.lunge{transform:translateY(22px) scale(1.06)}
+.bar{height:8px;background:#000b;border-radius:4px;overflow:hidden;margin-top:3px;position:relative}
+.bar i{display:block;height:100%;transition:width .3s}
+.bar.hp i{background:linear-gradient(90deg,#2fcf74,#a6ff5c)}
+.enemy .bar.hp i{background:linear-gradient(90deg,#ff4d6d,#ff9a6b)}
+.bar.atb{height:4px}.bar.atb i{background:#5ec8ff;transition:width .15s}
+.hpt{font-size:9.5px;color:#ddd}
+.ufx{min-height:16px;font-size:12px;line-height:16px;margin-top:2px}
+.ufx span{position:relative}
+.ufx sub{font-size:8px;position:absolute;right:-3px;bottom:-4px;color:#fff;font-weight:900}
+.uadv{position:absolute;top:-8px;left:-6px;font-size:10px;font-weight:900;padding:1px 5px;border-radius:6px;z-index:3}
+.adv-up{background:#1f9d55}.adv-dn{background:#b02a37}
+.float{position:absolute;left:50%;top:18%;font-weight:900;font-size:19px;pointer-events:none;text-shadow:0 2px 0 #000,0 0 6px #000;animation:floatUp 1.15s backwards;white-space:nowrap;z-index:6;opacity:0}
+.float.crit{color:#ffd166;font-size:25px}.float.heal{color:#7cff9e}.float.glance{color:#bbb;font-size:15px}.float.info{color:#9fd8ff;font-size:12px}.float.dot{color:#d68cff;font-size:15px}.float.advt{color:#7cff9e;font-size:12px}
+@keyframes floatUp{0%{opacity:0;transform:translate(-50%,10px) scale(.6)}15%{opacity:1;transform:translate(-50%,0) scale(1.15)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-55px) scale(1)}}
+.b-msg{text-align:center;min-height:26px;font-weight:800;font-size:14px;text-shadow:0 2px 0 #000}
+.b-banner{position:absolute;left:0;right:0;top:42%;text-align:center;font-size:34px;font-weight:900;z-index:8;text-shadow:0 3px 0 #000,0 0 20px #7c5cff;animation:bannerIn 1.1s forwards;pointer-events:none}
+@keyframes bannerIn{0%{opacity:0;transform:scale(2)}20%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0}}
+.b-flash{position:absolute;inset:0;pointer-events:none;animation:sflash .5s forwards;z-index:7}
+.b-bottom{background:#0009;padding:8px 8px 10px;border-top:1px solid #4a3f8f}
+.b-skills{display:flex;gap:8px;justify-content:center}
+.sk{flex:1;max-width:200px;background:#2a2259;border:2px solid #4a3f8f;border-radius:12px;padding:7px;color:#fff;text-align:left;cursor:pointer;position:relative;min-height:54px}
+.sk .si{font-size:20px;float:left;margin-right:5px}
+.sk .sn{font-size:12px;font-weight:800;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sk small{font-size:10px;color:var(--mut)}
+.sk.on{border-color:#ffd166;box-shadow:0 0 10px #ffd16688}
+.sk .cdn{position:absolute;inset:0;display:grid;place-items:center;font-size:20px;font-weight:900;background:#000a;border-radius:10px}
+.b-desc{text-align:center;font-size:12px;color:#ddd;min-height:32px;margin-top:6px}
+.b-over{position:absolute;inset:0;z-index:20;background:rgba(5,2,20,.82);display:flex;align-items:center;justify-content:center;padding:12px;animation:fade .3s}
+.b-over .modal{max-width:480px;text-align:center}
+.vtitle{font-size:40px;font-weight:900;letter-spacing:2px}
+.vstars{font-size:38px;color:#ffd166;letter-spacing:4px}
+.vstars .no{color:#444}
+.lvlrow{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:8px 0}
+.lvlrow>div{background:#1a1440;border-radius:10px;padding:6px 8px;font-size:11.5px;min-width:72px}
+.lvlrow .av{width:40px;height:40px;font-size:24px;margin:0 auto 3px}
+.up{color:#7cff9e;font-weight:900}
+.pnote h4{margin:10px 0 4px;color:#ffd166}
+.pnote li{margin-left:18px;font-size:13px;margin-bottom:3px}
+.cnt{font-variant-numeric:tabular-nums}
+@media (max-width:520px){
+ .brand{font-size:14px}.cur{font-size:11px;padding:2px 6px}
+ .hero h1{font-size:27px}.parade{font-size:22px}.parade span{margin:0 1px}
+ .unit .av{width:44px;height:44px;font-size:26px}
+ .unit.boss .av{width:60px;height:60px;font-size:38px}
+ .unit .un{font-size:9.5px}
+ .multi{grid-template-columns:repeat(5,1fr);gap:5px}
+ .multi .mc .av{width:40px;height:40px;font-size:23px}
+ .sk .si{display:none}
+ .tslot .av{width:44px;height:44px;font-size:26px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand" onclick="openPatch()" title="What's New">🌀 Rift Tamers<span class="ver" id="verTag">v1.0.0</span></div>
+    <div id="curbar"></div>
+    <button class="icon-btn" onclick="openSettings()" title="Settings" id="btnSettings">⚙️</button>
+  </header>
+  <main id="view"></main>
+  <nav id="tabs"></nav>
+</div>
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+<script>
+'use strict';
+/* =====================================================================
+   RIFT TAMERS — an original monster-summoning, turn-based RPG
+   All monsters, names, and art (emoji + CSS) are original to this game.
+   ===================================================================== */
+const VERSION='1.0.0';
+const SAVE_KEY='riftTamers.save.v1';
+
+/* ---------- utils ---------- */
+const $=s=>document.querySelector(s);
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const ri=(a,b)=>Math.floor(rnd(a,b+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmt=n=>{n=Math.floor(n);return n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e5?Math.round(n/1e3)+'K':n.toLocaleString('en-US');};
+function seeded(seed){let s=Math.abs(Math.floor(seed))%2147483647;if(s<=0)s+=2147483646;return()=>(s=s*16807%2147483647)/2147483647;}
+const todayStr=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();};
+const dayNum=()=>{const d=new Date();return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/86400000);};
+const nextMidnight=()=>{const m=new Date();m.setHours(24,0,0,0);return m.getTime();};
+function fmtDur(ms){ms=Math.max(0,ms);const d=Math.floor(ms/86400000),h=Math.floor(ms%86400000/3600000),m=Math.floor(ms%3600000/60000),s=Math.floor(ms%60000/1000);return d?`${d}d ${h}h ${m}m`:h?`${h}h ${m}m ${s}s`:`${m}m ${s}s`;}
+const starsHtml=(n,cls='')=>`<span class="stars ${cls}">${'★'.repeat(n)}</span>`;
+
+/* ---------- elements ---------- */
+const ELEM={fire:{n:'Fire',i:'🔥',c:'#ff6b3d'},water:{n:'Water',i:'💧',c:'#3da5ff'},wind:{n:'Wind',i:'🍃',c:'#3fd17f'},light:{n:'Light',i:'✨',c:'#ffe27a'},dark:{n:'Dark',i:'🌑',c:'#a66bff'}};
+const ADV={fire:'wind',wind:'water',water:'fire',light:'dark',dark:'light'};
+function elemMod(a,d){if(ADV[a]===d)return 1;if(ADV[d]===a)return -1;return 0;}
+const RCOL=['#888','#9aa0a6','#6fcf97','#56ccf2','#c77dff','#ffd166','#ff7ad9'];
+const RNAME=['','Common','Uncommon','Rare','Epic','Legendary','Mythic'];
+
+/* ---------- status effects ---------- */
+const FX={
+ atkUp:{n:'ATK Up',i:'⚔️',buff:1,d:'+50% ATK'},
+ defUp:{n:'DEF Up',i:'🛡️',buff:1,d:'+70% DEF'},
+ spdUp:{n:'SPD Up',i:'💨',buff:1,d:'+30% SPD'},
+ regen:{n:'Regen',i:'💚',buff:1,d:'Heals 12% HP each turn'},
+ atkDown:{n:'ATK Break',i:'🔻',d:'-50% ATK'},
+ defBreak:{n:'DEF Break',i:'💔',d:'-70% DEF'},
+ slow:{n:'Slow',i:'🐌',d:'-30% SPD'},
+ stun:{n:'Stun',i:'💫',d:'Skips its next turn'},
+ dot:{n:'Burn',i:'☠️',d:'Loses 5% max HP per turn (stacks up to 5)'},
+};
+
+/* ---------- monsters ---------- */
+const MD={};
+function M(id,n,e,el,rar,st,lead,desc,skills,x){MD[id]=Object.assign({id,n,e,el,rar,hp:st[0],atk:st[1],def:st[2],spd:st[3],cr:st[4]||15,cdm:st[5]||50,lead,desc,skills},x||{});}
+function SK(n,i,d,o){return Object.assign({n,i,d,cd:0,t:'e',m:1,h:1,fx:[],self:[]},o||{});}
+const LD=(s,v)=>({s,v});
+// t: e=one enemy, ae=all enemies, a=one ally, aa=all allies, s=self
+
+// FIRE
+M('flickerwisp','Flickerwisp','🔥','fire',1,[560,64,36,104],null,"A tiny flame spirit with a big ego. Was once called 'cute' and has never recovered.",[
+ SK('Spark Poke','✨','Pokes an enemy for 1.0x damage.'),
+ SK('Hot Take','🌶️','Delivers a spicy opinion (1.6x). 50% chance of ATK Break for 2 turns.',{cd:3,m:1.6,fx:[['atkDown',2,50]]})]);
+M('magmander','Magmander','🦎','fire',2,[660,70,44,100],null,"Salamander who naps in volcanoes. Rated the lava 'a bit chilly, 3/5' online.",[
+ SK('Lava Lick','👅','Licks an enemy (1.0x). 35% chance to Burn for 2 turns.',{fx:[['dot',2,35]]}),
+ SK('Molten Tail','🌋','Smacks with a molten tail (2.0x). 60% chance of DEF Break for 2 turns.',{cd:3,m:2,fx:[['defBreak',2,60]]})]);
+M('cinderfox','Cinderfox','🦊','fire',3,[760,82,48,108,20],LD('atk',15),"Nine tails, zero chill. Will set your homework on fire and blame the dog.",[
+ SK('Foxfire','🔥','Two quick fire hits (0.65x each).',{m:0.65,h:2}),
+ SK('Ember Dance','💃','Gains SPD Up for 2 turns, then strikes (1.5x).',{cd:3,m:1.5,self:[['spdUp',2]]}),
+ SK('Nine-Tail Blaze','🌟','Hits ALL enemies (0.9x). 50% chance to Burn for 2 turns.',{cd:4,t:'ae',m:0.9,fx:[['dot',2,50]]})]);
+M('blazemane','Blazemane','🦁','fire',4,[880,92,55,103,20,60],LD('atk',25),"King of the Ember Savanna. His mane has its own weather system and a separate fan club.",[
+ SK('Roar Swipe','🐾','Swipe (1.2x). 30% chance of ATK Break.',{m:1.2,fx:[['atkDown',2,30]]}),
+ SK('Pride Rally','📣','All allies gain ATK Up for 2 turns and +25% ATB.',{cd:4,t:'aa',m:0,fx:[['atkUp',2,100]],atb:25}),
+ SK('Sunburst Pounce','☀️','Massive pounce (3.2x). Inflicts DEF Break for 2 turns.',{cd:4,m:3.2,fx:[['defBreak',2,100]]})]);
+M('pyrewyrm','Pyrewyrm','🐉','fire',5,[1000,104,62,106,25,70],LD('atk',33),"Ancient dragon. Has hoarded gold for 3,000 years and still refuses to split the bill.",[
+ SK('Scorch Bite','🦷','Bite (1.3x).',{m:1.3}),
+ SK('Wing Inferno','🔥','ALL enemies (1.1x). 70% chance to Burn for 2 turns.',{cd:3,t:'ae',m:1.1,fx:[['dot',2,70]]}),
+ SK('Cataclysm Breath','☄️','ALL enemies (1.8x). 50% chance of DEF Break.',{cd:5,t:'ae',m:1.8,fx:[['defBreak',2,50]]})]);
+// WATER
+M('bubblefin','Bubblefin','🐟','water',1,[580,60,40,101],null,"Has a 3-second memory. Every battle is its first battle. Every battle is a delight.",[
+ SK('Bubble Pop','💧','Pop (1.0x).'),
+ SK('Splash Zone','🌊','ALL enemies (0.6x). 30% chance to Slow for 2 turns.',{cd:3,t:'ae',m:0.6,fx:[['slow',2,30]]})]);
+M('shellbert','Shellbert','🐢','water',2,[760,58,62,92],null,"A tank in every sense. Moves at the speed of a Monday morning.",[
+ SK('Shell Bonk','🐚','Bonk (damage scales with DEF).',{sc:'def'}),
+ SK('Turtle Up','🛡️','Gains DEF Up for 3 turns and heals 15% HP.',{cd:3,t:'s',m:0,heal:0.15,fx:[['defUp',3,100]]})]);
+M('tidesinger','Tidesinger','🧜','water',4,[860,80,56,106],LD('hp',25),"Sings sea shanties so beautiful that pirates weep. Also heals, which is the important part.",[
+ SK('Riptide Note','🎵','Hit (1.1x). 40% chance to Slow.',{m:1.1,fx:[['slow',2,40]]}),
+ SK('Healing Shanty','🎶','Heals ALL allies for 25% of their max HP.',{cd:3,t:'aa',m:0,heal:0.25}),
+ SK('Chorus of the Deep','🧜','Heals all allies 15%, removes their debuffs and grants DEF Up for 2 turns.',{cd:5,t:'aa',m:0,heal:0.15,cleanse:1,fx:[['defUp',2,100]]})]);
+M('tentacular','Tentacular','🐙','water',4,[840,90,52,104,20,60],LD('def',25),"Eight arms, eight part-time jobs. Still can't afford rent under the sea.",[
+ SK('Ink Squirt','🖋️','Hit (1.1x). 40% chance of ATK Break.',{m:1.1,fx:[['atkDown',2,40]]}),
+ SK('Eight-Arm Slap','👋','Eight rapid slaps (0.38x each).',{cd:3,m:0.38,h:8}),
+ SK('Abyss Grip','🌀','Crushing grip (2.6x). 60% chance to Stun.',{cd:4,m:2.6,fx:[['stun',1,60]]})]);
+M('leviadrift','Leviadrift','🐋','water',5,[1080,96,64,101,15,60],LD('hp',33),"So large it has its own postal code. Gentle, unless you call it 'chonky'.",[
+ SK('Tail Splash','💦','Hit (1.3x).',{m:1.3}),
+ SK('Tsunami','🌊','ALL enemies (1.4x). 80% chance to Slow for 2 turns.',{cd:4,t:'ae',m:1.4,fx:[['slow',2,80]]}),
+ SK("Ocean's Mercy",'💙','Heals all allies 30% and grants Regen for 2 turns.',{cd:4,t:'aa',m:0,heal:0.3,fx:[['regen',2,100]]})]);
+// WIND
+M('buzzsaw','Buzzsaw','🐝','wind',1,[520,66,36,110],null,"Furious about flowers for reasons it refuses to explain.",[
+ SK('Triple Sting','🐝','Three stings (0.4x each).',{m:0.4,h:3}),
+ SK('Hive Mind','🍯','Gains ATK Up for 2 turns, then stings (1.2x).',{cd:3,m:1.2,self:[['atkUp',2]]})]);
+M('hootstorm','Hootstorm','🦉','wind',2,[640,68,46,106],null,"Asks 'who?' constantly. Has never once received a satisfying answer.",[
+ SK('Talon Hoot','🦉','Hit (1.0x). 30% chance to Slow.',{fx:[['slow',2,30]]}),
+ SK('Who-Who Whirl','🌪️','ALL enemies (0.7x). 20% chance to Stun.',{cd:4,t:'ae',m:0.7,fx:[['stun',1,20]]})]);
+M('galeclaw','Galeclaw','🦅','wind',3,[720,86,46,112,25],LD('spd',10),"Dives at 300 km/h. Has never once braked in time.",[
+ SK('Dive Strike','🦅','Hit (1.2x).',{m:1.2}),
+ SK('Gust Rend','💨','Hit (1.8x). 80% chance of DEF Break.',{cd:3,m:1.8,fx:[['defBreak',2,80]]}),
+ SK('Skyfall','⚡','Plummets from the heavens (3.0x).',{cd:4,m:3})]);
+M('zephyrlet','Zephyrlet','🧚','wind',4,[800,78,54,118],LD('spd',15),"A pixie who runs on wind and gossip. Mostly gossip.",[
+ SK('Breeze Flick','🍃','Hit (1.1x). 40% chance to Slow.',{m:1.1,fx:[['slow',2,40]]}),
+ SK('Tailwind','🌬️','All allies gain SPD Up for 2 turns and +30% ATB.',{cd:4,t:'aa',m:0,fx:[['spdUp',2,100]],atb:30}),
+ SK('Pixie Mend','🌸','Heals all allies 20% and grants Regen for 2 turns.',{cd:4,t:'aa',m:0,heal:0.2,fx:[['regen',2,100]]})]);
+M('tempestrix','Tempestrix','🐲','wind',5,[980,102,60,112,25,60],LD('spd',20),"Storm dragon. Responsible for 87% of all lost umbrellas.",[
+ SK('Thunderclap','⚡','Hit (1.3x). 25% chance to Stun.',{m:1.3,fx:[['stun',1,25]]}),
+ SK('Cyclone','🌪️','ALL enemies, two gusts (0.6x each).',{cd:3,t:'ae',m:0.6,h:2}),
+ SK('Eye of the Storm','🌀','ALL enemies (2.0x). 40% chance to Stun.',{cd:5,t:'ae',m:2,fx:[['stun',1,40]]})]);
+// LIGHT
+M('lumilamb','Lumilamb','🐑','light',1,[600,58,42,100],null,"Fluffy, glowing, and legally classified as a nightlight.",[
+ SK('Fluffy Headbutt','🐑','Hit (1.0x).'),
+ SK('Baa-lm','💖','Heals one ally for 30% of max HP.',{cd:3,t:'a',m:0,heal:0.3})]);
+M('dawnstag','Dawnstag','🦌','light',2,[680,72,48,104],null,"Wakes up at 5 AM every day and needs you to know about it.",[
+ SK('Antler Gleam','🦌','Hit (1.1x).',{m:1.1}),
+ SK('Morning Call','🌅','All allies gain ATK Up for 2 turns.',{cd:4,t:'aa',m:0,fx:[['atkUp',2,100]]})]);
+M('halodove','Halodove','🕊️','light',3,[740,76,52,107],LD('def',15),"Brings peace to every battlefield. Starts a new war the moment you touch its bread.",[
+ SK('Peck of Peace','🕊️','Hit (1.0x). 30% chance of ATK Break.',{fx:[['atkDown',2,30]]}),
+ SK('Olive Branch','🌿','Heals all allies for 20% of max HP.',{cd:3,t:'aa',m:0,heal:0.2}),
+ SK('Feather Storm','🌟','ALL enemies (1.1x).',{cd:4,t:'ae',m:1.1})]);
+M('gleamhorn','Gleamhorn','🦄','light',4,[860,86,58,105,20],LD('hp',25),"Its horn emits 16 million colors. Its personality emits one: smug.",[
+ SK('Prism Horn','🌈','Hit (1.2x). 30% chance of DEF Break.',{m:1.2,fx:[['defBreak',2,30]]}),
+ SK('Rainbow Ward','🛡️','All allies gain DEF Up for 2 turns and heal 10%.',{cd:4,t:'aa',m:0,heal:0.1,fx:[['defUp',2,100]]}),
+ SK('Starlight Charge','💫','Charge (3.0x). 35% chance to Stun.',{cd:4,m:3,fx:[['stun',1,35]]})]);
+M('seraphyne','Seraphyne','👼','light',5,[1000,100,64,108,20,60],LD('def',33),"Celestial guardian with excellent posture. Judges you silently. And also loudly.",[
+ SK('Judgment Ray','🔆','Hit (1.3x).',{m:1.3}),
+ SK('Sanctuary','⛪','Heals all allies 30% and removes all their debuffs.',{cd:4,t:'aa',m:0,heal:0.3,cleanse:1}),
+ SK('Revelation','👁️','ALL enemies (1.6x). 70% chance of ATK Break.',{cd:5,t:'ae',m:1.6,fx:[['atkDown',2,70]]})]);
+// DARK
+M('bonejangle','Bonejangle','💀','dark',1,[560,64,38,102],null,"Rattles when nervous. Is always nervous.",[
+ SK('Rattle','🦴','Hit (1.0x).'),
+ SK('Spooky Dance','💃','Hit (1.4x). 40% chance of ATK Break.',{cd:3,m:1.4,fx:[['atkDown',2,40]]})]);
+M('nocturnipper','Nocturnipper','🦇','dark',2,[640,72,44,110],null,"Vegetarian vampire bat. Mostly. Do not ask about Tuesdays.",[
+ SK('Vampire Nip','🦇','Hit (1.0x) and heal for 30% of damage dealt.',{drain:0.3}),
+ SK('Echo Screech','📢','ALL enemies (0.6x). 40% chance to Slow.',{cd:3,t:'ae',m:0.6,fx:[['slow',2,40]]})]);
+M('widowmire','Widowmire','🕷️','dark',3,[720,80,48,106,20],LD('atk',15),"Knits gorgeous sweaters. Nobody has ever been brave enough to wear one.",[
+ SK('Venom Bite','🕷️','Hit (1.0x). 60% chance to Poison (Burn) for 2 turns.',{fx:[['dot',2,60]]}),
+ SK('Web Snare','🕸️','Hit (1.2x). 50% chance to Stun.',{cd:3,m:1.2,fx:[['stun',1,50]]}),
+ SK('Brood Swarm','🐜','ALL enemies (0.8x). 70% chance to Poison.',{cd:4,t:'ae',m:0.8,fx:[['dot',2,70]]})]);
+M('shadowfang','Shadowfang','🐺','dark',4,[840,96,52,110,30,60],LD('cr',15),"Howls at the moon. The moon has filed a noise complaint.",[
+ SK('Night Rend','🌙','Hit (1.3x).',{m:1.3}),
+ SK('Pack Howl','🐺','Gains ATK Up and SPD Up for 2 turns, then bites (1.0x).',{cd:3,self:[['atkUp',2],['spdUp',2]]}),
+ SK('Eclipse Fangs','🌑','Four savage bites (0.9x each).',{cd:4,m:0.9,h:4})]);
+M('duskula','Count Duskula','🧛','dark',5,[980,106,58,109,25,70],LD('atk',33),"Aristocratic, dramatic, and 412 years old. Still sleeps with a nightlight (it's Lumilamb).",[
+ SK('Fancy Bite','🧛','Hit (1.3x) and heal for 40% of damage dealt.',{m:1.3,drain:0.4}),
+ SK('Bat Cloud','🦇','ALL enemies (1.2x), heal 20% of damage. 50% chance to Poison.',{cd:4,t:'ae',m:1.2,drain:0.2,fx:[['dot',2,50]]}),
+ SK('Midnight Waltz','🌒','Hit (4.0x), heal 30% of damage. 50% chance to Stun.',{cd:5,m:4,drain:0.3,fx:[['stun',1,50]]})]);
+// FODDER
+M('jellybop','Jellybop','🍮','light',1,[500,40,40,95],null,"Made of 100% pure experience. Feed it to a monster for 6x XP. It's fine. It wants this. Probably.",[
+ SK('Jiggle','🍮','Wobbles menacingly (0.8x).',{m:0.8}),
+ SK('Wobble Heal','💛','Heals self for 30%.',{cd:3,t:'s',m:0,heal:0.3})],{fodder:1});
+// BOSSES (not summonable)
+M('magmaw','Magmaw the Molten','👹','fire',3,[900,82,55,100],null,"Guardian of Emberfall. Eats volcanoes for breakfast. Brunch is worse.",[
+ SK('Slag Slam','👊','Hit (1.3x).',{m:1.3}),
+ SK('Eruption','🌋','ALL enemies (1.0x). 50% chance to Burn.',{cd:3,t:'ae',m:1,fx:[['dot',2,50]]}),
+ SK('Magma Armor','🛡️','Gains DEF Up and ATK Up for 2 turns.',{cd:4,t:'s',m:0,fx:[['defUp',2,100],['atkUp',2,100]]})],{boss:1});
+M('brinequeen','Brinequeen','🦈','water',4,[900,92,58,104],null,"Rules Tidewhisper Coast with an iron fin. Hates being hummed at.",[
+ SK('Razor Fin','🦈','Hit (1.4x). 40% chance of DEF Break.',{m:1.4,fx:[['defBreak',2,40]]}),
+ SK('Maelstrom','🌀','ALL enemies (1.2x). 50% chance to Slow.',{cd:3,t:'ae',m:1.2,fx:[['slow',2,50]]}),
+ SK('Feeding Frenzy','🍽️','Three bites (1.0x each).',{cd:4,m:1,h:3})],{boss:1});
+M('thunderroc','Thunderroc','🌩️','wind',4,[900,96,56,110],null,"A bird so big it causes weather. Its sneezes are classified as hurricanes.",[
+ SK('Gale Talon','🦅','Hit (1.4x).',{m:1.4}),
+ SK('Thunderstorm','⛈️','ALL enemies (1.2x). 30% chance to Stun.',{cd:4,t:'ae',m:1.2,fx:[['stun',1,30]]}),
+ SK('Updraft','🌬️','Gains ATK Up and SPD Up and heals 15%.',{cd:4,t:'s',m:0,heal:0.15,fx:[['atkUp',2,100],['spdUp',2,100]]})],{boss:1});
+M('umbral','Umbral Sovereign','👿','dark',5,[950,104,62,108,20,60],null,"The final boss. Wants to plunge the world into eternal night, mostly to finally get some decent sleep.",[
+ SK('Void Lance','🗡️','Hit (1.5x). 50% chance of DEF Break.',{m:1.5,fx:[['defBreak',2,50]]}),
+ SK('Eclipse Wave','🌘','ALL enemies (1.3x). 60% chance of ATK Break.',{cd:3,t:'ae',m:1.3,fx:[['atkDown',2,60]]}),
+ SK('Night Eternal','🌑','ALL enemies (1.9x). 40% chance to Stun.',{cd:5,t:'ae',m:1.9,fx:[['stun',1,40]]})],{boss:1});
+M('goldgolem','Treasure Golem','🗿','light',3,[900,80,70,95],null,"Made of solid gold. Doing its taxes is a nightmare.",[
+ SK('Coin Toss','🪙','Hit (1.2x).',{m:1.2}),
+ SK('Gold Rush','💰','ALL enemies (1.0x).',{cd:3,t:'ae',m:1})],{boss:1});
+M('glyphwarden','Glyph Warden','🔮','dark',4,[900,88,60,104],null,"Guards ancient glyphs. Has read every terms-of-service agreement ever written. Twice.",[
+ SK('Rune Bolt','🔮','Hit (1.3x). 40% chance of DEF Break.',{m:1.3,fx:[['defBreak',2,40]]}),
+ SK('Arcane Nova','💥','ALL enemies (1.2x). 30% chance to Stun.',{cd:4,t:'ae',m:1.2,fx:[['stun',1,30]]})],{boss:1});
+M('jellyking','King Jellybop','👑','water',3,[950,70,60,98],null,"Royal wobbler. The crown is also jelly. Everything is jelly.",[
+ SK('Royal Jiggle','👑','Hit (1.2x).',{m:1.2}),
+ SK('Jelly Rain','🍮','ALL enemies (0.9x). 40% chance to Slow.',{cd:3,t:'ae',m:0.9,fx:[['slow',2,40]]})],{boss:1});
+M('crystalwyrm','Crystal Wyrm','💎','fire',4,[900,92,62,104],null,"Sheds gems like a dog sheds fur. Please brush responsibly.",[
+ SK('Prism Bite','💎','Hit (1.4x).',{m:1.4}),
+ SK('Shard Storm','✨','ALL enemies (1.2x). 40% chance of DEF Break.',{cd:3,t:'ae',m:1.2,fx:[['defBreak',2,40]]})],{boss:1});
+
+const SUMMONABLE=Object.values(MD).filter(d=>!d.boss&&!d.fodder);
+const DEXLIST=Object.values(MD).filter(d=>!d.boss);
+const byRar=r=>SUMMONABLE.filter(d=>d.rar===r);
+
+/* ---------- glyphs (gear) ---------- */
+const GSET={
+ fury:{n:'Fury',i:'🗡️',stat:'atk',pct:1,sb:10,c:'#ff6b6b'},
+ bulwark:{n:'Bulwark',i:'🛡️',stat:'def',pct:1,sb:15,c:'#6bb8ff'},
+ vigor:{n:'Vigor',i:'❤️',stat:'hp',pct:1,sb:15,c:'#7cff9e'},
+ gale:{n:'Gale',i:'🌬️',stat:'spd',pct:0,sb:8,c:'#c9f7ff'},
+ keen:{n:'Keen',i:'🎯',stat:'cr',pct:0,sb:10,c:'#ffd166'},
+};
+const GBASE={pct:[0,4,6,8,11,14],spd:[0,2,3,4,6,8],cr:[0,2,3,4,5,7]};
+const STATN={hp:'HP',atk:'ATK',def:'DEF',spd:'SPD',cr:'CRI Rate',cd:'CRI Dmg'};
+const GLYPH_MAX=9;
+
+/* ---------- world ---------- */
+const AREAS=[
+ {n:'Emberfall Canyon',i:'🏜️',bg:'linear-gradient(135deg,#ff8a3d,#a12a1f 60%,#3d0f0f)',pool:['flickerwisp','bubblefin','buzzsaw','lumilamb','bonejangle','magmander'],boss:'magmaw',lv:1,desc:'Warm, rocky, and full of very rude salamanders.'},
+ {n:'Tidewhisper Coast',i:'🏖️',bg:'linear-gradient(135deg,#3dd6ff,#1f5fc4 60%,#0d1f52)',pool:['bubblefin','shellbert','magmander','hootstorm','nocturnipper','dawnstag','galeclaw'],boss:'brinequeen',lv:10,desc:'Sandy beaches, salty breezes, and one extremely territorial shark.'},
+ {n:'Galeholm Peaks',i:'🏔️',bg:'linear-gradient(135deg,#9dffb0,#2a9d6a 55%,#0e3d36)',pool:['galeclaw','cinderfox','widowmire','halodove','hootstorm','tentacular','zephyrlet'],boss:'thunderroc',lv:19,desc:'So windy that hats are considered a myth.'},
+ {n:'Eclipse Citadel',i:'🏰',bg:'linear-gradient(135deg,#c08bff,#4b1fa0 55%,#120630)',pool:['shadowfang','gleamhorn','tidesinger','blazemane','widowmire','halodove','tentacular'],boss:'umbral',lv:28,desc:'Where day and night argue forever. Bring snacks.'},
+];
+const EVENTS=[
+ {id:'gold',n:'Gold Rush Vault',i:'💰',bg:'linear-gradient(135deg,#ffe08a,#c98a1a 60%,#5a3a05)',boss:'goldgolem',pool:['buzzsaw','flickerwisp','magmander','galeclaw'],reward:'Mountains of Gold (4x)',desc:"Bonk the golem, take its gold. It's basically a piñata with feelings."},
+ {id:'glyph',n:'Glyph Sanctum',i:'🔮',bg:'linear-gradient(135deg,#d6a6ff,#6a2fc4 60%,#1f0a45)',boss:'glyphwarden',pool:['widowmire','nocturnipper','bonejangle','halodove'],reward:'2–3 guaranteed Glyphs (higher grade)',desc:'Ancient glyphs, freshly dusted. The Warden would like them back.'},
+ {id:'jelly',n:'Jelly Grove',i:'🍮',bg:'linear-gradient(135deg,#ffd6a5,#ff8fab 60%,#7a2a4a)',boss:'jellyking',pool:['jellybop','bubblefin','shellbert','jellybop'],reward:'Jellybops (6x XP fodder) + 2x XP',desc:'Wobbly. Sticky. Educational. Bring a spoon.'},
+ {id:'crystal',n:'Crystal Cavern',i:'💎',bg:'linear-gradient(135deg,#a5f3ff,#3a7bd5 60%,#1a1050)',boss:'crystalwyrm',pool:['cinderfox','tentacular','dawnstag','galeclaw'],reward:'Gems + Mystic Scroll chance',desc:'A cave made of premium currency. Suspiciously convenient.'},
+];
+const TIERS=[{n:'Easy',lv:6},{n:'Normal',lv:18},{n:'Hard',lv:32}];
+const FEATURED=[['pyrewyrm','shadowfang'],['leviadrift','blazemane'],['tempestrix','tidesinger'],['seraphyne','tentacular'],['duskula','zephyrlet']];
+const BANNER_DAYS=3;
+const RATES={common:[55,35,9,0.9,0.1],mystic:[0,0,85,13,2],featured:[0,0,85,13,2],radiant:[0,0,0,85,15]};
+const PITY=60;
+const SCROLLS={
+ common:{n:'Common Scroll',i:'📃',bg:'linear-gradient(135deg,#5b6170,#2b2f3a)',desc:'Mostly 1–2★ friends. Great for fodder. Occasionally a miracle.'},
+ mystic:{n:'Mystic Scroll',i:'📜',bg:'linear-gradient(135deg,#7c5cff,#3a1f8a)',desc:'3★ or better, every time. Counts toward the 5★ pity.'},
+ featured:{n:'Featured Banner',i:'🎉',bg:'linear-gradient(135deg,#ff7ad9,#7c2fd6 60%,#2a0f5e)',desc:'Limited time! Rate-up on the featured monsters. Counts toward pity.'},
+ radiant:{n:'Radiant Scroll',i:'🌟',bg:'linear-gradient(135deg,#ffe08a,#ff7ad9 60%,#7c2fd6)',desc:'Guaranteed 4★ or 5★. Smells faintly of victory.'},
+};
+const LOGIN=[{gold:3000},{gems:50},{common:3},{gems:100},{mystic:1},{gold:8000,jelly:2,jellyStars:3},{radiant:1,gems:150}];
+const DAILY_Q=[
+ {id:'login',i:'👋',n:'Show up!',d:'Log in today',goal:1,r:{gold:1000}},
+ {id:'summon',i:'🌀',n:'Rift Curious',d:'Summon 3 monsters',goal:3,r:{gems:30}},
+ {id:'win',i:'⚔️',n:'Daily Brawl',d:'Win 3 battles',goal:3,r:{gold:3000}},
+ {id:'powerup',i:'⬆️',n:'Gym Day',d:'Power up or star up a monster',goal:1,r:{gems:20}},
+ {id:'event',i:'🎪',n:'Event Enjoyer',d:'Clear an event dungeon',goal:1,r:{common:2}},
+];
+const DAILY_ALL={id:'all',i:'🏆',n:'Overachiever',d:'Complete all other daily quests',r:{mystic:1}};
+const ACH=[
+ ['sum1','🌀','Hello, Monster!','Summon your first monster',s=>s.stats.summons>=1,{gems:50}],
+ ['sum30','📜','Scroll Goblin','Summon 30 monsters',s=>s.stats.summons>=30,{mystic:3}],
+ ['sum100','🎰','Professional Summoner','Summon 100 monsters',s=>s.stats.summons>=100,{radiant:1}],
+ ['five','🌟','SHINY!!!','Summon a 5★ monster',s=>s.stats.fives>=1,{gems:200}],
+ ['dex10','📖','Gotta Catch Some','Discover 10 different monsters',s=>dexCount()>=10,{gems:100}],
+ ['dex20','🤓','Monster Nerd','Discover 20 different monsters',s=>dexCount()>=20,{mystic:2}],
+ ['dexAll','👑','Monsterpedia Complete','Discover every monster in the Monsterpedia',s=>dexCount()>=DEXLIST.length,{radiant:2}],
+ ['win1','⚔️','First Victory','Win a battle',s=>s.stats.wins>=1,{gold:2000}],
+ ['win25','🎖️','Seasoned Tamer','Win 25 battles',s=>s.stats.wins>=25,{gems:150}],
+ ['win100','🏅','Living Legend','Win 100 battles',s=>s.stats.wins>=100,{gems:400}],
+ ['area0','🌋','Canyon Cooler','Defeat Magmaw in Emberfall Canyon',s=>!!s.camp['0-4'],{gems:100,mystic:1}],
+ ['area1','🦈','Shark Week','Defeat Brinequeen at Tidewhisper Coast',s=>!!s.camp['1-4'],{gems:150,mystic:1}],
+ ['area2','🌩️','Bird Is The Word','Defeat Thunderroc atop Galeholm Peaks',s=>!!s.camp['2-4'],{gems:200,mystic:2}],
+ ['area3','💡','Lights On','Defeat the Umbral Sovereign',s=>!!s.camp['3-4'],{radiant:1,gems:300}],
+ ['perfect','💯','Flawless','Earn 3 stars on 10 stages',s=>Object.values(s.camp).filter(v=>v>=3).length>=10,{gems:150}],
+ ['star','⭐','Ascension','Star-up a monster',s=>s.stats.starUps>=1,{gems:100}],
+ ['crit100','🎯','Critical Thinker','Land 100 critical hits',s=>s.stats.crits>=100,{gems:100}],
+ ['big','💥','Big Number Go Brrr','Deal 3,000+ damage in a single hit',s=>s.stats.maxHit>=3000,{gems:150}],
+ ['glyph10','🔧','Glyph Tinkerer','Upgrade glyphs 10 times',s=>s.stats.glyphUps>=10,{gold:15000}],
+ ['event5','🎪','Event Regular','Clear 5 event dungeons',s=>s.stats.events>=5,{mystic:2}],
+ ['login7','📅','Creature of Habit','Claim 7 daily login rewards',s=>s.stats.logins>=7,{radiant:1}],
+];
+const TIPS=[
+ "Fire beats Wind, Wind beats Water, Water beats Fire. Light and Dark beat each other up — it's a whole thing.",
+ "Feed Jellybops to your monsters for 6x XP. The Jellybops consented. We checked. Twice.",
+ "Stuck on a stage? Glyphs! Glyphs are the answer. Glyphs are always the answer.",
+ "Shellbert is not slow. He is 'strategically unhurried'.",
+ "A 5★ is guaranteed within 60 Mystic/Featured summons. The Rift is generous. Eventually.",
+ "Auto-battle is great. Auto-battle at 3x speed is a lifestyle.",
+ "Star-up resets level to 1, but stats grow a lot more. That's called character development.",
+ "Your leader's bonus applies to the whole team. Choose wisely. Or choose the cutest one.",
+ "DEF Break + a big hit = very large numbers. Very large numbers = joy.",
+ "Weekends open every event dungeon at once. Plan your snacks accordingly.",
+];
+const PATCHES=[
+ {v:'1.0.0',date:'Oct 6, 2026',title:'🎉 Grand Opening!',sections:[
+  ['✨ New Content',[
+   '25 original summonable monsters across Fire, Water, Wind, Light & Dark — plus one suspiciously delicious Jellybop and 8 bosses.',
+   'Summoning with Common, Mystic, Featured & Radiant scrolls. 5★ pity guaranteed by summon #60.',
+   'Your first 10x Mystic/Featured summon is guaranteed to contain a 4★ or better. You\'re welcome.',
+   'Campaign: 4 areas, 20 stages, 4 bosses who all have strong opinions.',
+   'Rotating Event Dungeons (Gold, Glyph, Jelly, Crystal). Weekends: everything is open!',
+   'Limited-time Featured Banner that rotates every 3 days.',
+   'Glyphs: 5 equippable sets with set bonuses, upgradable to +9.',
+   'Daily login calendar, daily quests, and 21 achievements.',
+   'Auto-battle and 1x / 2x / 3x battle speed.']],
+  ['⚖️ Balance',[
+   'Shellbert\'s movement speed is unchanged. He asked us to stop asking.',
+   'Tentacular\'s Eight-Arm Slap now hits exactly eight times (previously "a lot").',
+   'Pyrewyrm still refuses to split the bill. Working as intended.']],
+  ['🐛 Bug Fixes',[
+   'Fixed an issue where Count Duskula could be summoned during daytime. He was furious.',
+   'Bubblefin no longer forgets it is in a battle mid-turn. (Mostly.)',
+   'Lumilamb no longer keeps the whole team awake by glowing too hard.']],
+  ['🧪 Known Issues',[
+   'Hootstorm still doesn\'t know who.',
+   'Some Jellybops report feeling "a little too delicious".']],
+  ['🔮 Coming Soon (v1.1+)',[
+   'Rift Arena: battle AI-controlled rival tamers.',
+   'Endless Rift Tower with weekly leaderboards (local, so you always win).',
+   'Monster skins, more monsters, and a fishing minigame nobody asked for.']],
+ ]},
+];
+
+/* =================== STATE =================== */
+let S=null;
+let TAB='home';
+const UI={monSub:'roster',sort:'stars',area:null,qSub:'daily',glyphSort:'grade'};
+function defaultState(){return{v:VERSION,gems:1500,gold:20000,scrolls:{common:5,mystic:10,radiant:0},nextUid:1,mons:[],glyphs:[],team:[],camp:{},pity:0,firstMulti:false,dex:{},
+ stats:{summons:0,fives:0,wins:0,battles:0,crits:0,maxHit:0,starUps:0,glyphUps:0,events:0,logins:0,bosses:0,losses:0},
+ login:{last:'',count:0},daily:{date:'',prog:{},claimed:{}},ach:{},settings:{sound:true,speed:1,auto:false},seenPatch:'',created:Date.now()};}
+function deepMerge(base,over){if(Array.isArray(base)||typeof base!=='object'||base===null)return over===undefined?base:over;const out={...base};for(const k in over){out[k]=(k in base&&base[k]&&typeof base[k]==='object'&&!Array.isArray(base[k]))?deepMerge(base[k],over[k]):over[k];}return out;}
+function save(){try{S.v=VERSION;localStorage.setItem(SAVE_KEY,JSON.stringify(S));}catch(e){console.warn('save failed',e);}}
+function newGame(){S=defaultState();
+ ['cinderfox','shellbert','hootstorm','lumilamb'].forEach(id=>{const m=addMon(id);S.team.push(m.uid);});
+ const g1=newGlyph(2);g1.set='fury';const g2=newGlyph(2);g2.set='vigor';
+ save();}
+function load(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw){newGame();return;}S=deepMerge(defaultState(),JSON.parse(raw));migrate();}catch(e){console.warn('load failed, new game',e);newGame();}}
+function migrate(){ // home for future update migrations
+ S.mons=S.mons.filter(m=>MD[m.id]);S.mons.forEach(m=>{if(!m.gl)m.gl=[0,0,0];});
+ S.team=S.team.filter(u=>S.mons.some(m=>m.uid===u)).slice(0,4);
+ S.glyphs.forEach(g=>{if(g.on&&!S.mons.some(m=>m.uid===g.on))g.on=0;});}
+
+/* ---------- monster helpers ---------- */
+function addMon(id,stars,lvl){const d=MD[id];const m={uid:S.nextUid++,id,lvl:lvl||1,xp:0,stars:stars||d.rar,lock:false,gl:[0,0,0]};S.mons.push(m);S.dex[id]=1;return m;}
+const monByUid=u=>S.mons.find(m=>m.uid===u);
+const maxLvl=m=>m.stars*10;
+const xpNeed=l=>Math.floor(25+l*l*1.2+l*10);
+const dexCount=()=>DEXLIST.filter(d=>S.dex[d.id]).length;
+function addXp(m,x){const b=m.lvl;if(m.lvl>=maxLvl(m))return 0;m.xp+=x;while(m.lvl<maxLvl(m)&&m.xp>=xpNeed(m.lvl)){m.xp-=xpNeed(m.lvl);m.lvl++;}if(m.lvl>=maxLvl(m))m.xp=0;return m.lvl-b;}
+function baseStats(id,lvl,stars){const d=MD[id];const g=1+0.07*(lvl-1),sm=1+0.12*(stars-d.rar);
+ return{hp:Math.round(d.hp*g*sm),atk:Math.round(d.atk*g*sm),def:Math.round(d.def*g*sm),spd:d.spd+(stars-d.rar)*2+Math.floor(lvl/10),cr:d.cr,cd:d.cdm};}
+function monStats(m){const b=baseStats(m.id,m.lvl,m.stars);const bon={hp:0,atk:0,def:0,spd:0,cr:0,cd:0};const sets={};
+ (m.gl||[]).forEach(gu=>{const g=glyphByUid(gu);if(!g)return;const gs=GSET[g.set];const v=glyphVal(g);bon[gs.stat]+=gs.pct?Math.round(b[gs.stat]*v/100):v;sets[g.set]=(sets[g.set]||0)+1;});
+ const act=[];for(const k in sets)if(sets[k]>=2){const gs=GSET[k];bon[gs.stat]+=gs.pct?Math.round(b[gs.stat]*gs.sb/100):gs.sb;act.push(k);}
+ const t={};for(const k in b)t[k]=b[k]+bon[k];return{b,bon,t,sets:act};}
+function power(m){const t=monStats(m).t;return Math.round(t.hp/4+t.atk*3+t.def*2+t.spd*2+t.cr*3);}
+function removeMon(uid){const m=monByUid(uid);if(!m)return;m.gl.forEach(gu=>{const g=glyphByUid(gu);if(g)g.on=0;});S.mons=S.mons.filter(x=>x.uid!==uid);S.team=S.team.filter(u=>u!==uid);}
+function leadText(l){if(!l)return'None';return l.s==='cr'?`All allies: +${l.v}% Critical Rate`:`All allies: +${l.v}% ${STATN[l.s]}`;}
+
+/* ---------- glyph helpers ---------- */
+const glyphByUid=u=>u?S.glyphs.find(g=>g.uid===u):null;
+function glyphVal(g){const gs=GSET[g.set];const tb=gs.pct?GBASE.pct:GBASE[gs.stat];return Math.round(tb[g.grade]*(1+g.lvl*0.12));}
+function glyphText(g){const gs=GSET[g.set];return`${STATN[gs.stat]} +${glyphVal(g)}${gs.pct||gs.stat==='cr'?'%':''}`;}
+function setBonusText(k){const gs=GSET[k];return`2-set: +${gs.sb}${gs.pct||gs.stat==='cr'?'%':''} ${STATN[gs.stat]}`;}
+function newGlyph(grade){const g={uid:S.nextUid++,set:pick(Object.keys(GSET)),grade:clamp(Math.round(grade),1,5),lvl:0,on:0};S.glyphs.push(g);return g;}
+function rollGrade(boost){const r=Math.random()+boost*0.16;return r<0.4?1:r<0.7?2:r<0.9?3:r<1.02?4:5;}
+function equipGlyph(m,slot,g){if(g.on){const o=monByUid(g.on);if(o)o.gl=o.gl.map(x=>x===g.uid?0:x);}const cur=glyphByUid(m.gl[slot]);if(cur)cur.on=0;m.gl[slot]=g.uid;g.on=m.uid;}
+function unequipGlyph(g){const o=monByUid(g.on);if(o)o.gl=o.gl.map(x=>x===g.uid?0:x);g.on=0;}
+const glyphUpCost=g=>(g.lvl+1)*g.grade*150;
+const glyphSell=g=>g.grade*400+g.lvl*250;
+
+/* ---------- rewards ---------- */
+function grant(r){if(r.gold)S.gold+=r.gold;if(r.gems)S.gems+=r.gems;['common','mystic','radiant'].forEach(k=>{if(r[k])S.scrolls[k]+=r[k];});
+ if(r.jelly)for(let i=0;i<r.jelly;i++)addMon('jellybop',r.jellyStars||2);
+ if(r.glyph)for(let i=0;i<(r.glyphN||1);i++)newGlyph(r.glyph);}
+function rewardText(r){const p=[];if(r.gold)p.push(`💰 ${fmt(r.gold)}`);if(r.gems)p.push(`💎 ${r.gems}`);if(r.mystic)p.push(`📜 ${r.mystic} Mystic`);if(r.common)p.push(`📃 ${r.common} Common`);if(r.radiant)p.push(`🌟 ${r.radiant} Radiant`);if(r.jelly)p.push(`🍮 ${r.jelly}x ${r.jellyStars||2}★ Jellybop`);if(r.glyph)p.push(`🔮 ${r.glyphN||1}x ${r.glyph}★ Glyph`);return p.join(' · ')||'—';}
+
+/* ---------- daily / login / achievements ---------- */
+function ensureDaily(){const t=todayStr();if(S.daily.date!==t){S.daily={date:t,prog:{login:1},claimed:{}};save();}}
+function prog(k,n){ensureDaily();S.daily.prog[k]=(S.daily.prog[k]||0)+(n||1);}
+const canLogin=()=>S.login.last!==todayStr();
+function claimLogin(){if(!canLogin())return;const r=LOGIN[S.login.count%7];grant(r);S.login.count++;S.login.last=todayStr();S.stats.logins++;save();sfx('win');toast('📅 Daily reward: '+rewardText(r));closeModal('login');render();}
+const qDone=q=>(S.daily.prog[q.id]||0)>=q.goal;
+const allDailyDone=()=>DAILY_Q.every(qDone);
+function claimQuest(id){ensureDaily();if(S.daily.claimed[id])return;let r;if(id==='all'){if(!allDailyDone())return;r=DAILY_ALL.r;}else{const q=DAILY_Q.find(x=>x.id===id);if(!q||!qDone(q))return;r=q.r;}
+ S.daily.claimed[id]=1;grant(r);save();sfx('heal');toast('✅ '+rewardText(r));render();}
+function claimAch(id){const a=ACH.find(x=>x[0]===id);if(!a||S.ach[id]||!a[4](S))return;S.ach[id]=1;grant(a[5]);save();sfx('win');toast('🏆 '+a[2]+': '+rewardText(a[5]));render();}
+function claimables(){ensureDaily();let n=0;DAILY_Q.forEach(q=>{if(qDone(q)&&!S.daily.claimed[q.id])n++;});if(allDailyDone()&&!S.daily.claimed.all)n++;ACH.forEach(a=>{if(!S.ach[a[0]]&&a[4](S))n++;});return n;}
+
+/* ---------- banner / events rotation ---------- */
+const bannerNow=()=>FEATURED[Math.floor(dayNum()/BANNER_DAYS)%FEATURED.length];
+const bannerEnds=()=>nextMidnight()+((BANNER_DAYS-1-(dayNum()%BANNER_DAYS))*86400000);
+const isWeekend=()=>{const d=new Date().getDay();return d===0||d===6;};
+const todaysEvent=()=>EVENTS[dayNum()%EVENTS.length];
+const eventOpen=ev=>isWeekend()||todaysEvent().id===ev.id;
+
+/* ---------- sound (tiny WebAudio blips) ---------- */
+let AC=null;
+function sfx(t){if(!S||!S.settings.sound)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();
+ const map={hit:[200,.07,'square'],crit:[420,.12,'sawtooth'],heal:[660,.18,'sine'],summon:[260,.6,'triangle'],five:[520,1,'triangle'],click:[520,.04,'sine'],win:[523,.45,'triangle'],lose:[160,.6,'sawtooth'],buff:[700,.12,'sine']};
+ const[f,d,ty]=map[t]||map.click;const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.setValueAtTime(f,AC.currentTime);
+ if(t==='summon'||t==='five'||t==='win')o.frequency.exponentialRampToValueAtTime(f*2,AC.currentTime+d);if(t==='lose')o.frequency.exponentialRampToValueAtTime(f/2,AC.currentTime+d);
+ g.gain.setValueAtTime(.05,AC.currentTime);g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d);}catch(e){}}
+
+/* =================== CORE UI =================== */
+function toast(msg){const el=document.createElement('div');el.className='toast';el.innerHTML=msg;$('#toast-root').appendChild(el);setTimeout(()=>el.remove(),2700);}
+function openModal(html,id){const bg=document.createElement('div');bg.className='modal-bg';if(id)bg.dataset.id=id;
+ bg.innerHTML=`<div class="modal"><button class="x" onclick="closeModal()">✕</button>${html}</div>`;
+ bg.addEventListener('click',e=>{if(e.target===bg)closeModal();});$('#modal-root').appendChild(bg);return bg;}
+function closeModal(id){const root=$('#modal-root');let el;if(id)el=root.querySelector(`[data-id="${id}"]`);else el=root.lastElementChild;if(el)el.remove();}
+function closeAllModals(){$('#modal-root').innerHTML='';}
+function confirmBox(msg,yes,yesText){window._cbYes=yes;openModal(`<h3>Are you sure?</h3><p>${msg}</p><div class="row-btns c"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn red" id="cbYes" onclick="closeModal();window._cbYes()">${yesText||'Yes'}</button></div>`,'confirm');}
+
+const TABS=[['home','🏠','Home'],['summon','🌀','Summon'],['monsters','🐾','Monsters'],['team','🛡️','Team'],['adventure','🗺️','Adventure'],['events','🎪','Events'],['quests','📜','Quests']];
+function setTab(t){TAB=t;if(t!=='adventure')UI.area=UI.area;sfx('click');render();$('#view').scrollTop=0;}
+function renderTop(){$('#curbar').innerHTML=`<span class="cur" title="Gems">💎 <span id="cGems">${fmt(S.gems)}</span></span><span class="cur" title="Gold">💰 <span id="cGold">${fmt(S.gold)}</span></span><span class="cur" title="Mystic Scrolls">📜 ${S.scrolls.mystic}</span><span class="cur" title="Common Scrolls">📃 ${S.scrolls.common}</span>`;$('#verTag').textContent='v'+VERSION;}
+function renderTabs(){const q=claimables()>0,l=canLogin();
+ $('#tabs').innerHTML=TABS.map(([id,i,n])=>`<button class="${TAB===id?'on':''}" id="tab-${id}" onclick="setTab('${id}')"><b>${i}</b>${n}${(id==='quests'&&(q||l))||(id==='home'&&l)?'<span class="dot"></span>':''}</button>`).join('');}
+function render(){ensureDaily();renderTop();renderTabs();const v=$('#view');
+ const f={home:renderHome,summon:renderSummon,monsters:renderMonsters,team:renderTeam,adventure:renderAdventure,events:renderEvents,quests:renderQuests}[TAB];v.innerHTML=f();}
+setInterval(()=>{document.querySelectorAll('[data-cd]').forEach(el=>{el.textContent=fmtDur(+el.dataset.cd-Date.now());});},1000);
+
+function avHtml(id,size,extra){const d=MD[id];return`<div class="av el-${d.el} ${extra||''}" style="${size?`width:${size}px;height:${size}px;font-size:${Math.round(size*.58)}px`:''}">${d.e}<span class="elb">${ELEM[d.el].i}</span></div>`;}
+function monCard(m,onclick,extra){const d=MD[m.id];const inTeam=S.team.indexOf(m.uid);
+ return`<div class="mc r${m.stars} el-${d.el} ${extra||''}" data-uid="${m.uid}" onclick="${onclick}">${inTeam===0?'<span class="badge l">👑</span>':inTeam>0?'<span class="badge l">⚔️</span>':''}${m.lock?'<span class="badge">🔒</span>':''}
+ <div class="av">${d.e}<span class="elb">${ELEM[d.el].i}</span></div>${starsHtml(m.stars)}<div class="nm">${d.n}</div><div class="lv">Lv ${m.lvl}${m.lvl>=maxLvl(m)?' <b style="color:#ffd166">MAX</b>':''}</div></div>`;}
+function sortedMons(list){const s=UI.sort;return list.slice().sort((a,b)=>s==='level'?b.lvl-a.lvl||b.stars-a.stars:s==='element'?Object.keys(ELEM).indexOf(MD[a.id].el)-Object.keys(ELEM).indexOf(MD[b.id].el)||b.stars-a.stars:s==='power'?power(b)-power(a):b.stars-a.stars||b.lvl-a.lvl||MD[b.id].rar-MD[a.id].rar);}
+
+/* =================== HOME =================== */
+function nextStage(){for(let a=0;a<AREAS.length;a++){if(!areaUnlocked(a))break;for(let s=0;s<5;s++)if(!S.camp[a+'-'+s])return[a,s];}return[AREAS.length-1,4];}
+function renderHome(){const [fa,fs]=bannerNow();const ev=todaysEvent();const [na,ns]=nextStage();const tip=pick(TIPS);
+ const cleared=Object.keys(S.camp).length;const lr=LOGIN[S.login.count%7];
+ return`<div class="hero"><h1>RIFT TAMERS</h1><p>Summon. Battle. Mildly overthink.</p>
+ <div class="parade">${['🐉','🦊','🐙','🦄','🧛','🧚','🐢','🦇','🐋'].map((e,i)=>`<span style="animation-delay:${i*.15}s">${e}</span>`).join('')}</div>
+ <div class="row-btns c" style="margin-top:14px"><button class="btn gold" onclick="openStage(${na},${ns})">⚔️ Continue: ${AREAS[na].n} ${na+1}-${ns+1}</button><button class="btn ghost" onclick="openPatch()">📰 What's New in v${VERSION}</button></div></div>
+ <div class="tip">💡 <b>Tamer Tip:</b> ${tip}</div><div style="height:12px"></div>
+ <div class="grid2">
+  <div class="card"><div class="sec">📅 Daily Login — Day ${(S.login.count%7)+1}</div>
+   ${canLogin()?`<p class="mut">Today's gift: <b>${rewardText(lr)}</b></p><div class="row-btns"><button class="btn gold" id="homeLogin" onclick="openLogin()">🎁 Claim Reward</button></div>`:`<p class="mut">Claimed! Next gift in <b class="cnt" data-cd="${nextMidnight()}">${fmtDur(nextMidnight()-Date.now())}</b></p>`}</div>
+  <div class="card" style="background:${SCROLLS.featured.bg}"><div class="sec">🎉 Featured Banner <span class="tag live">LIMITED</span></div>
+   <div style="display:flex;gap:10px;align-items:center">${avHtml(fa,56)}${avHtml(fs,44)}<div><b>${MD[fa].n}</b> ${starsHtml(5)}<br><span class="mut" style="color:#fff">+ ${MD[fs].n} rate-up</span></div></div>
+   <p class="mut" style="color:#fde">Ends in <b class="cnt" data-cd="${bannerEnds()}">${fmtDur(bannerEnds()-Date.now())}</b></p><div class="row-btns"><button class="btn" onclick="setTab('summon')">🌀 Go Summon</button></div></div>
+  <div class="card" style="background:${ev.bg}"><div class="sec">🎪 ${isWeekend()?'Weekend Frenzy: ALL events open!':'Today\'s Event'}</div>
+   <p><b>${ev.i} ${ev.n}</b></p><p class="mut" style="color:#fff">${ev.reward}</p><div class="row-btns"><button class="btn" onclick="setTab('events')">Enter</button></div></div>
+  <div class="card"><div class="sec">📊 Your Rift</div>
+   <p class="mut">Monsters owned: <b>${S.mons.length}</b> · Monsterpedia: <b>${dexCount()}/${DEXLIST.length}</b><br>Stages cleared: <b>${cleared}/20</b> · Battles won: <b>${S.stats.wins}</b><br>5★ pity: <b>${S.pity}/${PITY}</b> · Quests ready: <b>${claimables()}</b></p>
+   <div class="row-btns"><button class="btn ghost sm" onclick="setTab('quests')">📜 Quests</button><button class="btn ghost sm" onclick="setTab('team')">🛡️ Team</button></div></div>
+ </div>`;}
+
+/* =================== SUMMON =================== */
+function rateTable(type){const r=RATES[type];return`<table class="rates">${r.map((p,i)=>p?`<tr><td>${starsHtml(i+1)} ${RNAME[i+1]}</td><td style="text-align:right">${p}%</td></tr>`:'').join('')}</table>`;}
+function renderSummon(){const [fa,fs]=bannerNow();
+ const card=(type,extra,btns)=>{const sc=SCROLLS[type];return`<div class="scard" style="background:${sc.bg}"><span class="big">${sc.i}</span><h3>${sc.n}</h3><p class="mut" style="color:#eee">${sc.desc}</p>${extra||''}<div class="row-btns">${btns}</div><details><summary>📊 Drop rates</summary>${rateTable(type)}${type==='featured'?`<p class="mut" style="color:#eee">50% of 5★ results are ${MD[fa].n}; 40% of 4★ results are ${MD[fs].n}.</p>`:''}${type==='mystic'||type==='featured'?`<p class="mut" style="color:#eee">Pity: a 5★ is guaranteed on summon #${PITY} without one.</p>`:''}</details></div>`;};
+ const my=S.scrolls.mystic;
+ return`<div class="card"><div class="sec">🌀 The Summoning Rift</div><p class="mut">Tap a scroll to tear open the Rift. 5★ pity: <b>${S.pity}/${PITY}</b></p><div class="prog" style="margin-top:6px"><i style="width:${S.pity/PITY*100}%"></i></div>${!S.firstMulti?'<p class="mut" style="margin-top:6px">🎁 First 10x Mystic/Featured summon: <b>guaranteed 4★ or better!</b></p>':''}</div>
+ ${card('featured',`<div style="display:flex;gap:10px;align-items:center;margin:6px 0">${avHtml(fa,64)}<div><b style="font-size:16px">${MD[fa].n}</b> ${starsHtml(5)}<br><span>Rate-up: ${MD[fs].e} ${MD[fs].n} ${starsHtml(4)}</span><br><span class="mut" style="color:#fde">Ends in <b class="cnt" data-cd="${bannerEnds()}">${fmtDur(bannerEnds()-Date.now())}</b></span></div></div>`,
+  `<button class="btn gold" id="sumFeat1" onclick="doSummon('featured',1)">x1 · 💎150</button><button class="btn gold" onclick="doSummon('featured',10)">x10 · 💎1350</button>`)}
+ ${card('mystic',`<p><b>Owned: ${my}</b></p>`,`<button class="btn" id="sumMys1" onclick="doSummon('mystic',1)">x1 · ${my>=1?'📜1':'💎100'}</button><button class="btn" id="sumMys10" onclick="doSummon('mystic',10)">x10 · ${my>=10?'📜10':'💎900'}</button>`)}
+ ${card('radiant',`<p><b>Owned: ${S.scrolls.radiant}</b></p>`,`<button class="btn gold" onclick="doSummon('radiant',1)" ${S.scrolls.radiant<1?'disabled':''}>Summon x1</button>`)}
+ ${card('common',`<p><b>Owned: ${S.scrolls.common}</b></p>`,`<button class="btn ghost" id="sumCom1" onclick="doSummon('common',1)" ${S.scrolls.common<1?'disabled':''}>x1</button><button class="btn ghost" onclick="doSummon('common',10)" ${S.scrolls.common<10?'disabled':''}>x10</button>`)}`;}
+function rollStars(type){if((type==='mystic'||type==='featured')&&S.pity>=PITY-1)return 5;let r=Math.random()*100;const rt=RATES[type];for(let i=0;i<5;i++){if(r<rt[i])return i+1;r-=rt[i];}return rt.findIndex(x=>x>0)+1;}
+function rollSummon(type){const st=rollStars(type);if(type==='mystic'||type==='featured'){S.pity=st===5?0:S.pity+1;}
+ const [f5,f4]=bannerNow();if(type==='featured'){if(st===5&&Math.random()<0.5)return{id:f5,stars:5};if(st===4&&Math.random()<0.4)return{id:f4,stars:4};}
+ return{id:pick(byRar(st)).id,stars:st};}
+function doSummon(type,n){let ok=false;
+ if(type==='common'){if(S.scrolls.common>=n){S.scrolls.common-=n;ok=true;}}
+ else if(type==='mystic'){if(S.scrolls.mystic>=n){S.scrolls.mystic-=n;ok=true;}else{const c=n===10?900:100*n;if(S.gems>=c){S.gems-=c;ok=true;}}}
+ else if(type==='featured'){const c=n===10?1350:150*n;if(S.gems>=c){S.gems-=c;ok=true;}}
+ else if(type==='radiant'){if(S.scrolls.radiant>=n){S.scrolls.radiant-=n;ok=true;}}
+ if(!ok){toast('Not enough currency! Clear stages, events & quests to earn more. 💎');return;}
+ const res=[];for(let i=0;i<n;i++)res.push(rollSummon(type));
+ if(n===10&&!S.firstMulti&&(type==='mystic'||type==='featured')){if(!res.some(r=>r.stars>=4))res[9]={id:pick(byRar(4)).id,stars:4};S.firstMulti=true;}
+ const mons=res.map(r=>{const isNew=!S.dex[r.id];const m=addMon(r.id,r.stars);m._new=isNew;if(r.stars>=5)m.lock=true;return m;});
+ S.stats.summons+=n;S.stats.fives+=mons.filter(m=>m.stars>=5).length;prog('summon',n);
+ const out=mons.map(m=>{const o={uid:m.uid,id:m.id,stars:m.stars,isNew:m._new};delete m._new;return o;});
+ save();renderTop();playSummon(out);}
+
+/* summon animation: canvas particles + magic circle + rarity reveal */
+let SUMO=null;
+function playSummon(list){const best=Math.max(...list.map(m=>m.stars));const oc=RCOL[best];
+ const ov=document.createElement('div');ov.className='sum-ov';ov.id='sumOv';ov.style.setProperty('--oc',oc);
+ ov.innerHTML=`<canvas></canvas><div class="mcircle"></div><div class="mcircle b"></div><div class="orb" style="--oc:#b9a8ff"></div><button class="btn ghost sm skip" id="sumSkip" onclick="summonReveal()">Skip ⏭</button>`;
+ document.body.appendChild(ov);sfx('summon');
+ const cv=ov.querySelector('canvas'),cx=cv.getContext('2d');const W=cv.width=innerWidth,H=cv.height=innerHeight;
+ const P=[];for(let i=0;i<110;i++){const a=Math.random()*Math.PI*2,r=rnd(180,Math.max(W,H)*.7);P.push({a,r,s:rnd(1,3.2),v:rnd(2,6),c:Math.random()<.5?'#b9a8ff':'#fff'});}
+ SUMO={list,ov,best,phase:0,start:performance.now(),P,timer:null};
+ const orb=ov.querySelector('.orb');setTimeout(()=>{if(orb)orb.style.setProperty('--oc',oc);},800);
+ const loop=t=>{if(!SUMO||SUMO.ov!==ov)return;cx.clearRect(0,0,W,H);
+  for(const p of P){if(SUMO.phase===0){p.r=Math.max(0,p.r-p.v*(1+(t-SUMO.start)/500));}else{p.r+=p.v*4;}
+   const x=W/2+Math.cos(p.a)*p.r,y=H/2+Math.sin(p.a)*p.r;cx.globalAlpha=SUMO.phase===0?.9:Math.max(0,1-p.r/Math.max(W,H));cx.fillStyle=SUMO.phase===0?p.c:oc;cx.beginPath();cx.arc(x,y,p.s*(SUMO.phase?1.6:1),0,7);cx.fill();p.a+=SUMO.phase===0?.02:0;}
+  requestAnimationFrame(loop);};
+ requestAnimationFrame(loop);
+ SUMO.timer=setTimeout(summonReveal,1700);}
+function summonReveal(){if(!SUMO||SUMO.phase)return;clearTimeout(SUMO.timer);SUMO.phase=1;const {ov,list,best}=SUMO;const oc=RCOL[best];
+ ov.querySelectorAll('.mcircle,.orb,.skip').forEach(e=>e.remove());
+ const fl=document.createElement('div');fl.className='sflash';ov.appendChild(fl);
+ if(best>=4){const r=document.createElement('div');r.className='rays';ov.appendChild(r);}
+ if(best>=5){ov.classList.add('shake');sfx('five');}else sfx('heal');
+ const wrap=document.createElement('div');wrap.style.cssText='position:relative;z-index:2;display:flex;flex-direction:column;align-items:center';
+ if(list.length===1){const m=list[0],d=MD[m.id];
+  wrap.innerHTML=`<div class="reveal el-${d.el}" style="--oc:${RCOL[m.stars]}">${m.stars>=5?'<div class="rtitle">LEGENDARY!</div>':m.stars===4?'<div class="rtitle" style="font-size:24px">EPIC!</div>':''}
+  <div class="av" style="box-shadow:0 0 50px ${RCOL[m.stars]}">${d.e}<span class="elb" style="width:34px;height:34px;font-size:20px">${ELEM[d.el].i}</span></div>
+  <div class="stars">${Array.from({length:m.stars},(_,i)=>`<span style="animation-delay:${.3+i*.15}s">★</span>`).join('')}</div>
+  <h2>${d.n}${m.isNew?'<span class="newtag">NEW!</span>':''}</h2><p class="mut" style="max-width:360px;margin:6px auto">${RNAME[m.stars]} · ${ELEM[d.el].n}</p><p class="desc" style="max-width:380px">"${d.desc}"</p></div>`;
+ }else{wrap.innerHTML=`${best>=5?'<div class="rtitle">LEGENDARY PULL!</div>':''}<div class="multi">${list.map((m,i)=>{const d=MD[m.id];return`<div class="mc r${m.stars} el-${d.el}" style="animation-delay:${i*.13}s;${m.stars>=5?'box-shadow:0 0 20px #ffd166':m.stars===4?'box-shadow:0 0 12px #c77dff':''}">${m.isNew?'<span class="badge" style="font-size:9px;background:#ff4d6d;border-radius:5px;padding:0 3px">NEW</span>':''}<div class="av">${d.e}<span class="elb">${ELEM[d.el].i}</span></div>${starsHtml(m.stars)}<div class="nm">${d.n}</div></div>`;}).join('')}</div>`;}
+ const b=document.createElement('div');b.className='sum-btns';b.innerHTML=`<button class="btn gold" id="sumDone" onclick="closeSummon()">Continue</button>${list.length===1?`<button class="btn ghost" onclick="closeSummon(${list[0].uid})">View Monster</button>`:''}`;
+ wrap.appendChild(b);ov.appendChild(wrap);}
+function closeSummon(uid){if(SUMO&&SUMO.ov)SUMO.ov.remove();SUMO=null;render();if(uid)openMon(uid);}
+
+/* =================== MONSTERS =================== */
+function renderMonsters(){const sub=UI.monSub;
+ let h=`<div class="subtabs"><button class="${sub==='roster'?'on':''}" onclick="UI.monSub='roster';render()">🐾 Roster (${S.mons.length})</button><button class="${sub==='glyphs'?'on':''}" onclick="UI.monSub='glyphs';render()">🔮 Glyphs (${S.glyphs.length})</button><button class="${sub==='dex'?'on':''}" onclick="UI.monSub='dex';render()">📖 Monsterpedia</button></div>`;
+ if(sub==='roster'){h+=`<div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;flex-wrap:wrap"><span class="mut">Sort:</span>${['stars','level','element','power'].map(s=>`<button class="btn sm ${UI.sort===s?'':'ghost'}" onclick="UI.sort='${s}';render()">${s[0].toUpperCase()+s.slice(1)}</button>`).join('')}</div>
+  <div class="mgrid">${sortedMons(S.mons).map(m=>monCard(m,`openMon(${m.uid})`)).join('')}</div>`;}
+ else if(sub==='glyphs'){h+=`<div class="card"><p class="mut">Glyphs boost stats. Equip up to 3 per monster from its detail page. Two glyphs of the same set grant a set bonus:</p><p class="mut" style="margin-top:4px">${Object.keys(GSET).map(k=>`${GSET[k].i} <b>${GSET[k].n}</b> (${STATN[GSET[k].stat]}) ${setBonusText(k)}`).join('<br>')}</p></div>
+  <div class="glist">${S.glyphs.slice().sort((a,b)=>b.grade-a.grade||b.lvl-a.lvl).map(g=>glyphCard(g,`openGlyph(${g.uid})`)).join('')||'<p class="mut">No glyphs yet. Win battles to find some!</p>'}</div>`;}
+ else{h+=`<div class="card"><p class="mut">Discovered <b>${dexCount()}/${DEXLIST.length}</b> monsters. Summon or obtain monsters to fill in the Monsterpedia!</p><div class="prog" style="margin-top:6px"><i style="width:${dexCount()/DEXLIST.length*100}%"></i></div></div>
+  <div class="mgrid">${DEXLIST.slice().sort((a,b)=>a.rar-b.rar||Object.keys(ELEM).indexOf(a.el)-Object.keys(ELEM).indexOf(b.el)).map(d=>S.dex[d.id]?`<div class="mc r${d.rar} el-${d.el}" onclick="openDex('${d.id}')"><div class="av">${d.e}<span class="elb">${ELEM[d.el].i}</span></div>${starsHtml(d.rar)}<div class="nm">${d.n}</div></div>`:`<div class="mc r${d.rar}" onclick="toast('Not discovered yet! Keep summoning. 🌀')"><div class="av unknown">❓</div>${starsHtml(d.rar)}<div class="nm">???</div></div>`).join('')}</div>`;}
+ return h;}
+function glyphCard(g,onclick){const gs=GSET[g.set];const o=g.on?monByUid(g.on):null;return`<div class="gcard" style="--gc:${RCOL[g.grade]}" onclick="${onclick}"><span class="gi">${gs.i}</span><b>${gs.n} +${g.lvl}</b><br>${starsHtml(g.grade)}<br><span style="color:#cfe">${glyphText(g)}</span>${o?`<div class="mut">on ${MD[o.id].e} ${MD[o.id].n}</div>`:'<div class="mut">Unequipped</div>'}</div>`;}
+function skillHtml(sk){const tgt={e:'Single enemy',ae:'All enemies',a:'Single ally',aa:'All allies',s:'Self'}[sk.t];return`<div class="skill"><b>${sk.i} ${sk.n}</b>${sk.cd?`<span class="cdtag">⏳ Cooldown ${sk.cd}</span>`:'<span class="cdtag">Basic</span>'}<br>${sk.d}<br><span class="mut">🎯 ${tgt}${sk.fx.length?' · '+sk.fx.map(f=>FX[f[0]].i+' '+FX[f[0]].n).join(', '):''}</span></div>`;}
+function openDex(id){const d=MD[id];const b=baseStats(id,1,d.rar);
+ openModal(`<div class="mhead el-${d.el}"><div class="av">${d.e}</div><div><h3>${d.n}</h3>${starsHtml(d.rar)} <span class="mut">${RNAME[d.rar]} · ${ELEM[d.el].i} ${ELEM[d.el].n}</span><br><span class="mut">Leader: ${leadText(d.lead)}</span></div></div><p class="desc">"${d.desc}"</p>
+ <table class="stat-t">${['hp','atk','def','spd'].map(k=>`<tr><td>${STATN[k]} (Lv1)</td><td>${b[k]}</td></tr>`).join('')}<tr><td>CRI Rate / Dmg</td><td>${b.cr}% / ${b.cd}%</td></tr></table>${d.skills.map(skillHtml).join('')}`,'dex');}
+function openMon(uid){const m=monByUid(uid);if(!m)return;closeModal('mon');const d=MD[m.id];const st=monStats(m);const ml=maxLvl(m);const ti=S.team.indexOf(uid);
+ const row=k=>`<tr><td>${STATN[k]}</td><td>${st.t[k]}${k==='cr'||k==='cd'?'%':''} ${st.bon[k]?`<span class="plus">(+${st.bon[k]})</span>`:''}</td></tr>`;
+ openModal(`<div class="mhead el-${d.el}"><div class="av">${d.e}<span class="elb">${ELEM[d.el].i}</span></div><div style="flex:1;min-width:0"><h3>${d.n}</h3>${starsHtml(m.stars)} <span class="mut">Natural ${d.rar}★ ${RNAME[d.rar]} · ${ELEM[d.el].n}</span>
+  <div class="mut" style="margin-top:4px">Lv <b>${m.lvl}</b> / ${ml} · Power <b>${fmt(power(m))}</b></div><div class="xpbar"><i style="width:${m.lvl>=ml?100:m.xp/xpNeed(m.lvl)*100}%"></i></div><div class="mut">${m.lvl>=ml?'MAX LEVEL — ready to Star Up!':`XP ${m.xp}/${xpNeed(m.lvl)}`}</div></div></div>
+ <p class="desc">"${d.desc}"</p>
+ <div class="row-btns"><button class="btn green" id="btnPower" onclick="openPowerUp(${uid})" ${m.lvl>=ml?'disabled':''}>⬆️ Power Up</button><button class="btn gold" id="btnStar" onclick="openStarUp(${uid})" ${m.stars>=6?'disabled':''}>⭐ Star Up</button>
+  <button class="btn ghost" onclick="toggleTeam(${uid});openMon(${uid})">${ti>=0?'➖ Remove from Team':'➕ Add to Team'}</button><button class="btn ghost" onclick="toggleLock(${uid})">${m.lock?'🔓 Unlock':'🔒 Lock'}</button></div>
+ <table class="stat-t">${['hp','atk','def','spd','cr','cd'].map(row).join('')}</table>
+ <div class="sec">🔮 Glyphs ${st.sets.length?`<span class="tag" style="background:#1f9d55">Set: ${st.sets.map(k=>GSET[k].n).join(', ')}</span>`:''}</div>
+ <div class="sockets">${m.gl.map((gu,i)=>{const g=glyphByUid(gu);return g?`<div class="sock full" style="--gc:${RCOL[g.grade]}" onclick="openGlyph(${g.uid})"><span class="gi">${GSET[g.set].i}</span><b>${GSET[g.set].n} +${g.lvl}</b><span>${glyphText(g)}</span></div>`:`<div class="sock" id="sock${i}" onclick="openSocket(${uid},${i})"><span class="gi">➕</span>Slot ${i+1}</div>`;}).join('')}</div>
+ <div class="sec">👑 Leader Skill</div><p class="mut">${leadText(d.lead)}</p>
+ <div class="sec">📖 Skills</div>${d.skills.map(skillHtml).join('')}`,'mon');}
+function toggleLock(uid){const m=monByUid(uid);m.lock=!m.lock;save();openMon(uid);render();}
+function fodderXp(f){let x=40*f.stars*f.stars+f.lvl*25;if(f.id==='jellybop')x*=6;return x;}
+let PK=null;
+function openPicker(o){PK={o,sel:[]};
+ openModal(`<h3>${o.title}</h3><p class="mut">${o.hint||''}</p><div class="card" id="pkInfo" style="margin:8px 0"></div><div class="mgrid" id="pkGrid">${o.list.length?o.list.slice().sort((a,b)=>(b.id==='jellybop')-(a.id==='jellybop')||a.stars-b.stars||a.lvl-b.lvl).map(m=>monCard(m,`pkToggle(${m.uid})`)).join(''):'<p class="mut">Nothing eligible. Summon more monsters or remove some from your team / unlock them.</p>'}</div>
+ <div class="row-btns c"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn gold" id="pkOk" onclick="pkConfirm()">${o.okText||'Confirm'}</button></div>`,'picker');pkUpd();}
+function pkToggle(uid){const i=PK.sel.indexOf(uid);if(i>=0)PK.sel.splice(i,1);else{if(PK.sel.length>=PK.o.max){toast(`You can select up to ${PK.o.max}.`);return;}PK.sel.push(uid);}pkUpd();}
+function pkUpd(){document.querySelectorAll('#pkGrid .mc').forEach(el=>el.classList.toggle('sel',PK.sel.includes(+el.dataset.uid)));const info=PK.o.info(PK.sel.map(monByUid));$('#pkInfo').innerHTML=info.html+(PK.sel.map(monByUid).some(m=>m.stars>=4&&m.id!=='jellybop')?'<div style="color:#ffb86b;margin-top:4px">⚠️ You selected a 4★+ monster as fodder — it will be consumed!</div>':'');$('#pkOk').disabled=!info.ok;}
+function pkConfirm(){const sel=PK.sel.map(monByUid);const o=PK.o;if(!o.info(sel).ok)return;closeModal('picker');o.onOk(sel);}
+function openPowerUp(uid){const m=monByUid(uid);if(m.lvl>=maxLvl(m)){toast('Already max level! Try Star Up ⭐');return;}
+ openPicker({title:`⬆️ Power Up ${MD[m.id].n}`,hint:'Select up to 6 monsters to feed. 🍮 Jellybops give 6x XP! Team members & locked monsters are hidden.',max:6,okText:'Feed!',
+  list:S.mons.filter(f=>f.uid!==uid&&!f.lock&&!S.team.includes(f.uid)),
+  info:sel=>{const xp=sel.reduce((a,f)=>a+fodderXp(f),0);const cost=sel.reduce((a,f)=>a+300*f.stars,0);const sim={...m};addXp(sim,xp);
+   return{ok:sel.length>0&&S.gold>=cost,html:`XP <b>+${fmt(xp)}</b> → Lv <b>${m.lvl}</b> ➜ <b class="up">${sim.lvl}</b> / ${maxLvl(m)} · Cost 💰 <b style="color:${S.gold>=cost?'#fff':'#ff6b6b'}">${fmt(cost)}</b>`};},
+  onOk:sel=>{const xp=sel.reduce((a,f)=>a+fodderXp(f),0);const cost=sel.reduce((a,f)=>a+300*f.stars,0);S.gold-=cost;sel.forEach(f=>removeMon(f.uid));const g=addXp(m,xp);prog('powerup');save();sfx('heal');toast(`⬆️ ${MD[m.id].n} gained ${g} level${g===1?'':'s'}!`);render();openMon(uid);}});}
+function openStarUp(uid){const m=monByUid(uid);if(m.stars>=6){toast('Already at maximum stars!');return;}
+ if(m.lvl<maxLvl(m)){toast(`Reach max level (${maxLvl(m)}) first, then Star Up!`);return;}
+ const need=m.stars,cost=m.stars*5000;
+ openPicker({title:`⭐ Star Up ${MD[m.id].n}`,hint:`Select ${need} monster${need>1?'s':''} of ${m.stars}★ or higher. ${MD[m.id].n} becomes ${m.stars+1}★ (level resets to 1, but stats and max level grow).`,max:need,okText:'Ascend!',
+  list:S.mons.filter(f=>f.uid!==uid&&!f.lock&&!S.team.includes(f.uid)&&f.stars>=m.stars),
+  info:sel=>({ok:sel.length===need&&S.gold>=cost,html:`Selected <b>${sel.length}/${need}</b> · Cost 💰 <b style="color:${S.gold>=cost?'#fff':'#ff6b6b'}">${fmt(cost)}</b>`}),
+  onOk:sel=>{S.gold-=cost;sel.forEach(f=>removeMon(f.uid));m.stars++;m.lvl=1;m.xp=0;S.stats.starUps++;prog('powerup');save();sfx('five');toast(`⭐ ${MD[m.id].n} ascended to ${m.stars}★!`);render();openMon(uid);}});}
+function openSocket(uid,slot){const m=monByUid(uid);const list=S.glyphs.filter(g=>!m.gl.includes(g.uid)).sort((a,b)=>(a.on?1:0)-(b.on?1:0)||b.grade-a.grade||b.lvl-a.lvl);
+ openModal(`<h3>🔮 Equip Glyph — Slot ${slot+1}</h3><p class="mut">Glyphs on other monsters will be moved.</p><div class="glist" style="margin-top:8px">${list.map(g=>glyphCard(g,`equipFromPicker(${uid},${slot},${g.uid})`)).join('')||'<p class="mut">No glyphs available. Win battles or run the Glyph Sanctum event!</p>'}</div>`,'socket');}
+function equipFromPicker(uid,slot,gu){const m=monByUid(uid),g=glyphByUid(gu);equipGlyph(m,slot,g);save();closeModal('socket');sfx('buff');openMon(uid);render();}
+function openGlyph(gu){const g=glyphByUid(gu);if(!g)return;closeModal('glyph');const gs=GSET[g.set];const o=g.on?monByUid(g.on):null;const cost=glyphUpCost(g);
+ openModal(`<h3>${gs.i} ${gs.n} Glyph +${g.lvl}</h3>${starsHtml(g.grade)} <span class="mut">${RNAME[g.grade]}</span><table class="stat-t"><tr><td>Main stat</td><td><b>${glyphText(g)}</b></td></tr><tr><td>Set bonus</td><td>${setBonusText(g.set)}</td></tr><tr><td>Equipped on</td><td>${o?MD[o.id].e+' '+MD[o.id].n:'—'}</td></tr></table>
+ <div class="row-btns"><button class="btn green" id="btnGUp" onclick="upGlyph(${gu})" ${g.lvl>=GLYPH_MAX?'disabled':''}>🔧 Upgrade ${g.lvl>=GLYPH_MAX?'(MAX)':'· 💰'+fmt(cost)}</button>${o?`<button class="btn ghost" onclick="unequipGlyph(glyphByUid(${gu}));save();closeModal('glyph');openMon(${o.uid});render()">Unequip</button>`:''}<button class="btn red" onclick="sellGlyph(${gu})">Sell · 💰${fmt(glyphSell(g))}</button></div><p class="mut" style="margin-top:8px">Upgrades never fail, and have a 10% chance of a ✨Critical Upgrade (+2)!</p>`,'glyph');}
+function upGlyph(gu){const g=glyphByUid(gu);if(g.lvl>=GLYPH_MAX)return;const c=glyphUpCost(g);if(S.gold<c){toast('Not enough gold 💰');return;}S.gold-=c;const crit=Math.random()<0.1&&g.lvl<GLYPH_MAX-1;g.lvl=Math.min(GLYPH_MAX,g.lvl+(crit?2:1));S.stats.glyphUps++;save();sfx(crit?'crit':'buff');toast(crit?'✨ CRITICAL UPGRADE! +2':`🔧 Upgraded to +${g.lvl}`);renderTop();openGlyph(gu);refreshBehind(g);}
+function refreshBehind(g){const mm=$('#modal-root [data-id="mon"]');if(mm&&g.on){const gm=$('#modal-root [data-id="glyph"]');mm.remove();openMon(g.on);if(gm){$('#modal-root').appendChild(gm);}}if(TAB==='monsters')render();}
+function sellGlyph(gu){const g=glyphByUid(gu);confirmBox(`Sell this ${g.grade}★ ${GSET[g.set].n} glyph for 💰${fmt(glyphSell(g))}?`,()=>{const on=g.on;unequipGlyph(g);S.gold+=glyphSell(g);S.glyphs=S.glyphs.filter(x=>x.uid!==gu);save();closeModal('glyph');if(on&&$('#modal-root [data-id="mon"]'))openMon(on);render();toast('Sold! 💰');},'Sell');}
+
+/* =================== TEAM =================== */
+function toggleTeam(uid){const i=S.team.indexOf(uid);if(i>=0)S.team.splice(i,1);else{if(S.team.length>=4){toast('Team is full (4). Remove someone first.');return;}S.team.push(uid);}save();render();}
+function makeLeader(i){const [x]=S.team.splice(i,1);S.team.unshift(x);save();render();toast('👑 New leader!');}
+function autoTeam(){S.team=S.mons.slice().sort((a,b)=>power(b)-power(a)).slice(0,4).map(m=>m.uid);save();render();toast('Auto-filled your strongest team!');}
+function teamPower(){return S.team.map(monByUid).filter(Boolean).reduce((a,m)=>a+power(m),0);}
+function renderTeam(){const team=S.team.map(monByUid);const lead=team[0]?MD[team[0].id].lead:null;
+ return`<div class="card"><div class="sec">🛡️ Battle Team <span class="mut" style="margin-left:auto">Power ${fmt(teamPower())}</span></div>
+ <div class="tslots">${[0,1,2,3].map(i=>{const m=team[i];if(!m)return`<div class="tslot ${i===0?'lead':''}">${i===0?'<span class="crown">👑</span>':''}<span style="font-size:26px;opacity:.5">➕</span><span class="mut">${i===0?'Leader':'Empty'}</span></div>`;const d=MD[m.id];
+  return`<div class="tslot ${i===0?'lead':''} el-${d.el}">${i===0?'<span class="crown">👑</span>':''}<div class="av" onclick="openMon(${m.uid})">${d.e}<span class="elb">${ELEM[d.el].i}</span></div>${starsHtml(m.stars)}<div style="font-size:11px;font-weight:700">${d.n}</div><div class="mut">Lv ${m.lvl}</div>
+  <div style="display:flex;gap:3px;margin-top:3px">${i>0?`<button class="btn sm ghost" title="Make leader" onclick="makeLeader(${i})">👑</button>`:''}<button class="btn sm ghost" title="Remove" onclick="toggleTeam(${m.uid})">✕</button></div></div>`;}).join('')}</div>
+ <p class="mut">👑 Leader skill: <b style="color:#ffd166">${team[0]?MD[team[0].id].n+' — '+leadText(lead):'—'}</b></p>
+ <div class="row-btns"><button class="btn" onclick="autoTeam()">✨ Auto-fill strongest</button><button class="btn ghost" onclick="S.team=[];save();render()">Clear</button><button class="btn gold" onclick="setTab('adventure')">🗺️ To Adventure</button></div></div>
+ <p class="mut" style="margin-bottom:8px">Tap a monster to add/remove it from the team (first slot is the leader). Element tip: 🔥 › 🍃 › 💧 › 🔥, ✨ ⇄ 🌑</p>
+ <div class="mgrid">${sortedMons(S.mons).map(m=>monCard(m,`toggleTeam(${m.uid})`,S.team.includes(m.uid)?'sel':'')).join('')}</div>`;}
+
+/* =================== ADVENTURE =================== */
+const areaUnlocked=a=>a===0||!!S.camp[(a-1)+'-4'];
+const stageUnlocked=(a,s)=>areaUnlocked(a)&&(s===0||!!S.camp[a+'-'+(s-1)]);
+function areaStars(a){let t=0;for(let s=0;s<5;s++)t+=S.camp[a+'-'+s]||0;return t;}
+function renderAdventure(){if(UI.area===null){
+  return`<div class="sec">🗺️ Campaign — The Riftlands</div>${AREAS.map((A,a)=>{const un=areaUnlocked(a);return`<div class="area ${un?'':'locked'}" style="background:${A.bg}" id="area${a}" onclick="${un?`UI.area=${a};render()`:`toast('🔒 Defeat the previous area boss to unlock!')`}"><span class="bossi">${MD[A.boss].e}</span><h3>${A.i} ${a+1}. ${A.n}</h3><p style="max-width:75%;font-size:13px">${A.desc}</p><p style="margin-top:6px;font-weight:800">${un?`⭐ ${areaStars(a)}/15 · Lv ${A.lv}–${A.lv+10}`:'🔒 Locked'}</p></div>`;}).join('')}`;}
+ const a=UI.area,A=AREAS[a];const offs=[-70,10,70,0,-40];
+ return`<div class="row-btns" style="margin:0 0 10px"><button class="btn ghost sm" onclick="UI.area=null;render()">← Map</button></div><div class="area" style="background:${A.bg};cursor:default"><span class="bossi">${MD[A.boss].e}</span><h3>${A.i} ${A.n}</h3><p style="font-size:13px;max-width:75%">${A.desc}</p><p style="font-weight:800;margin-top:4px">⭐ ${areaStars(a)}/15</p></div>
+ <div class="path">${[0,1,2,3,4].map(s=>{const un=stageUnlocked(a,s),st=S.camp[a+'-'+s]||0;const isNext=un&&!st;return`<div class="node ${s===4?'boss':''} ${st?'cleared':''} ${un?'':'locked'} ${isNext?'next':''}" id="node${a}-${s}" style="transform:translateX(${offs[s]}px)" onclick="${un?`openStage(${a},${s})`:`toast('🔒 Clear the previous stage first!')`}">${s===4?MD[A.boss].e:`<span>${a+1}-${s+1}</span>`}<span class="stars">${st?'★'.repeat(st)+'<span style="color:#0005">'+'★'.repeat(3-st)+'</span>':''}</span></div>`;}).join('')}</div>`;}
+function campaignCfg(a,s){const A=AREAS[a];const rng=seeded(7919+a*131+s*17);const lvl=A.lv+(a===0?Math.round(s*1.5):s*2);const nW=s===4?3:2;const extra=a>=3?1:0;const waves=[];
+ for(let w=0;w<nW;w++){const bossW=s===4&&w===nW-1;const n=bossW?2:Math.min(4,2+(s>=1?1:0)+(s>=3&&w===nW-1?1:0));const wave=[];
+  for(let i=0;i<n;i++){const id=A.pool[Math.floor(rng()*A.pool.length)];wave.push({id,lvl:lvl+(w>0?1:0),stars:Math.min(6,MD[id].rar+extra)});}
+  if(bossW)wave.splice(1,0,{id:A.boss,lvl:lvl+2,stars:MD[A.boss].rar,boss:1,hpm:a===0?3.5:4.5});waves.push(wave);}
+ return{type:'campaign',a,s,lvl,waves,name:`${A.n} ${a+1}-${s+1}${s===4?' (BOSS)':''}`,bg:A.bg};}
+function eventCfg(ei,tier){const E=EVENTS[ei];const T=TIERS[tier];const rng=seeded(555+ei*71+tier*13+dayNum());const waves=[];
+ for(let w=0;w<3;w++){const wave=[];const n=w===2?2:3;for(let i=0;i<n;i++){const id=E.pool[Math.floor(rng()*E.pool.length)];wave.push({id,lvl:T.lv+w,stars:Math.min(6,MD[id].rar+(tier===2?1:0))});}
+  if(w===2)wave.splice(1,0,{id:E.boss,lvl:T.lv+3,stars:Math.min(6,MD[E.boss].rar+(tier===2?1:0)),boss:1});waves.push(wave);}
+ return{type:'event',ei,tier,lvl:T.lv,waves,name:`${E.n} — ${T.n}`,bg:E.bg};}
+function wavePreview(cfg){return cfg.waves.map((w,i)=>`<div class="mut" style="margin-top:6px">Wave ${i+1}${i===cfg.waves.length-1&&w.some(x=>x.boss)?' ⚠️ BOSS':''}</div><div class="wave-prev">${w.map(e=>`<div title="${MD[e.id].n} Lv${e.lvl}" style="text-align:center">${avHtml(e.id,e.boss?52:38,e.boss?'bs':'')}<div style="font-size:9.5px">Lv${e.lvl}</div></div>`).join('')}</div>`).join('');}
+function teamStrip(){const t=S.team.map(monByUid).filter(Boolean);return t.length?`<div class="wave-prev">${t.map((m,i)=>`<div style="text-align:center">${avHtml(m.id,38)}<div style="font-size:9.5px">${i===0?'👑':''}Lv${m.lvl}</div></div>`).join('')}</div>`:'<p class="mut" style="color:#ff8a8a">No team selected!</p>';}
+function openStage(a,s){if(!stageUnlocked(a,s)){toast('🔒 Locked');return;}const cfg=campaignCfg(a,s);const first=!S.camp[a+'-'+s];
+ openModal(`<h3>${cfg.name}</h3><p class="mut">Recommended Lv ${cfg.lvl+3}+ · ${cfg.waves.length} waves</p>${wavePreview(cfg)}
+ <div class="card" style="margin-top:10px"><b>Rewards:</b> <span class="mut">💰 ~${fmt(200+cfg.lvl*60)} · XP ${40+cfg.lvl*15} per monster · Glyph ${s===4?'100%':'55%'}${first?` · <b style="color:#ffd166">First clear: 💎${s===4?100:25}${s===4?' + 📜1':''}</b>`:''}</span></div>
+ <div class="mut">Your team:</div>${teamStrip()}
+ <div class="row-btns c"><button class="btn ghost" onclick="closeModal();setTab('team')">Edit Team</button><button class="btn gold" id="btnFight" onclick="startBattle(campaignCfg(${a},${s}))">⚔️ Battle!</button></div>`,'stage');}
+
+/* =================== EVENTS =================== */
+function renderEvents(){const [fa,fs]=bannerNow();const te=todaysEvent();
+ return`<div class="card" style="background:linear-gradient(135deg,#ff7ad9,#7c5cff)"><div class="sec" style="color:#fff">🎪 Rift Events ${isWeekend()?'<span class="tag live">WEEKEND FRENZY</span>':''}</div><p style="font-size:13px">${isWeekend()?'It\'s the weekend — <b>every</b> event dungeon is open!':`Today's dungeon: <b>${te.i} ${te.n}</b>. Rotates in <b class="cnt" data-cd="${nextMidnight()}">${fmtDur(nextMidnight()-Date.now())}</b>.`} Weekends open everything.</p></div>
+ ${EVENTS.map((E,ei)=>{const open=eventOpen(E);const days=(ei-dayNum()%EVENTS.length+EVENTS.length)%EVENTS.length;return`<div class="evcard ${open?'':'closed'}" style="background:${E.bg}"><span class="big">${MD[E.boss].e}</span><h3>${E.i} ${E.n} ${open?'<span class="tag live">OPEN</span>':`<span class="tag">Opens in ${days} day${days===1?'':'s'}</span>`}</h3><p style="font-size:13px;max-width:78%">${E.desc}</p><p style="font-weight:800;font-size:13px;margin-top:4px">🎁 ${E.reward}</p>
+ <div class="row-btns">${TIERS.map((T,ti)=>`<button class="btn sm ${ti===2?'red':ti===1?'':'green'}" id="ev${ei}-${ti}" ${open?'':'disabled'} onclick="openEvent(${ei},${ti})">${T.n} · Lv${T.lv}</button>`).join('')}</div></div>`;}).join('')}
+ <div class="card" style="background:${SCROLLS.featured.bg}"><div class="sec" style="color:#fff">🎉 Limited Featured Banner</div><div style="display:flex;gap:10px;align-items:center">${avHtml(fa,56)}<div><b>${MD[fa].n}</b> ${starsHtml(5)} & ${MD[fs].e} ${MD[fs].n}<br><span style="font-size:12px">Ends in <b class="cnt" data-cd="${bannerEnds()}">${fmtDur(bannerEnds()-Date.now())}</b></span></div></div><div class="row-btns"><button class="btn gold" onclick="setTab('summon')">Summon now</button></div></div>`;}
+function openEvent(ei,tier){if(!eventOpen(EVENTS[ei])){toast('This event is closed today.');return;}const cfg=eventCfg(ei,tier);
+ openModal(`<h3>${cfg.name}</h3><p class="mut">Recommended Lv ${cfg.lvl+4}+ · 3 waves</p>${wavePreview(cfg)}<div class="card" style="margin-top:10px"><b>Rewards:</b> <span class="mut">${EVENTS[ei].reward}</span></div><div class="mut">Your team:</div>${teamStrip()}
+ <div class="row-btns c"><button class="btn ghost" onclick="closeModal();setTab('team')">Edit Team</button><button class="btn gold" id="btnFight" onclick="startBattle(eventCfg(${ei},${tier}))">⚔️ Battle!</button></div>`,'stage');}
+
+/* =================== QUESTS =================== */
+function renderQuests(){ensureDaily();const sub=UI.qSub;
+ let h=`<div class="subtabs"><button class="${sub==='daily'?'on':''}" onclick="UI.qSub='daily';render()">📅 Daily</button><button class="${sub==='ach'?'on':''}" onclick="UI.qSub='ach';render()">🏆 Achievements (${Object.keys(S.ach).length}/${ACH.length})</button></div>`;
+ if(sub==='daily'){const day=S.login.count%7;
+  h+=`<div class="card"><div class="sec">📅 7-Day Login Calendar</div><div class="login-row">${LOGIN.map((r,i)=>{const got=i<day||(i===day&&!canLogin()&&false);const today=i===day&&canLogin();return`<div class="lday ${i<day?'got':''} ${today?'today':''}"><div class="li">${r.radiant?'🌟':r.mystic?'📜':r.jelly?'🍮':r.common?'📃':r.gems?'💎':'💰'}</div>Day ${i+1}${i<day?'<br>✅':''}</div>`;}).join('')}</div>
+  <div class="row-btns">${canLogin()?`<button class="btn gold" id="qLogin" onclick="claimLogin()">🎁 Claim Day ${day+1}: ${rewardText(LOGIN[day])}</button>`:`<span class="mut">Come back in <b class="cnt" data-cd="${nextMidnight()}">${fmtDur(nextMidnight()-Date.now())}</b> for Day ${day+1}!</span>`}</div></div>
+  <div class="sec">✅ Daily Quests <span class="mut" style="margin-left:auto">Resets in <span class="cnt" data-cd="${nextMidnight()}">${fmtDur(nextMidnight()-Date.now())}</span></span></div>
+  ${DAILY_Q.map(q=>qRow(q.id,q.i,q.n,q.d,Math.min(S.daily.prog[q.id]||0,q.goal),q.goal,q.r,`claimQuest('${q.id}')`,!!S.daily.claimed[q.id])).join('')}
+  ${qRow('all',DAILY_ALL.i,DAILY_ALL.n,DAILY_ALL.d,DAILY_Q.filter(qDone).length,DAILY_Q.length,DAILY_ALL.r,`claimQuest('all')`,!!S.daily.claimed.all)}`;}
+ else{h+=ACH.slice().sort((a,b)=>(S.ach[a[0]]?1:0)-(S.ach[b[0]]?1:0)||(b[4](S)?1:0)-(a[4](S)?1:0)).map(a=>{const done=a[4](S);return qRow(a[0],a[1],a[2],a[3],done?1:0,1,a[5],`claimAch('${a[0]}')`,!!S.ach[a[0]],true);}).join('');}
+ return h;}
+function qRow(id,i,n,d,p,goal,r,onc,claimed,bin){const done=p>=goal;return`<div class="q ${claimed?'done':''}"><span class="qi">${i}</span><div class="qb"><b>${n}</b> <span class="mut">— ${d}</span><div class="mut">🎁 ${rewardText(r)}</div>${bin?'':`<div class="prog" style="margin-top:4px"><i style="width:${p/goal*100}%"></i></div><span class="mut">${p}/${goal}</span>`}</div>${claimed?'<span>✅</span>':`<button class="btn sm ${done?'gold':'ghost'}" id="q-${id}" ${done?'':'disabled'} onclick="${onc}">${done?'Claim':'…'}</button>`}</div>`;}
+function openLogin(){const day=S.login.count%7;openModal(`<h3>📅 Daily Login — Day ${day+1}</h3><p class="mut">Welcome back, Tamer! The Rift missed you. (It told us.)</p><div class="login-row" style="margin:12px 0">${LOGIN.map((r,i)=>`<div class="lday ${i<day?'got':''} ${i===day?'today':''}"><div class="li">${r.radiant?'🌟':r.mystic?'📜':r.jelly?'🍮':r.common?'📃':r.gems?'💎':'💰'}</div>Day ${i+1}</div>`).join('')}</div>
+ <div class="card" style="text-align:center"><b>Today: ${rewardText(LOGIN[day])}</b></div><div class="row-btns c"><button class="btn gold" id="btnClaimLogin" onclick="claimLogin()">🎁 Claim!</button></div>`,'login');}
+
+/* =================== PATCH NOTES & SETTINGS =================== */
+function openPatch(){openModal(`<h3>📰 What's New</h3>${PATCHES.map(p=>`<div class="pnote"><div class="card" style="background:linear-gradient(135deg,#7c5cff,#ff7ad9)"><b style="font-size:18px">v${p.v} — ${p.title}</b><br><span style="font-size:12px">${p.date}</span></div>${p.sections.map(([t,items])=>`<h4>${t}</h4><ul>${items.map(x=>`<li>${x}</li>`).join('')}</ul>`).join('')}</div>`).join('<hr style="border-color:#4a3f8f;margin:14px 0">')}<div class="row-btns c"><button class="btn gold" id="btnPatchOk" onclick="closeModal('patch')">Let's go! 🚀</button></div>`,'patch');S.seenPatch=VERSION;save();}
+function openSettings(){openModal(`<h3>⚙️ Settings</h3><table class="stat-t"><tr><td>Sound effects</td><td><button class="btn sm ${S.settings.sound?'green':'ghost'}" onclick="S.settings.sound=!S.settings.sound;save();closeModal();openSettings()">${S.settings.sound?'ON 🔊':'OFF 🔇'}</button></td></tr>
+ <tr><td>Default battle speed</td><td><button class="btn sm" onclick="S.settings.speed=S.settings.speed%3+1;save();closeModal();openSettings()">${S.settings.speed}x</button></td></tr>
+ <tr><td>Auto-battle by default</td><td><button class="btn sm ${S.settings.auto?'green':'ghost'}" onclick="S.settings.auto=!S.settings.auto;save();closeModal();openSettings()">${S.settings.auto?'ON':'OFF'}</button></td></tr></table>
+ <div class="row-btns"><button class="btn" onclick="save();toast('💾 Saved!')">💾 Save now</button><button class="btn ghost" onclick="openPatch()">📰 Patch Notes</button><button class="btn ghost" onclick="exportSave()">📤 Export</button><button class="btn ghost" onclick="importSave()">📥 Import</button></div>
+ <div class="row-btns"><button class="btn red" id="btnReset" onclick="confirmBox('This deletes ALL progress (monsters, glyphs, currencies). There is no undo!',resetGame,'Reset everything')">🗑️ Reset Progress</button></div>
+ <p class="mut" style="margin-top:12px">Rift Tamers v${VERSION} · Progress auto-saves in this browser (localStorage).<br>An original fan-made game: all monsters, names and visuals are original creations.</p>`,'settings');}
+function resetGame(){localStorage.removeItem(SAVE_KEY);closeAllModals();newGame();TAB='home';UI.area=null;render();toast('🔄 Fresh start! Welcome, new Tamer.');setTimeout(()=>{if(canLogin()&&!B)openLogin();},400);}
+function exportSave(){save();openModal(`<h3>📤 Export Save</h3><p class="mut">Copy this text somewhere safe:</p><textarea style="width:100%;height:180px;background:#120d2c;color:#cfc;border-radius:8px;padding:6px;font-size:11px" readonly onclick="this.select()">${btoa(unescape(encodeURIComponent(JSON.stringify(S))))}</textarea>`,'export');}
+function importSave(){openModal(`<h3>📥 Import Save</h3><textarea id="impTxt" style="width:100%;height:160px;background:#120d2c;color:#cfc;border-radius:8px;padding:6px;font-size:11px" placeholder="Paste save text here"></textarea><div class="row-btns c"><button class="btn gold" onclick="doImport()">Import</button></div>`,'import');}
+function doImport(){try{const d=JSON.parse(decodeURIComponent(escape(atob($('#impTxt').value.trim()))));if(!d||!Array.isArray(d.mons))throw 0;S=deepMerge(defaultState(),d);migrate();save();closeAllModals();render();toast('✅ Save imported!');}catch(e){toast('❌ That save text looks invalid.');}}
+
+/* =================== BATTLE ENGINE =================== */
+let B=null;
+function later(fn,ms){const b=B;if(!b)return;setTimeout(()=>{if(B===b&&!b.closed)fn();},ms/b.speed);}
+function mkUnit(side,spec){const d=MD[spec.id];const st=spec.m?monStats(spec.m).t:baseStats(spec.id,spec.lvl,spec.stars);
+ const u={bid:++B.uc,side,id:spec.id,n:d.n,e:d.e,el:d.el,lvl:spec.m?spec.m.lvl:spec.lvl,stars:spec.m?spec.m.stars:spec.stars,boss:!!spec.boss,m:spec.m||null,
+  hp:st.hp,atk:st.atk,def:st.def,spd:st.spd,cr:st.cr,cd:st.cd,atb:Math.random()*20,fx:[],cds:d.skills.map(()=>0),skills:d.skills};
+ if(spec.boss){u.hp=Math.round(u.hp*(spec.hpm||4.5));u.atk=Math.round(u.atk*1.15);u.def=Math.round(u.def*1.1);u.spd+=4;}
+ u.maxHp=u.hp;return u;}
+function eff(u,s){let v=u[s];const h=id=>u.fx.some(f=>f.id===id);
+ if(s==='atk'){if(h('atkUp'))v*=1.5;if(h('atkDown'))v*=0.5;}
+ if(s==='def'){if(h('defUp'))v*=1.7;if(h('defBreak'))v*=0.3;}
+ if(s==='spd'){if(h('spdUp'))v*=1.3;if(h('slow'))v*=0.7;}
+ return v;}
+const allUnits=()=>[...B.allies,...B.enemies];
+const foesOf=u=>(u.side==='p'?B.enemies:B.allies).filter(x=>x.hp>0);
+const friendsOf=u=>(u.side==='p'?B.allies:B.enemies).filter(x=>x.hp>0);
+const cardOf=u=>document.getElementById('u'+u.bid);
+
+function startBattle(cfg){const team=S.team.map(monByUid).filter(Boolean);
+ if(!team.length){closeAllModals();toast('Pick a team first! 🛡️');setTab('team');return;}
+ closeAllModals();if(B)B.closed=true;const oldB=$('#battle');if(oldB)oldB.remove();
+ B={cfg,uc:0,wave:0,allies:[],enemies:[],speed:S.settings.speed,auto:S.settings.auto,over:false,deaths:0,awaiting:false,actor:null,sel:0,closed:false};
+ B.allies=team.map(m=>mkUnit('p',{id:m.id,m}));
+ const lead=MD[team[0].id].lead;
+ if(lead)B.allies.forEach(u=>{if(lead.s==='cr')u.cr+=lead.v;else{u[lead.s]=Math.round(u[lead.s]*(1+lead.v/100));if(lead.s==='hp')u.maxHp=u.hp;}});
+ S.stats.battles++;save();
+ const el=document.createElement('div');el.id='battle';
+ el.innerHTML=`<div class="bgfx" style="background:${cfg.bg};filter:brightness(.55)"></div>
+ <div class="b-top"><button class="btn sm ghost" id="bFlee" onclick="fleeBattle()">🏳️ Retreat</button><div class="wave"><div style="font-size:11px;opacity:.85">${cfg.name}</div><span id="bWave"></span></div>
+ <div style="display:flex;gap:6px"><button class="btn sm" id="bAuto" onclick="toggleAuto()"></button><button class="btn sm" id="bSpeed" onclick="cycleSpeed()"></button></div></div>
+ <div class="b-field" id="bField"><div class="brow enemy" id="bEnemies"></div><div class="b-msg" id="bMsg">${lead?`👑 Leader: ${leadText(lead)}`:''}</div><div class="brow ally" id="bAllies"></div></div>
+ <div class="b-bottom"><div class="b-skills" id="bSkills"></div><div class="b-desc" id="bDesc"></div></div>`;
+ document.body.appendChild(el);
+ $('#bAllies').innerHTML=B.allies.map(unitHtml).join('');
+ spawnWave();later(nextTurn,1100);}
+function unitHtml(u){return`<div class="unit el-${u.el} ${u.boss?'boss':''}" id="u${u.bid}" onclick="tapUnit(${u.bid})"><span class="uadv"></span><div class="av">${u.e}<span class="elb">${ELEM[u.el].i}</span></div>
+ <div class="un">${u.boss?'⚠️ ':''}${u.n} <span style="color:#ffd166">Lv${u.lvl}</span></div><div class="bar hp"><i></i></div><div class="hpt"></div><div class="bar atb"><i></i></div><div class="ufx"></div></div>`;}
+function spawnWave(){B.enemies=B.cfg.waves[B.wave].map(sp=>mkUnit('e',sp));$('#bEnemies').innerHTML=B.enemies.map(unitHtml).join('');
+ const boss=B.enemies.some(u=>u.boss);banner(boss?'⚠️ BOSS WAVE ⚠️':`Wave ${B.wave+1}/${B.cfg.waves.length}`);renderBattle();}
+function banner(t){const f=$('#bField');if(!f)return;const el=document.createElement('div');el.className='b-banner';el.textContent=t;f.appendChild(el);setTimeout(()=>el.remove(),1200);}
+function setMsg(t){const m=$('#bMsg');if(m)m.innerHTML=t;}
+function float(u,text,cls,idx){const c=cardOf(u);if(!c)return;const el=document.createElement('div');el.className='float '+cls;el.textContent=text;
+ el.style.animationDelay=((idx||0)*0.13)+'s';el.style.marginLeft=(Math.random()*30-15)+'px';el.style.top=(18+((idx||0)%3)*9)+'%';c.appendChild(el);setTimeout(()=>el.remove(),1500+(idx||0)*130);}
+function hitAnim(u){const c=cardOf(u);if(!c)return;c.classList.remove('hit');void c.offsetWidth;c.classList.add('hit');}
+function flashField(col){const f=$('#bField');if(!f)return;const el=document.createElement('div');el.className='b-flash';el.style.background=`radial-gradient(circle,${col}66,transparent 70%)`;f.appendChild(el);setTimeout(()=>el.remove(),600);}
+
+function renderBattle(){if(!B||!$('#battle'))return;
+ $('#bWave').textContent=`Wave ${B.wave+1}/${B.cfg.waves.length}`;
+ $('#bAuto').textContent=B.auto?'🤖 AUTO ON':'🤖 AUTO';$('#bAuto').className='btn sm '+(B.auto?'green':'ghost');$('#bSpeed').textContent='⏩ '+B.speed+'x';
+ const actor=B.actor;const sk=B.awaiting&&actor?actor.skills[B.sel]:null;const valid=sk?validTargets(actor,sk):[];
+ allUnits().forEach(u=>{const c=cardOf(u);if(!c)return;
+  c.querySelector('.bar.hp i').style.width=(u.hp/u.maxHp*100)+'%';c.querySelector('.hpt').textContent=`${fmt(u.hp)} / ${fmt(u.maxHp)}`;
+  c.querySelector('.bar.atb i').style.width=Math.min(100,u.atb)+'%';
+  const g={};u.fx.forEach(f=>{g[f.id]=g[f.id]||{n:0,t:0};g[f.id].n++;g[f.id].t=Math.max(g[f.id].t,f.t);});
+  c.querySelector('.ufx').innerHTML=Object.keys(g).map(k=>`<span title="${FX[k].n} (${g[k].t}t): ${FX[k].d}">${FX[k].i}${g[k].n>1?`<sub>${g[k].n}</sub>`:''}</span>`).join(' ');
+  c.classList.toggle('dead',u.hp<=0);c.classList.toggle('active',u===actor&&u.hp>0);c.classList.toggle('tgt',valid.includes(u));
+  const adv=c.querySelector('.uadv');
+  if(actor&&actor.side==='p'&&u.side==='e'&&u.hp>0&&sk&&(sk.t==='e'||sk.t==='ae')){const em=elemMod(actor.el,u.el);adv.className='uadv '+(em>0?'adv-up':em<0?'adv-dn':'');adv.textContent=em>0?'▲ ADV':em<0?'▼ WEAK':'';}
+  else{adv.className='uadv';adv.textContent='';}});
+ const sb=$('#bSkills'),dd=$('#bDesc');
+ if(B.awaiting&&actor&&actor.side==='p'){sb.innerHTML=actor.skills.map((s,i)=>`<button class="sk ${i===B.sel?'on':''}" id="sk${i}" onclick="selSkill(${i})"><span class="si">${s.i}</span><span class="sn">${s.n}</span><small>${s.cd?'CD '+s.cd:'Basic'} · ${{e:'1 enemy',ae:'All enemies',a:'1 ally',aa:'All allies',s:'Self'}[s.t]}</small>${actor.cds[i]>0?`<span class="cdn">⏳${actor.cds[i]}</span>`:''}</button>`).join('');
+  dd.innerHTML=`<b>${actor.e} ${actor.n}'s turn</b> — ${sk.d}<br><span style="color:#7cff9e">👉 Tap a glowing ${sk.t==='e'||sk.t==='ae'?'enemy':sk.t==='s'?'(self)':'ally'} to use it.</span>`;}
+ else{sb.innerHTML=actor?`<div class="mut" style="padding:14px">${actor.side==='p'?(B.auto?'🤖 Auto-battling…':''):`${actor.e} ${actor.n} is thinking…`}</div>`:'<div class="mut" style="padding:14px">…</div>';dd.innerHTML='';}}
+
+function nextTurn(){if(!B||B.over)return;if(checkEnd())return;
+ const alive=allUnits().filter(u=>u.hp>0);let best=null,bt=Infinity;
+ for(const u of alive){const t=Math.max(0,100-u.atb)/eff(u,'spd');if(t<bt){bt=t;best=u;}}
+ for(const u of alive)u.atb+=eff(u,'spd')*bt;best.atb=100;startTurn(best);}
+function checkEnd(){if(B.allies.every(u=>u.hp<=0)){defeat();return true;}
+ if(B.enemies.every(u=>u.hp<=0)){if(B.wave<B.cfg.waves.length-1){B.wave++;B.actor=null;renderBattle();later(()=>{spawnWave();later(nextTurn,1000);},700);return true;}victory();return true;}
+ return false;}
+function startTurn(u){B.actor=u;u.cds=u.cds.map(c=>Math.max(0,c-1));
+ const dots=u.fx.filter(f=>f.id==='dot').length;
+ if(dots){const d=Math.max(1,Math.round(u.maxHp*0.05*dots));hurt(u,d);float(u,`-${fmt(d)} ☠️`,'dot');}
+ if(u.hp>0&&u.fx.some(f=>f.id==='regen'))heal(u,Math.round(u.maxHp*0.12));
+ renderBattle();
+ if(u.hp<=0){u.atb=0;B.actor=null;later(nextTurn,500);return;}
+ if(u.fx.some(f=>f.id==='stun')){float(u,'Stunned! 💫','info');setMsg(`${u.e} ${u.n} is stunned!`);later(()=>endTurn(u),750);return;}
+ if(u.side==='p'&&!B.auto){B.awaiting=true;B.sel=0;setMsg(`${u.e} ${u.n}'s turn!`);renderBattle();return;}
+ later(()=>aiAct(u),u.side==='p'?350:600);}
+function endTurn(u){if(!B||B.over)return;u.atb=0;u.fx.forEach(f=>{if(f.fresh)f.fresh=false;else f.t--;});u.fx=u.fx.filter(f=>f.t>0);B.awaiting=false;B.actor=null;renderBattle();later(nextTurn,320);}
+function validTargets(u,sk){switch(sk.t){case'e':case'ae':return foesOf(u);case'a':case'aa':return friendsOf(u);default:return[u];}}
+const isHealSkill=sk=>sk.heal&&sk.t!=='s';
+function aiAct(u){if(!B||B.over||u.hp<=0)return;const foes=foesOf(u),friends=friendsOf(u);if(!foes.length){endTurn(u);return;}
+ const avail=u.skills.map((s,i)=>i).filter(i=>u.cds[i]===0);let si=0;
+ const lowest=arr=>arr.reduce((a,b)=>a.hp/a.maxHp<=b.hp/b.maxHp?a:b);
+ const hurtAlly=friends.some(f=>f.hp/f.maxHp<0.6);const healers=avail.filter(i=>isHealSkill(u.skills[i]));
+ const selfHeal=avail.filter(i=>u.skills[i].t==='s');
+ if(hurtAlly&&healers.length)si=healers[healers.length-1];
+ else{const others=avail.filter(i=>i>0&&!isHealSkill(u.skills[i])&&!(u.skills[i].t==='s'&&u.skills[i].heal&&u.hp/u.maxHp>0.8&&!u.skills[i].fx.length));if(others.length&&Math.random()<0.85)si=others[others.length-1];}
+ const sk=u.skills[si];let tgt;
+ if(sk.t==='e'){const adv=foes.filter(f=>elemMod(u.el,f.el)>0);const r=Math.random();tgt=(adv.length&&r<0.45)?pick(adv):r<0.75?lowest(foes):pick(foes);}
+ else if(sk.t==='a')tgt=lowest(friends);else if(sk.t==='ae')tgt=foes[0];else if(sk.t==='aa')tgt=friends[0];else tgt=u;
+ useSkill(u,si,tgt);}
+function selSkill(i){if(!B||!B.awaiting)return;const u=B.actor;if(u.cds[i]>0){toast(`⏳ ${u.skills[i].n} is on cooldown (${u.cds[i]} turn${u.cds[i]>1?'s':''}).`);return;}B.sel=i;sfx('click');
+ const sk=u.skills[i];if(sk.t==='s'){useSkill(u,i,u);return;}renderBattle();}
+function tapUnit(bid){if(!B||!B.awaiting)return;const u=B.actor;const sk=u.skills[B.sel];const t=allUnits().find(x=>x.bid===bid);if(!t)return;
+ if(!validTargets(u,sk).includes(t)){toast(sk.t==='e'||sk.t==='ae'?'Pick a glowing enemy 🎯':'Pick a glowing ally 💚');return;}useSkill(u,B.sel,t);}
+function useSkill(u,si,tgt){B.awaiting=false;const sk=u.skills[si];u.cds[si]=sk.cd;setMsg(`${u.e} ${u.n} uses <span style="color:#ffd166">${sk.i} ${sk.n}</span>!`);
+ renderBattle();const c=cardOf(u);if(c&&sk.m>0)c.classList.add('lunge');
+ later(()=>{const c2=cardOf(u);if(c2)c2.classList.remove('lunge');resolveSkill(u,sk,tgt);renderBattle();later(()=>endTurn(u),sk.h>3?900:600);},280);}
+function resolveSkill(u,sk,tgt){const foes=foesOf(u),friends=friendsOf(u);
+ (sk.self||[]).forEach(([id,t])=>addFx(u,u,id,t,100));
+ let targets;if(sk.t==='e')targets=[tgt&&tgt.hp>0&&tgt.side!==u.side?tgt:foes[0]];else if(sk.t==='ae')targets=foes;else if(sk.t==='a')targets=[tgt&&tgt.hp>0&&tgt.side===u.side?tgt:u];else if(sk.t==='aa')targets=friends;else targets=[u];
+ targets=targets.filter(Boolean);const off=sk.t==='e'||sk.t==='ae';
+ if(sk.t==='ae'&&sk.m>0)flashField(ELEM[u.el].c);if(!off&&sk.heal)sfx('heal');else if(!off)sfx('buff');
+ let total=0;
+ targets.forEach(t=>{if(off&&sk.m>0){for(let h=0;h<sk.h;h++){if(t.hp<=0)break;total+=strike(u,t,sk,h);}}
+  if(t.hp>0){if(sk.heal)heal(t,Math.round(t.maxHp*sk.heal));if(sk.cleanse){const n=t.fx.length;t.fx=t.fx.filter(f=>FX[f.id].buff);if(t.fx.length<n)float(t,'Cleansed ✨','info',1);}
+   (sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,ch);});if(sk.atb&&t!==u)t.atb=Math.min(100,t.atb+sk.atb);}});
+ if(sk.drain&&total>0&&u.hp>0)heal(u,Math.round(total*sk.drain));}
+function strike(u,t,sk,h){const em=elemMod(u.el,t.el);const cr=eff(u,'cr')+(em>0?15:em<0?-15:0);const glance=em<0&&Math.random()<0.3;const crit=!glance&&Math.random()*100<cr;
+ const stat=sk.sc==='def'?eff(u,'def')*1.8:eff(u,'atk');let d=stat*sk.m*2*(200/(200+eff(t,'def')));
+ if(em>0)d*=1.3;else if(em<0)d*=0.85;if(crit)d*=1+u.cd/100;if(glance)d*=0.7;d*=0.95+Math.random()*0.1;d=Math.max(1,Math.round(d));
+ hurt(t,d);float(t,(crit?'💥':'')+fmt(d)+(crit?'!':''),crit?'crit':glance?'glance':'dmg',h);
+ if(h===0&&em>0)float(t,'▲ Advantage','advt',h+1);if(h===0&&glance)float(t,'Glancing','info',h+1);
+ if(u.side==='p'){if(crit)S.stats.crits++;if(d>S.stats.maxHit)S.stats.maxHit=d;}
+ sfx(crit?'crit':'hit');hitAnim(t);return d;}
+function hurt(t,d){if(t.hp<=0)return;t.hp=Math.max(0,t.hp-d);if(t.hp===0){t.fx=[];t.atb=0;if(t.side==='p')B.deaths++;float(t,'KO 💀','info',2);}}
+function heal(t,a){if(t.hp<=0||a<=0)return;const b=t.hp;t.hp=Math.min(t.maxHp,t.hp+a);if(t.hp>b)float(t,'+'+fmt(t.hp-b),'heal');}
+function addFx(src,t,id,turns,ch){const buff=FX[id].buff;
+ if(!buff){let c=ch;if(elemMod(src.el,t.el)<0)c*=0.75;if(t.boss&&id==='stun')c*=0.5;if(Math.random()*100>=c){if(ch>=50)float(t,'Resisted','info',1);return;}}
+ const fresh=B.actor===t;
+ if(id==='dot'){if(t.fx.filter(f=>f.id==='dot').length<5)t.fx.push({id,t:turns,fresh});}
+ else{const ex=t.fx.find(f=>f.id===id);if(ex){ex.t=Math.max(ex.t,turns);ex.fresh=ex.fresh||fresh;}else t.fx.push({id,t:turns,fresh});}
+ float(t,FX[id].i+' '+FX[id].n,'info',1);}
+function toggleAuto(){if(!B)return;B.auto=!B.auto;S.settings.auto=B.auto;save();if(B.auto&&B.awaiting&&B.actor){B.awaiting=false;const u=B.actor;renderBattle();later(()=>aiAct(u),200);}renderBattle();}
+function cycleSpeed(){if(!B)return;B.speed=B.speed%3+1;S.settings.speed=B.speed;save();renderBattle();}
+function fleeBattle(){if(!B)return;if(B.over){exitBattle();return;}confirmBox('Retreat from battle? You will not receive any rewards.',()=>{S.stats.losses++;save();exitBattle();},'Retreat');}
+function exitBattle(to){if(B)B.closed=true;B=null;const el=$('#battle');if(el)el.remove();closeAllModals();if(to)TAB=to;render();}
+
+function victory(){B.over=true;B.actor=null;renderBattle();sfx('win');const cfg=B.cfg;
+ const R={gold:0,gems:0,common:0,mystic:0};const glyphs=[];let xp=0,first=false;const stars=B.deaths===0?3:B.deaths===1?2:1;let jelly=0,jellyStars=2;
+ if(cfg.type==='campaign'){const key=cfg.a+'-'+cfg.s;R.gold=Math.round((200+cfg.lvl*60)*rnd(.9,1.1));xp=40+cfg.lvl*15;first=!S.camp[key];
+  if(first){R.gems+=cfg.s===4?100:25;if(cfg.s===4)R.mystic+=1;}S.camp[key]=Math.max(S.camp[key]||0,stars);
+  if(Math.random()<(cfg.s===4?1:0.55))glyphs.push(newGlyph(rollGrade(cfg.a+(cfg.s===4?1:0))));if(Math.random()<0.15)R.common+=1;if(cfg.s===4)S.stats.bosses++;}
+ else{const E=EVENTS[cfg.ei],tier=cfg.tier;xp=40+cfg.lvl*15;R.gold=Math.round((150+cfg.lvl*40)*rnd(.9,1.1));
+  if(E.id==='gold')R.gold*=4;
+  if(E.id==='glyph'){const n=2+(Math.random()<0.5?1:0);for(let i=0;i<n;i++)glyphs.push(newGlyph(rollGrade(tier*1.3+1)));}
+  if(E.id==='jelly'){jelly=2+tier;jellyStars=[2,3,4][tier];xp*=2;}
+  if(E.id==='crystal'){R.gems+=[30,60,100][tier];if(Math.random()<[0.2,0.35,0.5][tier])R.mystic+=1;}
+  S.stats.events++;prog('event');}
+ grant({...R,jelly,jellyStars});
+ const ups=B.allies.map(u=>{const m=u.m;const b=m.lvl;if(monByUid(m.uid))addXp(m,xp);return{m,b};});
+ S.stats.wins++;prog('win');save();
+ const R2={...R};if(jelly){R2.jelly=jelly;R2.jellyStars=jellyStars;}
+ const nextBtn=cfg.type==='campaign'?(()=>{let a=cfg.a,s=cfg.s+1;if(s>4){a++;s=0;}return a<AREAS.length&&stageUnlocked(a,s)?`<button class="btn gold" id="bNext" onclick="startBattle(campaignCfg(${a},${s}))">Next Stage ▶</button>`:'';})():'';
+ const ov=document.createElement('div');ov.className='b-over';
+ ov.innerHTML=`<div class="modal"><div class="vtitle" style="color:#ffd166">VICTORY!</div><div class="vstars">${[1,2,3].map(i=>i<=stars?'★':'<span class="no">★</span>').join('')}</div>
+ ${first?'<div class="tag live" style="margin:4px">FIRST CLEAR!</div>':''}<p style="margin:6px 0"><b>${rewardText(R2)}</b></p>
+ ${glyphs.length?`<div class="mut">New glyph${glyphs.length>1?'s':''}: ${glyphs.map(g=>`${GSET[g.set].i} ${g.grade}★ ${GSET[g.set].n}`).join(', ')}</div>`:''}
+ <div class="mut" style="margin-top:6px">+${xp} XP each</div><div class="lvlrow">${ups.map(({m,b})=>`<div>${avHtml(m.id,40)}${m.lvl>b?`<span class="up">Lv ${b} ➜ ${m.lvl} ⬆️</span>`:`Lv ${m.lvl}${m.lvl>=maxLvl(m)?' MAX':''}`}</div>`).join('')}</div>
+ <div class="row-btns c"><button class="btn ghost" id="bBack" onclick="exitBattle()">Back</button><button class="btn" id="bReplay" onclick="startBattle(${cfg.type==='campaign'?`campaignCfg(${cfg.a},${cfg.s})`:`eventCfg(${cfg.ei},${cfg.tier})`})">↻ Replay</button>${nextBtn}</div></div>`;
+ later(()=>{const bt=$('#battle');if(bt)bt.appendChild(ov);},600);}
+function defeat(){B.over=true;B.actor=null;renderBattle();sfx('lose');S.stats.losses++;save();const cfg=B.cfg;
+ const ov=document.createElement('div');ov.className='b-over';
+ ov.innerHTML=`<div class="modal"><div class="vtitle" style="color:#ff6b6b">DEFEAT</div><p style="margin:8px 0">Your team needs a nap. 😴</p>
+ <div class="tip" style="text-align:left">💡 ${pick(['Power up your monsters with fodder or 🍮 Jellybops.','Equip glyphs — two of a set gives a bonus!','Use element advantage: 🔥 › 🍃 › 💧 › 🔥 and ✨ ⇄ 🌑.','Bring a healer (Lumilamb, Halodove, Tidesinger…).','Star up a max-level monster for a big stat jump.'])}</div>
+ <div class="row-btns c"><button class="btn ghost" id="bBack" onclick="exitBattle()">Back</button><button class="btn" onclick="exitBattle('monsters')">Upgrade Team</button><button class="btn gold" id="bRetry" onclick="startBattle(${cfg.type==='campaign'?`campaignCfg(${cfg.a},${cfg.s})`:`eventCfg(${cfg.ei},${cfg.tier})`})">↻ Retry</button></div></div>`;
+ later(()=>{const bt=$('#battle');if(bt)bt.appendChild(ov);},600);}
+
+/* =================== INIT =================== */
+function init(){load();ensureDaily();render();
+ if(S.seenPatch!==VERSION)openPatch();
+ if(canLogin())openLogin();}
+window.addEventListener('error',e=>{console.error('Rift error:',e.message);});
+init();
+</script>
+</body>
+</html>
