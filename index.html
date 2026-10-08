@@ -489,7 +489,7 @@ body.lite .unit .fl{animation:none}
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.3.2';
+const VERSION='1.3.3';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -748,6 +748,9 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.3.3',date:'Oct 8, 2026',title:'🐛 Wave Fix',sections:[
+  ['🐛 Fixes',['An extra turn earned by the attack that clears a wave is no longer lost: it now opens the next wave, and normal turn order continues after it.']],
+  ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.3.2',date:'Oct 8, 2026',title:'🔧 Under the Hood',sections:[
   ['🔧 Under-the-hood improvements',['Behind-the-scenes tidying of how game content and save data are loaded. Nothing changes in how the game plays.']],
   ['🐛 Fixes',['Fixed skills that could sit out a whole wave after the battle moved on to the next wave.']],
@@ -1668,7 +1671,7 @@ const cardOf=u=>document.getElementById('u'+u.bid);
 function startBattle(cfg){const team=S.team.map(monByUid).filter(Boolean);
  if(!team.length){closeAllModals();toast('Pick a team first! 🛡️');setTab('team');return;}
  closeAllModals();if(B)B.closed=true;const oldB=$('#battle');if(oldB)oldB.remove();
- B={cfg,uc:0,wave:0,allies:[],enemies:[],speed:S.settings.speed,auto:S.settings.auto,over:false,deaths:0,awaiting:false,actor:null,sel:0,closed:false};
+ B={cfg,uc:0,wave:0,allies:[],enemies:[],speed:S.settings.speed,auto:S.settings.auto,over:false,deaths:0,awaiting:false,actor:null,sel:0,closed:false,carry:null};
  B.allies=team.map(m=>mkUnit('p',{id:m.id,m}));
  const lead=MD[team[0].id].lead;B.reap=null;
  if(lead)B.allies.forEach(u=>{if(lead.s==='cr')u.cr+=lead.v;else{u[lead.s]=Math.round(u[lead.s]*(1+lead.v/100));if(lead.s==='hp')u.maxHp=u.hp;}});
@@ -1764,7 +1767,7 @@ function nextTurn(){if(!B||B.over)return;if(checkEnd())return;
  for(const u of alive){const t=Math.max(0,100-u.atb)/eff(u,'spd');if(t<bt){bt=t;best=u;}}
  for(const u of alive)u.atb+=eff(u,'spd')*bt;best.atb=100;startTurn(best);}
 function checkEnd(){if(B.allies.every(u=>u.hp<=0)){defeat();return true;}
- if(B.enemies.every(u=>u.hp<=0)){if(B.wave<B.cfg.waves.length-1){B.wave++;waveReset();renderBattle();later(()=>{spawnWave();later(nextTurn,1000);},700);return true;}victory();return true;}
+ if(B.enemies.every(u=>u.hp<=0)){if(B.wave<B.cfg.waves.length-1){const cu=B.carry;B.carry=null;B.wave++;waveReset();renderBattle();later(()=>{spawnWave();later(()=>{if(cu&&cu.hp>0&&!B.over)bonusTurn(cu);else nextTurn();},1000);},700);return true;}victory();return true;}
  return false;}
 // v1.3.2: nothing turn-scoped may leak into the next wave. Cooldowns persist across waves by design, but
 // 'every turn' skills can never be on cooldown (in v1.3.0 a 4-turn AoE cooldown carried over and the AoE skipped wave 2).
@@ -1783,7 +1786,9 @@ function startTurn(u){B.actor=u;u.cds=u.cds.map(c=>Math.max(0,c-1));
 function endTurn(u){if(!B||B.over)return;u.atb=0;
  if(!u.bonus){u.fx.forEach(f=>{if(f.fresh)f.fresh=false;else f.t--;});u.fx=u.fx.filter(f=>f.t>0);} // a bonus turn is "free": buffs don't tick
  u.bonus=false;B.awaiting=false;B.actor=null;const h=B.reap;B.reap=null;renderBattle();
- if(h===u&&u.hp>0&&foesOf(u).length){later(()=>bonusTurn(u),380);return;} // kill passive: one extra turn
+ if(h===u&&u.hp>0){if(foesOf(u).length){later(()=>bonusTurn(u),380);return;} // kill passive: one extra turn
+  // v1.3.3: the kill cleared the wave -> the extra turn carries over and opens the next wave (on the final wave: just victory)
+  if(B.wave<B.cfg.waves.length-1)B.carry=u;}
  later(nextTurn,320);}
 // kill passive ('reap'): one immediate extra turn per normal turn (kills during the bonus turn don't chain → no loops)
 function bonusTurn(u){if(!B||B.over)return;if(u.hp<=0||!foesOf(u).length){later(nextTurn,100);return;}
