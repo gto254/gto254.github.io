@@ -499,6 +499,8 @@ body.lite #battle .scene .dk{background:#0a0204d9}
 @media (orientation:landscape) and (max-height:540px){.rtitle.mythic{font-size:30px}}
 @media (prefers-reduced-motion:reduce){.mburst,.rtitle.mythic,.unit.emp .aura,.ufx .majx{animation:none!important}}
 body.lite .mburst{display:none}body.lite .unit.emp .aura{animation:none}
+.unit.rev .av{animation:revGlow .85s ease-out}@keyframes revGlow{0%{filter:brightness(2.4) drop-shadow(0 0 14px #ffd27a)}40%{filter:brightness(1.6) drop-shadow(0 0 10px #ff2a4a)}100%{filter:none}}
+@media (prefers-reduced-motion:reduce){.unit.rev .av{animation:none}}
 </style>
 </head>
 <body>
@@ -520,7 +522,7 @@ body.lite .mburst{display:none}body.lite .unit.emp .aura{animation:none}
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.3.0';
+const VERSION='1.3.1';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -661,11 +663,10 @@ M('duskula','Count Duskula','🧛','dark',5,[980,106,58,109,25,70],LD('atk',33),
  SK('Midnight Waltz','🌒','Hit (4.0x), heal 30% of damage. 50% chance to Stun.',{cd:5,m:4,drain:0.3,fx:[['stun',1,50]]})]);
 // MYTHIC (unique: one per save, never in any random pool, permanently locked)
 M('lucifer','Lucifer','🌑','dark',6,[1150,112,72,112,25,70],LD('def',20),"Fell from somewhere very high and landed, somehow, with perfect hair. Collects souls the way Pyrewyrm collects gold, and is equally bad at sharing.",[
- SK('Abyssal Rend','🗡️','Rends one enemy with burning talons (1.5x). Abyssal: ALL of Lucifer\'s damage ignores 100% of the target\'s DEF, DEF buffs included. Auto-battle aims it at the weakest foe to harvest a soul.',{m:1.5,lowest:1}),
- SK('Infernal Apocalypse','🌋','The ground splits open and abyssal hands drag ALL enemies into the chasm (2.8x each, ignores DEF). Afterwards Lucifer gains DEF Up for 2 turns.',{cd:4,t:'ae',m:2.8,self:[['defUp',2]],selfAfter:1,hitAt:1700,after:1000})],
+ SK('Infernal Apocalypse','🌋','His only active skill. The ground splits open and abyssal hands drag ALL enemies into the chasm (2.8x each). Abyssal: ignores 100% of every target\'s DEF, DEF buffs included. No cooldown: Lucifer uses it every turn. After the hits land he gains DEF Up for 2 turns.',{cd:0,every:1,t:'ae',m:2.8,self:[['defUp',2]],selfAfter:1,hitAt:1700,after:1000})],
  {myth:1,ignDef:1,passives:[
-  {k:'majesty',n:'Fallen Majesty',i:'👑',d:'Passive. While his current DEF in battle (level, glyphs, leader skill and buffs all count) is above 1,000, he gains +400% ATK, +400% Critical Rate (capped at 100%) and +400% Critical Damage.'},
-  {k:'harvest',n:'Soul Harvest',i:'⛓️',d:'Passive. Landing a killing blow grants an immediate extra turn (at most one per turn: kills during the extra turn do not chain). Enemies he defeats are marked Soul Taken and can never be revived.'}]});
+  {k:'majesty',n:'Fallen Majesty',i:'👑',d:'Passive. Always active: Lucifer permanently has +400% ATK, +400% Critical Rate (capped at 100%) and +400% Critical Damage (x5 each).'},
+  {k:'harvest',n:'Soul Harvest',i:'⛓️',d:'Passive. Landing a killing blow grants an immediate extra turn (at most one per turn: kills during the extra turn do not chain). Every enemy he kills also revives one fallen ally at 50% HP (one ally per kill, so an AoE that kills 3 can revive up to 3). Enemies he defeats are marked Soul Taken and can never be revived.'}]});
 // FODDER
 M('jellybop','Jellybop','🍮','light',1,[500,40,40,95],null,"Made of 100% pure experience. Feed it to a monster for 6x XP. It's fine. It wants this. Probably.",[
  SK('Jiggle','🍮','Wobbles menacingly (0.8x).',{m:0.8}),
@@ -786,6 +787,9 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.3.1',date:'Oct 8, 2026',title:'🌑 A Restless Presence',sections:[
+  ['⚖️ Balance',['The mythic presence beneath the Rift has grown restless. Something down there no longer needs a reason to be terrifying.','It has also started looking after whoever fights beside it. Fallen friends don\'t seem to stay fallen for long.']],
+  ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.3.0',date:'Oct 8, 2026',title:'📬 Whispers from the Abyss',sections:[
   ['📬 The Mailbox',[
    'There\'s a new 📬 Mailbox at the top of the screen. Gifts, letters and rewards arrive there, and you claim them with one tap.',
@@ -949,7 +953,6 @@ const SKVFX={
  'Bat Cloud':[['swarm',{g:'🦇',n:7,sz:18,wob:30,c:'#7a3fd1'}],['drain',{c:'#c9304a',n:3}]],
  'Midnight Waltz':[['vortex',{c:'#c9304a',c2:'#a66bff',r:1.6,arms:3,rev:1}],['slash',{n:4,gap:70,c:'#ff4d6d',c2:'#ffffff',alt:1.57,r:1.3}],['drain',{c:'#ff4d6d',n:5}]],
  // MYTHIC
- 'Abyssal Rend':[['slash',{claw:1,c:'#ff2a4a',c2:'#ffd0d8',r:1.45,rot:-.8,bn:10}],['burst',{c:'#ff2a4a',c2:'#3a0010',rays:8,r:1.9,st:HIT,len:380}]],
  'Infernal Apocalypse':[['abyss',{c:'#ff3a1f',c2:'#ffb03d',dur:2650,wall:1}]],
  // FODDER
  'Jiggle':[['bonk',{g:'@',c:'#ffd166',sz:1.1}]],
@@ -1521,10 +1524,10 @@ function renderMonsters(){const sub=UI.monSub;
  return h;}
 function glyphCard(g,onclick){const gs=GSET[g.set];const o=g.on?monByUid(g.on):null;return`<div class="gcard" style="--gc:${RCOL[g.grade]}" onclick="${onclick}"><span class="gi">${gs.i}</span><b>${gs.n} +${g.lvl}</b><br>${starsHtml(g.grade)}<br><span style="color:#cfe">${glyphText(g)}</span>${o?`<div class="mut">on ${spi(o.id)} ${MD[o.id].n}</div>`:'<div class="mut">Unequipped</div>'}</div>`;}
 function pasHtml(p){return`<div class="skill pas"><b>${p.i} ${p.n}</b><span class="cdtag pt">Passive</span><br>${p.d}</div>`;}
-// Fallen Majesty preview outside battle: sheet DEF (level + glyphs); battle adds leader skill and buffs
-function majHtml(m){const st=monStats(m),d=MD[m.id];if(!d.passives)return'';const def=st.t.def,ld=Math.round(def*1.2),bu=Math.round(ld*1.7);
- return`<div class="card maj"><b>👑 Fallen Majesty check</b><div class="mut">Sheet DEF <b>${def}</b> · as leader (+20%) <b>${ld}</b> · with DEF Up (+70%) <b style="color:${bu>1000?'#7cff9e':'#ff8a8a'}">${bu}</b> / 1,000 ${bu>1000?'✅ reachable in battle':'— keep leveling & upgrading DEF glyphs'}</div><div class="prog" style="margin-top:4px"><i style="width:${Math.min(100,bu/10)}%;background:linear-gradient(90deg,#8a0a22,#ff2a4a)"></i></div></div>`;}
-function skillHtml(sk){const tgt={e:'Single enemy',ae:'All enemies',a:'Single ally',aa:'All allies',s:'Self'}[sk.t];return`<div class="skill"><b>${sk.i} ${sk.n}</b>${sk.cd?`<span class="cdtag">⏳ Cooldown ${sk.cd}</span>`:'<span class="cdtag">Basic</span>'}<br>${sk.d}<br><span class="mut">🎯 ${tgt}${sk.fx.length?' · '+sk.fx.map(f=>FX[f[0]].i+' '+FX[f[0]].n).join(', '):''}</span></div>`;}
+// Fallen Majesty preview outside battle (always active since v1.3.1): sheet values vs. in-battle values
+function majHtml(m){const st=monStats(m),d=MD[m.id];if(!(d.passives||[]).some(p=>p.k==='majesty'))return'';const t=st.t;
+ return`<div class="card maj"><b>👑 Fallen Majesty: always active</b><div class="mut">In battle: ATK <b>${fmt(t.atk)}</b> ➜ <b style="color:#ff8a3d">${fmt(t.atk*5)}</b> · CRI Rate <b>${t.cr}%</b> ➜ <b style="color:#ff8a3d">${Math.min(100,t.cr*5)}%</b> · CRI Dmg <b>${t.cd}%</b> ➜ <b style="color:#ff8a3d">${t.cd*5}%</b></div></div>`;}
+function skillHtml(sk){const tgt={e:'Single enemy',ae:'All enemies',a:'Single ally',aa:'All allies',s:'Self'}[sk.t];return`<div class="skill"><b>${sk.i} ${sk.n}</b>${sk.every?'<span class="cdtag">♾️ Every turn</span>':sk.cd?`<span class="cdtag">⏳ Cooldown ${sk.cd}</span>`:'<span class="cdtag">Basic</span>'}<br>${sk.d}<br><span class="mut">🎯 ${tgt}${sk.fx.length?' · '+sk.fx.map(f=>FX[f[0]].i+' '+FX[f[0]].n).join(', '):''}</span></div>`;}
 function openDex(id){const d=MD[id];const b=baseStats(id,1,d.rar);
  openModal(`<div class="mhead el-${d.el}">${avHtml(d.id,0,'',d.rar)}<div><h3>${d.n}</h3>${starsHtml(d.rar)} <span class="mut">${RNAME[d.rar]} · ${ELEM[d.el].i} ${ELEM[d.el].n}</span><br><span class="mut">Leader: ${leadText(d.lead)}</span></div></div><p class="desc">"${d.desc}"</p>
  <table class="stat-t">${['hp','atk','def','spd'].map(k=>`<tr><td>${STATN[k]} (Lv1)</td><td>${b[k]}</td></tr>`).join('')}<tr><td>CRI Rate / Dmg</td><td>${b.cr}% / ${b.cd}%</td></tr></table>${d.skills.map(skillHtml).join('')}${(d.passives||[]).map(pasHtml).join('')}`,'dex');}
@@ -1708,11 +1711,10 @@ function eff(u,s){let v=u[s];const h=id=>u.fx.some(f=>f.id===id);
  if(s==='atk'){if(h('atkUp'))v*=1.5;if(h('atkDown'))v*=0.5;}
  if(s==='def'){if(h('defUp'))v*=1.7;if(h('defBreak'))v*=0.3;}
  if(s==='spd'){if(h('spdUp'))v*=1.3;if(h('slow'))v*=0.7;}
- // Fallen Majesty: +400% of the CURRENT value (x5) while current DEF > 1000; crit rate capped at 100%
+ // Fallen Majesty (always on since v1.3.1): +400% of the CURRENT value (x5); crit rate capped at 100%
  if(u.maj&&(s==='atk'||s==='cr'||s==='cd')&&empowered(u)){v*=5;if(s==='cr')v=Math.min(100,v);}
  return v;}
-const MAJ_DEF=1000;
-function empowered(u){return !!u.maj&&u.hp>0&&eff(u,'def')>MAJ_DEF;}
+function empowered(u){return !!u.maj&&u.hp>0;} // no DEF condition any more
 const allUnits=()=>[...B.allies,...B.enemies];
 const foesOf=u=>(u.side==='p'?B.enemies:B.allies).filter(x=>x.hp>0);
 const friendsOf=u=>(u.side==='p'?B.allies:B.enemies).filter(x=>x.hp>0);
@@ -1811,15 +1813,15 @@ function renderBattle(){if(!B||!$('#battle'))return;
   const hx=`scaleX(${u.hp/u.maxHp})`;c.querySelectorAll('.bar.hp i').forEach(i=>{if(i.style.transform!==hx)i.style.transform=hx;});c.querySelector('.hpt').textContent=`${fmt(u.hp)} / ${fmt(u.maxHp)}`;
   c.querySelector('.bar.atb i').style.transform=`scaleX(${Math.min(100,u.atb)/100})`;
   const g={};u.fx.forEach(f=>{g[f.id]=g[f.id]||{n:0,t:0};g[f.id].n++;g[f.id].t=Math.max(g[f.id].t,f.t);});
-  const emp=empowered(u);if(u.maj&&emp!==!!u._emp){u._emp=emp;float(u,emp?'👑 Fallen Majesty!':'Majesty fades',emp?'soul':'info',1);}
+  const emp=empowered(u);if(u.maj&&u.hp>0&&emp!==!!u._emp){u._emp=emp;float(u,emp?'👑 Fallen Majesty!':'Majesty fades',emp?'soul':'info',1);}
   c.querySelector('.ufx').innerHTML=(emp?'<span class="majx" title="Fallen Majesty: +400% ATK, CRI Rate, CRI Dmg">👑</span> ':'')+(u.soul?'<span title="Soul Taken: can never be revived">⛓️</span>':'')+Object.keys(g).map(k=>`<span title="${FX[k].n} (${g[k].t}t): ${FX[k].d}">${FX[k].i}${g[k].n>1?`<sub>${g[k].n}</sub>`:''}</span>`).join(' ');
   c.classList.toggle('emp',emp);c.classList.toggle('soul',!!u.soul);c.classList.toggle('dead',u.hp<=0);c.classList.toggle('active',u===actor&&u.hp>0);c.classList.toggle('tgt',valid.includes(u));
   const adv=c.querySelector('.uadv');
   if(actor&&actor.side==='p'&&u.side==='e'&&u.hp>0&&sk&&(sk.t==='e'||sk.t==='ae')){const em=elemMod(actor.el,u.el);adv.className='uadv '+(em>0?'adv-up':em<0?'adv-dn':'');adv.textContent=em>0?'▲ ADV':em<0?'▼ WEAK':'';}
   else{adv.className='uadv';adv.textContent='';}});
  const sb=$('#bSkills'),dd=$('#bDesc');
- if(B.awaiting&&actor&&actor.side==='p'){sb.innerHTML=actor.skills.map((s,i)=>`<button class="sk ${i===B.sel?'on':''}" id="sk${i}" onclick="selSkill(${i})"><span class="si">${s.i}</span><span class="sn">${s.n}</span><small>${s.cd?'CD '+s.cd:'Basic'} · ${{e:'1 enemy',ae:'All enemies',a:'1 ally',aa:'All allies',s:'Self'}[s.t]}</small>${actor.cds[i]>0?`<span class="cdn">⏳${actor.cds[i]}</span>`:''}</button>`).join('');
-  dd.innerHTML=`<b>${spi(actor.id)} ${actor.n}'s ${actor.bonus?'<span style="color:#ff6a8a">extra </span>':''}turn</b> — ${sk.d}${actor.maj?`<br><span style="color:${empowered(actor)?'#ff8a3d':'#b9a8d6'}">👑 Fallen Majesty ${empowered(actor)?'ACTIVE':'inactive'} · DEF ${fmt(eff(actor,'def'))}/${fmt(MAJ_DEF)}</span>`:''}<br><span style="color:#7cff9e">👉 Tap a glowing ${sk.t==='e'||sk.t==='ae'?'enemy':sk.t==='s'?'(self)':'ally'} to use it.</span>`;}
+ if(B.awaiting&&actor&&actor.side==='p'){sb.innerHTML=actor.skills.map((s,i)=>`<button class="sk ${i===B.sel?'on':''}" id="sk${i}" onclick="selSkill(${i})"><span class="si">${s.i}</span><span class="sn">${s.n}</span><small>${s.every?'Every turn':s.cd?'CD '+s.cd:'Basic'} · ${{e:'1 enemy',ae:'All enemies',a:'1 ally',aa:'All allies',s:'Self'}[s.t]}</small>${actor.cds[i]>0?`<span class="cdn">⏳${actor.cds[i]}</span>`:''}</button>`).join('');
+  dd.innerHTML=`<b>${spi(actor.id)} ${actor.n}'s ${actor.bonus?'<span style="color:#ff6a8a">extra </span>':''}turn</b> — ${sk.d}${actor.maj?`<br><span style="color:#ff8a3d">👑 Fallen Majesty: always active (x5 ATK · CRI Rate · CRI Dmg)</span>`:''}<br><span style="color:#7cff9e">👉 Tap a glowing ${sk.t==='e'||sk.t==='ae'?'enemy':sk.t==='s'?'(self)':'ally'} to use it.</span>`;}
  else{sb.innerHTML=actor?`<div class="mut" style="padding:14px">${actor.side==='p'?(B.auto?'🤖 Auto-battling…':''):`${spi(actor.id)} ${actor.n} is thinking…`}</div>`:'<div class="mut" style="padding:14px">…</div>';dd.innerHTML='';}}
 
 function nextTurn(){if(!B||B.over)return;if(checkEnd())return;
@@ -1853,8 +1855,8 @@ function bonusTurn(u){if(!B||B.over)return;if(u.hp<=0||!foesOf(u).length){later(
 function validTargets(u,sk){switch(sk.t){case'e':case'ae':return foesOf(u);case'a':case'aa':return friendsOf(u);default:return[u];}}
 const isHealSkill=sk=>sk.heal&&sk.t!=='s';
 function aiAct(u){if(!B||B.over||u.hp<=0)return;const foes=foesOf(u),friends=friendsOf(u);if(!foes.length){endTurn(u);return;}
- if(u.myth){ // ultimate when it can hit 2+ foes or a boss; otherwise rend the weakest foe to harvest a soul
-  const ui=u.skills.findIndex((s,i)=>s.t==='ae'&&u.cds[i]===0);const si2=ui>=0&&(foes.length>=2||foes.some(f=>f.boss))?ui:0;
+ if(u.myth){ // mythic: the AoE whenever it's ready (Lucifer has only Infernal Apocalypse since v1.3.1, so: every turn)
+  const ui=u.skills.findIndex((s,i)=>s.t==='ae'&&u.cds[i]===0);const si2=ui>=0&&(u.skills.length===1||foes.length>=2||foes.some(f=>f.boss))?ui:0;
   useSkill(u,si2,u.skills[si2].t==='ae'?foes[0]:foes.reduce((a,b)=>a.hp<=b.hp?a:b));return;}
  const avail=u.skills.map((s,i)=>i).filter(i=>u.cds[i]===0);let si=0;
  const lowest=arr=>arr.reduce((a,b)=>a.hp/a.maxHp<=b.hp/b.maxHp?a:b);
@@ -1869,13 +1871,13 @@ function aiAct(u){if(!B||B.over||u.hp<=0)return;const foes=foesOf(u),friends=fri
 function selSkill(i){if(!B||!B.awaiting)return;const u=B.actor;if(u.cds[i]>0){toast(`⏳ ${u.skills[i].n} is on cooldown (${u.cds[i]} turn${u.cds[i]>1?'s':''}).`);return;}B.sel=i;sfx('click');
  const sk=u.skills[i];if(sk.t==='s'){useSkill(u,i,u);return;}renderBattle();}
 function unitInfo(u){const g={};u.fx.forEach(f=>{g[f.id]=Math.max(g[f.id]||0,f.t);});let fx=Object.keys(g).map(k=>`${FX[k].i} ${FX[k].n} (${g[k]}t): ${FX[k].d}`).join('<br>');
- if(u.maj)fx=`👑 Fallen Majesty ${empowered(u)?'<b style="color:#ff8a3d">ACTIVE</b>':'inactive'} (DEF ${fmt(eff(u,'def'))}/${fmt(MAJ_DEF)})`+(fx?'<br>'+fx:'');if(u.soul)fx='⛓️ Soul Taken: cannot be revived'+(fx?'<br>'+fx:'');
+ if(u.maj)fx=`👑 Fallen Majesty <b style="color:#ff8a3d">ALWAYS ACTIVE</b> (ATK ${fmt(eff(u,'atk'))} · CRI ${Math.round(eff(u,'cr'))}% · CRI Dmg ${Math.round(eff(u,'cd'))}%)`+(fx?'<br>'+fx:'');if(u.soul)fx='⛓️ Soul Taken: cannot be revived'+(fx?'<br>'+fx:'');
  return`${spi(u.id)} <b>${u.n}</b> Lv${u.lvl} · ❤️ ${fmt(u.hp)}/${fmt(u.maxHp)}${fx?'<br>'+fx:''}`;}
 function tapUnit(bid){if(!B)return;const t=allUnits().find(x=>x.bid===bid);if(!t)return;
  if(!B.awaiting){toast(unitInfo(t));return;} // tap = inspect (replaces hover tooltips)
  const u=B.actor;const sk=u.skills[B.sel];
  if(!validTargets(u,sk).includes(t)){toast((sk.t==='e'||sk.t==='ae'?'Pick a glowing enemy 🎯':'Pick a glowing ally 💚')+'<br>'+unitInfo(t));return;}useSkill(u,B.sel,t);}
-function useSkill(u,si,tgt){B.awaiting=false;const sk=u.skills[si];u.cds[si]=sk.cd;setMsg(`${spi(u.id)} ${u.n} uses <span style="color:${u.myth&&sk.cd?'#ff4d6d':'#ffd166'}">${sk.i} ${sk.n}</span>!`);
+function useSkill(u,si,tgt){B.awaiting=false;const sk=u.skills[si];u.cds[si]=sk.cd;setMsg(`${spi(u.id)} ${u.n} uses <span style="color:${u.myth&&(sk.cd||sk.every)?'#ff4d6d':'#ffd166'}">${sk.i} ${sk.n}</span>!`);
  renderBattle();skillMotion(u,sk,tgt);vxPlay(u,sk,vxTargets(u,sk,tgt));if((SKVFX[sk.n]||[]).some(r=>r[0]==='abyss'))abyssStart(u,foesOf(u));
  later(()=>{resolveSkill(u,sk,tgt);renderBattle();later(()=>endTurn(u),sk.after||(sk.h>3?900:600));},sk.hitAt||HIT);}
 // pick the body motion that matches the skill's VFX recipe
@@ -1905,11 +1907,17 @@ function strike(u,t,sk,h){const em=elemMod(u.el,t.el);const cr=Math.min(100,eff(
 function hurt(t,d,src){if(t.hp<=0)return;t.hp=Math.max(0,t.hp-d);if(t.hp===0){t.fx=[];t.atb=0;if(t.side==='p')B.deaths++;
   const soul=!!(src&&src.har&&src.side!==t.side); // Soul Harvest: killing blow → Soul Taken + one bonus turn
   if(soul){t.soul=1;if(!src.bonus&&src.hp>0)B.harvest=src;}
-  float(t,soul?'⛓️ Soul Taken':'KO 💀',soul?'soul':'info',2);vxKO(t,soul);if(!t._sink)koAnim(t);}}
+  float(t,soul?'⛓️ Soul Taken':'KO 💀',soul?'soul':'info',2);vxKO(t,soul);if(!t._sink)koAnim(t);
+  if(soul)harvestRevive(src);}}
+// Soul Harvest revive: each kill by Lucifer revives ONE fallen ally (first in team order; never a Soul Taken unit) at 50% max HP.
+// It grants no turn and resets the ally's ATB, so it can't loop with the extra turn. No ally down → nothing happens.
+function harvestRevive(src){if(!B||src.hp<=0)return null;const t=(src.side==='p'?B.allies:B.enemies).find(x=>x!==src&&canRevive(x));if(!t)return null;
+ if(!revive(t,0.5,'⛓️ Revived by Soul Harvest!'))return null;B.revives=(B.revives||0)+1;if(src.side==='p')S.stats.revives=(S.stats.revives||0)+1;
+ setMsg(`${spi(src.id)} ${src.n} harvests a soul: ${spi(t.id)} ${t.n} rises again at 50% HP!`);vxRevive(t);return t;}
 // Revive rules: the game has no revive skill yet, but ANY revive must go through here. Soul Taken units can never return.
 function canRevive(t){return !!t&&t.hp<=0&&!t.soul;}
-function revive(t,pct){if(!canRevive(t)){if(t&&t.soul)float(t,'Soul Taken: cannot revive','soul',1);return false;}
- t.hp=Math.max(1,Math.round(t.maxHp*(pct||.3)));t.atb=0;const m=mvOf(t);if(m&&m.getAnimations)m.getAnimations().forEach(a=>a.cancel());setFace(t,'idle');float(t,'Revived! ✨','heal');renderBattle();return true;}
+function revive(t,pct,msg){if(!canRevive(t)){if(t&&t.soul)float(t,'Soul Taken: cannot revive','soul',1);return false;}
+ t.hp=Math.max(1,Math.round(t.maxHp*(pct||.3)));t.atb=0;t.fx=[];const m=mvOf(t);if(m&&m.getAnimations)m.getAnimations().forEach(a=>a.cancel());setFace(t,'idle');float(t,msg||'Revived! ✨','heal',1);renderBattle();return true;}
 function heal(t,a){if(t.hp<=0||t.soul||a<=0)return;const b=t.hp;t.hp=Math.min(t.maxHp,t.hp+a);if(t.hp>b)float(t,'+'+fmt(t.hp-b),'heal');}
 function addFx(src,t,id,turns,ch){const buff=FX[id].buff;
  if(!buff){let c=ch;if(elemMod(src.el,t.el)<0)c*=0.75;if(t.boss&&id==='stun')c*=0.5;if(Math.random()*100>=c){if(ch>=50)float(t,'Resisted','info',1);return;}}
@@ -1989,6 +1997,8 @@ function vxTargets(u,sk,tgt){return sk.t==='ae'?foesOf(u):sk.t==='aa'?friendsOf(
 function vxPlay(u,sk,tgts){try{if(!VX.cv||!B||B.speed>3||document.hidden)return;const f=vxPos(u);if(!f)return;const T=tgts.map(t=>{const p=vxPos(t);if(p)p.u=t;return p;}).filter(Boolean);if(!T.length)T.push(f);
  skillVfx(u,sk).forEach(([k,o])=>{o=o||{};if(!VREC[k])return;let sl=0;if(o.g==='@'){sl=k==='dive'&&sk.t==='e'&&!noMo();o=Object.assign({},o,{g:'@'+u.id+(u.side==='e'?'|f':'')});}VX.fx.push({k,o,sl,f,T:o.on==='self'?[f]:T,t:-(o.d||0),dur:(o.d||0)+(o.dur||1150),once:{},sd:Math.random()*1000});});
  vxKick();}catch(e){console.warn('vfx',e);}}
+function vxRevive(u){const c=cardOf(u);if(c){c.classList.remove('rev');void c.offsetWidth;c.classList.add('rev');later(()=>{const c2=cardOf(u);if(c2)c2.classList.remove('rev');},900);}
+ try{if(!VX.cv||!B||B.speed>3)return;const p=vxPos(u);if(!p)return;vxRing(p.x,p.y+p.r*.5,'#ffd27a',p.r*1.7);vxRing(p.x,p.y,'#ff2a4a',p.r*1.2);spray(p.x,p.y+p.r*.6,'#ffd27a',12,2.4,{vy:-2.2,g:-.04});spray(p.x,p.y+p.r*.6,'#ff2a4a',6,1.8,{vy:-1.6,g:-.03});vxKick();}catch(e){}}
 function vxKO(u,soul){try{if(!VX.cv||!B||B.speed>3)return;const p=vxPos(u);if(!p)return;if(soul){spray(p.x,p.y,'#ff2a4a',12,2.6,{vy:1.2,g:.05});spray(p.x,p.y,'#3a0010',6,2);vxRing(p.x,p.y+p.r*.6,'#ff2a4a',p.r*1.4);}else{spray(p.x,p.y,'#b9a8ff',10,3,{vy:-1.5,g:-.03});vxRing(p.x,p.y,'#e3c9ff',p.r*1.6);}vxKick();}catch(e){}}
 function vxDrawP(p,a){const cx=VX.cx;
  if(p.e){E(p.e,p.x,p.y,p.s,p.r=(p.r||0)+(p.vr||0),a);return;}
