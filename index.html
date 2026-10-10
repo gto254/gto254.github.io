@@ -639,6 +639,26 @@ body.lite .scene .shim,body.lite .scene .fgx.top,body.lite .scene .setp,body.lit
 .world .wrays{position:absolute;inset:0;pointer-events:none;background:repeating-conic-gradient(from 200deg at 88% -8%,#fff6c81a 0 4deg,transparent 4deg 13deg);mask-image:linear-gradient(180deg,#000,transparent 75%);-webkit-mask-image:linear-gradient(180deg,#000,transparent 75%);animation:rayp 9s ease-in-out infinite alternate}
 body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:none!important}
 @media (prefers-reduced-motion:reduce){.world .spk i,.world .cshad i,.world .wrays{animation:none!important}}
+
+/* ===== v1.4.2 shop (play money, TEST MODE) ===== */
+.tm-banner{position:sticky;top:0;z-index:5;margin:0 0 10px;padding:8px 12px;border-radius:10px;background:repeating-linear-gradient(135deg,#ffd166 0 14px,#ffb03d 14px 28px);color:#2a1400;font-size:14px;text-align:center;box-shadow:0 2px 10px #0006}
+.modal .tm-banner{position:static}
+.tm-note{margin:10px 0;padding:8px 10px;border-radius:8px;background:#ffd16622;border:1px solid #ffd166;color:#fff3c0}
+.shop-tabs{flex-wrap:wrap}.shop-tabs .btn{min-height:44px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.cpack{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;padding:14px 8px 10px;border-radius:14px;border:1px solid #5a4fb0;background:linear-gradient(180deg,#2e2670,#1c1648);color:#fff;font:inherit;cursor:pointer;min-height:44px;text-align:center}
+.cpack:active{transform:scale(.97)}
+.cpack .ci{font-size:34px;line-height:1}.cpack b{font-size:14px}.cpack small{font-size:11.5px;opacity:.85}
+.cpack .camt{font-size:18px;font-weight:900;color:#7cf0ff}
+.cpack .price{margin-top:6px;padding:6px 14px;border-radius:20px;background:linear-gradient(180deg,#ffd166,#f0a020);color:#2a1400;font-weight:900;font-size:15px}
+.cpack .dbl{position:absolute;top:-8px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:2px 8px;border-radius:10px;background:#ff4d6d;font-size:10.5px;font-weight:900}
+.cpack.prem{border-color:#ffd166;background:linear-gradient(180deg,#5a3a10,#2a1a48);box-shadow:0 0 14px #ffd16644}
+.pack-card{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:14px;border:1px solid #5a4fb0;background:linear-gradient(135deg,#3a2a80,#1c1648);margin-bottom:12px}
+.pack-card .ci{font-size:40px}.pack-card ul,.plines{margin:6px 0 10px 18px;line-height:1.6}
+.spick{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;max-height:55vh;overflow:auto}
+.spk-b{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:10px;border:1px solid #4a3f8f;background:#1a1440;color:#fff;font:inherit;cursor:pointer;min-height:44px}
+.odds details{margin:8px 0;padding:6px 8px;border-radius:10px;background:#1a1440}.odds summary{cursor:pointer;min-height:32px;display:flex;align-items:center}
+.tslot.hoard .av{box-shadow:0 0 0 3px #ffd166,0 0 14px 2px #ffd166aa;border-radius:12px}
 </style>
 </head>
 <body>
@@ -661,7 +681,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.4.1';
+const VERSION='1.4.2';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -978,6 +998,11 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.4.2',date:'Oct 10, 2026',title:'🛒 New Shop (test mode)',sections:[
+  ['🛒 New Shop (test mode)',['The Shop has a new look with tabs for Crystals, Packs, Pass, Items and Odds. Open it from the island Shop or the bottom menu.','TEST MODE: prices are labels only and no real money is ever charged. A test-mode banner is always shown, and every purchase asks you to confirm first.','Crystal bundles from 300 to 19,500 crystals. Your first purchase of each bundle doubles its base crystals (once per account). The biggest bundle also unlocks a golden Rift Hoard frame for your team leader.','Starter Pack (once per account): 900 crystals, 3 Mystic Scrolls, a 4★ monster of your choice and 100 energy.',"Tamer’s Monthly Pass: 300 crystals now plus 70 every day for 30 days."]],
+  ['📊 Fair Summons',['New Odds tab with the exact chance of every rarity and every monster, for every scroll.','A 5★ is still guaranteed by Mystic/Featured summon #60, with the counter always visible.','Every 10x Mystic or Featured summon now contains at least one 4★ or better.','Summons are cheaper: 1 Mystic summon = 75 crystals (10x = 750), Featured = 110 (10x = 1,100). Mystic Scrolls you already own still summon as before.']],
+  ['👪 Younger Players',['Before the first purchase you are asked for your birth year. Players under 16 need a parent or guardian to approve each purchase.']],
+  ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.4.1',date:'Oct 9, 2026',title:'✨ Living Worlds',sections:[
   ['🎨 Richer Backgrounds',['Every scene got more depth: a distant haze layer, warmer lighting, a soft light pool under the fighters and framing foreground silhouettes.','New details per area: lava falls and heat shimmer in Emberfall, glittering sea and drifting fog in the ruins, icicles and aurora in the peaks, a ringed planet over the rift, torches in the Keep and moonbeams over the Necropolis.','The home island now has shallow water, sparkling waves, drifting cloud shadows and sun rays.']],
   ['🌦️ Weather',['Each area has its own weather on top of its particles: falling leaves and fireflies in the forest, ash and embers over the lava, snow gusts in the peaks, drifting stars and the odd shooting star in the rift, rolling fog in the ruins.']],
@@ -1604,7 +1629,7 @@ function migrate(){ // home for future update migrations
  // unique monsters: one per save (dedupe imported/edited saves), natural stars, permanently locked
  const my=S.mons.filter(m=>MD[m.id].uniq);if(my.length){const keep=new Set();my.slice().sort((a,b)=>b.lvl-a.lvl).forEach(m=>{if(keep.has(m.id))S.mons=S.mons.filter(x=>x!==m);else{keep.add(m.id);m.lock=true;m.stars=MD[m.id].rar;}});}
  if(!Array.isArray(S.mail))S.mail=[];if(!S.mailGot||typeof S.mailGot!=='object')S.mailGot={};if(!S.redeemed||typeof S.redeemed!=='object')S.redeemed={};
- deliverMail('welcome-v130');
+ deliverMail('welcome-v130');shopState(); // v1.4.2 shop state (purchases, pass, age gate)
  S.team=S.team.filter(u=>S.mons.some(m=>m.uid===u)).slice(0,4);
  runeSanity();}
 
@@ -1706,10 +1731,10 @@ function renderSummon(){return backBar('home','Isle')+renderSummon0();}
 function renderSummon0(){const [fa,fs]=bannerNow();
  const card=(type,extra,btns)=>{const sc=SCROLLS[type];return`<div class="scard" style="background:${sc.bg}"><span class="big">${sc.i}</span><h3>${sc.n}</h3><p class="mut" style="color:#eee">${sc.desc}</p>${extra||''}<div class="row-btns">${btns}</div><details><summary>📊 Drop rates</summary>${rateTable(type)}${type==='featured'?`<p class="mut" style="color:#eee">50% of 5★ results are ${MD[fa].n}; 40% of 4★ results are ${MD[fs].n}.</p>`:''}${type==='mystic'||type==='featured'?`<p class="mut" style="color:#eee">Pity: a 5★ is guaranteed on summon #${PITY} without one.</p>`:''}</details></div>`;};
  const my=S.scrolls.mystic;
- return`<div class="card"><div class="sec">🌀 The Summoning Rift</div><p class="mut">Tap a scroll to tear open the Rift. 5★ pity: <b>${S.pity}/${PITY}</b></p><div class="prog" style="margin-top:6px"><i style="width:${S.pity/PITY*100}%"></i></div>${!S.firstMulti?'<p class="mut" style="margin-top:6px">🎁 First 10x Mystic/Featured summon: <b>guaranteed 4★ or better!</b></p>':''}</div>
+ return`<div class="card"><div class="sec">🌀 The Summoning Rift</div><p class="mut">Tap a scroll to tear open the Rift. 5★ pity: <b>${S.pity}/${PITY}</b></p><div class="prog" style="margin-top:6px"><i style="width:${S.pity/PITY*100}%"></i></div><p class="mut" style="margin-top:6px">🎁 Every 10x Mystic/Featured summon: <b>at least one 4★ or better</b></p><div class="row-btns"><button class="btn sm ghost" id="sumOdds" style="min-height:44px" onclick="UI.shopTab='odds';setTab('shop')">📊 Full odds &amp; pity</button></div></div>
  ${card('featured',`<div style="display:flex;gap:10px;align-items:center;margin:6px 0">${avHtml(fa,64)}<div><b style="font-size:16px">${MD[fa].n}</b> ${starsHtml(5)}<br><span>Rate-up: ${spi(fs)} ${MD[fs].n} ${starsHtml(4)}</span><br><span class="mut" style="color:#fde">Ends in <b class="cnt" data-cd="${bannerEnds()}">${fmtDur(bannerEnds()-Date.now())}</b></span></div></div>`,
-  `<button class="btn gold" id="sumFeat1" onclick="doSummon('featured',1)">x1 · 💎150</button><button class="btn gold" onclick="doSummon('featured',10)">x10 · 💎1350</button>`)}
- ${card('mystic',`<p><b>Owned: ${my}</b></p>`,`<button class="btn" id="sumMys1" onclick="doSummon('mystic',1)">x1 · ${my>=1?'📜1':'💎100'}</button><button class="btn" id="sumMys10" onclick="doSummon('mystic',10)">x10 · ${my>=10?'📜10':'💎900'}</button>`)}
+  `<button class="btn gold" id="sumFeat1" onclick="doSummon('featured',1)">x1 · 💎${FEAT_CR}</button><button class="btn gold" onclick="doSummon('featured',10)">x10 · 💎${fmt(FEAT_CR*10)}</button>`)}
+ ${card('mystic',`<p><b>Owned: ${my}</b></p>`,`<button class="btn" id="sumMys1" onclick="doSummon('mystic',1)">x1 · ${my>=1?'📜1':'💎'+SUMMON_CR}</button><button class="btn" id="sumMys10" onclick="doSummon('mystic',10)">x10 · ${my>=10?'📜10':'💎'+fmt(SUMMON_CR*10)}</button>`)}
  ${card('radiant',`<p><b>Owned: ${S.scrolls.radiant}</b></p>`,`<button class="btn gold" onclick="doSummon('radiant',1)" ${S.scrolls.radiant<1?'disabled':''}>Summon x1</button>`)}
  ${card('common',`<p><b>Owned: ${S.scrolls.common}</b></p>`,`<button class="btn ghost" id="sumCom1" onclick="doSummon('common',1)" ${S.scrolls.common<1?'disabled':''}>x1</button><button class="btn ghost" onclick="doSummon('common',10)" ${S.scrolls.common<10?'disabled':''}>x10</button>`)}`;}
 function rollStars(type){if((type==='mystic'||type==='featured')&&S.pity>=PITY-1)return 5;let r=Math.random()*100;const rt=RATES[type];for(let i=0;i<5;i++){if(r<rt[i])return i+1;r-=rt[i];}return rt.findIndex(x=>x>0)+1;}
@@ -1718,12 +1743,12 @@ function rollSummon(type){const st=rollStars(type);if(type==='mystic'||type==='f
  return{id:pick(byRar(st)).id,stars:st};}
 function doSummon(type,n){let ok=false;
  if(type==='common'){if(S.scrolls.common>=n){S.scrolls.common-=n;ok=true;}}
- else if(type==='mystic'){if(S.scrolls.mystic>=n){S.scrolls.mystic-=n;ok=true;}else{const c=n===10?900:100*n;if(S.gems>=c){S.gems-=c;ok=true;}}}
- else if(type==='featured'){const c=n===10?1350:150*n;if(S.gems>=c){S.gems-=c;ok=true;}}
+ else if(type==='mystic'){if(S.scrolls.mystic>=n){S.scrolls.mystic-=n;ok=true;}else{const c=SUMMON_CR*n;if(S.gems>=c){S.gems-=c;ok=true;}}}
+ else if(type==='featured'){const c=FEAT_CR*n;if(S.gems>=c){S.gems-=c;ok=true;}}
  else if(type==='radiant'){if(S.scrolls.radiant>=n){S.scrolls.radiant-=n;ok=true;}}
  if(!ok){toast('Not enough currency! Clear stages, events & quests to earn more. 💎');return;}
  const res=[];for(let i=0;i<n;i++)res.push(rollSummon(type));
- if(n===10&&!S.firstMulti&&(type==='mystic'||type==='featured')){if(!res.some(r=>r.stars>=4))res[9]={id:pick(byRar(4)).id,stars:4};S.firstMulti=true;}
+ if(n===10&&(type==='mystic'||type==='featured')){if(!res.some(r=>r.stars>=4)){const [,f4]=bannerNow();res[9]={id:type==='featured'&&Math.random()<.4?f4:pick(byRar(4)).id,stars:4};}S.firstMulti=true;} // v1.4.2: every 10x contains a 4★ or better
  const mons=res.map(r=>{const isNew=!S.dex[r.id];const m=addMon(r.id,r.stars);m._new=isNew;if(r.stars>=5)m.lock=true;return m;});
  S.stats.summons+=n;S.stats.fives+=mons.filter(m=>m.stars>=5).length;prog('summon',n);
  const out=mons.map(m=>{const o={uid:m.uid,id:m.id,stars:m.stars,isNew:m._new};delete m._new;return o;});
@@ -1828,7 +1853,7 @@ function teamPower(){return S.team.map(monByUid).filter(Boolean).reduce((a,m)=>a
 function renderTeam(){const team=S.team.map(monByUid);const lead=team[0]?MD[team[0].id].lead:null;
  return`${backBar('home','Isle')}<div class="card"><div class="sec">🛡️ Battle Team <span class="mut" style="margin-left:auto">Power ${fmt(teamPower())}</span></div>
  <div class="tslots">${[0,1,2,3].map(i=>{const m=team[i];if(!m)return`<div class="tslot ${i===0?'lead':''}">${i===0?'<span class="crown">👑</span>':''}<span style="font-size:26px;opacity:.5">➕</span><span class="mut">${i===0?'Leader':'Empty'}</span></div>`;const d=MD[m.id];
-  return`<div class="tslot ${i===0?'lead':''} el-${d.el}">${i===0?'<span class="crown">👑</span>':''}<div class="av pf ${frx(m.id,m.stars)}" onclick="openMon(${m.uid})">${sprImg(m.id)}<span class="elb">${ELEM[d.el].i}</span></div>${starsHtml(m.stars)}<div style="font-size:12.5px;font-weight:700">${d.n}</div><div class="mut">Lv ${m.lvl}</div>
+  return`<div class="tslot ${i===0?'lead':''} ${i===0&&S.shop&&S.shop.frame?'hoard':''} el-${d.el}">${i===0?'<span class="crown">👑</span>':''}<div class="av pf ${frx(m.id,m.stars)}" onclick="openMon(${m.uid})">${sprImg(m.id)}<span class="elb">${ELEM[d.el].i}</span></div>${starsHtml(m.stars)}<div style="font-size:12.5px;font-weight:700">${d.n}</div><div class="mut">Lv ${m.lvl}</div>
   <div style="display:flex;gap:3px;margin-top:3px">${i>0?`<button class="btn sm ghost" title="Make leader" onclick="makeLeader(${i})">👑</button>`:''}<button class="btn sm ghost" title="Remove" onclick="toggleTeam(${m.uid})">✕</button></div></div>`;}).join('')}</div>
  <p class="mut">👑 Leader skill: <b style="color:#ffd166">${team[0]?MD[team[0].id].n+' — '+leadText(lead):'—'}</b></p>
  <div class="row-btns"><button class="btn" onclick="autoTeam()">✨ Auto-fill strongest</button><button class="btn ghost" onclick="S.team=[];save();render()">Clear</button><button class="btn gold" onclick="setTab('battle')">⚔️ To Battle</button></div></div>
@@ -2200,7 +2225,7 @@ const PLACES=[
  ['altar','monsters','Monster Altar','🐾',19,45,'Your monsters'],
  ['portal','dungeons','Cairos Portal','🌌',81,44,'Rune dungeons'],
  ['runes','runes','Rune Workshop','💠',33,64,'Equip & upgrade runes'],
- ['shop','shop','Shop','🛒',67,62,'Energy · scrolls · mana'],
+ ['shop','shop','Shop','🛒',67,62,'Crystals · packs · pass'],
  ['camp','team','Team Camp','🛡️',50,81,'Set up your team'],
  ['board','quests','Quest Board','📜',15,80,'Daily quests & rewards'],
  ['mail','mail','Mailbox','📬',85,80,'Letters & gifts'],
@@ -2252,15 +2277,93 @@ function renderToa(){return backBar('battle','Battle')+toaHtml();}
 /* =================== SHOP =================== */
 const SHOP=[
  {id:'energy',i:'⚡',n:'Energy Refill',d:`Refill energy to ${ENERGY_MAX}`,c:30,f:()=>{S.energy=Math.max(energyNow(),ENERGY_MAX);S.enAt=Date.now();}},
- {id:'mystic',i:'📜',n:'Mystic Scroll',d:'Summons a 3–5★ monster',c:90,f:()=>{S.scrolls.mystic++;}},
+ {id:'mystic',i:'📜',n:'Mystic Scroll',d:'Summons a 3–5★ monster (see Odds)',c:75,f:()=>{S.scrolls.mystic++;}},
  {id:'common5',i:'📃',n:'5 Common Scrolls',d:'Summons 1–3★ monsters',c:60,f:()=>{S.scrolls.common+=5;}},
  {id:'mana',i:'💰',n:'Mana Chest',d:'60,000 mana (gold) for rune upgrades',c:120,f:()=>{S.gold+=60000;}},
  {id:'runes',i:'💠',n:'Rune Pack',d:'3 random 5★ runes (Rare or better)',c:150,f:()=>{for(let i=0;i<3;i++)newRune({grade:5,rar:rollRar(2,4)});}},
- {id:'radiant',i:'🌟',n:'Radiant Scroll',d:'A guaranteed 5★ summon',c:1200,f:()=>{S.scrolls.radiant++;}},
+ {id:'radiant',i:'🌟',n:'Radiant Scroll',d:'Guaranteed 4★ or 5★ (see Odds)',c:900,f:()=>{S.scrolls.radiant++;}},
 ];
-function renderShop(){return`${backBar('home','Isle')}<div class="sec">🛒 Shop <span class="mut" style="margin-left:auto">💎 ${fmt(S.gems)} crystals</span></div>
- <div class="shop">${SHOP.map(x=>`<div class="sitem" id="shop-${x.id}"><span class="si2">${x.i}</span><div class="sd"><b>${x.n}</b><small>${x.d}</small></div><button class="btn gold" id="buy-${x.id}" onclick="buyShop('${x.id}')" ${S.gems>=x.c?'':'disabled'}>💎 ${fmt(x.c)}</button></div>`).join('')}</div>
- <p class="mut" style="margin-top:8px">Crystals (💎) come from first clears, quests, the Tower and Hard/Hell story stages.</p>`;}
+/* =================== SHOP (v1.4.2: play-money store, TEST MODE) ===================
+   Prices are labels only. No payment provider, no network calls. In TEST MODE a "purchase" grants the items at once
+   after an explicit confirm that says no real money is charged. With testMode off, purchases are refused (no payment path).
+   Regulatory wiring: posted odds, visible pity, 10x 4★ guarantee, an age gate with a parent-approval step for under-16s,
+   and a region flag that blocks paid random packs (e.g. Belgium) once test mode is off. */
+const SHOP_CFG={testMode:true,region:'',noRandomPaid:['BE'],minAge:16};
+const SUMMON_CR=75,FEAT_CR=110; // 1 Mystic summon = 75 crystals (10x = 750); Featured 110 (10x = 1,100)
+const CR_PACKS=[
+ {id:'c1',n:'Handful of Crystals',i:'💎',usd:1.99,base:300,bonus:0,pct:0},
+ {id:'c2',n:'Pouch of Crystals',i:'💎',usd:5.99,base:900,bonus:0,pct:0},
+ {id:'c3',n:'Bag of Crystals',i:'👝',usd:9.99,base:1500,bonus:300,pct:20},
+ {id:'c4',n:'Sack of Crystals',i:'🎒',usd:19.99,base:3000,bonus:600,pct:20},
+ {id:'c5',n:'Box of Crystals',i:'📦',usd:29.99,base:4500,bonus:1200,pct:27},
+ {id:'c6',n:'Chest of Crystals',i:'🧰',usd:49.99,base:7500,bonus:2400,pct:32},
+ {id:'c7',n:'Rift Hoard',i:'👑',usd:99.99,base:15000,bonus:4500,pct:30,frame:1},
+];
+const PASS={id:'pass',n:"Tamer's Monthly Pass",i:'🗓️',usd:4.99,now:300,daily:70,days:30};
+const STARTER={id:'starter',n:'Starter Pack',i:'🎁',usd:4.99,gems:900,mystic:3,energy:100,random:1};
+const usd=x=>'$'+x.toFixed(2);
+const dayNo=t=>{const d=new Date(t);return Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()))/864e5);};
+function shopState(){if(!S.shop||typeof S.shop!=='object')S.shop={};const s=S.shop;if(!s.first||typeof s.first!=='object')s.first={};if(!Array.isArray(s.log))s.log=[];return s;}
+function crTotal(p){return p.base+p.bonus+(shopState().first[p.id]?0:p.base);}
+function passInfo(){const p=shopState().pass;if(!p)return{active:false};const d=dayNo(Date.now())-p.start;const active=d>=0&&d<PASS.days;
+ return{active,day:d+1,left:Math.max(0,PASS.days-d),claimed:p.n,canClaim:active&&p.last!==dayNo(Date.now())&&p.n<PASS.days};}
+function starterPicks(){return byRar(4).map(d=>d.id);}
+function randomBlocked(item){return !!(item&&item.random)&&!SHOP_CFG.testMode&&SHOP_CFG.noRandomPaid.includes(String(SHOP_CFG.region||'').toUpperCase());}
+const tmBanner=()=>`<div class="tm-banner" id="tmBanner" role="note">🧪 <b>TEST MODE</b> · Prices are labels only. No real money is charged.</div>`;
+function renderShop(){shopState();const t=UI.shopTab||'crystals';
+ const tabs=[['crystals','💎 Crystals'],['packs','🎁 Packs'],['pass','🗓️ Pass'],['items','🛒 Items'],['odds','📊 Odds']];
+ let h=`${backBar('home','Isle')}${SHOP_CFG.testMode?tmBanner():''}<div class="sec">🛒 Shop <span class="mut" style="margin-left:auto">💎 ${fmt(S.gems)} crystals</span></div>
+ <div class="subtabs shop-tabs" role="tablist">${tabs.map(([k,n])=>`<button class="btn sm ${t===k?'':'ghost'}" id="stab-${k}" role="tab" aria-selected="${t===k}" onclick="UI.shopTab='${k}';render()">${n}</button>`).join('')}</div>`;
+ if(t==='crystals')h+=`<p class="mut" style="margin-bottom:8px">1 Mystic summon = 💎${SUMMON_CR}. Every bundle buys whole summons. ★ First purchase of each bundle: base crystals doubled (once per account).</p><div class="cgrid">${CR_PACKS.map(p=>{const f=!shopState().first[p.id];return`<button class="cpack ${p.frame?'prem':''}" id="pk-${p.id}" onclick="buyPack('${p.id}')">${f?'<span class="dbl">2× FIRST BUY</span>':''}<span class="ci">${p.i}</span><b>${p.n}</b><span class="camt">💎 ${fmt(crTotal(p))}</span><small>${fmt(p.base)}${p.bonus?` + ${fmt(p.bonus)} bonus`:''}${f?` + ${fmt(p.base)} first-buy`:''}</small><small>= ${(n=>n+(n===1?' summon':' summons'))(Math.floor((p.base+p.bonus)/SUMMON_CR))}${p.pct?` · +${p.pct}%`:''}${p.frame?' · 🖼️ Hoard frame':''}</small><span class="price">${usd(p.usd)}</span></button>`;}).join('')}</div>`;
+ else if(t==='packs'){const got=shopState().starter;const bl=randomBlocked(STARTER);h+=`<div class="pack-card" id="pk-starter"><span class="ci">${STARTER.i}</span><div><b>${STARTER.n}</b> <span class="tag">Once per account</span><ul><li>💎 ${fmt(STARTER.gems)} crystals</li><li>📜 ${STARTER.mystic} Mystic Scrolls (random, see Odds)</li><li>⭐ A 4★ monster of your choice (not random)</li><li>⚡ ${STARTER.energy} energy</li></ul>
+  ${got?'<button class="btn" disabled>✅ Purchased</button>':bl?'<button class="btn" disabled>🚫 Not available in your region</button>':`<button class="btn gold" id="buy-starter" onclick="buyPack('starter')">${usd(STARTER.usd)}</button>`}</div></div>`;}
+ else if(t==='pass'){const pi=passInfo();h+=`<div class="pack-card" id="pk-pass"><span class="ci">${PASS.i}</span><div><b>${PASS.n}</b><p class="mut">💎 ${PASS.now} at once + 💎 ${PASS.daily} every day for ${PASS.days} days = 💎 ${fmt(PASS.now+PASS.daily*PASS.days)} in total. Claim once per day here; a missed day is not carried over.</p>
+  ${pi.active?`<p><b>Active:</b> day ${pi.day}/${PASS.days} · claimed ${pi.claimed}/${PASS.days} · ${pi.left} day${pi.left===1?'':'s'} left</p><div class="prog"><i style="width:${pi.claimed/PASS.days*100}%"></i></div><div class="row-btns"><button class="btn gold" id="passClaim" onclick="claimPass()" ${pi.canClaim?'':'disabled'}>${pi.canClaim?`Claim 💎${PASS.daily}`:'✅ Claimed today'}</button></div>`
+   :`<button class="btn gold" id="buy-pass" onclick="buyPack('pass')">${usd(PASS.usd)} · 30 days</button>`}</div></div>`;}
+ else if(t==='items')h+=`<div class="shop">${SHOP.map(x=>`<div class="sitem" id="shop-${x.id}"><span class="si2">${x.i}</span><div class="sd"><b>${x.n}</b><small>${x.d}</small></div><button class="btn gold" id="buy-${x.id}" onclick="buyShop('${x.id}')" ${S.gems>=x.c?'':'disabled'}>💎 ${fmt(x.c)}</button></div>`).join('')}</div>
+  <p class="mut" style="margin-top:8px">Crystals (💎) also come from first clears, quests, the Tower and Hard/Hell story stages.</p>`;
+ else h+=oddsHtml();
+ if(shopState().frame)h+=`<p class="mut" style="margin-top:10px">🖼️ Rift Hoard frame: owned (shown on your team leader).</p>`;
+ return h;}
+/* posted odds: per rarity and per monster, for every scroll; sums shown */
+function oddsRows(type){const rt=RATES[type];const [f5,f4]=bannerNow();const rows=[];
+ rt.forEach((p,i)=>{if(!p)return;const st=i+1;const ids=byRar(st).map(d=>d.id);const per={};ids.forEach(id=>per[id]=p/ids.length);
+  if(type==='featured'&&st===5){ids.forEach(id=>per[id]=p*.5/ids.length);per[f5]=(per[f5]||0)+p*.5;}
+  if(type==='featured'&&st===4){ids.forEach(id=>per[id]=p*.6/ids.length);per[f4]=(per[f4]||0)+p*.4;}
+  rows.push({st,p,per});});return rows;}
+function oddsHtml(){const types=['mystic','featured','common','radiant'];
+ return`<div class="card odds" id="oddsPanel"><div class="sec">📊 Drop Odds</div><p class="mut">Exact chances for every summon. Pity: a 5★ is guaranteed by Mystic/Featured summon #${PITY} (yours: <b id="oddsPity">${S.pity}/${PITY}</b>). Every 10× Mystic/Featured summon contains at least one 4★ or better. Starter Pack scrolls use the Mystic odds.</p>
+ ${types.map(t=>{const rows=oddsRows(t);const tot=rows.reduce((a,r)=>a+r.p,0);return`<details ${t==='mystic'?'open':''} id="odds-${t}"><summary><b>${SCROLLS[t].i} ${SCROLLS[t].n}</b> · cost ${t==='mystic'?`💎${SUMMON_CR} or 1 scroll`:t==='featured'?`💎${FEAT_CR}`:'scroll only'}</summary>
+  <table class="rates">${rows.map(r=>`<tr><td>${starsHtml(r.st)} ${RNAME[r.st]}</td><td style="text-align:right" data-p="${r.p}">${r.p}%</td></tr><tr><td colspan="2" class="mut" style="font-size:12px">${Object.entries(r.per).map(([id,q])=>`${MD[id].n} ${(+q.toFixed(4))}%`).join(' · ')}</td></tr>`).join('')}<tr><td><b>Total</b></td><td style="text-align:right" class="otot"><b>${+tot.toFixed(4)}%</b></td></tr></table></details>`;}).join('')}</div>`;}
+/* purchase flow: (region) -> age gate -> parent approval (under 16) -> TEST MODE confirm -> grant */
+function packById(id){return id==='pass'?PASS:id==='starter'?STARTER:CR_PACKS.find(p=>p.id===id);}
+function buyPack(id,pick){const p=packById(id);if(!p)return;shopState();
+ if(!SHOP_CFG.testMode){toast('Real payments are not enabled in this build.');return;}
+ if(randomBlocked(p)){toast('🚫 This pack is not available in your region.');return;}
+ if(id==='starter'&&S.shop.starter){toast('Already purchased (once per account).');return;}
+ if(id==='pass'&&passInfo().active){toast('Your pass is already active.');return;}
+ if(id==='starter'&&!pick){openStarterPick();return;}
+ ageGate(()=>parentGate(()=>shopConfirm(p,pick)));}
+function curYear(){return new Date().getFullYear();}
+function isMinor(){const by=shopState().by;return by!=null&&curYear()-by<=SHOP_CFG.minAge;} // birth year only: anyone who may still be 16 or younger counts as under 16 (cautious)
+function ageGate(next){if(shopState().by!=null){next();return;}window._agNext=next;
+ openModal(`<h3>🎂 Before your first purchase</h3><p>Please enter your birth year. Players under 16 need a parent or guardian to approve purchases.</p><div class="rrow" style="margin-top:8px"><input id="ageYear" type="number" inputmode="numeric" min="1900" max="${curYear()}" placeholder="e.g. 1990" aria-label="Birth year" style="font-size:16px"><button class="btn gold" id="ageOk" onclick="ageSubmit()">Continue</button></div><p class="mut" id="ageMsg" style="margin-top:6px">Placeholder age check for this test build. It is stored only on this device.</p>`,'agegate');}
+function ageSubmit(){const v=+(($('#ageYear')||{}).value||0);if(!v||v<1900||v>curYear()){const m=$('#ageMsg');if(m)m.textContent='Please enter a valid year.';return;}shopState().by=v;save();closeModal('agegate');const n=window._agNext;window._agNext=null;if(n)n();}
+function parentGate(next){if(!isMinor()){next();return;}window._pgNext=next;
+ openModal(`<h3>👪 Parent or guardian approval</h3><p>This player is under 16. A parent or guardian must approve this purchase.</p><label style="display:flex;gap:8px;align-items:center;margin:10px 0"><input type="checkbox" id="pgChk" style="width:22px;height:22px"> I am the parent or guardian and I approve this purchase.</label><div class="row-btns c"><button class="btn ghost" onclick="closeModal('parent')">Cancel</button><button class="btn gold" id="pgOk" onclick="parentSubmit()">Approve</button></div><p class="mut">Placeholder approval step (test build). A real store would verify consent.</p>`,'parent');}
+function parentSubmit(){const c=$('#pgChk');if(!c||!c.checked){toast('A parent or guardian needs to tick the box first.');return;}closeModal('parent');const n=window._pgNext;window._pgNext=null;if(n)n();}
+function openStarterPick(){openModal(`<h3>🎁 Starter Pack: choose your 4★</h3><p class="mut">Pick one. This choice is not random.</p><div class="spick">${starterPicks().map(id=>`<button class="spk-b" id="spk-${id}" onclick="closeModal('spick');buyPack('starter','${id}')">${avHtml(id,56,'',4)}<small>${MD[id].n}</small></button>`).join('')}</div>`,'spick');}
+function packLines(p,pick){if(p===PASS)return[`💎 ${PASS.now} now`,`💎 ${PASS.daily}/day for ${PASS.days} days (claim daily)`];
+ if(p===STARTER)return[`💎 ${fmt(p.gems)} crystals`,`📜 ${p.mystic} Mystic Scrolls`,`⭐ ${MD[pick].n} (4★)`,`⚡ ${p.energy} energy`];
+ const f=!shopState().first[p.id];return[`💎 ${fmt(crTotal(p))} crystals${f?' (first-buy double included)':''}`].concat(p.frame?['🖼️ Rift Hoard portrait frame']:[]);}
+function shopConfirm(p,pick){window._spBuy=()=>grantPack(p.id,pick);
+ openModal(`${tmBanner()}<h3>${p.i} ${p.n}</h3><ul class="plines">${packLines(p,pick).map(x=>`<li>${x}</li>`).join('')}</ul><p class="tm-note" id="tmNote"><b>Test mode: no real money is charged.</b> Price label: ${usd(p.usd)}.</p><div class="row-btns c"><button class="btn ghost" onclick="closeModal('buy')">Cancel</button><button class="btn gold" id="buyOk" onclick="closeModal('buy');window._spBuy()">Get it (test)</button></div>`,'buy');}
+function grantPack(id,pick){const p=packById(id);const s=shopState();if(!p||!SHOP_CFG.testMode)return false;
+ if(id==='starter'){if(s.starter||!starterPicks().includes(pick))return false;s.starter=Date.now();S.gems+=p.gems;S.scrolls.mystic+=p.mystic;S.energy=energyNow()+p.energy;S.enAt=Date.now();const m=addMon(pick,4);if(m)m._new=0;}
+ else if(id==='pass'){if(passInfo().active)return false;s.pass={start:dayNo(Date.now()),n:0,last:null,at:Date.now()};S.gems+=PASS.now;}
+ else{const g=crTotal(p);if(!s.first[p.id])s.first[p.id]=Date.now();S.gems+=g;if(p.frame)s.frame=true;}
+ s.log.unshift({id,at:Date.now(),usd:p.usd,test:true});s.log=s.log.slice(0,50);save();sfx('five');renderTop();render();toast(`✅ ${p.i} ${p.n}: added (test mode)`);return true;}
+function claimPass(){const pi=passInfo();if(!pi.canClaim)return false;const p=S.shop.pass;p.n++;p.last=dayNo(Date.now());S.gems+=PASS.daily;save();sfx('buff');renderTop();render();toast(`💎 +${PASS.daily} from your Monthly Pass (${p.n}/${PASS.days})`);return true;}
 function buyShop(id){const x=SHOP.find(y=>y.id===id);if(!x)return;if(S.gems<x.c){toast('Not enough crystals 💎');return;}
  confirmBox(`Buy <b>${x.i} ${x.n}</b> for 💎${fmt(x.c)}?`,()=>{if(S.gems<x.c)return;S.gems-=x.c;x.f();save();sfx('buff');toast(`✅ Bought ${x.i} ${x.n}`);renderTop();render();},'Buy');}
 function giftRuneSet(set,gr){const L=GLEG[set]||{},k=RSET[L.to]?L.to:RSET[set]?set:'guard',mk=L.s&&L.pct?L.s:'def';
