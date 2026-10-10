@@ -573,6 +573,72 @@ select{min-height:44px;background:#1d1745;color:#fff;border:1px solid #4a3f8f;bo
 .b-order .to img{width:100%;height:100%}.b-order .to.e{border-color:#ff6b6b}.b-order .to.p{border-color:#5ee09a}.b-order .to.now{width:34px;height:34px;border-color:#ffd166;box-shadow:0 0 8px #ffd166}
 .b-order .lbl{font-size:10px;color:var(--mut);margin-right:2px}
 .unit.boss.insane .plate{border-color:#ff2a4a}
+
+/* ===== v1.4.1 idle breathing (transform-only, GPU): bob 2-4px + feet-anchored squash + tiny sway; paused while acting / hit / moving; off when KO ===== */
+.unit .br{position:absolute;inset:0;transform-origin:50% 94%;will-change:transform;animation:idleBr var(--bdu,3s) ease-in-out var(--bdl,0s) infinite}
+.unit .br.hv{animation-name:idleHv}
+.unit.acting .br,.unit.busy .br,.unit.tk .br{animation-play-state:paused}
+.unit.dead .br{animation:none}
+@keyframes idleBr{0%,100%{transform:translateY(0) scale(1,1) rotate(0deg)}25%{transform:translateY(-1.5px) scale(.992,1.012) rotate(.6deg)}50%{transform:translateY(-3px) scale(.982,1.024) rotate(0deg)}75%{transform:translateY(-1.2px) scale(1.012,.988) rotate(-.6deg)}}
+@keyframes idleHv{0%,100%{transform:translateY(0) scale(1,1) rotate(0deg)}30%{transform:translateY(-1.5px) scale(.99,1.015) rotate(.35deg)}55%{transform:translateY(-3.5px) scale(.978,1.028) rotate(0deg)}80%{transform:translateY(-.8px) scale(1.018,.982) rotate(-.35deg)}}
+@keyframes idleS{0%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
+:where(.av.pf) img.sp{transform-origin:50% 96%;will-change:transform;animation:idleBr var(--bdu,3s) ease-in-out var(--bdl,0s) infinite}
+:where(.av.pf.hv) img.sp{animation-name:idleHv}
+:where(.av.pf.unknown) img.sp{animation:none}
+body.mo-reduced .unit .br,body.mo-reduced :where(.av.pf) img.sp{animation-name:idleS}
+body.mo-off .unit .br,body.mo-off :where(.av.pf) img.sp{animation:none}
+body.mo-off .unit .bd,body.mo-off .unit .fl,body.mo-off .unit .aura,body.mo-off .scene *,body.mo-reduced .scene *{animation:none!important}
+.seg{display:flex;gap:4px;flex-wrap:wrap}.seg .btn{min-width:64px}
+
+/* ===== v1.4.1 scenery: haze layer, horizon rim light, ground light pool, heat shimmer, set pieces, foreground frame, colour grade ===== */
+.scene .far2{bottom:calc(100% - var(--hz) + 4%);height:calc(var(--hz)*.55);opacity:.55;translate:calc(var(--cam)*-3px) 0}
+.scene .setp{position:absolute;inset:0;background-size:cover;background-position:center}
+.scene .setp.set-lavafall{bottom:calc(100% - var(--hz) - 4%);top:auto;height:70%;animation:lavaP 3.2s ease-in-out infinite alternate}
+@keyframes lavaP{from{opacity:.75}to{opacity:1}}
+.scene .setp.set-glitter{animation:glit 2.4s steps(2) infinite}@keyframes glit{50%{opacity:.6}}
+.scene .setp.set-torches{animation:torch .9s steps(3) infinite alternate}@keyframes torch{to{opacity:.7}}
+.scene .hzl{position:absolute;left:0;right:0;top:calc(var(--hz) - 7%);height:12%;background:radial-gradient(ellipse 60% 50% at 50% 60%,color-mix(in srgb,var(--lp) 30%,transparent),transparent 72%);pointer-events:none}
+.scene .lpool{position:absolute;left:8%;right:8%;top:calc(var(--hz) + 6%);bottom:6%;background:radial-gradient(ellipse 50% 46% at 50% 50%,color-mix(in srgb,var(--lp) 16%,transparent),transparent 70%);pointer-events:none}
+.scene .shim{position:absolute;left:-6%;right:-6%;top:calc(var(--hz) - 5%);height:18%;pointer-events:none;background:repeating-linear-gradient(180deg,#ffb07a14 0 3px,transparent 3px 7px);mask-image:linear-gradient(180deg,transparent,#000 40%,#000 60%,transparent);-webkit-mask-image:linear-gradient(180deg,transparent,#000 40%,#000 60%,transparent);animation:shim 1.6s ease-in-out infinite alternate;will-change:transform}
+@keyframes shim{from{transform:translateY(0) skewX(-1.5deg) scaleY(1)}to{transform:translateY(-4px) skewX(1.5deg) scaleY(1.06)}}
+.scene .fog.f3{top:calc(var(--hz) + 22%);height:34%;animation-duration:52s;opacity:.85}
+.scene .fgx{bottom:0;height:30%;left:-5%;right:-5%;z-index:2;translate:calc(var(--cam)*-30px) 0;opacity:.92}
+.scene .fgx.top{top:0;bottom:auto;height:26%;background-position:center top;animation:fgsw 9s ease-in-out infinite alternate;transform-origin:50% 0}
+@keyframes fgsw{from{transform:rotate(-.4deg)}to{transform:rotate(.4deg)}}
+.scene .grade{position:absolute;inset:0;z-index:3;pointer-events:none}
+.scene.menu .fgx,.scene.menu .lpool,.scene.menu .shim{display:none}
+/* boss arenas: fade in when a boss wave spawns */
+.scene .arena{position:absolute;inset:0;z-index:0;opacity:0;transition:opacity 1s ease;pointer-events:none}
+.scene.arena-on .arena{opacity:1}
+.arena .ar-sky{position:absolute;inset:0 0 calc(100% - var(--hz) - 4%) 0;background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 22%,#05021088),transparent)}
+.arena .ar-bk{position:absolute;left:-4%;width:108%;bottom:calc(100% - var(--hz) - 4px);height:calc(var(--hz)*.62)}
+.arena .ar-ring{position:absolute;left:50%;top:calc(var(--hz) + (100% - var(--hz))*.12);width:min(78vw,520px);aspect-ratio:1;margin-left:calc(min(78vw,520px)/-2);transform:scaleY(.26);transform-origin:50% 0}
+.arena .ar-rot{position:absolute;inset:0;background-size:100% 100%;animation:spin 40s linear infinite;opacity:.95;will-change:transform}
+.arena .ar-pillar{position:absolute;top:0;bottom:calc(100% - var(--hz) - 22%);width:12%;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--ac) 28%,transparent) 60%,transparent);animation:rayp 4s ease-in-out infinite alternate}
+.arena .ar-pillar.l{left:10%}.arena .ar-pillar.r{right:10%;animation-delay:-2s}
+.arena.ar-sky .ar-sky{background:linear-gradient(180deg,#fff3b033,transparent)}
+.arena.ar-insane .ar-sky{inset:0;background:radial-gradient(ellipse at 50% 20%,#5a000c88,transparent 60%),linear-gradient(180deg,#0a0004ee,#2a0008aa 40%,#0006 70%,#1a0004cc)}
+.arena .ar-vortex{position:absolute;left:50%;top:calc(var(--hz)*.35);width:150vmax;height:150vmax;margin:-75vmax 0 0 -75vmax;background:repeating-conic-gradient(#ff2a3a14 0 10deg,transparent 10deg 30deg);border-radius:50%;mask-image:radial-gradient(closest-side,#000,transparent);-webkit-mask-image:radial-gradient(closest-side,#000,transparent);animation:spin 30s linear infinite;will-change:transform}
+.arena .ar-bolt{position:absolute;left:22%;top:0;width:9%;height:calc(var(--hz) + 6%);opacity:0;animation:bolt 7s linear infinite}
+.arena .ar-flash{position:absolute;inset:0;background:#ffd0d8;opacity:0}
+.arena.ar-insane .ar-flash{animation:flsh 7s linear infinite}
+@keyframes bolt{0%,88%,91%,93%,100%{opacity:0}89%,92%{opacity:.95}}
+@keyframes flsh{0%,88%,92%,100%{opacity:0}89%{opacity:.16}92.5%{opacity:.08}}
+body.mo-reduced .arena .ar-bolt,body.mo-off .arena .ar-bolt,body.mo-reduced .arena .ar-flash,body.mo-off .arena .ar-flash,body.lite .arena .ar-bolt,body.lite .arena .ar-flash{display:none}
+body.lite .scene .shim,body.lite .scene .fgx.top,body.lite .scene .setp,body.lite .arena *{animation:none}
+@media (prefers-reduced-motion:reduce){.scene .shim,.scene .fgx,.scene .setp,.arena *{animation:none!important}.arena .ar-bolt,.arena .ar-flash{display:none}}
+
+/* v1.4.1 island hub: shallow-water halo, foam, sea glints, drifting cloud shadows, warm light rays */
+.world .spk{position:absolute;inset:0;pointer-events:none}
+.world .spk i{position:absolute;inset:0;background-image:radial-gradient(1.5px 1.5px at 12% 8%,#fff 50%,transparent),radial-gradient(1.5px 1.5px at 84% 12%,#fff 50%,transparent),radial-gradient(1.5px 1.5px at 6% 52%,#fff 50%,transparent),radial-gradient(1.5px 1.5px at 94% 44%,#fff 50%,transparent),radial-gradient(1.5px 1.5px at 90% 82%,#fff 50%,transparent),radial-gradient(1.5px 1.5px at 8% 90%,#fff 50%,transparent);animation:spk 3s ease-in-out infinite;will-change:opacity}
+.world .spk i+i{transform:translate(4%,6%);animation-delay:-1.5s}
+@keyframes spk{0%,100%{opacity:0}50%{opacity:.9}}
+.world .cshad{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.world .cshad i{position:absolute;width:46%;height:16%;border-radius:50%;background:radial-gradient(closest-side,#00182a40,transparent);animation:cl 90s linear infinite;left:-50%}
+.world .cshad i:nth-child(1){top:24%}.world .cshad i:nth-child(2){top:60%;animation-duration:120s;animation-delay:-60s}
+.world .wrays{position:absolute;inset:0;pointer-events:none;background:repeating-conic-gradient(from 200deg at 88% -8%,#fff6c81a 0 4deg,transparent 4deg 13deg);mask-image:linear-gradient(180deg,#000,transparent 75%);-webkit-mask-image:linear-gradient(180deg,#000,transparent 75%);animation:rayp 9s ease-in-out infinite alternate}
+body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:none!important}
+@media (prefers-reduced-motion:reduce){.world .spk i,.world .cshad i,.world .wrays{animation:none!important}}
 </style>
 </head>
 <body>
@@ -595,7 +661,7 @@ select{min-height:44px;background:#1d1745;color:#fff;border:1px solid #4a3f8f;bo
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.4.0';
+const VERSION='1.4.1';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -830,6 +896,9 @@ const STORYD=[
  {n:'Hard',k:'h',lv:28,em:[1.7,1.35,1.5],bm:[1.6,1.25,1.3],spd:10,rune:1,gold:2.2,gems:2,c:'',mech:1},
  {n:'Hell',k:'x',lv:45,em:[2.6,1.75,2.1],bm:[2.2,1.45,1.6],spd:20,rune:2,gold:3.5,gems:3,c:'red',mech:2},
 ];
+// v1.4.1 story toughness per difficulty x chapter (area): [HP multipliers],[ATK multipliers]. Longer fights, not one-shots.
+const STORY_SC=[[[1,1.05,1.55,2],[1,1,1.08,1.12]],[[2.1,2.15,2.2,2.3],[1.1,1.1,1.12,1.15]],[[2.4,2.3,2,1.8],[1.05,1.05,1,1]]];
+const storySc=(a,d)=>{const T=STORY_SC[d||0]||STORY_SC[0];return[T[0][a]||T[0][T[0].length-1],T[1][a]||T[1][T[1].length-1]];};
 // Tower of Ascension: 100 floors (+ Hard after floor 100), a boss every 10th floor, monthly reset.
 const TOA_BOSS=[
  {id:'magmaw',mech:'enrage'},{id:'brinequeen',mech:'regen'},{id:'thunderroc',mech:'fast'},{id:'goldgolem',mech:'shield'},{id:'jellyking',mech:'regen'},
@@ -909,6 +978,14 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.4.1',date:'Oct 9, 2026',title:'✨ Living Worlds',sections:[
+  ['🎨 Richer Backgrounds',['Every scene got more depth: a distant haze layer, warmer lighting, a soft light pool under the fighters and framing foreground silhouettes.','New details per area: lava falls and heat shimmer in Emberfall, glittering sea and drifting fog in the ruins, icicles and aurora in the peaks, a ringed planet over the rift, torches in the Keep and moonbeams over the Necropolis.','The home island now has shallow water, sparkling waves, drifting cloud shadows and sun rays.']],
+  ['🌦️ Weather',['Each area has its own weather on top of its particles: falling leaves and fireflies in the forest, ash and embers over the lava, snow gusts in the peaks, drifting stars and the odd shooting star in the rift, rolling fog in the ruins.']],
+  ['👑 Boss Arenas',['Boss waves now transform the battlefield: story bosses fight inside a glowing rune circle, Tower bosses (every 10th floor) on a sky platform, dungeon bosses in front of their throne, and INSANE bosses in a red storm with lightning.']],
+  ['🫁 Idle Breathing',['Every monster now breathes and sways gently while waiting, in battle and on the Monster and Team screens. Bosses breathe slower and heavier. The motion pauses while a monster attacks, gets hit or moves.']],
+  ['⚙️ Ambient Motion Setting',['New option in Settings: Ambient motion Full / Reduced / Off. It controls idle animations, weather and particles. If your device asks for reduced motion, the game starts on Reduced.','Animations pause when the game is in a background tab, and phones use fewer particles to stay smooth.']],
+  ['⚔️ Tougher Story',['Story enemies are tougher in later chapters: more HP for enemies and bosses in later Normal chapters and across Hard and Hell, with only a small attack increase, so fights last longer instead of ending in one hit. The first two Normal chapters stay beginner-friendly.']],
+  ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.4.0',date:'Oct 9, 2026',title:'💠 Runes, Dungeons & the Tower',sections:[
   ['🏝️ A Whole New Isle',['The home screen is now an illustrated island. Tap the Summoning Circle, Monster Altar, Rune Workshop, Dungeon Portal, Tower of Ascension, World Gate, Shop and Mailbox to jump straight in.','New top bar shows Energy, Mana, Crystals and Scrolls. The bottom quick-menu has Battle, Monsters, Shop and Settings.','The Battle menu branches into Story, Dungeons and the Tower.']],
   ['🎨 New Backgrounds',['Every area and dungeon has its own layered, animated scene: misty forest, lava cavern, frozen peaks, starry rift, sunken ruins, a golem keep, a dragon lair, a necropolis and more.','Gentle drifting particles (embers, snow, fireflies, bubbles). Phones use fewer particles, and your device’s Reduce Motion setting (or turning battle effects off) stops the animation.']],
@@ -1402,33 +1479,104 @@ function skyArt(sc,seed){const r=seeded(seed);let s='';
  return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">${s}</svg>`;}
 const _scn={};
 const svgUrl=x=>`url('data:image/svg+xml;charset=utf-8,${encodeURIComponent(x).replace(/'/g,'%27')}')`;
+/* v1.4.1 scenery upgrade: extra haze layer (atmospheric perspective), colour grade, ground light pool + horizon rim light,
+   top/bottom foreground framing, per-area set pieces (lava falls, heat shimmer, sea glitter, aurora, planets, torches…),
+   a second weather/particle type per scene and unique boss arenas. All static art is cached SVG; motion is CSS transform/opacity only. */
+const _hx=h=>{h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');return[0,2,4].map(i=>parseInt(h.substr(i,2),16));};
+function mixHex(a,b,t){const A=_hx(a),B=_hx(b);return'#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('');}
+Object.entries({
+ forest:{far2:'peaks',fgx:'tf-branch',pt2:'leaf',pc2:['#9ad46a','#e0c25a','#6fbf5a'],grade:['#fff0b822','#08201844'],lp:'#fff6c8',set:'shafts'},
+ lava:{far2:'crags',fgx:'rocks',pt2:'ash',pc2:['#9a8f8a','#d0c4bc','#6a6260'],grade:['#ff7a3a22','#2a000a55'],lp:'#ff7a2e',set:'lavafall',shim:1},
+ coast:{far2:'peaks',fgx:'tf-vine',pt2:'mist',pc2:['#e8f4ff'],grade:['#ffd9a822','#0a183a44'],lp:'#ffe6c0',set:'glitter',fogA:.3,fog3:1},
+ peaks:{far2:'peaks',fgx:'tf-ice',pt2:'flake',pc2:['#ffffff'],grade:['#e8f6ff22','#0a1a3a33'],lp:'#ffffff',set:'peaksun'},
+ rift:{far2:'islands',fgx:'tf-crystal',pt2:'drift',pc2:['#ffffff','#c9b6ff','#7cf0ff'],grade:['#7a3aff22','#05021066'],lp:'#c08bff',set:'planet'},
+ keep:{far2:'mesa',fgx:'tf-chain',pt2:'spark',pc2:['#ffd166','#ff9a3a'],grade:['#ffd08022','#2a140644'],lp:'#ffe0a0',set:'torches'},
+ lair:{far2:'crags',fgx:'rocks',pt2:'ash',pc2:['#8a7a78','#c0aaa0'],grade:['#ff3a2a22','#20000655'],lp:'#ff5a2a',set:'lavafall',shim:1},
+ necro:{far2:'ridge',fgx:'tf-vine',pt2:'mist',pc2:['#bff0e0'],grade:['#7cf0c81a','#02040c66'],lp:'#9ad8c8',set:'moonbeam',fog3:1},
+ tower:{far2:'cloudsea',fgx:'tf-cloud',pt2:'mist',pc2:['#ffffff'],grade:['#ffffff1a','#1a1a6a33'],lp:'#ffffff',set:'halo'},
+ crystal:{far2:'crystals2',fgx:'rocks',pt2:'drift',pc2:['#a5f3ff','#ffffff'],grade:['#7cd0ff1a','#02081a55'],lp:'#a5f3ff',set:'glitter'},
+ candy:{far2:'candy',fgx:'tf-cloud',pt2:'leaf',pc2:['#ffffff','#ffd6f0','#fff3a0'],grade:['#ffffff1a','#ff7ab822'],lp:'#ffffff',set:'shafts'},
+}).forEach(([k,v])=>Object.assign(SCN[k],v));
+function frameSvg(type,col,seed){const r=seeded(seed);let s='';const mir=x=>400-x;
+ const both=f=>{s+=f(1,0);s+=f(-1,400);};
+ if(type==='tf-branch')both((d,x0)=>{let p=`<path d="M${x0} 0 L${x0} 14 Q${x0+d*60} 6 ${x0+d*120} 18 Q${x0+d*70} 2 ${x0} 4Z" fill="${col}"/>`;for(let i=0;i<9;i++){const x=x0+d*(10+r()*120),y=6+r()*16,w=8+r()*12;p+=`<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${w.toFixed(1)}" ry="${(w*.55).toFixed(1)}" fill="${col}"/>`;}for(let i=0;i<4;i++){const x=x0+d*(20+r()*90);p+=`<path d="M${x} 10 q${d*3} 14 0 ${18+r()*16}" stroke="${col}" stroke-width="1.4" fill="none"/>`;}return p;});
+ else if(type==='tf-vine')both((d,x0)=>{let p=`<path d="M${x0} 0 L${x0+d*90} 0 L${x0+d*82} 10 Q${x0+d*40} 22 ${x0} 30Z" fill="${col}"/>`;for(let i=0;i<7;i++){const x=x0+d*(6+r()*80),l=14+r()*40;p+=`<path d="M${x.toFixed(1)} 6 q${d*4} ${l/2} ${-d*2} ${l}" stroke="${col}" stroke-width="1.6" fill="none"/>`;for(let k=1;k<4;k++)p+=`<ellipse cx="${(x+d*(k%2?2:-2)).toFixed(1)}" cy="${(6+l*k/4).toFixed(1)}" rx="2.6" ry="1.4" fill="${col}"/>`;}return p;});
+ else if(type==='tf-ice')both((d,x0)=>{let p=`<path d="M${x0} 0 L${x0+d*110} 0 Q${x0+d*60} 10 ${x0} 14Z" fill="#e8f6ff" opacity=".9"/>`;for(let i=0;i<12;i++){const x=x0+d*(4+i*8+r()*4),l=6+r()*22*(1-i/14);p+=`<path d="M${(x-2.4).toFixed(1)} 4 L${x.toFixed(1)} ${(4+l).toFixed(1)} L${(x+2.4).toFixed(1)} 4Z" fill="#cfeaff" opacity=".85"/>`;}return p;});
+ else if(type==='tf-crystal')both((d,x0)=>{let p='';for(let i=0;i<5;i++){const x=x0+d*(6+r()*70),l=16+r()*30,w=5+r()*6,a=(r()-.5)*30;p+=`<path transform="rotate(${a.toFixed(1)} ${x.toFixed(1)} 0)" d="M${(x-w).toFixed(1)} 0 L${x.toFixed(1)} ${l.toFixed(1)} L${(x+w).toFixed(1)} 0Z" fill="${col}"/><path transform="rotate(${a.toFixed(1)} ${x.toFixed(1)} 0)" d="M${x.toFixed(1)} 0 L${x.toFixed(1)} ${l.toFixed(1)} L${(x+w*.6).toFixed(1)} 0Z" fill="#c9b6ff" opacity=".35"/>`;}return p;});
+ else if(type==='tf-chain')both((d,x0)=>{let p=`<path d="M${x0} 0 L${x0+d*70} 0 L${x0+d*70} 6 L${x0} 8Z" fill="${col}"/>`;for(let c=0;c<2;c++){const x=x0+d*(18+c*34),l=26+r()*26;for(let y=6;y<l;y+=5)p+=`<ellipse cx="${x}" cy="${y}" rx="${y/5%2?1.4:2.4}" ry="2.6" fill="none" stroke="${col}" stroke-width="1.2"/>`;}p+=`<path d="M${x0+d*44} 6 L${x0+d*44} 44 L${x0+d*52} 38 L${x0+d*60} 44 L${x0+d*60} 6Z" fill="#7a1a1a" opacity=".85"/>`;return p;});
+ else if(type==='tf-cloud')both((d,x0)=>{let p='';for(let i=0;i<4;i++){const x=x0+d*(i*26+r()*10),y=2+r()*8,rr=12+r()*12;p+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr.toFixed(1)}" fill="${col}" opacity=".75"/>`;}return p;});
+ return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMin slice">${s}</svg>`;}
+/* per-area set pieces (static SVG over the sky / far layers) */
+function setSvg(sc,seed){const r=seeded(seed);let s='';const k=sc.set;
+ if(k==='lavafall')for(const x of [36,142,258,352]){s+=`<path d="M${x} 20 Q${x+6} 80 ${x+2} 150 L${x+12} 150 Q${x+14} 80 ${x+8} 20Z" fill="#ff6a1f" opacity=".75"/><path d="M${x+3} 20 Q${x+7} 80 ${x+5} 150" stroke="#ffd166" stroke-width="1.6" fill="none" opacity=".8"/><ellipse cx="${x+7}" cy="150" rx="22" ry="5" fill="#ff8a3a" opacity=".55"/>`;}
+ else if(k==='glitter'){for(let i=0;i<40;i++){const x=r()*400,y=118+r()*40;s+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(2+r()*7).toFixed(1)}" height=".9" fill="#fff6e0" opacity="${(.3+r()*.5).toFixed(2)}"/>`;}s+=`<path d="M300 112 L320 160 L280 160Z" fill="#ffe6c0" opacity=".14"/>`;}
+ else if(k==='peaksun')s+=`<path d="M-10 70 C80 40 160 90 260 50 S380 30 410 52 L410 58 C360 44 290 72 220 70 S60 70 -10 82Z" fill="#7cffc8" opacity=".14"/>`;
+ else if(k==='planet')s+=`<circle cx="86" cy="46" r="26" fill="#3a1a6a"/><circle cx="80" cy="40" r="26" fill="#6a3ab0" opacity=".55"/><ellipse cx="86" cy="46" rx="46" ry="8" fill="none" stroke="#c9b6ff" stroke-width="2" opacity=".6" transform="rotate(-16 86 46)"/><circle cx="330" cy="30" r="7" fill="#7cf0ff" opacity=".7"/>`;
+ else if(k==='moonbeam')s+=`<path d="M290 40 L200 200 L360 200Z" fill="#e8f0ff" opacity=".07"/><path d="M300 40 L250 200 L330 200Z" fill="#e8f0ff" opacity=".06"/>`;
+ else if(k==='halo')s+=`<circle cx="200" cy="40" r="34" fill="none" stroke="#fff3b0" stroke-width="2" opacity=".45"/><circle cx="200" cy="40" r="44" fill="none" stroke="#ffffff" stroke-width="1" opacity=".25"/>`;
+ else if(k==='torches')for(const x of [70,330])s+=`<rect x="${x-2}" y="96" width="4" height="22" fill="#3a240c"/><ellipse cx="${x}" cy="92" rx="5" ry="8" fill="#ffb03d"/><ellipse cx="${x}" cy="94" rx="2.6" ry="4.4" fill="#fff3b0"/>`;
+ return s?`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">${s}</svg>`:'';}
+/* boss arenas: story (area-tinted rune ring), Tower milestone (sky platform), dungeon thrones, INSANE storm */
+const ARENA_AC={lava:'#ff6a2a',coast:'#5ac8ff',peaks:'#3a9aff',rift:'#c08bff',forest:'#9dffb0',keep:'#ffd166',lair:'#ff3a2a',necro:'#7cf0c8',tower:'#fff3b0',crystal:'#a5f3ff',candy:'#ff9ad5'};
+function arenaKind(cfg){if(!cfg)return'';if(cfg.type==='dungeon')return String(cfg.scene||'').endsWith('i')?'insane':'throne';if(cfg.type==='toa')return cfg.f%10===0?'sky':'';if(cfg.type==='campaign')return cfg.s===4?'story':'';if(cfg.type==='event')return'story';return'';}
+function ringSvg(col,n){let s='';for(let i=0;i<n;i++){const a=i/n*6.283;s+=`<path d="M${(100+Math.cos(a)*80).toFixed(1)} ${(100+Math.sin(a)*80).toFixed(1)} l4 -6 l4 6 l-4 6Z" fill="${col}"/>`;}
+ return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="92" fill="none" stroke="${col}" stroke-width="12" opacity=".18"/><circle cx="100" cy="100" r="60" fill="${col}" opacity=".1"/><circle cx="100" cy="100" r="92" fill="none" stroke="${col}" stroke-width="3" opacity=".8"/><circle cx="100" cy="100" r="70" fill="none" stroke="${col}" stroke-width="1.5" stroke-dasharray="6 5" opacity=".7"/><path d="M100 30 L160 135 L40 135Z M100 170 L40 65 L160 65Z" fill="none" stroke="${col}" stroke-width="1.2" opacity=".55"/>${s}</svg>`;}
+function arenaHtml(cfg,base){const k=arenaKind(cfg);if(!k)return'';const ac=k==='insane'?'#ff2a3a':ARENA_AC[base]||'#ffd166';
+ let back='';
+ if(k==='sky')back=`<svg class="ar-bk" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMax slice"><g fill="#3a3a8a"><path d="M40 100 L44 24 L36 20 L66 20 L58 24 L62 100Z"/><path d="M338 100 L342 30 L334 26 L364 26 L356 30 L360 100Z"/></g><g fill="#ffd166" opacity=".9"><path d="M46 30 L56 30 L56 60 L51 54 L46 60Z"/><path d="M344 36 L354 36 L354 64 L349 58 L344 64Z"/></g><ellipse cx="200" cy="96" rx="190" ry="8" fill="#ffffff" opacity=".35"/></svg>`;
+ else if(k==='throne'){const t={keep:['#5a3a14','#ffd166'],lair:['#3a0a14','#ffb03d'],necro:['#141a2c','#7cf0c8']}[base]||['#3a2a14','#ffd166'];
+  back=`<svg class="ar-bk" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMax slice"><path d="M170 100 L170 30 L180 18 L190 30 L190 14 L200 2 L210 14 L210 30 L220 18 L230 30 L230 100Z" fill="${t[0]}"/><path d="M178 100 L178 56 L222 56 L222 100Z" fill="${mixHex(t[0],'#000000',.4)}"/><circle cx="200" cy="22" r="4" fill="${t[1]}"/>${base==='lair'?'<path d="M120 100 Q130 60 160 54 Q140 70 142 100Z M280 100 Q270 60 240 54 Q260 70 258 100Z" fill="#e8d8c0" opacity=".7"/>':''}${base==='necro'?'<path d="M150 100 L150 60 Q160 50 170 60 L170 100Z M230 100 L230 60 Q240 50 250 60 L250 100Z" fill="#0e1222"/><ellipse cx="160" cy="58" rx="4" ry="7" fill="#7cf0c8" opacity=".8"/><ellipse cx="240" cy="58" rx="4" ry="7" fill="#7cf0c8" opacity=".8"/>':''}${base==='keep'?'<rect x="120" y="40" width="6" height="60" fill="#3a240c"/><rect x="274" y="40" width="6" height="60" fill="#3a240c"/><ellipse cx="123" cy="36" rx="5" ry="8" fill="#ffb03d"/><ellipse cx="277" cy="36" rx="5" ry="8" fill="#ffb03d"/>':''}</svg>`;}
+ else if(k==='insane')back=`<svg class="ar-bk" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMax slice"><path d="M0 100 L0 60 L30 40 L50 64 L80 30 L110 62 L150 44 L190 70 L230 36 L270 60 L310 28 L350 58 L400 40 L400 100Z" fill="#1a0006"/><path d="M80 30 L86 40 M310 28 L316 42 M230 36 L224 50" stroke="#ff2a3a" stroke-width="1.4" opacity=".8"/></svg>`;
+ const bolt=k==='insane'?`<svg class="ar-bolt" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 200" preserveAspectRatio="none"><path d="M60 0 L40 70 L58 72 L30 200 L72 90 L52 88 L74 0Z" fill="#ffd0d0"/></svg>`:'';
+ return`<div class="arena ar-${k}" style="--ac:${ac}" aria-hidden="true"><div class="ar-sky"></div>${k==='insane'?'<div class="ar-vortex"></div>':''}${back}<div class="ar-ring"><div class="ar-rot" style="background-image:${svgUrl(ringSvg(ac,k==='insane'?12:8))}"></div></div><div class="ar-pillar l"></div><div class="ar-pillar r"></div>${bolt}<div class="ar-flash"></div></div>`;}
+function setArena(on){const sc=document.querySelector('#battle .scene');if(sc)sc.classList.toggle('arena-on',!!on);}
 function sceneHtml(cfg,lite,menu){const key=typeof cfg==='string'?cfg:sceneKey(cfg);const base=key.replace(/[!~]$/,''),mode=key.endsWith('!')?'hell':key.endsWith('~')?'hard':'';const sc=SCN[base]||SCN.forest;
- const sd=base.length*31+7;const c=_scn[base]||(_scn[base]={sky:svgUrl(skyArt(sc,sd)),far:svgUrl(silhouette(sc.far[0],sc.far[1],sd)),mid:svgUrl(silhouette(sc.mid[0],sc.mid[1],sd+11)),near:svgUrl(silhouette(sc.near[0],sc.near[1],sd+23)),gnd:svgUrl(groundSvg(sc,sd+5))});
- return`<div class="scene scn-${base} ${mode?'m-'+mode:''} ${menu?'menu':''}" data-scn="${key}" data-pt="${sc.pt}" data-pc="${sc.pc.join(',')}"><div class="sky" style="background:linear-gradient(180deg,${sc.sky[0]},${sc.sky[1]} 55%,${sc.sky[2]})"><div class="skyart" style="background-image:${c.sky}"></div>${sc.sun&&!sc.moon?`<div class="sun" style="--sun:${sc.sun}"></div>`:''}${sc.rays?`<div class="rays" style="--ray:${sc.rays}"></div>`:''}${sc.glow?`<div class="glowfx" style="--glow:${sc.glow}"></div>`:''}</div>
- <div class="ly far" style="background-image:${c.far}"></div><div class="fog f1" style="--fog:${sc.fog};--fa:${sc.fogA}"></div><div class="ly mid" style="background-image:${c.mid}"></div><div class="ly gnd" style="background-image:${c.gnd}"></div><div class="fog f2" style="--fog:${sc.fog};--fa:${sc.fogA}"></div>
- <canvas class="amb" aria-hidden="true"></canvas><div class="ly near ${sc.near[0]==='stalac'?'top':''}" style="background-image:${c.near}"></div>${mode?'<div class="modefx"></div>':''}<div class="vign"></div>${menu?'<div class="scrim"></div>':''}</div>`;}
-/* ambient particles: one canvas per scene, capped, ~30 fps, paused while hidden; static frame for reduced motion */
+ const sd=base.length*31+7;const c=_scn[base]||(_scn[base]={sky:svgUrl(skyArt(sc,sd)),far:svgUrl(silhouette(sc.far[0],sc.far[1],sd)),mid:svgUrl(silhouette(sc.mid[0],sc.mid[1],sd+11)),near:svgUrl(silhouette(sc.near[0],sc.near[1],sd+23)),gnd:svgUrl(groundSvg(sc,sd+5)),
+  far2:sc.far2?svgUrl(silhouette(sc.far2,mixHex(sc.far[1],sc.sky[2],.55),sd+41)):'',fgx:sc.fgx?svgUrl(sc.fgx.startsWith('tf-')?frameSvg(sc.fgx,mixHex(sc.near[1],'#000000',.25),sd+53):silhouette(sc.fgx,mixHex(sc.near[1],'#000000',.35),sd+59)):'',set:(()=>{const x=setSvg(sc,sd+61);return x?svgUrl(x):'';})()});
+ const fogA=sc.fogA,top=sc.fgx&&sc.fgx.startsWith('tf-');
+ return`<div class="scene scn-${base} ${mode?'m-'+mode:''} ${menu?'menu':''}" data-scn="${key}" data-pt="${sc.pt}" data-pc="${sc.pc.join(',')}" data-pt2="${sc.pt2||''}" data-pc2="${(sc.pc2||[]).join(',')}" style="--lp:${sc.lp||'#ffffff'}"><div class="sky" style="background:linear-gradient(180deg,${sc.sky[0]},${sc.sky[1]} 55%,${sc.sky[2]})"><div class="skyart" style="background-image:${c.sky}"></div>${sc.sun&&!sc.moon?`<div class="sun" style="--sun:${sc.sun}"></div>`:''}${sc.rays?`<div class="rays" style="--ray:${sc.rays}"></div>`:''}${sc.glow?`<div class="glowfx" style="--glow:${sc.glow}"></div>`:''}${c.set?`<div class="setp set-${sc.set}" style="background-image:${c.set}"></div>`:''}</div>
+ ${c.far2?`<div class="ly far2" style="background-image:${c.far2}"></div>`:''}<div class="ly far" style="background-image:${c.far}"></div><div class="fog f1" style="--fog:${sc.fog};--fa:${fogA}"></div><div class="ly mid" style="background-image:${c.mid}"></div><div class="hzl"></div><div class="ly gnd" style="background-image:${c.gnd}"></div><div class="lpool"></div>${sc.shim?'<div class="shim"></div>':''}<div class="fog f2" style="--fog:${sc.fog};--fa:${fogA}"></div>${sc.fog3?`<div class="fog f3" style="--fog:${sc.fog};--fa:${fogA}"></div>`:''}
+ ${menu?'':arenaHtml(typeof cfg==='string'?null:cfg,base)}<canvas class="amb" aria-hidden="true"></canvas><div class="ly near ${sc.near[0]==='stalac'?'top':''}" style="background-image:${c.near}"></div>${c.fgx?`<div class="ly fgx ${top?'top':''}" style="background-image:${c.fgx}"></div>`:''}<div class="grade" style="background:linear-gradient(180deg,${(sc.grade||['#0000','#0000'])[0]},transparent 45%,${(sc.grade||['#0000','#0000'])[1]})"></div>${mode?'<div class="modefx"></div>':''}<div class="vign"></div>${menu?'<div class="scrim"></div>':''}</div>`;}
+/* ambient particles: one canvas per scene, primary + secondary weather type, capped and scaled by screen size, ~30 fps,
+   paused while the tab is hidden; a single static frame for Reduced motion, nothing for Off / LITE */
 const AMB={list:[]};
-function ambStart(root){const cv=root&&root.querySelector('canvas.amb');if(!cv||cv._amb)return;const sc=root.querySelector('.scene')||root;const type=sc.dataset.pt,cols=(sc.dataset.pc||'#fff').split(',');
- const still=matchMedia('(prefers-reduced-motion: reduce)').matches,lite=document.body.classList.contains('lite')||(S&&S.settings&&S.settings.vfx===false);
- const small=Math.min(innerWidth,innerHeight)<600,menu=sc.classList.contains('menu');const cap=lite?0:Math.min(AMB_CAP,(small?22:36)*(menu?.6:1)|0);
+function ambCap(menu){const a=Math.sqrt(Math.max(1,innerWidth*innerHeight)),k=Math.max(.45,Math.min(1,a/1100));return Math.round(AMB_CAP*k*(menu?.6:1));}
+function ambStart(root){const cv=root&&root.querySelector('canvas.amb');if(!cv||cv._amb)return;const sc=root.querySelector('.scene')||root;const type=sc.dataset.pt,cols=(sc.dataset.pc||'#fff').split(','),type2=sc.dataset.pt2||'',cols2=(sc.dataset.pc2||'#fff').split(',');
+ const mo=typeof motionMode==='function'?motionMode():'full',still=mo!=='full'||matchMedia('(prefers-reduced-motion: reduce)').matches,lite=mo==='off'||document.body.classList.contains('lite')||(S&&S.settings&&S.settings.vfx===false);
+ const menu=sc.classList.contains('menu');const cap=lite?0:ambCap(menu),cap2=type2?Math.round(cap*.4):0,cap1=cap-cap2;
  const dpr=Math.min(1.5,devicePixelRatio||1),ctx=cv.getContext('2d');let W=0,H=0;
  const size=()=>{const r=cv.getBoundingClientRect();W=Math.max(1,r.width);H=Math.max(1,r.height);cv.width=W*dpr|0;cv.height=H*dpr|0;ctx.setTransform(dpr,0,0,dpr,0,0);};size();
- const R=Math.random,P=[];const mk=(init)=>{const p={x:R()*W,y:init?R()*H:(type==='snow'||type==='dust'?-6:H+6),r:1+R()*2.2,c:cols[(R()*cols.length)|0],a:R()*6.28,v:.2+R()*.6,ph:R()*6.28};
-  if(type==='star'){p.y=R()*H*.7;p.r=.6+R()*1.6;}if(type==='firefly'||type==='wisp'){p.y=H*(.3+R()*.6);p.r=1.4+R()*2;}if(type==='bubble')p.r=1.5+R()*3;return p;};
- for(let i=0;i<cap;i++)P.push(mk(true));
- const draw=(t)=>{ctx.clearRect(0,0,W,H);for(const p of P){let al=1;
-  if(type==='ember'){p.y-=p.v*1.6;p.x+=Math.sin(t*.002+p.ph)*.5;al=Math.min(1,(p.y/H)*1.4)*(.6+.4*Math.sin(t*.01+p.ph));}
-  else if(type==='snow'||type==='dust'){p.y+=p.v*(type==='snow'?1.2:.35);p.x+=Math.sin(t*.0013+p.ph)*.6+(type==='snow'?.25:0);al=type==='dust'?.45:.9;}
-  else if(type==='bubble'){p.y-=p.v*.9;p.x+=Math.sin(t*.003+p.ph)*.4;al=.55;}
-  else if(type==='star'){al=.35+.65*Math.abs(Math.sin(t*.0012*p.v+p.ph));}
+ let mist=null;if(type2==='mist'){mist=document.createElement('canvas');mist.width=mist.height=64;const m=mist.getContext('2d'),g=m.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,cols2[0]);g.addColorStop(1,'rgba(255,255,255,0)');m.fillStyle=g;m.fillRect(0,0,64,64);}
+ const R=Math.random,P=[];const mk=(init,t,cs)=>{const p={t,x:R()*W,y:init?R()*H:(t==='snow'||t==='dust'||t==='leaf'||t==='flake'||t==='ash'?-6:H+6),r:1+R()*2.2,c:cs[(R()*cs.length)|0],a:R()*6.28,v:.2+R()*.6,ph:R()*6.28};
+  if(t==='star'){p.y=R()*H*.7;p.r=.6+R()*1.6;}if(t==='firefly'||t==='wisp'){p.y=H*(.3+R()*.6);p.r=1.4+R()*2;}if(t==='bubble')p.r=1.5+R()*3;
+  if(t==='flake'){p.r=2.4+R()*2.4;p.v=.8+R()*.8;}if(t==='leaf'){p.r=2.4+R()*2;}if(t==='ash'){p.r=.8+R()*1.4;}
+  if(t==='mist'){p.y=H*(.35+R()*.55);p.r=50+R()*70;p.v=.15+R()*.25;if(!init)p.x=-p.r;}
+  if(t==='drift'){p.y=R()*H*.75;p.r=.6+R()*1.2;p.v=.3+R()*.8;if(!init)p.x=-4;p.sh=R()<.08;}
+  if(t==='spark'){p.x=(R()<.5?.17:.83)*W+(R()-.5)*20;p.y=H*(.5+R()*.1);p.r=.8+R();p.v=.6+R()*.8;}
+  return p;};
+ for(let i=0;i<cap1;i++)P.push(mk(true,type,cols));for(let i=0;i<cap2;i++)P.push(mk(true,type2,cols2));
+ const draw=(t)=>{ctx.clearRect(0,0,W,H);for(const p of P){let al=1;const ty=p.t;
+  if(ty==='ember'){p.y-=p.v*1.6;p.x+=Math.sin(t*.002+p.ph)*.5;al=Math.min(1,(p.y/H)*1.4)*(.6+.4*Math.sin(t*.01+p.ph));}
+  else if(ty==='snow'||ty==='dust'){p.y+=p.v*(ty==='snow'?1.2:.35);p.x+=Math.sin(t*.0013+p.ph)*.6+(ty==='snow'?.25:0);al=ty==='dust'?.45:.9;}
+  else if(ty==='flake'){p.y+=p.v*2;p.x+=.9+Math.sin(t*.002+p.ph)*.8;al=.75;}
+  else if(ty==='leaf'){p.y+=p.v*.8;p.x+=Math.sin(t*.0015+p.ph)*1.1+.2;p.a+=.03;al=.8;}
+  else if(ty==='ash'){p.y+=p.v*.5;p.x+=Math.sin(t*.001+p.ph)*.4-.15;al=.55;}
+  else if(ty==='mist'){p.x+=p.v;al=.14+.08*Math.sin(t*.0007+p.ph);if(p.x-p.r>W){p.x=-p.r;}}
+  else if(ty==='drift'){p.x+=p.v*(p.sh?7:.35);p.y+=p.sh?p.v*2.4:0;al=p.sh?.9:.5+.4*Math.sin(t*.002+p.ph);if(p.x>W+6){Object.assign(p,mk(false,ty,cols2));}}
+  else if(ty==='spark'){p.y-=p.v;p.x+=Math.sin(t*.004+p.ph)*.4;al=Math.max(0,1-(H*.6-p.y)/(H*.25));if(al<=0)Object.assign(p,mk(false,ty,cols2));}
+  else if(ty==='bubble'){p.y-=p.v*.9;p.x+=Math.sin(t*.003+p.ph)*.4;al=.55;}
+  else if(ty==='star'){al=.35+.65*Math.abs(Math.sin(t*.0012*p.v+p.ph));}
   else{p.x+=Math.cos(p.a)*p.v*.5;p.y+=Math.sin(p.a)*p.v*.35;p.a+=(R()-.5)*.2;al=.25+.75*Math.abs(Math.sin(t*.002+p.ph));if(p.x<-10)p.x=W+5;if(p.x>W+10)p.x=-5;if(p.y<H*.15)p.a=1.57;if(p.y>H*.95)p.a=-1.57;}
-  if(p.y<-12||p.y>H+12){Object.assign(p,mk(false));}
-  ctx.globalAlpha=Math.max(0,al);const g=type==='ember'||type==='firefly'||type==='wisp'||type==='star';
+  if(ty!=='mist'&&(p.y<-12||p.y>H+12||p.x>W+20)){Object.assign(p,mk(false,ty,ty===type?cols:cols2));}
+  ctx.globalAlpha=Math.max(0,al);
+  if(ty==='mist'){ctx.drawImage(mist,p.x-p.r,p.y-p.r*.45,p.r*2,p.r*.9);continue;}
+  if(ty==='leaf'){ctx.fillStyle=p.c;ctx.beginPath();ctx.ellipse(p.x,p.y,p.r,p.r*.45,p.a,0,6.283);ctx.fill();continue;}
+  if(ty==='drift'&&p.sh){ctx.strokeStyle=p.c;ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-22,p.y-7.5);ctx.stroke();continue;}
+  const g=ty==='ember'||ty==='firefly'||ty==='wisp'||ty==='star'||ty==='spark';
   if(g){ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,p.r*2.4,0,6.283);ctx.globalAlpha=Math.max(0,al)*.18;ctx.fill();ctx.globalAlpha=Math.max(0,al);}
-  ctx.fillStyle=p.c;ctx.beginPath();if(type==='bubble'){ctx.strokeStyle=p.c;ctx.lineWidth=1;ctx.arc(p.x,p.y,p.r,0,6.283);ctx.stroke();}else{ctx.arc(p.x,p.y,p.r,0,6.283);ctx.fill();}}ctx.globalAlpha=1;};
+  ctx.fillStyle=p.c;ctx.beginPath();if(ty==='bubble'){ctx.strokeStyle=p.c;ctx.lineWidth=1;ctx.arc(p.x,p.y,p.r,0,6.283);ctx.stroke();}else{ctx.arc(p.x,p.y,p.r,0,6.283);ctx.fill();}}ctx.globalAlpha=1;};
  const st={cv,P,raf:0,last:0,stop(){cancelAnimationFrame(st.raf);st.raf=0;}};cv._amb=st;AMB.list.push(st);
- if(!cap)return st;draw(performance.now());if(still)return st;
+ if(!cap){ctx.clearRect(0,0,W,H);return st;}draw(performance.now());if(still)return st;
  const loop=t=>{if(!cv.isConnected){st.stop();AMB.list=AMB.list.filter(x=>x!==st);return;}st.raf=requestAnimationFrame(loop);if(document.hidden||t-st.last<33)return;if(Math.round(cv.clientWidth)!==Math.round(W))size();st.last=t;draw(t);};st.raf=requestAnimationFrame(loop);return st;}
 const AMB_CAP=40;
 /* menu backdrop: themed per screen, dimmed with a scrim so text stays readable */
@@ -1543,7 +1691,7 @@ setInterval(()=>{if(document.hidden)return;document.querySelectorAll('[data-cd]'
 
 const frc=s=>s>=5?'fr-r':s===4?'fr-g':s===3?'fr-s':'fr-b';
 const frx=(id,s)=>MD[id]&&MD[id].th?MD[id].th.fr:frc(s); // themed monsters bring their own frame
-function avHtml(id,size,extra,stars,face){const d=MD[id];return`<div class="av pf ${frx(id,stars||d.rar)} el-${d.el} ${extra||''}" style="${size?`width:${size}px;height:${size}px`:''}">${sprImg(id,face)}<span class="elb">${ELEM[d.el].i}</span></div>`;}
+function avHtml(id,size,extra,stars,face){const d=MD[id];return`<div class="av pf ${frx(id,stars||d.rar)} el-${d.el} ${d.boss||d.uniq?'hv':''} ${extra||''}" style="${size?`width:${size}px;height:${size}px;`:''}--bdl:${(-Math.random()*4).toFixed(2)}s;--bdu:${((d.boss||d.uniq?3.6:2.6)+Math.random()*.9).toFixed(2)}s">${sprImg(id,face)}<span class="elb">${ELEM[d.el].i}</span></div>`;}
 function monCard(m,onclick,extra){const d=MD[m.id];const inTeam=S.team.indexOf(m.uid);
  return`<div class="mc r${m.stars} el-${d.el} ${d.th?d.th.cls:''} ${extra||''}" data-uid="${m.uid}" onclick="${onclick}">${inTeam===0?'<span class="badge l">👑</span>':inTeam>0?'<span class="badge l">⚔️</span>':''}${m.lock?'<span class="badge">🔒</span>':''}
  ${avHtml(m.id,0,'',m.stars)}${starsHtml(m.stars)}<div class="nm">${d.n}</div><div class="lv">Lv ${m.lvl}${m.lvl>=maxLvl(m)?' <b style="color:#ffd166">MAX</b>':''}</div></div>`;}
@@ -1697,10 +1845,10 @@ function renderAdventure(){const d=UI.sd||0;const dchips=`<div class="chips sdif
  const a=UI.area,A=AREAS[a];const offs=[-70,10,70,0,-40];const M=campMap(d);
  return`<div class="row-btns" style="margin:0 0 10px"><button class="btn ghost sm" onclick="UI.area=null;render()">← Map</button></div><div class="area" style="background:${A.bg};cursor:default"><span class="bossi">${sprImg(A.boss)}</span><h3>${A.i} ${A.n}</h3><p style="font-size:14px;max-width:75%">${A.desc}</p><p style="font-weight:800;margin-top:4px">⭐ ${areaStars(a,d)}/15 · <span class="tag ${STORYD[d].c}">${STORYD[d].n}</span></p></div>
  <div class="path">${[0,1,2,3,4].map(s=>{const un=stageUnlocked(a,s,d),st=M[a+'-'+s]||0;const isNext=un&&!st;return`<div class="node ${s===4?'boss':''} ${st?'cleared':''} ${un?'':'locked'} ${isNext?'next':''}" id="node${a}-${s}" style="transform:translateX(${offs[s]}px)" onclick="${un?`openStage(${a},${s},${d})`:`toast('🔒 Clear the previous stage first!')`}">${s===4?sprImg(A.boss):`<span>${a+1}-${s+1}</span>`}<span class="stars">${st?'★'.repeat(st)+'<span style="color:#0005">'+'★'.repeat(3-st)+'</span>':''}</span></div>`;}).join('')}</div>`;}
-function campaignCfg(a,s,d){d=d||0;const D=STORYD[d];const A=AREAS[a];const rng=seeded(7919+a*131+s*17+d*977);const lvl=Math.min(d===2?70:65,A.lv+(a===0?Math.round(s*1.5):s*2)+D.lv);const extra=a>=3?1:0,xs=d?Math.min(6,2+d+Math.floor(a/2)):0;const nW=s===4||d?3:2;const waves=[];
+function campaignCfg(a,s,d){d=d||0;const D=STORYD[d];const A=AREAS[a];const rng=seeded(7919+a*131+s*17+d*977);const lvl=Math.min(d===2?70:65,A.lv+(a===0?Math.round(s*1.5):s*2)+D.lv);const extra=a>=3?1:0,xs=d?Math.min(6,2+d+Math.floor(a/2)):0;const nW=s===4||d?3:2;const waves=[];const [SH,SA]=storySc(a,d);
  for(let w=0;w<nW;w++){const bossW=s===4&&w===nW-1;const n=bossW?2:Math.min(4,2+(s>=1?1:0)+(s>=3&&w===nW-1?1:0));const wave=[];
-  for(let i=0;i<n;i++){const id=A.pool[Math.floor(rng()*A.pool.length)];wave.push(d?{id,lvl:lvl+(w>0?1:0),stars:Math.max(MD[id].rar,xs),em:D.em,spd:D.spd}:{id,lvl:lvl+(w>0?1:0),stars:Math.min(6,MD[id].rar+extra)});}
-  if(bossW)wave.splice(1,0,d?{id:A.boss,lvl:lvl+2,stars:Math.max(MD[A.boss].rar,xs),boss:1,hpm:(a===0?3.5:4.5)*D.bm[0],em:[1,D.em[1]*D.bm[1],D.em[2]*D.bm[2]],spd:D.spd+6,mech:storyBossMech(a,d),res:20+d*15,acc:d*15}:{id:A.boss,lvl:lvl+2,stars:MD[A.boss].rar,boss:1,hpm:a===0?3.5:4.5});waves.push(wave);}
+  for(let i=0;i<n;i++){const id=A.pool[Math.floor(rng()*A.pool.length)];wave.push(d?{id,lvl:lvl+(w>0?1:0),stars:Math.max(MD[id].rar,xs),em:[D.em[0]*SH,D.em[1]*SA,D.em[2]],spd:D.spd}:{id,lvl:lvl+(w>0?1:0),stars:Math.min(6,MD[id].rar+extra),em:[SH,SA,1]});}
+  if(bossW)wave.splice(1,0,d?{id:A.boss,lvl:lvl+2,stars:Math.max(MD[A.boss].rar,xs),boss:1,hpm:(a===0?3.5:4.5)*D.bm[0],em:[SH,D.em[1]*D.bm[1]*SA,D.em[2]*D.bm[2]],spd:D.spd+6,mech:storyBossMech(a,d),res:20+d*15,acc:d*15}:{id:A.boss,lvl:lvl+2,stars:MD[A.boss].rar,boss:1,hpm:a===0?3.5:4.5,em:[SH,SA,1]});waves.push(wave);}
  return{type:'campaign',a,s,d,lvl,waves,name:`${d?STORYD[d].n+' · ':''}${A.n} ${a+1}-${s+1}${s===4?' (BOSS)':''}`,bg:A.bg};}
 function eventCfg(ei,tier){const E=EVENTS[ei];const T=TIERS[tier];const rng=seeded(555+ei*71+tier*13+dayNum());const waves=[];
  for(let w=0;w<3;w++){const wave=[];const n=w===2?2:3;for(let i=0;i<n;i++){const id=E.pool[Math.floor(rng()*E.pool.length)];wave.push({id,lvl:T.lv+w,stars:Math.min(6,MD[id].rar+(tier===2?1:0))});}
@@ -1744,6 +1892,7 @@ function openPatch(){openModal(`<h3>📰 What's New</h3>${PATCHES.map(p=>`<div c
 function openSettings(){openModal(`<h3>⚙️ Settings</h3><table class="stat-t"><tr><td>Sound effects</td><td><button class="btn sm ${S.settings.sound?'green':'ghost'}" onclick="S.settings.sound=!S.settings.sound;save();closeModal();openSettings()">${S.settings.sound?'ON 🔊':'OFF 🔇'}</button></td></tr>
  <tr><td>Default battle speed</td><td><button class="btn sm" onclick="S.settings.speed=S.settings.speed%3+1;save();closeModal();openSettings()">${S.settings.speed}x</button></td></tr>
  <tr><td>Skill effects</td><td><button class="btn sm ${S.settings.vfx!==false?'green':'ghost'}" id="btnVfx" onclick="S.settings.vfx=S.settings.vfx===false;document.body.classList.toggle('lite',S.settings.vfx===false);sprMotion();save();closeModal();openSettings()">${S.settings.vfx!==false?'HIGH ✨':'LITE 🔋'}</button></td></tr>
+ <tr><td>Ambient motion<br><small class="mut">Idle animations, weather, particles</small></td><td><div class="seg" id="segMotion">${[['full','Full'],['reduced','Reduced'],['off','Off']].map(([k,n])=>`<button class="btn sm ${motionMode()===k?'green':'ghost'}" id="mo-${k}" onclick="setMotion('${k}');closeModal();openSettings()">${n}</button>`).join('')}</div></td></tr>
  <tr><td>Auto-battle by default</td><td><button class="btn sm ${S.settings.auto?'green':'ghost'}" onclick="S.settings.auto=!S.settings.auto;save();closeModal();openSettings()">${S.settings.auto?'ON':'OFF'}</button></td></tr></table>
  <div class="row-btns"><button class="btn" onclick="save();toast('💾 Saved!')">💾 Save now</button><button class="btn ghost" onclick="openPatch()">📰 Patch Notes</button><button class="btn ghost" id="btnRedeemSet" onclick="closeModal('settings');openMail(true)">🎟️ Redeem Code</button><button class="btn ghost" onclick="exportSave()">📤 Export</button><button class="btn ghost" onclick="importSave()">📥 Import</button></div>
  <div class="row-btns"><button class="btn red" id="btnReset" onclick="confirmBox('This deletes ALL progress (monsters, runes, currencies). There is no undo!',resetGame,'Reset everything')">🗑️ Reset Progress</button></div>
@@ -1802,7 +1951,7 @@ function vaultRestore(){if(!Array.isArray(S.vault)||!S.vault.length)return 0;let
   if(MD[m.id].uniq&&S.mons.some(x=>x.id===m.id))return false;if(S.mons.some(x=>x.uid===m.uid))return false;
   S.mons.push(m);S.dex[m.id]=1;if(v.ti>=0&&S.team.length<4&&!S.team.includes(m.uid))S.team.splice(Math.min(v.ti,S.team.length),0,m.uid);n++;return false;});return n;}
 const sealedGear=g=>!!(g&&g.on&&!S.mons.some(m=>m.uid===g.on)&&(S.vault||[]).some(v=>v.m.uid===g.on));
-function needReseal(){return !VLT.info&&((S.vault||[]).length>0||Object.keys(S.redeemed||{}).length>0||(S.mail||[]).some(x=>!MAILS[x.id]));}
+function needReseal(){const gids=Object.values(GIFT_CODES);return !VLT.info&&((S.vault||[]).length>0||Object.keys(S.redeemed||{}).some(k=>!gids.includes(k))||(S.mail||[]).some(x=>!MAILS[x.id]));}
 function openReseal(){S.resealAsked=Date.now();save();closeModal('reseal');
  openModal(`<h3>🔒 Restore your code reward</h3><p>This update changed how code rewards are stored. Enter the redeem code you used on this save <b>once more</b> to restore what it unlocked. Your progress (levels, stars and gear) is kept, and nothing is duplicated.</p>
  <div class="card redeem" style="margin-top:10px"><div class="rrow"><input id="codeIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" placeholder="Enter code" aria-label="Redeem code" onkeydown="if(event.key==='Enter')redeemCode()"><button class="btn" id="btnRedeem" onclick="redeemCode()">Restore</button></div><p class="mut" id="codeMsg" style="margin-top:6px">You can also do this later from 📬 Mailbox → Redeem Code.</p></div>
@@ -1811,9 +1960,12 @@ function openReseal(){S.resealAsked=Date.now();save();closeModal('reseal');
 /* =================== MAILBOX & REDEEM CODES (v1.3) =================== */
 const MAILS={
  'welcome-v130':{i:'💌',from:'The Rift Post Office',title:'Welcome to the Mailbox!',body:'Gifts, letters and rewards will arrive here. This one is a small welcome present. The postman insists it is not a bribe.',r:{gold:3000,gems:50}},
+ 'cr90k-v141':{i:'💎',from:'The Rift Post Office',title:'Gift: 90,000 Crystals',body:'A very generous gift has arrived. Spend it wisely… or not at all wisely. We will not judge.',r:{gems:90000}},
 };
 // codes are stored only as salted SHA-256 hashes: viewing the source does not reveal them
 const CODES={'4457d82883cb934ead6de4bc835eff5469c0934cd0b461c7d162357244806178':1};
+// plain gift codes (hash -> mail id): deliver an ordinary mail, once per save; no sealed content involved
+const GIFT_CODES={'ab122d3e9171261d32df564bc73793bc39dffb787ab16f42ff5459838701b85b':'cr90k-v141'};
 const codeNorm=c=>String(c||'').toUpperCase().replace(/[\s\-\u2010-\u2015\u2212]/g,'');
 function sha256js(str){const b=unescape(encodeURIComponent(str)),K=[],H=[];let n=2,c=0;const fr=x=>(x-Math.floor(x))*4294967296|0;
  while(c<64){let p=1;for(let d=2;d*d<=n;d++)if(n%d===0){p=0;break;}if(p){if(c<8)H[c]=fr(Math.pow(n,1/2));K[c++]=fr(Math.pow(n,1/3));}n++;}
@@ -1838,6 +1990,8 @@ let _redeemBusy=false;
 async function redeemCode(){if(_redeemBusy)return;const inp=$('#codeIn'),msg=$('#codeMsg');const raw=inp?inp.value:'';if(!codeNorm(raw)){if(msg)msg.textContent='Type a code first. 🙂';return;}
  const say=(t,ok)=>{const mm=$('#codeMsg');if(mm){mm.innerHTML=t;mm.style.color=ok?'#7cff9e':'#ff8a8a';}toast(t);};
  _redeemBusy=true;let h='',k=null,info=null;try{h=await codeHash(raw);if(CODES[h]){k=await vaultKey(raw);info=await vaultOpen(k);}}finally{_redeemBusy=false;}
+ if(GIFT_CODES[h]){const gid=GIFT_CODES[h];if(S.redeemed[gid]||S.mailGot[gid]){say('This code has already been redeemed on this save. 📬');return;}
+  S.redeemed[gid]=Date.now();deliverMail(gid);save();sfx('five');renderTop();render();openMail();const cm=$('#codeMsg');if(cm){cm.innerHTML='✅ Code accepted! A gift is waiting in your Mailbox.';cm.style.color='#7cff9e';}toast('📬 A gift has arrived in your Mailbox!');return;}
  if(!CODES[h]){sfx('lose');say('❌ Invalid code. Double-check it and try again!');return;}
  if(!info){say('⚠️ That code is valid, but its content could not be opened on this device. Please try again.');return;}
  S.vk=b64e(k);const before=S.mons.length;migrate();const back=S.mons.length-before;const id=info.mail;
@@ -2068,14 +2222,15 @@ function islandSvg(){const r=seeded(4242);let deco='';
  <radialGradient id="isl" cx=".5" cy=".45" r=".6"><stop offset="0" stop-color="#7ad07a"/><stop offset=".75" stop-color="#3a9a52"/><stop offset="1" stop-color="#2a7a42"/></radialGradient>
  <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a4a8a"/><stop offset="1" stop-color="#0a1f4a"/></linearGradient></defs>
  <rect width="400" height="560" fill="url(#sea)"/>${[60,140,220,300,380,460,540].map((y,i)=>`<path class="wave" d="M0 ${y} q25 -6 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0" stroke="#7ad7ff" stroke-width="1.2" fill="none" opacity=".25" style="animation-delay:${-i*1.3}s"/>`).join('')}
- <path d="M60 140 C40 60 150 30 210 46 C300 30 380 80 368 170 C392 260 380 360 360 430 C340 520 250 548 190 540 C110 548 40 510 30 430 C14 350 30 250 60 140Z" fill="#e8d8a0"/>
+ <path d="M60 140 C40 60 150 30 210 46 C300 30 380 80 368 170 C392 260 380 360 360 430 C340 520 250 548 190 540 C110 548 40 510 30 430 C14 350 30 250 60 140Z" fill="none" stroke="#5ad0e8" stroke-width="34" opacity=".28"/><path d="M60 140 C40 60 150 30 210 46 C300 30 380 80 368 170 C392 260 380 360 360 430 C340 520 250 548 190 540 C110 548 40 510 30 430 C14 350 30 250 60 140Z" fill="none" stroke="#9af0ff" stroke-width="14" opacity=".3"/>
+ <path d="M60 140 C40 60 150 30 210 46 C300 30 380 80 368 170 C392 260 380 360 360 430 C340 520 250 548 190 540 C110 548 40 510 30 430 C14 350 30 250 60 140Z" fill="#e8d8a0"/><path d="M60 140 C40 60 150 30 210 46 C300 30 380 80 368 170 C392 260 380 360 360 430 C340 520 250 548 190 540 C110 548 40 510 30 430 C14 350 30 250 60 140Z" fill="none" stroke="#ffffff" stroke-width="2.4" opacity=".55"/>
  <path d="M72 148 C56 76 154 50 210 62 C292 50 362 92 352 172 C374 258 364 352 344 422 C326 504 248 530 192 524 C118 530 56 496 46 424 C32 350 46 254 72 148Z" fill="url(#isl)"/>
  <path d="M120 180 Q200 160 280 190 Q300 280 250 330 Q180 360 130 320 Q100 260 120 180Z" fill="#4ab062" opacity=".5"/>
  <path d="M88 132 Q140 200 200 236 Q260 200 328 128 M200 236 L200 494 M76 276 L200 236 L324 272 M132 392 L200 330 L268 380 M60 488 L200 494 L340 488 M208 78 L200 236" stroke="#d8c08a" stroke-width="7" fill="none" stroke-linecap="round" opacity=".75"/>
  ${deco}${Object.values(B).join('')}</svg>`;}
 function renderHome(){const [na,ns]=nextStage();const lr=LOGIN[S.login.count%7];const unread=S.mail.some(x=>!x.claimed&&MAILS[x.id]);const q=claimables();
  const badge=id=>(id==='mail'&&unread)||(id==='board'&&(q||canLogin()))||(id==='arena'&&false)?'<span class="pdot"></span>':'';
- return`<div class="world" id="world" data-pt="firefly" data-pc="#fff6a8,#9dffb0">${islandSvg()}<div class="clouds"><i></i><i></i><i></i></div><canvas class="amb" aria-hidden="true"></canvas>
+ return`<div class="world" id="world" data-pt="firefly" data-pc="#fff6a8,#9dffb0">${islandSvg()}<div class="cshad"><i></i><i></i></div><div class="clouds"><i></i><i></i><i></i></div><div class="spk"><i></i><i></i></div><div class="wrays"></div><canvas class="amb" aria-hidden="true"></canvas>
  ${PLACES.map(([id,to,n,ic,x,y,h])=>`<button class="place" id="pl-${id}" data-to="${to}" style="left:${x}%;top:${y}%" onclick="goPlace(this,'${to}')" aria-label="${n}: ${h}"><span class="pic">${ic}</span><span class="plab">${n}</span>${badge(id)}</button>`).join('')}</div>
  <div class="hubbar"><button class="btn gold big" id="btnContinue" onclick="openStage(${na},${ns})">⚔️ Continue Story ${na+1}-${ns+1}</button>${canLogin()?`<button class="btn big" id="homeLogin" onclick="openLogin()">🎁 Day ${(S.login.count%7)+1} gift</button>`:''}<button class="btn ghost big" onclick="openPatch()">📰 What's New</button></div>
  <div class="tip">💡 <b>Tamer Tip:</b> ${pick(TIPS)}</div>`;}
@@ -2166,7 +2321,7 @@ function slotCls(list){const bi=list.findIndex(u=>u.boss),m=new Map();
  const L=[['sfs'],['sf1','sb2'],['sf1','sbs','sf2'],['sf1','sb1','sf2','sb2']][Math.min(4,list.length)-1]||[];list.forEach((u,i)=>m.set(u,L[i]||'sb2'));return m;}
 function unitHtml(u,slot){const a=ART[u.id]||{},r=Math.random(),fly=!!a.wings||(a.body==='none'&&a.head!=='jelly'),jig=a.head==='jelly';
  return`<div class="unit el-${u.el} ${u.boss?'boss':''} ${u.th?u.th.cls:''} ${u.side==='e'?'en':'al'} ${slot||''}" id="u${u.bid}" onclick="tapUnit(${u.bid})"><span class="uadv"></span>
- <div class="av"><div class="aura" style="animation-delay:${(-r*2.4).toFixed(2)}s"></div><div class="shd"></div><div class="mv"><div class="bd${fly?' fly':jig?' jig':''}" style="animation-delay:${(-r*3).toFixed(2)}s;animation-duration:${(2.3+r*.9).toFixed(2)}s"><div class="fl" style="animation-delay:${(-r*1.9).toFixed(2)}s;animation-duration:${(1.7+r*.6).toFixed(2)}s"><img class="sp" src="${sprSrc(u.id)}" alt="" draggable="false"><img class="sp bl" src="${sprSrc(u.id,'blink')}" alt="" draggable="false" style="animation-delay:${(-Math.random()*5).toFixed(2)}s;animation-duration:${(3.4+Math.random()*2.6).toFixed(2)}s"></div></div></div><span class="elb">${ELEM[u.el].i}</span></div>
+ <div class="av"><div class="aura" style="animation-delay:${(-r*2.4).toFixed(2)}s"></div><div class="shd"></div><div class="mv"><div class="bd${fly?' fly':jig?' jig':''}" style="animation-delay:${(-r*3).toFixed(2)}s;animation-duration:${(2.3+r*.9).toFixed(2)}s"><div class="br${u.boss||u.th?' hv':''}" style="--bdl:${(-Math.random()*4).toFixed(2)}s;--bdu:${((u.boss||u.th?3.6:2.6)+Math.random()*(u.boss||u.th?.9:1)).toFixed(2)}s"><div class="fl" style="animation-delay:${(-r*1.9).toFixed(2)}s;animation-duration:${(1.7+r*.6).toFixed(2)}s"><img class="sp" src="${sprSrc(u.id)}" alt="" draggable="false"><img class="sp bl" src="${sprSrc(u.id,'blink')}" alt="" draggable="false" style="animation-delay:${(-Math.random()*5).toFixed(2)}s;animation-duration:${(3.4+Math.random()*2.6).toFixed(2)}s"></div></div></div></div><span class="elb">${ELEM[u.el].i}</span></div>
  <div class="plate ${frx(u.id,u.stars)}"><div class="pst">${'★'.repeat(Math.max(1,Math.min(6,u.stars)))}</div><div class="un">${u.boss?'⚠️':''}<b>Lv${u.lvl}</b>${u.n}</div><div class="bar hp"><i class="gh"></i><i class="hpf"></i><span class="hpt"></span></div><div class="bar atb"><i></i></div></div><div class="ufx"></div></div>`;}
 function sprPreload(cfg,team){const ids=new Set(team.map(m=>m.id));cfg.waves.forEach(w=>w.forEach(x=>ids.add(x.id)));B.pre=[];
  ids.forEach(id=>['idle','blink','attack','hit','ko','cheer'].forEach(f=>{const im=new Image();im.src=sprSrc(id,f);if(im.decode)im.decode().catch(()=>{});B.pre.push(im);}));}
@@ -2177,7 +2332,7 @@ function fitUnits(){const f=$('#bField'),A=$('#bAllies'),E=$('#bEnemies');if(!f|
  const sa=fit(ra.width/2-3,rowH),se=fit((hb?re.width*.8/2.1:re.width/2)-3,rowH);
  const szb=Math.max(se,Math.min((re.width*1.3/2.1-3)*.98,(re.height-ph+5)/1.067*.9,sa*1.75,210));
  A.style.setProperty('--sz',Math.floor(sa)+'px');E.style.setProperty('--sz',Math.floor(se)+'px');E.style.setProperty('--szb',Math.floor(szb)+'px');}
-function spawnWave(){B.enemies=B.cfg.waves[B.wave].map(sp=>mkUnit('e',sp));const se=slotCls(B.enemies),be=$('#bEnemies');be.classList.toggle('hb',B.enemies.some(u=>u.boss));be.innerHTML=B.enemies.map(u=>unitHtml(u,se.get(u))).join('');fitUnits();
+function spawnWave(){B.enemies=B.cfg.waves[B.wave].map(sp=>mkUnit('e',sp));const se=slotCls(B.enemies),be=$('#bEnemies');be.classList.toggle('hb',B.enemies.some(u=>u.boss));be.innerHTML=B.enemies.map(u=>unitHtml(u,se.get(u))).join('');fitUnits();setArena(B.enemies.some(u=>u.boss)&&arenaKind(B.cfg));
  B.enemies.forEach((u,i)=>{const m=mvOf(u);if(m&&m.animate&&!noMo())m.animate([{transform:'translateY(-34px) scale(.6,1.25)',opacity:0},{transform:'translateY(2px) scale(1.12,.86)',opacity:1,offset:.7},{transform:'none'}],{duration:520/B.speed,delay:i*90/B.speed,easing:'ease-out',fill:'backwards'});});
  const boss=B.enemies.some(u=>u.boss);banner(boss?'⚠️ BOSS WAVE ⚠️':`Wave ${B.wave+1}/${B.cfg.waves.length}`);renderBattle();}
 function banner(t){const f=$('#bField');if(!f)return;const el=document.createElement('div');el.className='b-banner';el.textContent=t;f.appendChild(el);setTimeout(()=>el.remove(),1200);}
@@ -2640,7 +2795,11 @@ function setupHomeScreen(){try{const c=document.createElement('canvas');c.width=
   add('manifest','data:application/manifest+json;charset=utf-8,'+encodeURIComponent(JSON.stringify(man)));}}catch(e){}}
 
 /* =================== INIT =================== */
-function sprMotion(){SPR.still=noMo()||(S&&S.settings.vfx===false);}
+function sprMotion(){SPR.still=noMo()||(S&&S.settings.vfx===false);applyMotion();}
+// v1.4.1 ambient motion setting: Full / Reduced / Off (idle breathing, weather, particles, drifting scenery). Default follows prefers-reduced-motion.
+function motionMode(){const m=S&&S.settings&&S.settings.motion;return m==='full'||m==='reduced'||m==='off'?m:(noMo()?'reduced':'full');}
+function applyMotion(){const m=motionMode();document.body.classList.toggle('mo-reduced',m==='reduced');document.body.classList.toggle('mo-off',m==='off');}
+function setMotion(m){S.settings.motion=m;applyMotion();save();AMB.list.forEach(a=>a.stop());AMB.list=[];document.querySelectorAll('canvas.amb').forEach(c=>{c._amb=null;});const mb=document.getElementById('menuBg');if(mb)ambStart(mb);const bt=document.getElementById('battle');if(bt)ambStart(bt);}
 async function init(){await bootVault();load();ensureDaily();document.body.classList.toggle('lite',S.settings.vfx===false);sprMotion();render();setupHomeScreen();
  if(S.seenPatch!==VERSION)openPatch();
  if(canLogin())openLogin();
