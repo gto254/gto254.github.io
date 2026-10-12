@@ -681,7 +681,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.4.2';
+const VERSION='1.4.3';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -802,6 +802,10 @@ M('seraphyne','Seraphyne','👼','light',5,[1000,100,64,108,20,60],LD('def',33),
  SK('Judgment Ray','🔆','Hit (1.3x).',{m:1.3}),
  SK('Sanctuary','⛪','Heals all allies 30% and removes all their debuffs.',{cd:4,t:'aa',m:0,heal:0.3,cleanse:1}),
  SK('Revelation','👁️','ALL enemies (1.6x). 70% chance of ATK Break.',{cd:5,t:'ae',m:1.6,fx:[['atkDown',2,70]]})]);
+M('prismane','Prismane','🦄','light',5,[1060,92,66,105,15,50],LD('hp',33),"Leaves a rainbow wherever she trots. Insists the rainbow was already there and you just never noticed.",[
+ SK('Prism Strike','🌈','Hit (1.1x). 40% chance to Stun for 1 turn.',{m:1.1,fx:[['stun',1,40]]}),
+ SK('Rainbow Blessing','💖','Heals all allies for 20% of HER max HP. Skill-ups: 25% / 30% / 35% / 40%.',{cd:4,t:'aa',m:0,heal:0.2,hb:1,up:[.25,.3,.35,.4]})],
+ {extra:m=>{const k=MD.prismane.skills[1],n=Math.min(m.sl||0,k.up.length);return`<div class="skill"><b>🌈 Skill level ${n+1} / ${k.up.length+1}</b><br>Rainbow Blessing heals <b>${Math.round((n?k.up[n-1]:k.heal)*100)}%</b> of her max HP${n<k.up.length?'. Feed a duplicate Prismane in Power Up for a skill-up.':' (max).'}</div>`;},passives:[{k:'glow',i:'✨',n:'Guardian Glow',d:'At the end of each of her turns, heals the ally with the lowest HP% for 15% of her max HP.'}]});
 // DARK
 M('bonejangle','Bonejangle','💀','dark',1,[560,64,38,102],null,"Rattles when nervous. Is always nervous.",[
  SK('Rattle','🦴','Hit (1.0x).'),
@@ -998,6 +1002,10 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.4.3',date:'Oct 11, 2026',title:'🦄 Prismane Arrives',sections:[
+  ['🦄 New 5★ Light Monster: Prismane',['A rainbow unicorn support has trotted into the Rift! Find her in Mystic and Featured summons (see the Odds tab) and in the Monsterpedia.','🌈 Prism Strike: hits one enemy with a 40% chance to Stun for 1 turn.','💖 Rainbow Blessing: heals all allies for 20% of her max HP (up to 40% with skill-ups).','✨ Guardian Glow (passive): at the end of each of her turns, heals the ally with the lowest HP%.']],
+  ['🌈 Skill-ups',['Feed a duplicate Prismane in Power Up to level up Rainbow Blessing (25% / 30% / 35% / 40%).']],
+  ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.4.2',date:'Oct 10, 2026',title:'🛒 New Shop (test mode)',sections:[
   ['🛒 New Shop (test mode)',['The Shop has a new look with tabs for Crystals, Packs, Pass, Items and Odds. Open it from the island Shop or the bottom menu.','TEST MODE: prices are labels only and no real money is ever charged. A test-mode banner is always shown, and every purchase asks you to confirm first.','Crystal bundles from 300 to 19,500 crystals. Your first purchase of each bundle doubles its base crystals (once per account). The biggest bundle also unlocks a golden Rift Hoard frame for your team leader.','Starter Pack (once per account): 900 crystals, 3 Mystic Scrolls, a 4★ monster of your choice and 100 energy.',"Tamer’s Monthly Pass: 300 crystals now plus 70 every day for 30 days."]],
   ['📊 Fair Summons',['New Odds tab with the exact chance of every rarity and every monster, for every scroll.','A 5★ is still guaranteed by Mystic/Featured summon #60, with the counter always visible.','Every 10x Mystic or Featured summon now contains at least one 4★ or better.','Summons are cheaper: 1 Mystic summon = 75 crystals (10x = 750), Featured = 110 (10x = 1,100). Mystic Scrolls you already own still summon as before.']],
@@ -1175,6 +1183,8 @@ const SKVFX={
  'Rainbow Ward':[['shield',{rb:1,c:'#7cc6ff',c2:'#ffffff'}],['ring',{c:'#7cff9e',plus:'🌈',rings:1,st:HIT+80,sp:0}]],
  'Starlight Charge':[['meteor',{s:'star',c:'#ffe27a',c2:'#ffffff',dx:-160,n:3,gap:60,sz:8}],['burst',{c:'#ffe27a',rays:5,r:2.4,st:HIT+40}]],
  'Judgment Ray':[['pillar',{c:'#ffe27a',c2:'#ffffff',w:.9,hitfx:1}]],
+ 'Prism Strike':[['beam',{rb:1,c:'#ffffff',w:5}],['burst',{c:'#ffe45a',c2:'#5ab8ff',rays:6,r:1.8,st:HIT+40}]],
+ 'Rainbow Blessing':[['pillar',{rb:1,c:'#ff9ad5',c2:'#ffffff',w:1.2,st:HIT-200,len:700}],['ring',{rb:1,c:'#7cff9e',c2:'#5ab8ff',plus:'🌈',flat:1,st:HIT}],['petals',{g:'✨',c:'#ffe45a',r:1.5,spin:3}]],
  'Sanctuary':[['pillar',{c:'#fff6c8',c2:'#ffffff',w:1.2,st:HIT-200,len:700}],['ring',{c:'#ffe27a',c2:'#7cff9e',plus:'✨',flat:1,st:HIT}]],
  'Revelation':[['runes',{c:'#ffe27a',c2:'#ffffff',flat:1}],['pillar',{c:'#ffe27a',w:.6,st:HIT,len:380}]],
  // DARK
@@ -1242,6 +1252,7 @@ const ART={
  dawnstag:{p:['#e0a868','#fff0d8','#a8703a'],a:'#fff6c8',e:'#5a3510',ears:'deer',top:['antlers'],muzzle:1,mark:['dots'],mouth:'smile'},
  halodove:{p:['#ffffff','#ffffff','#cfd6ea'],a:'#ffc94a',e:'#2a3a6a',top:['halo'],body:'bird',wings:'feather',mouth:'beak',acc:['olive']},
  gleamhorn:{p:['#fdf4ff','#ffffff','#dcc6ef'],a:'#ff9ad5',e:'#7a3fd1',hair:'#b98cff',ears:'horse',top:['unicorn','hair2'],back:['hairback'],tail:'mane',muzzle:1,lids:'smug',mouth:'smirk'},
+ prismane:{p:['#ffffff','#ffffff','#d8dcef'],a:'#ffd6f5',e:'#5a3fd1',hair:'#ff9ad5',ears:'horse',top:['unicorn','hair2'],back:['hairback'],tail:'mane',muzzle:1,mouth:'smile',rb:1},
  seraphyne:{p:['#ffe2cf','#fff6ee','#e6b49a'],a:'#ffe27a',e:'#3d7ad6',hair:'#ffd65a',body:'robe',robe:['#ffffff','#fff6dc','#d9c08a'],top:['halo','hair'],back:['hairback'],wings:'feather',mouth:'smile'},
  bonejangle:{p:['#f4efe2','#ffffff','#bfb398'],a:'#b46bff',e:'#b46bff',body:'skel',eyes:'skull',acc:['bone'],mouth:'teeth'},
  nocturnipper:{p:['#6a4a9e','#c9b2ef','#3a2466'],a:'#ff9ad5',e:'#ffcc33',ears:'bat',wings:'bat',mouth:'fang',acc:['carrot']},
@@ -1419,6 +1430,11 @@ function sprSvg(id,face){if(ART[id]&&ART[id].svg)return ART[id].svg(face);
  if(AC.includes('coins'))front+=`<ellipse cx="22" cy="106" rx="7" ry="3.4" fill="url(#gd)" ${S}/><ellipse cx="98" cy="108" rx="7" ry="3.4" fill="url(#gd)" ${S}/><ellipse cx="100" cy="103" rx="7" ry="3.4" fill="url(#gd)" ${S}/>`;
  if(AC.includes('bolts'))front+=mir(`<path d="M104 30 L96 44 L102 44 L94 58" stroke="#ffe27a" stroke-width="3" fill="none"/>`);
  if(AC.includes('runes'))front+=[[16,40],[104,46],[96,16],[22,16]].map(([x,y],i)=>`<g transform="translate(${x} ${y}) rotate(${i*30})"><circle r="6" fill="none" stroke="${A}" stroke-width="1.6"/><path d="M0 -4 L3.4 2 L-3.4 2Z" fill="none" stroke="${A}" stroke-width="1.4"/></g>`).join('');
+ if(a.rb){ // rainbow mane/tail + glowing horn + sparkles
+  defs=defs.replace('</defs>','<linearGradient id="rb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5a6e"/><stop offset=".2" stop-color="#ffb03d"/><stop offset=".4" stop-color="#ffe45a"/><stop offset=".6" stop-color="#5ee08a"/><stop offset=".8" stop-color="#5ab8ff"/><stop offset="1" stop-color="#b47aff"/></linearGradient><radialGradient id="hg"><stop offset="0" stop-color="#ffffff"/><stop offset=".4" stop-color="#fff6c8" stop-opacity=".8"/><stop offset="1" stop-color="#ffd6f5" stop-opacity="0"/></radialGradient></defs>');
+  const f=`fill="${hair}"`;back=back.split(f).join('fill="url(#rb)"');top=top.split(f).join('fill="url(#rb)"');
+  top=`<circle cx="${hx+2}" cy="${hy-50}" r="${ch||atk?16:12}" fill="url(#hg)"/>`+top;
+  front+=`<circle cx="${hx+2}" cy="${hy-57}" r="2.6" fill="#ffffff"/>`+[[16,20,3.4],[104,28,3],[100,96,2.6],[14,82,2.4],[84,4,2.2]].map(([x,y,r],i)=>`<path d="M${x} ${y-r*2} L${x+r*.45} ${y-r*.45} L${x+r*2} ${y} L${x+r*.45} ${y+r*.45} L${x} ${y+r*2} L${x-r*.45} ${y+r*.45} L${x-r*2} ${y} L${x-r*.45} ${y-r*.45}Z" fill="${['#ffe45a','#5ab8ff','#ff9ad5','#5ee08a','#ffffff'][i]}"/>`).join('');}
  const glow='';
  const content=glow+back+body+ears+head+top+faceS+front;
  return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -12 120 128">${defs}${boss?`<g transform="translate(60 112) scale(1.04) translate(-60 -112)">${content}</g>`:content}</svg>`;}
@@ -1816,7 +1832,7 @@ function openMon(uid){const m=monByUid(uid);if(!m)return;closeModal('mon');const
  openModal(`<div class="mhead el-${d.el}">${avHtml(m.id,0,'',m.stars)}<div style="flex:1;min-width:0"><h3>${d.n}</h3>${starsHtml(m.stars)} <span class="mut">${d.th?`<b class="uqtag">${d.th.t}</b> · Unique`:'Natural '+d.rar+'★ '+RNAME[d.rar]} · ${ELEM[d.el].n}</span>
   <div class="mut" style="margin-top:4px">Lv <b>${m.lvl}</b> / ${ml} · Power <b>${fmt(power(m))}</b></div><div class="xpbar"><i style="width:${m.lvl>=ml?100:m.xp/xpNeed(m.lvl)*100}%"></i></div><div class="mut">${m.lvl>=ml?(m.stars>=6?'MAX LEVEL — fully ascended ✨':'MAX LEVEL — ready to Star Up!'):`XP ${m.xp}/${xpNeed(m.lvl)}`}</div></div></div>
  <p class="desc">"${d.desc}"</p>
- <div class="row-btns"><button class="btn" id="btnRunes" onclick="openRuneSlot(${uid},1)">💠 Runes</button><button class="btn green" id="btnPower" onclick="openPowerUp(${uid})" ${m.lvl>=ml?'disabled':''}>⬆️ Power Up</button><button class="btn gold" id="btnStar" onclick="openStarUp(${uid})" ${m.stars>=6?'disabled':''}>⭐ Star Up</button>
+ <div class="row-btns"><button class="btn" id="btnRunes" onclick="openRuneSlot(${uid},1)">💠 Runes</button><button class="btn green" id="btnPower" onclick="openPowerUp(${uid})" ${m.lvl>=ml&&!skCan(m)?'disabled':''}>⬆️ Power Up</button><button class="btn gold" id="btnStar" onclick="openStarUp(${uid})" ${m.stars>=6?'disabled':''}>⭐ Star Up</button>
   <button class="btn ghost" onclick="toggleTeam(${uid});openMon(${uid})">${ti>=0?'➖ Remove from Team':'➕ Add to Team'}</button>${d.uniq?'<button class="btn ghost" disabled title="Bound to you forever">⛓️ Bound</button>':`<button class="btn ghost" onclick="toggleLock(${uid})">${m.lock?'🔓 Unlock':'🔒 Lock'}</button>`}</div>
  ${statPanelHtml(st)}
  ${monRunesHtml(m,st)}
@@ -1831,12 +1847,16 @@ function openPicker(o){PK={o,sel:[]};
 function pkToggle(uid){const i=PK.sel.indexOf(uid);if(i>=0)PK.sel.splice(i,1);else{if(PK.sel.length>=PK.o.max){toast(`You can select up to ${PK.o.max}.`);return;}PK.sel.push(uid);}pkUpd();}
 function pkUpd(){document.querySelectorAll('#pkGrid .mc').forEach(el=>el.classList.toggle('sel',PK.sel.includes(+el.dataset.uid)));const info=PK.o.info(PK.sel.map(monByUid));$('#pkInfo').innerHTML=info.html+(PK.sel.map(monByUid).some(m=>m.stars>=4&&m.id!=='jellybop')?'<div style="color:#ffb86b;margin-top:4px">⚠️ You selected a 4★+ monster as fodder — it will be consumed!</div>':'');$('#pkOk').disabled=!info.ok;}
 function pkConfirm(){const sel=PK.sel.map(monByUid);const o=PK.o;if(!o.info(sel).ok)return;closeModal('picker');o.onOk(sel);}
-function openPowerUp(uid){const m=monByUid(uid);if(m.lvl>=maxLvl(m)){toast('Already max level! Try Star Up ⭐');return;}
+// v1.4.3 skill-ups: monsters with an upgradable skill (an 'up' list) gain a skill level per duplicate fed in Power Up
+const skMax=id=>Math.max(0,...MD[id].skills.map(k=>(k.up||[]).length));
+const skCan=m=>skMax(m.id)>0&&(m.sl||0)<skMax(m.id);
+function skDups(m,sel){return Math.min(skMax(m.id)-(m.sl||0),sel.filter(f=>f&&f.id===m.id).length);}
+function openPowerUp(uid){const m=monByUid(uid);if(m.lvl>=maxLvl(m)&&!skCan(m)){toast('Already max level! Try Star Up ⭐');return;}
  openPicker({title:`⬆️ Power Up ${MD[m.id].n}`,hint:'Select up to 6 monsters to feed. 🍮 Jellybops give 6x XP! Team members & locked monsters are hidden.',max:6,okText:'Feed!',
   list:S.mons.filter(f=>f.uid!==uid&&!f.lock&&!MD[f.id].uniq&&!S.team.includes(f.uid)),
   info:sel=>{const xp=sel.reduce((a,f)=>a+fodderXp(f),0);const cost=sel.reduce((a,f)=>a+300*f.stars,0);const sim={...m};addXp(sim,xp);
-   return{ok:sel.length>0&&S.gold>=cost,html:`XP <b>+${fmt(xp)}</b> → Lv <b>${m.lvl}</b> ➜ <b class="up">${sim.lvl}</b> / ${maxLvl(m)} · Cost 💰 <b style="color:${S.gold>=cost?'#fff':'#ff6b6b'}">${fmt(cost)}</b>`};},
-  onOk:sel=>{sel=sel.filter(f=>f&&!MD[f.id].uniq);const xp=sel.reduce((a,f)=>a+fodderXp(f),0);const cost=sel.reduce((a,f)=>a+300*f.stars,0);S.gold-=cost;sel.forEach(f=>removeMon(f.uid));const g=addXp(m,xp);prog('powerup');save();sfx('heal');toast(`⬆️ ${MD[m.id].n} gained ${g} level${g===1?'':'s'}!`);render();openMon(uid);}});}
+   const su=skMax(m.id)?skDups(m,sel):0;return{ok:sel.length>0&&S.gold>=cost,html:`XP <b>+${fmt(xp)}</b> → Lv <b>${m.lvl}</b> ➜ <b class="up">${sim.lvl}</b> / ${maxLvl(m)}${su?` · 🌈 Skill-up <b class="up">+${su}</b>`:''} · Cost 💰 <b style="color:${S.gold>=cost?'#fff':'#ff6b6b'}">${fmt(cost)}</b>`};},
+  onOk:sel=>{sel=sel.filter(f=>f&&!MD[f.id].uniq);const xp=sel.reduce((a,f)=>a+fodderXp(f),0);const cost=sel.reduce((a,f)=>a+300*f.stars,0);S.gold-=cost;const su=skMax(m.id)?skDups(m,sel):0;sel.forEach(f=>removeMon(f.uid));const g=addXp(m,xp);if(su)m.sl=(m.sl||0)+su;prog('powerup');save();sfx('heal');toast(`⬆️ ${MD[m.id].n} gained ${g} level${g===1?'':'s'}!${su?` 🌈 Skill-up +${su}!`:''}`);render();openMon(uid);}});}
 function openStarUp(uid){const m=monByUid(uid);if(m.stars>=6){toast('Already at maximum stars!');return;}
  if(m.lvl<maxLvl(m)){toast(`Reach max level (${maxLvl(m)}) first, then Star Up!`);return;}
  const need=m.stars,cost=m.stars*5000;
@@ -2378,7 +2398,7 @@ function later(fn,ms){const b=B;if(!b)return;const run=()=>{if(B!==b||b.closed)r
 function mkUnit(side,spec){const d=MD[spec.id];const ms=spec.m?monStats(spec.m):null;const st=ms?ms.t:baseStats(spec.id,spec.lvl,spec.stars);const bs=ms?ms.b:{...st};const fx=ms?ms.fx:{};
  const u={bid:++B.uc,side,id:spec.id,n:d.n,e:d.e,el:d.el,lvl:spec.m?spec.m.lvl:spec.lvl,stars:spec.m?spec.m.stars:spec.stars,boss:!!spec.boss,m:spec.m||null,
   hp:st.hp,atk:st.atk,def:st.def,spd:st.spd,cr:st.cr,cd:st.cd,res:st.res,acc:st.acc,b:bs,violent:!!fx.violent,vamp:!!fx.vampire,despair:!!fx.despair,will:!!fx.will,atb:Math.random()*20,fx:[],cds:d.skills.map(()=>0),skills:d.skills,
-  uniq:!!d.uniq,th:d.th||null,amp:!!(d.passives||[]).some(p=>p.k==='amp'),reap:!!(d.passives||[]).some(p=>p.k==='reap'),first:!!(d.passives||[]).some(p=>p.first),owed:0,chain:0,ign:d.ignDef||0}; // ign = fraction of the target's CURRENT DEF ignored (1 = 100%, buffs included)
+  uniq:!!d.uniq,th:d.th||null,glow:!!(d.passives||[]).some(p=>p.k==='glow'),sl:spec.m?(spec.m.sl||0):0,amp:!!(d.passives||[]).some(p=>p.k==='amp'),reap:!!(d.passives||[]).some(p=>p.k==='reap'),first:!!(d.passives||[]).some(p=>p.first),owed:0,chain:0,ign:d.ignDef||0}; // ign = fraction of the target's CURRENT DEF ignored (1 = 100%, buffs included)
  if(spec.em){u.hp=Math.round(u.hp*spec.em[0]);u.atk=Math.round(u.atk*spec.em[1]);u.def=Math.round(u.def*spec.em[2]);} // v1.4 content: enemy stat multipliers
  if(spec.spd)u.spd+=spec.spd;
  if(spec.boss){u.hp=Math.round(u.hp*(spec.hpm||4.5));u.atk=Math.round(u.atk*1.15);u.def=Math.round(u.def*1.1);u.spd+=4;}
@@ -2530,7 +2550,7 @@ function startTurn(u){B.tn=(B.tn||0)+1;if(B.tn>TURN_CAP&&!B.over){B.timeUp=1;ban
  setCam(u);hopAnim(u);
  if(u.side==='p'&&!B.auto){B.awaiting=true;B.sel=0;setMsg(`${spi(u.id)} ${u.n}'s turn!`);renderBattle();return;}
  later(()=>aiAct(u),u.side==='p'?350:600);}
-function endTurn(u){if(!B||B.over)return;u.atb=0;
+function endTurn(u){if(!B||B.over)return;u.atb=0;if(u.glow)glowPulse(u);
  if(!u.bonus){u.fx.forEach(f=>{if(f.fresh)f.fresh=false;else f.t--;});u.fx=u.fx.filter(f=>f.t>0);} // a bonus turn is "free": buffs don't tick
  const wasBonus=u.bonus;u.bonus=false;B.awaiting=false;B.actor=null;const h=B.reap;B.reap=null;renderBattle();
  // v1.3.4 'reap': every action that kills earns exactly ONE extra turn (however many it kills), normal or extra turn alike.
@@ -2591,7 +2611,7 @@ function resolveSkill(u,sk,tgt){const foes=foesOf(u),friends=friendsOf(u);
  if(sk.t==='ae'&&sk.m>0)flashField(ELEM[u.el].c);if(!off&&sk.heal)sfx('heal');else if(!off)sfx('buff');
  let total=0;
  targets.forEach(t=>{if(off&&sk.m>0){for(let h=0;h<sk.h;h++){if(t.hp<=0)break;total+=strike(u,t,sk,h);}}
-  if(t.hp>0){if(sk.heal)heal(t,Math.round(t.maxHp*sk.heal));if(sk.cleanse){const n=t.fx.length;t.fx=t.fx.filter(f=>FX[f.id].buff);if(t.fx.length<n)float(t,'Cleansed ✨','info',1);}
+  if(t.hp>0){if(sk.heal)heal(t,Math.round((sk.hb?u.maxHp:t.maxHp)*healPct(u,sk)));if(sk.cleanse){const n=t.fx.length;t.fx=t.fx.filter(f=>FX[f.id].buff);if(t.fx.length<n)float(t,'Cleansed ✨','info',1);}
    (sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,ch);});if(sk.atb&&t!==u)t.atb=Math.min(100,t.atb+sk.atb);}});
  if(sk.drain&&total>0&&u.hp>0)heal(u,Math.round(total*sk.drain));
  if(sk.selfAfter&&u.hp>0)(sk.self||[]).forEach(([id,t])=>addFx(u,u,id,t,100));}
@@ -2619,6 +2639,11 @@ function reapRevive(src){if(!B||src.hp<=0)return null;const t=(src.side==='p'?B.
 function canRevive(t){return !!t&&t.hp<=0&&!t.tk;}
 function revive(t,pct,msg){if(!canRevive(t)){if(t&&t.tk)float(t,TX.noRevive,'crim',1);return false;}
  t.hp=Math.max(1,Math.round(t.maxHp*(pct||.3)));t.atb=0;t.fx=[];const m=mvOf(t);if(m&&m.getAnimations)m.getAnimations().forEach(a=>a.cancel());setFace(t,'idle');float(t,msg||'Revived! ✨','heal',1);renderBattle();return true;}
+// skill-ups (v1.4.3): a skill with an 'up' list uses up[sl-1] once the monster has sl skill-ups
+function healPct(u,sk){const n=Math.min(u.sl||0,(sk.up||[]).length);return n>0?sk.up[n-1]:sk.heal;}
+// 'glow' passive: at the end of each of her turns, heal the ally with the lowest HP% for 15% of her max HP
+function glowPulse(u){if(!u.glow||u.hp<=0||!B||B.over)return null;const fr=friendsOf(u).filter(f=>f.hp>0&&!f.tk);if(!fr.length)return null;
+ const t=fr.reduce((a,f)=>f.hp/f.maxHp<a.hp/a.maxHp?f:a);heal(t,Math.round(u.maxHp*0.15));try{vxPlay(u,{n:'Guardian Glow',t:'a',m:0,heal:1},[t]);}catch(e){}return t;}
 function heal(t,a){if(t.hp<=0||t.tk||a<=0)return;const b=t.hp;t.hp=Math.min(t.maxHp,t.hp+a);if(t.hp>b)float(t,'+'+fmt(t.hp-b),'heal');}
 function addFx(src,t,id,turns,ch,why){const buff=FX[id].buff;
  if(!buff&&(t.fx.some(f=>f.id==='immune')||(t.mech&&t.mech.shield))){float(t,'🔰 Immune','info',1);return;}
