@@ -681,6 +681,9 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
 .spk-b{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:10px;border:1px solid #4a3f8f;background:#1a1440;color:#fff;font:inherit;cursor:pointer;min-height:44px}
 .odds details{margin:8px 0;padding:6px 8px;border-radius:10px;background:#1a1440}.odds summary{cursor:pointer;min-height:32px;display:flex;align-items:center}
 .tslot.hoard .av{box-shadow:0 0 0 3px #ffd166,0 0 14px 2px #ffd166aa;border-radius:12px}
+
+/* v1.4.5 Freeze status: icy tint on frozen units */
+.frz img.sp{filter:saturate(.45) brightness(1.18) hue-rotate(160deg) drop-shadow(0 0 6px #9fe8ff) drop-shadow(0 0 2px #ffffff)}
 </style>
 </head>
 <body>
@@ -703,7 +706,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.4.4';
+const VERSION='1.4.5';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -737,6 +740,7 @@ const FX={
  defBreak:{n:'DEF Break',i:'💔',d:'-70% DEF'},
  slow:{n:'Slow',i:'🐌',d:'-30% SPD'},
  stun:{n:'Stun',i:'💫',d:'Skips its next turn'},
+ freeze:{n:'Freeze',i:'🧊',d:'Frozen solid: skips its next turn'},
  dot:{n:'Burn',i:'☠️',d:'Loses 5% max HP per turn (stacks up to 5)'},
  immune:{n:'Immunity',i:'🔰',buff:1,d:'Immune to harmful effects'},
 };
@@ -786,6 +790,11 @@ M('leviadrift','Leviadrift','🐋','water',5,[1080,96,64,101,15,60],LD('hp',33),
  SK('Tail Splash','💦','Hit (1.3x).',{m:1.3}),
  SK('Tsunami','🌊','ALL enemies (1.4x). 80% chance to Slow for 2 turns.',{cd:4,t:'ae',m:1.4,fx:[['slow',2,80]]}),
  SK("Ocean's Mercy",'💙','Heals all allies 30% and grants Regen for 2 turns.',{cd:4,t:'aa',m:0,heal:0.3,fx:[['regen',2,100]]})]);
+M('leviathan','Leviathan','🐍','water',5,[1040,103,62,104,20,60],LD('atk',33),"An ancient sea serpent that rises from the deep when the tide turns dark. Sailors count its spikes. Nobody has ever finished counting.",[
+ SK('Tail Sweep','🌊','Sweeps ALL enemies with its tail (0.75x). 20% chance to Stun for 1 turn. Skill-ups: 30% / 35% / 40% / 50%.',{t:'ae',m:0.75,fx:[['stun',1,20]],upFx:1,up:[30,35,40,50]}),
+ SK('Bite & Lash','🦷','Bites one enemy (1.8x), then its tail lashes the enemy with the lowest HP (1.0x) with a 20% chance to Stun. Skill-ups: 30% / 35% / 40% / 50%.',{cd:3,m:1.8,tail:{m:1.0,st:20},up:[30,35,40,50]}),
+ SK('Freezing Tidal Wave','🧊','A colossal icy wave crashes over ALL enemies (1.8x). 25% chance to Freeze each enemy hit for 1 turn.',{cd:5,t:'ae',m:1.8,fx:[['freeze',1,25]],awAtb:15})],
+ {extra:m=>{const k=MD.leviathan.skills[0],n=Math.min(m.sl||0,k.up.length),c=n?k.up[n-1]:20;return`<div class="skill"><b>🐍 Skill level ${n+1} / ${k.up.length+1}</b><br>Tail Sweep and the Bite & Lash tail hit have a <b>${c}%</b> Stun chance${n<k.up.length?'. Feed a duplicate Leviathan in Power Up for a skill-up.':' (max).'}</div>`;}});
 // WIND
 M('buzzsaw','Buzzsaw','🐝','wind',1,[520,66,36,110],null,"Furious about flowers for reasons it refuses to explain.",[
  SK('Triple Sting','🐝','Three stings (0.4x each).',{m:0.4,h:3}),
@@ -908,6 +917,7 @@ const AWK={
  seraphyne:{n:'Celestivra',b:['res',20],x:{top:['halo','hair','tiara'],acc:['pearls']}},
  prismane:{n:'Paislynn',b:['res',20],x:{p:['#fffdf6','#ffffff','#e8dcb8'],a:'#ffe27a',top:['halo','unicorn','hair2','crown'],wings:'feather',wc:'#fff6dc',acc:['pearls'],mouth:'smile',keep:1},
   sk:'Guardian Glow heals 20% (was 15%) and Rainbow Blessing also removes one harmful effect from each ally.'},
+ leviathan:{n:'Carter',b:['cd',20],g:1,x:{},sk:'Effect chances +10%, and Freezing Tidal Wave also pushes back every enemy\'s turn gauge by 15%.'},
  bonejangle:{n:'Marrowdance',b:['acc',20],x:{top:['crown']}},
  nocturnipper:{n:'Count Turnipire',b:['cr',12],x:{top:['crown'],acc:['carrot','collar']}},
  widowmire:{n:'Silkshade',b:['acc',20],x:{top:['bow','tiara'],mark:['gem']}},
@@ -1062,6 +1072,10 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.4.5',date:'Oct 13, 2026',title:'🐍 Leviathan Rises',sections:[
+  ['🐍 New 5★ Water Monster: Leviathan',['A fearsome sea serpent has surfaced in the Rift! Find it in Mystic and Featured summons (see the Odds tab) and in the Monsterpedia.','🌊 Tail Sweep: sweeps ALL enemies with a 20% chance to Stun (up to 50% with skill-ups).','🦷 Bite & Lash: bites one enemy, then lashes the enemy with the lowest HP with a 20% chance to Stun (up to 50% with skill-ups).','🧊 Freezing Tidal Wave: a colossal icy wave crashes over ALL enemies with a 25% chance to Freeze each one (a frozen monster skips its next turn).','Feed a duplicate Leviathan in Power Up for a skill-up.']],
+  ['🌟 Carter',['Leviathan awakens into Carter, a crowned deep-sea serpent: +10% effect chances, and Freezing Tidal Wave also pushes back every enemy\'s turn gauge by 15%.']],
+  ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.4.4',date:'Oct 11, 2026',title:'🌟 Awakening',sections:[
   ['🌟 Monster Awakening',['Monsters can now be awakened once! Open a monster and tap 🌟 Awaken.','Awakening costs Low / Mid / High essences of the monster\'s element plus mana, scaled by its natural stars. The confirm screen shows the cost and the stats before and after.','Awakened monsters get a new name, new look (new colours, a glowing aura and a crown, wings or jewels), +12% HP / ATK / DEF, +6 SPD, a bonus stat and a small skill upgrade.']],
   ['🦄 Paislynn',['Prismane awakens into Paislynn: Guardian Glow heals 20% and Rainbow Blessing also removes one harmful effect from each ally.']],
@@ -1198,6 +1212,9 @@ const SKVFX={
  'Spark Poke':[['proj',{s:'star',c:'#ffd166',c2:'#ff9a3d',sz:6,arc:26}]],
  'Hot Take':[['proj',{s:'emoji',g:'🌶️',sz:7,arc:60,spin:2,c:'#ff3d3d'}],['burst',{c:'#ff3d3d',c2:'#ffb03d',rays:8,r:2}]],
  'Lava Lick':[['beam',{c:'#ff7a1f',c2:'#ffd166',w:7,wob:1}],['rain',{c:'#ff5a1f',up:1,st:HIT,len:380,rate:.5,sz:5}]],
+ 'Tail Sweep':[['slash',{c:'#2fd8ff',c2:'#bff8ff',r:1.6,rot:2.4,len:3.2,w:.42}],['quake',{c:'#1f6fd6',px:5}]],
+ 'Bite & Lash':[['bite',{c:'#2fd8ff',c2:'#ffffff'}],['slash',{c:'#5ff0ff',c2:'#bff8ff',r:1.3,rot:-.9,st:HIT}]],
+ 'Freezing Tidal Wave':[['wave',{c:'#0e2f7a',c2:'#bff8ff',th:170,amp:18,a:.75}],['quake',{c:'#3da5ff',px:8}]],
  'Molten Tail':[['slash',{c:'#ff8a1f',c2:'#ffe08a',r:1.6,rot:2.4,len:3.2,w:.42}],['quake',{c:'#ff5a1f',px:5}]],
  'Foxfire':[['proj',{s:'orb',c:'#5ec8ff',c2:'#ff8a3d',n:2,gap:80,arc:55,sz:7}]],
  'Ember Dance':[['ring',{on:'self',c:'#ff8a3d',c2:'#ffd166',flat:1,st:0,len:420,sp:8,rings:1}],['slash',{c:'#ff6b3d',c2:'#ffd166',n:2,gap:90,r:1.2}]],
@@ -1343,6 +1360,60 @@ for(const id in AWK){const b=ART[id];if(!b||!MD[id])continue;const x=AWK[id].x||
  if(!x.keep&&x.top)o.top=[...new Set([...(b.top||[]),...x.top])];if(x.acc)o.acc=[...new Set([...(b.acc||[]),...x.acc])];if(x.mark)o.mark=[...new Set([...(b.mark||[]),...x.mark])];
  if(b.wings&&x.wings)o.wings=b.wings; // keep its own wings
  o.awk=1;o.awc=tn;ART[id+'_aw']=o;}
+/* ---------- v1.4.5 Leviathan / Carter: custom sea-serpent sprite (ART[id].svg) ---------- */
+function levSvg(aw,face){const ko=face==='ko',hit=face==='hit',atk=face==='attack',ch=face==='cheer',anim=!SPR.still&&!ko;
+ if(face==='blink')return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -40 400 427"></svg>`; // the serpent never blinks
+ const OL='#050a14',o=aw?{rim:'#3a6ad0',tip:'#d8ffff',body:['#1a2c5c','#070d22'],fin:['#2fd8ff','#0b2a66'],scale:'#38e1ff',belly:'#3a5fa0',eye:'#7ff8ff',glow:'#5ff0ff',w:36,hs:1.25,spike:30,step:.05}
+  :{rim:'#6fd0c4',tip:'#b8fff0',body:['#2f7f86','#163d52'],fin:['#5cc2b8','#1d5a66'],scale:'#0a2230',belly:'#8fd6c4',eye:'#d8ff5a',glow:'#5ff0d0',w:30,hs:1.3,spike:20,step:.06};
+ const an=(v,dur)=>anim?`<animate attributeName="opacity" values="${v}" dur="${dur}s" repeatCount="indefinite"/>`:'';
+ const SEG=[[40,330,30,250,120,230,150,290],[150,290,175,340,260,335,285,280],[285,280,310,225,250,190,215,205],[215,205,185,218,190,175,225,150]];
+ const bz=(s,t)=>{const u=1-t;return[u*u*u*s[0]+3*u*u*t*s[2]+3*u*t*t*s[4]+t*t*t*s[6],u*u*u*s[1]+3*u*u*t*s[3]+3*u*t*t*s[5]+t*t*t*s[7]];};
+ const at=g=>{const x=Math.min(3.999,g*4),i=Math.floor(x);return bz(SEG[i],x-i);};
+ const body='M40 330 C30 250 120 230 150 290 C175 340 260 335 285 280 C310 225 250 190 215 205 C185 218 190 175 225 150',tailP='M300 335 C330 300 350 300 372 255';
+ let s=`<defs><linearGradient id="bd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${o.rim}"/><stop offset=".3" stop-color="${o.body[0]}"/><stop offset="1" stop-color="${o.body[1]}"/></linearGradient>
+ <linearGradient id="fn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${o.tip}"/><stop offset=".35" stop-color="${o.fin[0]}"/><stop offset="1" stop-color="${o.fin[1]}"/></linearGradient>
+ <radialGradient id="au" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="${o.glow}" stop-opacity=".5"/><stop offset=".55" stop-color="${o.glow}" stop-opacity=".16"/><stop offset="1" stop-color="${o.glow}" stop-opacity="0"/></radialGradient>
+ <radialGradient id="gm" cx=".4" cy=".35" r=".6"><stop offset="0" stop-color="#ffffff"/><stop offset=".4" stop-color="${o.glow}"/><stop offset="1" stop-color="#03314a"/></radialGradient>
+ <filter id="gl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <pattern id="sc" width="14" height="10" patternUnits="userSpaceOnUse"><path d="M0 10 Q7 0 14 10" fill="none" stroke="${o.scale}" stroke-width="1.6" opacity=".55"/></pattern>
+ ${ko?'<filter id="ko"><feColorMatrix type="saturate" values=".25"/></filter>':''}</defs>`;
+ if(!ko)s+=`<ellipse cx="205" cy="200" rx="${aw?210:180}" ry="${aw?185:160}" fill="url(#au)">${an('.8;1;.8','2.4')}</ellipse>`;
+ if(aw&&!ko){s+=`<g fill="none" stroke="${o.glow}" stroke-width="3" stroke-linecap="round" opacity=".5">`;for(let i=0;i<4;i++){const r=70+i*32;s+=`<path d="M${200-r} 220 A${r} ${r*.55} 0 0 1 ${(200+r*.7).toFixed(0)} ${(220-r*.45).toFixed(0)}" opacity="${.9-i*.18}" stroke-dasharray="${40+i*20} 30"/>`;}s+=`</g>`;}
+ let g=`<g ${ko?'filter="url(#ko)" transform="translate(0 40) rotate(8 200 330)"':hit?'transform="translate(10 4)"':''}>`;
+ // dorsal spikes (with glowing veins) + glow spots / runes along the coil
+ let f='',r='';for(let t=0.08;t<0.93;t+=o.step){const a=at(t),b=at(t+.004);let tx=b[0]-a[0],ty=b[1]-a[1];const n0=Math.hypot(tx,ty)||1;tx/=n0;ty/=n0;let nx=ty,ny=-tx;
+  if(ny>0&&t<0.55){nx=-nx;ny=-ny;}if(t>=0.55&&nx<0){nx=-nx;ny=-ny;}
+  const h=o.spike*(1-Math.abs(t-.5)*.6),off=o.w/2-2,bx=a[0]+nx*off,by=a[1]+ny*off,F=v=>v.toFixed(1);
+  f+=`<path d="M${F(bx-tx*7)} ${F(by-ty*7)} L${F(bx+nx*h+tx*6)} ${F(by+ny*h+ty*6)} L${F(bx+tx*7)} ${F(by+ty*7)}Z" fill="url(#fn)" stroke="${OL}" stroke-width="3.5" stroke-linejoin="round"/><path d="M${F(bx)} ${F(by)} L${F(bx+nx*h*.75+tx*4)} ${F(by+ny*h*.75+ty*4)}" stroke="${o.glow}" stroke-width="1.2" opacity=".7"/>`;
+  if(aw){if(Math.round(t*100)%2===0)r+=`<path d="M${F(a[0]-4)} ${F(a[1]-5)} L${F(a[0]+4)} ${F(a[1])} L${F(a[0]-4)} ${F(a[1]+5)} M${F(a[0]+5)} ${F(a[1]-5)} L${F(a[0]+5)} ${F(a[1]+5)}" stroke="${o.glow}" stroke-width="2.4" fill="none" stroke-linecap="round" filter="url(#gl)"/>`;}
+  else r+=`<circle cx="${F(a[0]-nx*6)}" cy="${F(a[1]-ny*6)}" r="2.2" fill="${o.glow}" opacity=".85" filter="url(#gl)"/>`;}
+ g+=f;
+ g+=`<path d="${tailP}" stroke="${OL}" stroke-width="30" fill="none" stroke-linecap="round"/><path d="${tailP}" stroke="url(#bd)" stroke-width="22" fill="none" stroke-linecap="round"/><path d="M372 255 L360 205 L382 236 L398 200 L388 262Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/>`;
+ g+=`<path d="${body}" stroke="${OL}" stroke-width="${o.w+9}" fill="none" stroke-linecap="round"/><path d="${body}" stroke="url(#bd)" stroke-width="${o.w}" fill="none" stroke-linecap="round"/><path d="${body}" stroke="url(#sc)" stroke-width="${o.w}" fill="none" stroke-linecap="round"/>
+ <path d="${body}" stroke="${o.belly}" stroke-width="${o.w*.3}" fill="none" stroke-linecap="round" stroke-dasharray="7 4" opacity=".4" transform="translate(4 7)"/><path d="${body}" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".28" transform="translate(-5 -8)" stroke-dasharray="40 26"/><g>${an('1;.55;1','1.8')}${r}</g>`;
+ if(aw&&!ko)g+=`<circle cx="232" cy="222" r="9" fill="url(#gm)" stroke="${OL}" stroke-width="3" filter="url(#gl)"/><circle cx="232" cy="222" r="18" fill="${o.glow}" opacity=".22">${an('.3;.1;.3','1.6')}</circle>`;
+ const jaw=atk?18:ch?10:ko?4:0,hr=atk?-22:ch?-18:hit?2:ko?20:-12;
+ const eye=ko?`<path d="M-20 -14 L-6 -4 M-6 -14 L-20 -4" stroke="${OL}" stroke-width="3"/>`:hit?`<path d="M-24 -8 L4 -14" stroke="${OL}" stroke-width="3.5"/>`:`<path d="M-24 -6 L6 -16 L2 -6 Z" fill="${o.eye}" filter="url(#gl)"/><path d="M-6 -12 L-4 -7" stroke="${OL}" stroke-width="2.5"/>`;
+ g+=`<g transform="translate(225 150) rotate(${hr}) scale(${o.hs})">
+ ${aw?`<path d="M10 -20 L60 -78 L34 -18Z M-8 -24 L20 -92 L14 -20Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/>`:`<path d="M14 -18 L44 -50 L32 -12Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/>`}
+ <path d="M30 -10 L58 -2 L40 10 L62 22 L30 26Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/>
+ <g transform="rotate(${jaw} 30 22)"><path d="M30 18 L-70 34 L-62 44 L-20 44 L34 34Z" fill="${o.body[1]}" stroke="${OL}" stroke-width="5" stroke-linejoin="round"/>
+ <path d="M-64 34 L-58 22 L-52 34 L-46 23 L-40 33 L-34 24 L-28 32 L-22 25 L-16 31" fill="#f4f7ff" stroke="${OL}" stroke-width="1.5" stroke-linejoin="round"/></g>
+ <path d="M-66 18 L20 6 L28 22 L-66 ${32+jaw*1.4}Z" fill="#2a0612"/>
+ <path d="M38 -20 C20 -36 -10 -34 -40 -18 L-82 2 L-78 14 L-66 18 L20 8 L36 14 C46 0 46 -10 38 -20Z" fill="url(#bd)" stroke="${OL}" stroke-width="5" stroke-linejoin="round"/>
+ <path d="M-76 14 L-70 28 L-64 16 L-58 29 L-52 15 L-46 27 L-40 14 L-34 25 L-28 12 L-22 23 L-16 11" fill="#f4f7ff" stroke="${OL}" stroke-width="1.5" stroke-linejoin="round"/>
+ <path d="M-36 -16 C-20 -24 0 -26 20 -22" stroke="${o.belly}" stroke-width="3" fill="none" opacity=".5"/><circle cx="-72" cy="-2" r="2.5" fill="${OL}"/>
+ <ellipse cx="-10" cy="-24" rx="14" ry="3.5" fill="#ffffff" opacity=".3" transform="rotate(-10 -10 -24)"/><path d="M-60 -2 L-30 -10 M-50 6 L-20 0" stroke="${o.glow}" stroke-width="1.6" opacity=".7" filter="url(#gl)"/>
+ <path d="M-30 -18 L4 -28 L10 -14 L-26 -8Z" fill="${o.body[1]}" stroke="${OL}" stroke-width="3"/>${eye}
+ ${aw?[[-30,-20,-40],[-14,-30,-60],[2,-34,-72],[18,-30,-60]].map(([x,y,h])=>`<path d="M${x-6} ${y+4} L${x+2} ${y+h} L${x+8} ${y+2}Z" fill="#0a1830" stroke="${o.glow}" stroke-width="2.5" stroke-linejoin="round" filter="url(#gl)"/>`).join('')+`<path d="M14 -8 l6 6 l-6 6 l-6 -6z" fill="${o.glow}" filter="url(#gl)"/>`:''}
+ </g></g>`;
+ s+=g;
+ // dark water at the base
+ s+=`<path d="M10 330 C50 316 80 340 130 326 S220 310 260 330 S350 340 392 322 L384 352 C300 368 100 368 18 352Z" fill="${aw?'#081a3a':'#0b2c44'}" stroke="${OL}" stroke-width="4" stroke-linejoin="round" opacity=".95"/>
+ <path d="M30 330 C60 320 80 334 110 326 M180 320 C210 312 230 326 255 326 M320 334 C345 328 360 330 380 322" stroke="${aw?'#7ff8ff':'#9fe6e0'}" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/>`;
+ if(!ko)s+=[[60,250,3],[110,200,2.2],[340,180,2.6],[310,90,2],[90,120,2.4],[150,70,1.6]].map(([x,y,rr])=>`<circle cx="${x}" cy="${y}" r="${rr}" fill="${o.glow}" opacity=".8" filter="url(#gl)"/>`).join('');
+ return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -40 400 427">${s}</svg>`;}
+ART.leviathan={svg:f=>levSvg(0,f)};ART.leviathan_aw={svg:f=>levSvg(1,f),awk:1,awc:AWTINT.water};
 const AURA={fire:['#ff4d1f','#ffb03d'],water:['#1f8fff','#3de0d0'],wind:['#2fd16b','#f5e663'],light:['#ffffff','#ffd166'],dark:['#8a3dff','#12041f']};
 function mixc(a,b,t){const p=x=>[1,3,5].map(i=>parseInt(x.substr(i,2),16));const A=p(a),B2=p(b);return'#'+A.map((v,i)=>Math.round(v+(B2[i]-v)*t).toString(16).padStart(2,'0')).join('');}
 const SPR={c:{}};
@@ -2123,12 +2194,14 @@ function openReseal(){S.resealAsked=Date.now();save();closeModal('reseal');
 /* =================== MAILBOX & REDEEM CODES (v1.3) =================== */
 const MAILS={
  'welcome-v130':{i:'💌',from:'The Rift Post Office',title:'Welcome to the Mailbox!',body:'Gifts, letters and rewards will arrive here. This one is a small welcome present. The postman insists it is not a bribe.',r:{gold:3000,gems:50}},
+ 'gift-leviathan-v145':{i:'🐍',from:'The Rift Post Office',title:'Gift: Leviathan',body:'Something enormous is waiting in the deep… and it has chosen you. A 5★ Leviathan has arrived!',r:{mon:'leviathan'}},
+ 'gift-prismane-v145':{i:'🦄',from:'The Rift Post Office',title:'Gift: Prismane',body:'A rainbow has trotted all the way to your mailbox. A 5★ Prismane has arrived, with love!',r:{mon:'prismane'}},
  'cr90k-v141':{i:'💎',from:'The Rift Post Office',title:'Gift: 90,000 Crystals',body:'A very generous gift has arrived. Spend it wisely… or not at all wisely. We will not judge.',r:{gems:90000}},
 };
 // codes are stored only as salted SHA-256 hashes: viewing the source does not reveal them
 const CODES={'4457d82883cb934ead6de4bc835eff5469c0934cd0b461c7d162357244806178':1};
 // plain gift codes (hash -> mail id): deliver an ordinary mail, once per save; no sealed content involved
-const GIFT_CODES={'ab122d3e9171261d32df564bc73793bc39dffb787ab16f42ff5459838701b85b':'cr90k-v141'};
+const GIFT_CODES={'ab122d3e9171261d32df564bc73793bc39dffb787ab16f42ff5459838701b85b':'cr90k-v141','28afcfc370c94a2efacf23f2e86dee9b5316aadad1eb3a5cc55fef230e76c996':'gift-leviathan-v145','bfdb1ef9fcdd180328627a54ba7b2fb59d4ebfd06a00c5fe412ceb71f6cea311':'gift-prismane-v145'};
 const codeNorm=c=>String(c||'').toUpperCase().replace(/[\s\-\u2010-\u2015\u2212]/g,'');
 function sha256js(str){const b=unescape(encodeURIComponent(str)),K=[],H=[];let n=2,c=0;const fr=x=>(x-Math.floor(x))*4294967296|0;
  while(c<64){let p=1;for(let d=2;d*d<=n;d++)if(n%d===0){p=0;break;}if(p){if(c<8)H[c]=fr(Math.pow(n,1/2));K[c++]=fr(Math.pow(n,1/3));}n++;}
@@ -2163,7 +2236,7 @@ async function redeemCode(){if(_redeemBusy)return;const inp=$('#codeIn'),msg=$('
  S.redeemed[id]=Date.now();deliverMail(id);save();closeModal('reseal');sfx('five');renderTop();render();openMail();const cm=$('#codeMsg');if(cm){cm.innerHTML='✅ Code accepted! A new letter is waiting above.';cm.style.color='#7cff9e';}toast('📬 A sealed letter has arrived in your Mailbox…');}
 function claimMail(id){const x=S.mail.find(m=>m.id===id);const M2=MAILS[id];if(!x||!M2||x.claimed)return;x.claimed=true;x.cAt=Date.now();const r=M2.r;let got=null;
  grant(r);if(r.glyphs)r.glyphs.forEach(([set,gr])=>giftRuneSet(set,gr)); // v1.4: a legacy glyph gift arrives as a full 6-piece rune set of the matching set
- if(r.mon){const owned=S.mons.find(m=>m.id===r.mon);if(owned)toast(`${MD[r.mon].n} is already bound to you.`);else{got=addMon(r.mon);if(got&&MD[r.mon].uniq)S.stats.uniqs=(S.stats.uniqs||0)+1;}}
+ if(r.mon){const owned=S.mons.find(m=>m.id===r.mon);if(owned&&MD[r.mon].uniq)toast(`${MD[r.mon].n} is already bound to you.`);else{got=addMon(r.mon);if(got&&MD[r.mon].uniq)S.stats.uniqs=(S.stats.uniqs||0)+1;}}
  save();renderTop();closeModal('mail');
  if(got){playSummon([{uid:got.uid,id:got.id,stars:got.stars,isNew:true}]);}else{sfx('win');toast('✅ Claimed: '+mailRewardText(r));openMail();render();}}
 
@@ -2516,7 +2589,7 @@ let B=null;
 function later(fn,ms){const b=B;if(!b)return;const run=()=>{if(B!==b||b.closed)return;if(document.hidden){(b.pq=b.pq||[]).push(run);return;}fn();};setTimeout(run,ms/b.speed);}
 function mkUnit(side,spec){const d=MD[spec.id];const ms=spec.m?monStats(spec.m):null;const st=ms?ms.t:baseStats(spec.id,spec.lvl,spec.stars);const bs=ms?ms.b:{...st};const fx=ms?ms.fx:{};
  const awk=!!(spec.m&&spec.m.aw&&canAwaken(spec.id));
- const u={bid:++B.uc,side,id:spec.id,n:awk?AWK[spec.id].n:d.n,art:awk?spec.id+'_aw':spec.id,awk,awg:awk&&!AWK[spec.id].sk,e:d.e,el:d.el,lvl:spec.m?spec.m.lvl:spec.lvl,stars:spec.m?spec.m.stars:spec.stars,boss:!!spec.boss,m:spec.m||null,
+ const u={bid:++B.uc,side,id:spec.id,n:awk?AWK[spec.id].n:d.n,art:awk?spec.id+'_aw':spec.id,awk,awg:awk&&(!AWK[spec.id].sk||!!AWK[spec.id].g),e:d.e,el:d.el,lvl:spec.m?spec.m.lvl:spec.lvl,stars:spec.m?spec.m.stars:spec.stars,boss:!!spec.boss,m:spec.m||null,
   hp:st.hp,atk:st.atk,def:st.def,spd:st.spd,cr:st.cr,cd:st.cd,res:st.res,acc:st.acc,b:bs,violent:!!fx.violent,vamp:!!fx.vampire,despair:!!fx.despair,will:!!fx.will,atb:Math.random()*20,fx:[],cds:d.skills.map(()=>0),skills:d.skills,
   uniq:!!d.uniq,th:d.th||null,glow:!!(d.passives||[]).some(p=>p.k==='glow'),sl:spec.m?(spec.m.sl||0):0,amp:!!(d.passives||[]).some(p=>p.k==='amp'),reap:!!(d.passives||[]).some(p=>p.k==='reap'),first:!!(d.passives||[]).some(p=>p.first),owed:0,chain:0,ign:d.ignDef||0}; // ign = fraction of the target's CURRENT DEF ignored (1 = 100%, buffs included)
  if(spec.em){u.hp=Math.round(u.hp*spec.em[0]);u.atk=Math.round(u.atk*spec.em[1]);u.def=Math.round(u.def*spec.em[2]);} // v1.4 content: enemy stat multipliers
@@ -2626,7 +2699,7 @@ function renderBattle(){if(!B||!$('#battle'))return;
   const g={};u.fx.forEach(f=>{g[f.id]=g[f.id]||{n:0,t:0};g[f.id].n++;g[f.id].t=Math.max(g[f.id].t,f.t);});
   const emp=empowered(u);if(u.amp&&u.hp>0&&emp!==!!u._emp){u._emp=emp;float(u,emp?TX.ampOn:TX.ampOff,emp?'crim':'info',1);}
   c.querySelector('.ufx').innerHTML=(emp?`<span class="ampx" title="${TX.ampTip}">${TX.ampIcon}</span> `:'')+(u.tk?`<span title="${TX.takenTip}">⛓️</span>`:'')+Object.keys(g).map(k=>`<span title="${FX[k].n} (${g[k].t}t): ${FX[k].d}">${FX[k].i}${g[k].n>1?`<sub>${g[k].n}</sub>`:''}</span>`).join(' ');
-  c.classList.toggle('emp',emp);c.classList.toggle('tk',!!u.tk);c.classList.toggle('dead',u.hp<=0);c.classList.toggle('active',u===actor&&u.hp>0);c.classList.toggle('tgt',valid.includes(u));
+  c.classList.toggle('emp',emp);c.classList.toggle('tk',!!u.tk);c.classList.toggle('frz',u.hp>0&&u.fx.some(f=>f.id==='freeze'));c.classList.toggle('dead',u.hp<=0);c.classList.toggle('active',u===actor&&u.hp>0);c.classList.toggle('tgt',valid.includes(u));
   const adv=c.querySelector('.uadv');
   if(actor&&actor.side==='p'&&u.side==='e'&&u.hp>0&&sk&&(sk.t==='e'||sk.t==='ae')){const em=elemMod(actor.el,u.el);adv.className='uadv '+(em>0?'adv-up':em<0?'adv-dn':'');adv.textContent=em>0?'▲ ADV':em<0?'▼ WEAK':'';}
   else{adv.className='uadv';adv.textContent='';}});
@@ -2666,7 +2739,7 @@ function startTurn(u){B.tn=(B.tn||0)+1;if(B.tn>TURN_CAP&&!B.over){B.timeUp=1;ban
  if(u.hp>0&&u.mech&&u.mech.regen)heal(u,Math.round(u.maxHp*(u.mech.shield?0.02:0.03)));
  renderBattle();
  if(u.hp<=0){u.atb=0;B.actor=null;later(nextTurn,500);return;}
- if(u.fx.some(f=>f.id==='stun')){float(u,'Stunned! 💫','info');setMsg(`${spi(u.id)} ${u.n} is stunned!`);later(()=>endTurn(u),750);return;}
+ if(u.fx.some(f=>f.id==='stun'||f.id==='freeze')){const fz=!u.fx.some(f=>f.id==='stun');float(u,fz?'Frozen! 🧊':'Stunned! 💫','info');setMsg(`${spi(u.id)} ${u.n} is ${fz?'frozen solid':'stunned'}!`);later(()=>endTurn(u),750);return;}
  setCam(u);hopAnim(u);
  if(u.side==='p'&&!B.auto){B.awaiting=true;B.sel=0;setMsg(`${spi(u.id)} ${u.n}'s turn!`);renderBattle();return;}
  later(()=>aiAct(u),u.side==='p'?350:600);}
@@ -2732,7 +2805,8 @@ function resolveSkill(u,sk,tgt){const foes=foesOf(u),friends=friendsOf(u);
  let total=0;
  targets.forEach(t=>{if(off&&sk.m>0){for(let h=0;h<sk.h;h++){if(t.hp<=0)break;total+=strike(u,t,sk,h);}}
   if(t.hp>0){if(sk.heal)heal(t,Math.round((sk.hb?u.maxHp:t.maxHp)*healPct(u,sk)));if(sk.hb&&u.awk&&!sk.cleanse){const i=t.fx.findIndex(f=>!FX[f.id].buff);if(i>=0){t.fx.splice(i,1);float(t,'Cleansed ✨','info',1);}}if(sk.cleanse){const n=t.fx.length;t.fx=t.fx.filter(f=>FX[f.id].buff);if(t.fx.length<n)float(t,'Cleansed ✨','info',1);}
-   (sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,ch);});if(sk.atb&&t!==u)t.atb=Math.min(100,t.atb+sk.atb);}});
+   (sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,sk.upFx?upCh(u,sk,ch):ch);});if(sk.awAtb&&u.awk&&t.hp>0&&t.side!==u.side)t.atb=Math.max(0,t.atb-sk.awAtb);if(sk.atb&&t!==u)t.atb=Math.min(100,t.atb+sk.atb);}});
+ if(sk.tail&&u.hp>0){const al=foes.filter(f=>f.hp>0);if(al.length){const t2=al.reduce((a,b)=>b.hp<a.hp?b:a);B.lastTail=t2.bid;total+=strike(u,t2,Object.assign({},sk,{m:sk.tail.m}),1);if(t2.hp>0)addFx(u,t2,'stun',1,upCh(u,sk,sk.tail.st));}}
  if(sk.drain&&total>0&&u.hp>0)heal(u,Math.round(total*sk.drain));
  if(sk.selfAfter&&u.hp>0)(sk.self||[]).forEach(([id,t])=>addFx(u,u,id,t,100));}
 function strike(u,t,sk,h){const em=elemMod(u.el,t.el);const cr=Math.min(100,eff(u,'cr')+(em>0?15:em<0?-15:0));const glance=em<0&&Math.random()<0.3;const crit=!glance&&Math.random()*100<cr;
@@ -2759,6 +2833,8 @@ function reapRevive(src){if(!B||src.hp<=0)return null;const t=(src.side==='p'?B.
 function canRevive(t){return !!t&&t.hp<=0&&!t.tk;}
 function revive(t,pct,msg){if(!canRevive(t)){if(t&&t.tk)float(t,TX.noRevive,'crim',1);return false;}
  t.hp=Math.max(1,Math.round(t.maxHp*(pct||.3)));t.atb=0;t.fx=[];const m=mvOf(t);if(m&&m.getAnimations)m.getAnimations().forEach(a=>a.cancel());setFace(t,'idle');float(t,msg||'Revived! ✨','heal',1);renderBattle();return true;}
+// v1.4.5: stun-chance skill-ups (Leviathan): sk.up holds the chance (%) after each skill-up
+function upCh(u,sk,ch){const n=Math.min(u.sl||0,(sk.up||[]).length);return n>0?sk.up[n-1]:ch;}
 // skill-ups (v1.4.3): a skill with an 'up' list uses up[sl-1] once the monster has sl skill-ups
 function healPct(u,sk){const n=Math.min(u.sl||0,(sk.up||[]).length);return(n>0?sk.up[n-1]:sk.heal)+(u.awg&&!sk.hb?0.05:0);}
 // 'glow' passive: at the end of each of her turns, heal the ally with the lowest HP% for 15% of her max HP
@@ -2767,7 +2843,7 @@ function glowPulse(u){if(!u.glow||u.hp<=0||!B||B.over)return null;const fr=frien
 function heal(t,a){if(t.hp<=0||t.tk||a<=0)return;const b=t.hp;t.hp=Math.min(t.maxHp,t.hp+a);if(t.hp>b)float(t,'+'+fmt(t.hp-b),'heal');}
 function addFx(src,t,id,turns,ch,why){const buff=FX[id].buff;
  if(!buff&&(t.fx.some(f=>f.id==='immune')||(t.mech&&t.mech.shield))){float(t,'🔰 Immune','info',1);return;}
- if(!buff){let c=ch;if(src&&src.awg&&c<100)c=Math.min(100,c+10);if(elemMod(src.el,t.el)<0)c*=0.75;if(t.boss&&id==='stun')c*=0.5;if(Math.random()*100>=c){if(ch>=50)float(t,'Resisted','info',1);return;}
+ if(!buff){let c=ch;if(src&&src.awg&&c<100)c=Math.min(100,c+10);if(elemMod(src.el,t.el)<0)c*=0.75;if(t.boss&&(id==='stun'||id==='freeze'))c*=0.5;if(Math.random()*100>=c){if(ch>=50)float(t,'Resisted','info',1);return;}
   const rs=clamp((t.res||0)-(src.acc||0),0,85);if(rs>0&&Math.random()*100<rs){float(t,'Resisted','info',1);return;}} // RES vs ACC: resist chance = RES − ACC (max 85%)
  if(why==='despair')float(t,'😵 Despair','info',2);
  const fresh=B.actor===t;
