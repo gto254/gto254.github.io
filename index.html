@@ -684,6 +684,10 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
 
 /* v1.4.5 Freeze status: icy tint on frozen units */
 .frz img.sp{filter:saturate(.45) brightness(1.18) hue-rotate(160deg) drop-shadow(0 0 6px #9fe8ff) drop-shadow(0 0 2px #ffffff)}
+
+/* v1.4.7 Leviathan/Carter (MD.xl): drawn ~14% larger than other monsters, anchored at the bottom */
+.av.pf.xl img.sp{left:-15%;width:130%}
+.unit.xl img.sp{inset:auto 0 0 -7%;width:114%;height:114%}
 </style>
 </head>
 <body>
@@ -706,7 +710,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.4.6';
+const VERSION='1.4.7';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -794,7 +798,7 @@ M('leviathan','Leviathan','🐍','water',5,[1040,103,62,104,20,60],LD('atk',33),
  SK('Tail Sweep','🌊','Sweeps ALL enemies with its tail (0.75x). 20% chance to Stun for 1 turn. Skill-ups: 30% / 35% / 40% / 50%.',{t:'ae',m:0.75,fx:[['stun',1,20]],upFx:1,up:[30,35,40,50]}),
  SK('Bite & Lash','🦷','Bites one enemy (1.8x), then its tail lashes the enemy with the lowest HP (1.0x) with a 20% chance to Stun. Skill-ups: 30% / 35% / 40% / 50%.',{cd:3,m:1.8,tail:{m:1.0,st:20},up:[30,35,40,50]}),
  SK('Freezing Tidal Wave','🧊','A colossal icy wave crashes over ALL enemies (1.8x). 25% chance to Freeze each enemy hit for 1 turn.',{cd:5,t:'ae',m:1.8,fx:[['freeze',1,25]],awAtb:15})],
- {extra:m=>{const k=MD.leviathan.skills[0],n=Math.min(m.sl||0,k.up.length),c=n?k.up[n-1]:20;return`<div class="skill"><b>🐍 Skill level ${n+1} / ${k.up.length+1}</b><br>Tail Sweep and the Bite & Lash tail hit have a <b>${c}%</b> Stun chance${n<k.up.length?'. Feed a duplicate Leviathan in Power Up for a skill-up.':' (max).'}</div>`;}});
+ {xl:1,extra:m=>{const k=MD.leviathan.skills[0],n=Math.min(m.sl||0,k.up.length),c=n?k.up[n-1]:20;return`<div class="skill"><b>🐍 Skill level ${n+1} / ${k.up.length+1}</b><br>Tail Sweep and the Bite & Lash tail hit have a <b>${c}%</b> Stun chance${n<k.up.length?'. Feed a duplicate Leviathan in Power Up for a skill-up.':' (max).'}</div>`;}});
 // WIND
 M('buzzsaw','Buzzsaw','🐝','wind',1,[520,66,36,110],null,"Furious about flowers for reasons it refuses to explain.",[
  SK('Triple Sting','🐝','Three stings (0.4x each).',{m:0.4,h:3}),
@@ -1072,6 +1076,8 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.4.7',date:'Oct 13, 2026',title:'🐍 Leviathan Stands Tall',sections:[
+  ['🐍 Leviathan',['Leviathan and Carter are now a little bigger than the other monsters, as befits a legendary sea serpent.']]]},
  {v:'1.4.6',date:'Oct 13, 2026',title:'🐍 Leviathan Resized',sections:[
   ['🐍 Leviathan',['Leviathan and Carter are now drawn bigger, to match the size of the other monsters.']]]},
  {v:'1.4.5',date:'Oct 13, 2026',title:'🐍 Leviathan Rises',sections:[
@@ -1923,7 +1929,7 @@ setInterval(()=>{if(document.hidden)return;document.querySelectorAll('[data-cd]'
 
 const frc=s=>s>=5?'fr-r':s===4?'fr-g':s===3?'fr-s':'fr-b';
 const frx=(id,s)=>MD[id]&&MD[id].th?MD[id].th.fr:frc(s); // themed monsters bring their own frame
-function avHtml(id,size,extra,stars,face){const d=MD[awBase(id)];return`<div class="av pf ${frx(awBase(id),stars||d.rar)} ${id!==d.id?'awk':''} el-${d.el} ${d.boss||d.uniq?'hv':''} ${extra||''}" style="${size?`width:${size}px;height:${size}px;`:''}--bdl:${(-Math.random()*4).toFixed(2)}s;--bdu:${((d.boss||d.uniq?3.6:2.6)+Math.random()*.9).toFixed(2)}s">${sprImg(id,face)}<span class="elb">${ELEM[d.el].i}</span></div>`;}
+function avHtml(id,size,extra,stars,face){const d=MD[awBase(id)];return`<div class="av pf ${frx(awBase(id),stars||d.rar)} ${id!==d.id?'awk':''} el-${d.el} ${d.boss||d.uniq?'hv':''} ${d.xl?'xl':''} ${extra||''}" style="${size?`width:${size}px;height:${size}px;`:''}--bdl:${(-Math.random()*4).toFixed(2)}s;--bdu:${((d.boss||d.uniq?3.6:2.6)+Math.random()*.9).toFixed(2)}s">${sprImg(id,face)}<span class="elb">${ELEM[d.el].i}</span></div>`;}
 function monCard(m,onclick,extra){const d=MD[m.id];const inTeam=S.team.indexOf(m.uid);
  return`<div class="mc r${m.stars} el-${d.el} ${d.th?d.th.cls:''} ${extra||''}" data-uid="${m.uid}" onclick="${onclick}">${inTeam===0?'<span class="badge l">👑</span>':inTeam>0?'<span class="badge l">⚔️</span>':''}${m.lock?'<span class="badge">🔒</span>':''}
  ${avHtml(artId(m),0,'',m.stars)}${starsHtml(m.stars)}<div class="nm">${m.aw?'<i class="awdot">✦</i>':''}${monName(m)}</div><div class="lv">Lv ${m.lvl}${m.lvl>=maxLvl(m)?' <b style="color:#ffd166">MAX</b>':''}</div></div>`;}
@@ -2638,7 +2644,7 @@ function slotCls(list){const bi=list.findIndex(u=>u.boss),m=new Map();
  if(bi>=0){const o=list.filter(u=>!u.boss);m.set(list[bi],'sfs');o.forEach((u,i)=>m.set(u,o.length===1?'sbs':i?'sb2':'sb1'));return m;}
  const L=[['sfs'],['sf1','sb2'],['sf1','sbs','sf2'],['sf1','sb1','sf2','sb2']][Math.min(4,list.length)-1]||[];list.forEach((u,i)=>m.set(u,L[i]||'sb2'));return m;}
 function unitHtml(u,slot){const a=ART[u.art||u.id]||{},r=Math.random(),fly=!!a.wings||(a.body==='none'&&a.head!=='jelly'),jig=a.head==='jelly';
- return`<div class="unit el-${u.el} ${u.boss?'boss':''} ${u.th?u.th.cls:''} ${u.side==='e'?'en':'al'} ${slot||''}" id="u${u.bid}" onclick="tapUnit(${u.bid})"><span class="uadv"></span>
+ return`<div class="unit el-${u.el} ${MD[u.id]&&MD[u.id].xl?'xl':''} ${u.boss?'boss':''} ${u.th?u.th.cls:''} ${u.side==='e'?'en':'al'} ${slot||''}" id="u${u.bid}" onclick="tapUnit(${u.bid})"><span class="uadv"></span>
  <div class="av"><div class="aura" style="animation-delay:${(-r*2.4).toFixed(2)}s"></div><div class="shd"></div><div class="mv"><div class="bd${fly?' fly':jig?' jig':''}" style="animation-delay:${(-r*3).toFixed(2)}s;animation-duration:${(2.3+r*.9).toFixed(2)}s"><div class="br${u.boss||u.th?' hv':''}" style="--bdl:${(-Math.random()*4).toFixed(2)}s;--bdu:${((u.boss||u.th?3.6:2.6)+Math.random()*(u.boss||u.th?.9:1)).toFixed(2)}s"><div class="fl" style="animation-delay:${(-r*1.9).toFixed(2)}s;animation-duration:${(1.7+r*.6).toFixed(2)}s"><img class="sp" src="${sprSrc(u.art||u.id)}" alt="" draggable="false"><img class="sp bl" src="${sprSrc(u.art||u.id,'blink')}" alt="" draggable="false" style="animation-delay:${(-Math.random()*5).toFixed(2)}s;animation-duration:${(3.4+Math.random()*2.6).toFixed(2)}s"></div></div></div></div><span class="elb">${ELEM[u.el].i}</span></div>
  <div class="plate ${frx(u.id,u.stars)}"><div class="pst">${'★'.repeat(Math.max(1,Math.min(6,u.stars)))}</div><div class="un">${u.boss?'⚠️':''}<b>Lv${u.lvl}</b>${u.n}</div><div class="bar hp"><i class="gh"></i><i class="hpf"></i><span class="hpt"></span></div><div class="bar atb"><i></i></div></div><div class="ufx"></div></div>`;}
 function sprPreload(cfg,team){const ids=new Set(team.map(m=>artId(m)));cfg.waves.forEach(w=>w.forEach(x=>ids.add(x.id)));B.pre=[];
