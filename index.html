@@ -706,7 +706,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.4.5';
+const VERSION='1.4.6';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -1072,6 +1072,8 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.4.6',date:'Oct 13, 2026',title:'🐍 Leviathan Resized',sections:[
+  ['🐍 Leviathan',['Leviathan and Carter are now drawn bigger, to match the size of the other monsters.']]]},
  {v:'1.4.5',date:'Oct 13, 2026',title:'🐍 Leviathan Rises',sections:[
   ['🐍 New 5★ Water Monster: Leviathan',['A fearsome sea serpent has surfaced in the Rift! Find it in Mystic and Featured summons (see the Odds tab) and in the Monsterpedia.','🌊 Tail Sweep: sweeps ALL enemies with a 20% chance to Stun (up to 50% with skill-ups).','🦷 Bite & Lash: bites one enemy, then lashes the enemy with the lowest HP with a 20% chance to Stun (up to 50% with skill-ups).','🧊 Freezing Tidal Wave: a colossal icy wave crashes over ALL enemies with a 25% chance to Freeze each one (a frozen monster skips its next turn).','Feed a duplicate Leviathan in Power Up for a skill-up.']],
   ['🌟 Carter',['Leviathan awakens into Carter, a crowned deep-sea serpent: +10% effect chances, and Freezing Tidal Wave also pushes back every enemy\'s turn gauge by 15%.']],
@@ -1362,9 +1364,9 @@ for(const id in AWK){const b=ART[id];if(!b||!MD[id])continue;const x=AWK[id].x||
  o.awk=1;o.awc=tn;ART[id+'_aw']=o;}
 /* ---------- v1.4.5 Leviathan / Carter: custom sea-serpent sprite (ART[id].svg) ---------- */
 function levSvg(aw,face){const ko=face==='ko',hit=face==='hit',atk=face==='attack',ch=face==='cheer',anim=!SPR.still&&!ko;
- if(face==='blink')return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -40 400 427"></svg>`; // the serpent never blinks
- const OL='#050a14',o=aw?{rim:'#3a6ad0',tip:'#d8ffff',body:['#1a2c5c','#070d22'],fin:['#2fd8ff','#0b2a66'],scale:'#38e1ff',belly:'#3a5fa0',eye:'#7ff8ff',glow:'#5ff0ff',w:36,hs:1.25,spike:30,step:.05}
-  :{rim:'#6fd0c4',tip:'#b8fff0',body:['#2f7f86','#163d52'],fin:['#5cc2b8','#1d5a66'],scale:'#0a2230',belly:'#8fd6c4',eye:'#d8ff5a',glow:'#5ff0d0',w:30,hs:1.3,spike:20,step:.06};
+ if(face==='blink')return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="22 6 368 392"></svg>`; // the serpent never blinks
+ const OL='#050a14',o=aw?{rim:'#3a6ad0',tip:'#d8ffff',body:['#1a2c5c','#070d22'],fin:['#2fd8ff','#0b2a66'],scale:'#38e1ff',belly:'#3a5fa0',eye:'#7ff8ff',glow:'#5ff0ff',w:46,hs:1.55,spike:36,step:.05}
+  :{rim:'#6fd0c4',tip:'#b8fff0',body:['#2f7f86','#163d52'],fin:['#5cc2b8','#1d5a66'],scale:'#0a2230',belly:'#8fd6c4',eye:'#d8ff5a',glow:'#5ff0d0',w:40,hs:1.6,spike:26,step:.06};
  const an=(v,dur)=>anim?`<animate attributeName="opacity" values="${v}" dur="${dur}s" repeatCount="indefinite"/>`:'';
  const SEG=[[40,330,30,250,120,230,150,290],[150,290,175,340,260,335,285,280],[285,280,310,225,250,190,215,205],[215,205,185,218,190,175,225,150]];
  const bz=(s,t)=>{const u=1-t;return[u*u*u*s[0]+3*u*u*t*s[2]+3*u*t*t*s[4]+t*t*t*s[6],u*u*u*s[1]+3*u*u*t*s[3]+3*u*t*t*s[5]+t*t*t*s[7]];};
@@ -1412,7 +1414,7 @@ function levSvg(aw,face){const ko=face==='ko',hit=face==='hit',atk=face==='attac
  s+=`<path d="M10 330 C50 316 80 340 130 326 S220 310 260 330 S350 340 392 322 L384 352 C300 368 100 368 18 352Z" fill="${aw?'#081a3a':'#0b2c44'}" stroke="${OL}" stroke-width="4" stroke-linejoin="round" opacity=".95"/>
  <path d="M30 330 C60 320 80 334 110 326 M180 320 C210 312 230 326 255 326 M320 334 C345 328 360 330 380 322" stroke="${aw?'#7ff8ff':'#9fe6e0'}" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/>`;
  if(!ko)s+=[[60,250,3],[110,200,2.2],[340,180,2.6],[310,90,2],[90,120,2.4],[150,70,1.6]].map(([x,y,rr])=>`<circle cx="${x}" cy="${y}" r="${rr}" fill="${o.glow}" opacity=".8" filter="url(#gl)"/>`).join('');
- return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -40 400 427">${s}</svg>`;}
+ return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="22 6 368 392">${s}</svg>`;}
 ART.leviathan={svg:f=>levSvg(0,f)};ART.leviathan_aw={svg:f=>levSvg(1,f),awk:1,awc:AWTINT.water};
 const AURA={fire:['#ff4d1f','#ffb03d'],water:['#1f8fff','#3de0d0'],wind:['#2fd16b','#f5e663'],light:['#ffffff','#ffd166'],dark:['#8a3dff','#12041f']};
 function mixc(a,b,t){const p=x=>[1,3,5].map(i=>parseInt(x.substr(i,2),16));const A=p(a),B2=p(b);return'#'+A.map((v,i)=>Math.round(v+(B2[i]-v)*t).toString(16).padStart(2,'0')).join('');}
