@@ -54,8 +54,8 @@ button{font-family:inherit}
 .el-fire{--e1:#ffc29e;--e2:#e2491f;--e3:#6a160a;--ec:#ff6b3d;--a1:#ff4d1f;--a2:#ffb03d}
 .el-water{--e1:#c6ecff;--e2:#2b84e0;--e3:#0c2a62;--ec:#3da5ff;--a1:#1f8fff;--a2:#3de0d0}
 .el-wind{--e1:#e2ffd0;--e2:#2fb36b;--e3:#0c4026;--ec:#3fd17f;--a1:#2fd16b;--a2:#f5e663}
-.el-light{--e1:#ffffff;--e2:#f0c94a;--e3:#7a5a0a;--ec:#ffe27a;--a1:#fffbe8;--a2:#ffd166}
-.el-dark{--e1:#e3c9ff;--e2:#6a2fc4;--e3:#14062a;--ec:#a66bff;--a1:#9a4dff;--a2:#12041f}
+.el-heaven,.el-light{--e1:#ffffff;--e2:#f0c94a;--e3:#7a5a0a;--ec:#ffe27a;--a1:#fffbe8;--a2:#ffd166}
+.el-hell,.el-dark{--e1:#e3c9ff;--e2:#6a2fc4;--e3:#14062a;--ec:#a66bff;--a1:#9a4dff;--a2:#12041f}
 /* v1.2 ornate portrait frames (bronze 1-2★, silver 3★, gold 4★, rainbow 5-6★) */
 .fr-b{--fr:linear-gradient(145deg,#ffd9ad,#b06a32 32%,#5e3415 52%,#e9a96c 72%,#4e2a0e)}
 .fr-s{--fr:linear-gradient(145deg,#ffffff,#a5b2c6 32%,#4f596c 52%,#eef3fb 72%,#434c5e)}
@@ -82,6 +82,10 @@ button{font-family:inherit}
 .mc.sel{outline:3px solid #7cff9e;box-shadow:0 0 12px #7cff9e}
 .mc .badge{position:absolute;top:2px;right:4px;font-size:12px}
 .mc .badge.l{left:4px;right:auto}
+/* v1.5.0 Monsterpedia lines: 5 element slots per monster line */
+.dexline{margin:10px 0 4px}.dexline .dlh{font-weight:800;font-size:13px;margin:0 2px 5px}.dexline .dlh .mut{font-weight:600;font-size:11px;margin-left:4px}
+.dlg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.dlg .mc{padding:4px 1px 4px;min-width:0}.dlg .mc .av{width:46px;height:46px;margin:4px auto 2px}.dlg .mc .nm{font-size:9.5px}.dlg .mc .stars{font-size:8px}
+.mc.soon{opacity:.45;border-style:dashed;border-color:var(--ec,#666);cursor:default}.mc.soon .soonx{font-size:22px;height:46px;line-height:46px;margin:4px 0 2px}
 .elb{position:absolute;bottom:-3px;right:-3px;font-size:13px;background:#120d2c;border-radius:50%;width:20px;height:20px;display:grid;place-items:center;border:1px solid #4a3f8f}
 .r1{--rc:#8a9096}.r2{--rc:#5fc287}.r3{--rc:#4cb8e0}.r4{--rc:#c77dff}.r5{--rc:#ffd166}.r6{--rc:#ff7ad9}
 .r5.mc,.r6.mc{box-shadow:0 0 10px #ffd16655}
@@ -245,8 +249,8 @@ details summary{cursor:pointer;font-size:12.5px;font-weight:700;margin-top:6px;c
 .unit .shd{position:absolute;left:14%;right:14%;bottom:1%;height:13%;border-radius:50%;background:radial-gradient(closest-side,#000b,#0000)}
 .unit.boss .shd{left:8%;right:8%}
 .unit .aura{position:absolute;left:-4%;right:-4%;top:12%;bottom:-3%;border-radius:50%;background:radial-gradient(closest-side,var(--a1),transparent);background:radial-gradient(closest-side,color-mix(in srgb,var(--a1) 75%,transparent),color-mix(in srgb,var(--a2) 45%,transparent) 55%,transparent);opacity:.5;animation:aura 2.4s ease-in-out infinite;will-change:transform,opacity}
-.unit.el-dark .aura{background:radial-gradient(closest-side,#9a4dffcc,#3a0a6a88 50%,#12041f55 72%,transparent)}
-.unit.el-light .aura{background:radial-gradient(closest-side,#ffffffdd,#ffd16677 50%,transparent)}
+.unit.el-hell .aura,.unit.el-dark .aura{background:radial-gradient(closest-side,#9a4dffcc,#3a0a6a88 50%,#12041f55 72%,transparent)}
+.unit.el-heaven .aura,.unit.el-light .aura{background:radial-gradient(closest-side,#ffffffdd,#ffd16677 50%,transparent)}
 @keyframes aura{0%,100%{transform:scale(.92);opacity:.38}50%{transform:scale(1.04);opacity:.62}}
 .unit.dead .aura{display:none}
 .unit.dead .bd{animation:none}
@@ -278,7 +282,7 @@ details summary{cursor:pointer;font-size:12.5px;font-weight:700;margin-top:6px;c
 .adv-up{background:#1f9d55}.adv-dn{background:#b02a37}
 /* bouncy damage numbers */
 .float{position:absolute;left:50%;top:14%;font-weight:900;font-size:22px;line-height:1;pointer-events:none;color:#fff6e8;--o:#3a0a14;text-shadow:2px 2px 0 var(--o),-2px 2px 0 var(--o),2px -2px 0 var(--o),-2px -2px 0 var(--o),0 3px 0 var(--o),0 5px 6px #000c;animation:dmgPop 1.2s backwards;white-space:nowrap;z-index:6;opacity:0;letter-spacing:.5px}
-.float.x-fire{color:#ffe2c4;--o:#8a1a06}.float.x-water{color:#d8f2ff;--o:#0b3576}.float.x-wind{color:#e2ffd6;--o:#0c4a24}.float.x-light{color:#fffbe6;--o:#7a5200}.float.x-dark{color:#f2e2ff;--o:#3a0a6a}
+.float.x-fire{color:#ffe2c4;--o:#8a1a06}.float.x-water{color:#d8f2ff;--o:#0b3576}.float.x-wind{color:#e2ffd6;--o:#0c4a24}.float.x-heaven,.float.x-light{color:#fffbe6;--o:#7a5200}.float.x-hell,.float.x-dark{color:#f2e2ff;--o:#3a0a6a}
 .float.crit{color:#ffd23f;--o:#8a2a00;font-size:30px;animation-name:critPop}
 .float.heal{color:#8dff9e;--o:#0a4a24;font-size:21px}
 .float.glance{color:#c9c9d6;--o:#2a2a3a;font-size:16px}
@@ -710,7 +714,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.4.8';
+const VERSION='1.5.0';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -728,9 +732,13 @@ function fmtDur(ms){ms=Math.max(0,ms);const d=Math.floor(ms/86400000),h=Math.flo
 const starsHtml=(n,cls='')=>`<span class="stars ${cls}">${'★'.repeat(n)}</span>`;
 
 /* ---------- elements ---------- */
-const ELEM={fire:{n:'Fire',i:'🔥',c:'#ff6b3d'},water:{n:'Water',i:'💧',c:'#3da5ff'},wind:{n:'Wind',i:'🍃',c:'#3fd17f'},light:{n:'Light',i:'✨',c:'#ffe27a'},dark:{n:'Dark',i:'🌑',c:'#a66bff'}};
-const ADV={fire:'wind',wind:'water',water:'fire',light:'dark',dark:'light'};
-function elemMod(a,d){if(ADV[a]===d)return 1;if(ADV[d]===a)return -1;return 0;}
+const ELEM={fire:{n:'Fire',i:'🔥',c:'#ff6b3d'},water:{n:'Water',i:'💧',c:'#3da5ff'},wind:{n:'Wind',i:'🍃',c:'#3fd17f'},heaven:{n:'Heaven',i:'☀️',c:'#ffe27a'},hell:{n:'Hell',i:'🔱',c:'#a66bff'}};
+const ADV={fire:'wind',wind:'water',water:'fire',heaven:'hell',hell:'heaven'};
+// v1.5.0: Light -> Heaven, Dark -> Hell. Old keys stay readable (non-enumerable) so older data/code paths keep working.
+const EL_REN={light:'heaven',dark:'hell'};const elKey=e=>EL_REN[e]||e;
+function elAlias(o){for(const k in EL_REN)if(!Object.prototype.hasOwnProperty.call(o,k))Object.defineProperty(o,k,{get:()=>o[EL_REN[k]],enumerable:false});return o;}
+elAlias(ELEM);elAlias(ADV);
+function elemMod(a,d){a=elKey(a);d=elKey(d);if(ADV[a]===d)return 1;if(ADV[d]===a)return -1;return 0;}
 const RCOL=['#888','#9aa0a6','#6fcf97','#56ccf2','#c77dff','#ffd166','#ff7ad9'];
 const RNAME=['','Common','Uncommon','Rare','Epic','Legendary','Ascended'];
 
@@ -751,7 +759,7 @@ const FX={
 
 /* ---------- monsters ---------- */
 const MD={};
-function M(id,n,e,el,rar,st,lead,desc,skills,x){MD[id]=Object.assign({id,n,e,el,rar,hp:st[0],atk:st[1],def:st[2],spd:st[3],cr:st[4]||15,cdm:st[5]||50,lead,desc,skills},x||{});}
+function M(id,n,e,el,rar,st,lead,desc,skills,x){el=elKey(el);MD[id]=Object.assign({id,n,e,el,rar,hp:st[0],atk:st[1],def:st[2],spd:st[3],cr:st[4]||15,cdm:st[5]||50,lead,desc,skills},x||{});}
 function SK(n,i,d,o){return Object.assign({n,i,d,cd:0,t:'e',m:1,h:1,fx:[],self:[]},o||{});}
 const LD=(s,v)=>({s,v});
 // t: e=one enemy, ae=all enemies, a=one ally, aa=all allies, s=self
@@ -894,6 +902,70 @@ M('crystalwyrm','Crystal Wyrm','💎','fire',4,[900,92,62,104],null,"Sheds gems 
  SK('Prism Bite','💎','Hit (1.4x).',{m:1.4}),
  SK('Shard Storm','✨','ALL enemies (1.2x). 40% chance of DEF Break.',{cd:3,t:'ae',m:1.2,fx:[['defBreak',2,40]]})],{boss:1});
 
+// =========== v1.5.0 ELEMENT VERSIONS (batch 1: Leviathan, Prismane, Cinderfox lines) ===========
+// vof = the original monster of the line. Each version has its own name, art, kit, awakening; skill-ups need the exact same version.
+const VTILT={fire:[.97,1.04,1,0,0],water:[1.05,.97,1,0,0],wind:[.98,.98,1,3,0],heaven:[1,.98,1.06,0,0],hell:[1,1,.96,0,10]};
+function MV(base,el,n,desc,skills,lead,x){const b=MD[base],t=VTILT[el];
+ M(base+'_'+el,n,b.e,el,b.rar,[Math.round(b.hp*t[0]),Math.round(b.atk*t[1]),Math.round(b.def*t[2]),b.spd+t[3],b.cr,b.cdm+t[4]],lead,desc,skills,Object.assign({vof:base},b.xl?{xl:1}:{},x||{}));}
+const upPanel=(id,si,txt)=>m=>{const k=MD[id].skills[si],n=Math.min(m.sl||0,k.up.length);return`<div class="skill"><b>${MD[id].e} Skill level ${n+1} / ${k.up.length+1}</b><br>${txt(n?k.up[n-1]:null)}${n<k.up.length?`. Feed a duplicate ${MD[id].n} (this exact version) in Power Up for a skill-up.`:' (max).'}</div>`;};
+const pct=v=>Math.round(v*100)+'%';
+// Leviathan line
+MV('leviathan','fire','Infernathan',"Leviathan's hot-headed cousin from the lava trenches. Its spikes are technically flames, and they are technically always on.",[
+ SK('Magma Coil','🌋','Sweeps ALL enemies with a molten tail (0.7x). 25% chance to Burn for 2 turns.',{t:'ae',m:.7,fx:[['dot',2,25]]}),
+ SK('Searing Lash','🦷','Bites one enemy (1.8x), then its tail lashes the enemy with the lowest HP (1.0x) with a 60% chance to Burn for 2 turns. Skill-ups: 65% / 70% / 75% / 80%.',{cd:3,m:1.8,tail:{m:1,fx:['dot',2,60]},up:[65,70,75,80]}),
+ SK('Caldera Eruption','🔥','ALL enemies (1.7x). 40% chance of DEF Break for 2 turns.',{cd:5,t:'ae',m:1.7,fx:[['defBreak',2,40]]})],LD('atk',33),
+ {extra:upPanel('leviathan_fire',1,c=>`Searing Lash's tail hit has a <b>${c||60}%</b> Burn chance`)});
+MV('leviathan','wind','Stormcoil',"A sky serpent that rides thunderclouds like waterslides. Has never touched the ground and is weirdly proud of it.",[
+ SK('Gale Coil','🌪️','Hit (1.3x). Gains +15% ATB.',{m:1.3,ga:15}),
+ SK('Twister Lash','🦷','Bites one enemy (1.6x), then its tail lashes the enemy with the lowest HP (1.0x) and pushes its ATB back 30%. Skill-ups: 35% / 40% / 45% / 50%.',{cd:3,m:1.6,tail:{m:1,push:30},up:[35,40,45,50]}),
+ SK('Hurricane Spiral','🌀','ALL enemies, two gusts (0.8x each). 25% chance to Slow for 2 turns. All allies gain SPD Up for 2 turns.',{cd:5,t:'ae',m:.8,h:2,fx:[['slow',2,25]],post:{fx:[['spdUp',2]]}})],LD('spd',20),
+ {extra:upPanel('leviathan_wind',1,c=>`Twister Lash's tail hit pushes ATB back <b>${c||30}%</b>`)});
+MV('leviathan','heaven','Aurelithan',"A golden serpent of the upper heavens. Has wings, a halo and a strict no-biting policy that it ignores constantly.",[
+ SK('Halo Coil','✨','Hit (1.3x). Heals the ally with the lowest HP for 8% of max HP.',{m:1.3,healLow:.08}),
+ SK('Judgement Lash','⚖️','Bites one enemy (1.7x), then its tail smites the enemy with the lowest HP (1.0x) with a 30% chance to Stun. Skill-ups: 35% / 40% / 45% / 50%.',{cd:3,m:1.7,tail:{m:1,st:30},up:[35,40,45,50]}),
+ SK('Radiant Deluge','☀️','ALL enemies (1.5x), then heals all allies 15% and removes 1 harmful effect from each.',{cd:5,t:'ae',m:1.5,post:{heal:.15,cl:1}})],LD('def',33),
+ {extra:upPanel('leviathan_heaven',1,c=>`Judgement Lash's tail hit has a <b>${c||30}%</b> Stun chance`)});
+MV('leviathan','hell','Nethrathan',"Rose from the bottom of the deepest pit, dragging its own chains. Nobody chained it. It just likes the look.",[
+ SK('Nether Coil','😈','Sweeps ALL enemies (0.7x). 25% chance of ATK Break for 2 turns. Skill-ups: 30% / 35% / 40% / 50%.',{t:'ae',m:.7,fx:[['atkDown',2,25]],upFx:1,up:[30,35,40,50]}),
+ SK('Grave Lash','🦷','Bites one enemy (1.7x), then its tail lashes the enemy with the lowest HP (1.0x); the lash deals +50% damage if that enemy is below 50% HP.',{cd:3,m:1.7,tail:{m:1,lowB:.5}}),
+ SK('Maw of Torment','🕳️','ALL enemies (1.7x). 45% chance of ATK Break and 15% chance to Stun.',{cd:5,t:'ae',m:1.7,fx:[['atkDown',2,45],['stun',1,15]]})],LD('cr',15),
+ {extra:upPanel('leviathan_hell',0,c=>`Nether Coil has a <b>${c||25}%</b> ATK Break chance`)});
+// Prismane line (2 skills like the original + her element's Glow passive)
+const glowP=n=>[{k:'glow',i:'✨',n,d:'At the end of each of her turns, heals the ally with the lowest HP% for 15% of her max HP.'}];
+const blessUp=[.19,.23,.27,.3],blessTxt=nm=>c=>`${nm} heals <b>${pct(c||.15)}</b> of her max HP`;
+MV('prismane','fire','Emberhoof',"A unicorn who trots on embers and leaves scorch marks shaped like hearts. Very romantic. Very flammable.",[
+ SK('Sunfire Strike','☀️','Hit (1.15x). 30% chance to Burn for 2 turns and 20% chance to Stun for 1 turn.',{m:1.15,fx:[['dot',2,30],['stun',1,20]]}),
+ SK('Phoenix Blessing','🔥','Heals all allies for 15% of HER max HP and grants ATK Up for 2 turns. Skill-ups: 19% / 23% / 27% / 30%.',{cd:4,t:'aa',m:0,heal:.15,hb:1,fx:[['atkUp',2,100]],up:blessUp})],LD('atk',33),
+ {extra:upPanel('prismane_fire',1,blessTxt('Phoenix Blessing')),passives:glowP('Ember Glow')});
+MV('prismane','water','Brinehoof',"Gallops across waves and refuses to admit she can't actually swim. The bubbles are for emotional support.",[
+ SK('Tidal Prism','💎','Hit (1.1x). 30% chance to Freeze for 1 turn.',{m:1.1,fx:[['freeze',1,30]]}),
+ SK('Rainfall Blessing','🌧️','Heals all allies for 15% of HER max HP and grants Regen for 2 turns. Skill-ups: 19% / 23% / 27% / 30%.',{cd:4,t:'aa',m:0,heal:.15,hb:1,fx:[['regen',2,100]],up:blessUp})],LD('hp',33),
+ {extra:upPanel('prismane_water',1,blessTxt('Rainfall Blessing')),passives:glowP('Tide Glow')});
+MV('prismane','wind','Skyprance',"Prances on the breeze so lightly that clouds ask for her autograph. Sneezes rainbows when it's windy.",[
+ SK('Prism Gust','🌈','Hit (1.1x). 30% chance to Stun for 1 turn. Gains +15% ATB.',{m:1.1,fx:[['stun',1,30]],ga:15}),
+ SK('Rainbow Tailwind','🍃','Heals all allies for 15% of HER max HP and gives them +20% ATB. Skill-ups: 19% / 23% / 27% / 30%.',{cd:4,t:'aa',m:0,heal:.15,hb:1,atb:20,up:blessUp})],LD('spd',20),
+ {extra:upPanel('prismane_wind',1,blessTxt('Rainbow Tailwind')),passives:glowP('Breeze Glow')});
+MV('prismane','hell','Nyxmare',"A nightmare in the most literal sense. Shows up in your dreams to heal your team and insult your haircut.",[
+ SK('Eclipse Strike','🌑','Hit (1.15x). 25% chance to Stun and 30% chance of ATK Break.',{m:1.15,fx:[['stun',1,25],['atkDown',2,30]]}),
+ SK('Nightmare Blessing','🖤','ALL enemies (0.8x). 40% chance of DEF Break. Then heals all allies for 12% of HER max HP. Skill-ups: 15% / 18% / 21% / 24%.',{cd:4,t:'ae',m:.8,fx:[['defBreak',2,40]],post:{heal:.12,hb:1},up:[.15,.18,.21,.24]})],LD('cr',15),
+ {extra:upPanel('prismane_hell',1,c=>`Nightmare Blessing heals <b>${pct(c||.12)}</b> of her max HP`),passives:glowP('Gloom Glow')});
+// Cinderfox line
+MV('cinderfox','water','Riptail',"A water fox with coral horns. Splashes everyone, then acts surprised that everyone is wet.",[
+ SK('Splashtail','💧','Two tail splashes (0.6x each). Each splash has a 20% chance to Slow for 2 turns.',{m:.6,h:2,fx:[['slow',2,20]],fxh:1}),
+ SK('Tide Dance','🛡️','Gains DEF Up for 2 turns and heals 15% HP, then strikes (1.2x).',{cd:3,m:1.2,self:[['defUp',2]],selfHeal:.15}),
+ SK('Nine-Tail Torrent','🌊','ALL enemies (0.85x). 20% chance to Freeze for 1 turn.',{cd:4,t:'ae',m:.85,fx:[['freeze',1,20]]})],LD('hp',15));
+MV('cinderfox','wind','Zephyrkit',"Wears flight goggles it doesn't need. Says they're 'for the aesthetic'. They are.",[
+ SK('Gusttail','🍃','Three tail flicks (0.42x each).',{m:.42,h:3}),
+ SK('Wind Dance','💨','All allies gain SPD Up for 2 turns, then strikes (1.1x).',{cd:3,m:1.1,post:{fx:[['spdUp',2]],pre:1}}),
+ SK('Nine-Tail Cyclone','🌪️','Nine tail gusts on random enemies (0.2x each). Each gust has a 10% chance to Stun.',{cd:4,t:'ae',m:.2,rnd:9,fx:[['stun',1,10]]})],LD('spd',9));
+MV('cinderfox','heaven','Haloveil',"Nine tails, one halo and absolutely zero chill about being called 'cute'.",[
+ SK('Halo Tail','✨','Hit (1.15x). Heals the ally with the lowest HP for 8% of max HP.',{m:1.15,healLow:.08}),
+ SK('Sanctuary Dance','🕊️','All allies gain DEF Up for 2 turns and heal 10%.',{cd:3,t:'aa',m:0,heal:.1,fx:[['defUp',2,100]]}),
+ SK('Nine-Tail Halo','☀️','ALL enemies (0.8x). 25% chance to Stun for 1 turn.',{cd:4,t:'ae',m:.8,fx:[['stun',1,25]]})],LD('def',15));
+MV('cinderfox','hell','Hexfox',"Curses anyone who steps on its tails. Has nine tails. Curses a lot of people.",[
+ SK('Hextail','😈','Two cursed tail hits (0.6x each). Each hit has a 25% chance of ATK Break for 2 turns.',{m:.6,h:2,fx:[['atkDown',2,25]],fxh:1}),
+ SK('Shadow Dance','🗡️','Gains ATK Up for 2 turns, then strikes (1.4x); +25% damage if the target has a harmful effect.',{cd:3,m:1.4,self:[['atkUp',2]],debB:.25}),
+ SK('Nine-Tail Curse','🔱','ALL enemies (0.8x). 50% chance of DEF Break and 30% chance to Burn for 2 turns.',{cd:4,t:'ae',m:.8,fx:[['defBreak',2,50],['dot',2,30]]})],LD('cr',7));
 const SUMMONABLE=Object.values(MD).filter(d=>!d.boss&&!d.fodder&&!d.uniq);
 const DEXLIST=Object.values(MD).filter(d=>!d.boss);
 /* ---------- v1.4.4 AWAKENING (Summoners War style, once per monster; unique monsters are never awakenable) ----------
@@ -929,13 +1001,24 @@ const AWK={
  duskula:{n:'Nocturnelle',b:['cd',20],x:{top:['hair3','tiara'],acc:['bowtie','pearls']}},
  jellybop:{n:'Jigglemancer',b:['res',20],x:{top:['crown']}},
 };
+// v1.5.0 element versions: awakened names + looks
+Object.assign(AWK,{
+ leviathan_fire:{n:'Pyrothane',b:['cd',20],x:{}},leviathan_wind:{n:'Zephyrion',b:['acc',20],x:{}},leviathan_heaven:{n:'Solarion',b:['res',20],x:{}},leviathan_hell:{n:'Vorathrax',b:['cr',12],x:{}},
+ prismane_fire:{n:'Solstallion',b:['cr',12],g:1,x:{top:['unicorn','hair2','crown'],wings:'dragon'},sk:'Effect chances +10%, her Glow heals 20% (was 15%) and her Blessing also removes one harmful effect from each ally.'},
+ prismane_water:{n:'Maristelle',b:['res',20],g:1,x:{top:['unicorn','hair2','tiara'],acc:['pearls','bubbles']},sk:'Effect chances +10%, her Glow heals 20% (was 15%) and her Blessing also removes one harmful effect from each ally.'},
+ prismane_wind:{n:'Aerilynn',b:['acc',20],g:1,x:{top:['unicorn','hair2','leaf','tiara'],wings:'feather'},sk:'Effect chances +10%, her Glow heals 20% (was 15%) and her Blessing also removes one harmful effect from each ally.'},
+ prismane_hell:{n:'Nocthorne',b:['res',20],g:1,x:{top:['unicorn','hair2','devil','crown']},sk:'Effect chances +10% and her Glow heals 20% (was 15%).'},
+ cinderfox_water:{n:'Coralkitsu',b:['res',20],x:{top:['tiara'],acc:['bubbles']}},cinderfox_wind:{n:'Galekitsu',b:['acc',20],x:{top:['leaf','crown']}},
+ cinderfox_heaven:{n:'Aurakitsu',b:['res',20],x:{top:['halo','tiara']}},cinderfox_hell:{n:'Hexkitsu',b:['cr',12],x:{top:['devil','crown'],wings:'bat'}}});
 const AW_MULT=0.12,AW_SPD=6; // awakening: +12% base HP/ATK/DEF, +6 SPD, plus the bonus stat
 const AW_SK='Effect chances +10% and healing +5% (of max HP).';
 const AWC={1:{l:5,m:0,h:0,mana:5000},2:{l:10,m:3,h:0,mana:10000},3:{l:15,m:6,h:1,mana:25000},4:{l:20,m:10,h:3,mana:50000},5:{l:25,m:15,h:6,mana:100000}};
 const ESSN=['Low','Mid','High'],ESSI=['🧪','⚗️','💠'];
 const canAwaken=id=>!!(MD[id]&&!MD[id].uniq&&!MD[id].boss&&AWK[id]);
 const awBase=id=>id&&id.endsWith('_aw')?id.slice(0,-3):id;
-const DEXREQ=DEXLIST.filter(d=>!d.uniq);
+const DEXREQ=DEXLIST.filter(d=>!d.uniq&&!d.vof); // v1.5.0: Monsterpedia completion counts monster lines (any version found)
+const LINES=SUMMONABLE.filter(d=>!d.vof).map(d=>d.id);
+const lineOf=id=>{const b=MD[id]&&MD[id].vof||id;return[MD[b],...Object.values(MD).filter(d=>d.vof===b)].filter(Boolean);};
 const byRar=r=>SUMMONABLE.filter(d=>d.rar===r);
 
 /* ---------- stats (v1.4: Summoners-War-style scale) ---------- */
@@ -1064,7 +1147,7 @@ const ACH=[
  ['login7','📅','Creature of Habit','Claim 7 daily login rewards',s=>s.stats.logins>=7,{radiant:1}],
 ];
 const TIPS=[
- "Fire beats Wind, Wind beats Water, Water beats Fire. Light and Dark beat each other up — it's a whole thing.",
+ "Fire beats Wind, Wind beats Water, Water beats Fire. Heaven and Hell beat each other up — it's a whole thing.",
  "Feed Jellybops to your monsters for 6x XP. The Jellybops consented. We checked. Twice.",
  "Stuck on a stage? Runes! Runes are the answer. Runes are always the answer.",
  "Shellbert is not slow. He is 'strategically unhurried'.",
@@ -1076,6 +1159,10 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.5.0',date:'Oct 17, 2026',title:'🌈 Element Versions',sections:[
+  ['☀️ Heaven & 🔱 Hell',['The Light element is now called ☀️ Heaven and Dark is now 🔱 Hell. Nothing else changes: your monsters, essences and progress carry over automatically.','Heaven and Hell still beat each other.']],
+  ['🌈 12 New Monsters',['Leviathan, Prismane and Cinderfox now come in all five elements. Each new version has its own name, look, skills, leader skill and awakened form.','🐍 Leviathan line: Infernathan (Fire), Stormcoil (Wind), Aurelithan (Heaven), Nethrathan (Hell).','🦄 Prismane line: Emberhoof (Fire), Brinehoof (Water), Skyprance (Wind), Nyxmare (Hell).','🦊 Cinderfox line: Riptail (Water), Zephyrkit (Wind), Haloveil (Heaven), Hexfox (Hell).','They join the summon pools at their star level. The chance of each star level is unchanged; within a star level every monster is equally likely (see the Odds tab).','Skill-ups need a duplicate of the exact same version.']],
+  ['📖 Monsterpedia',['The Monsterpedia is now grouped by monster line, with five slots per line. A line counts toward completion as soon as you find any version of it.']]]},
  {v:'1.4.8',date:'Oct 13, 2026',title:'💎 Crystal Gifts',sections:[
   ['💎 Gifts',['New crystal gifts can now arrive in your 📬 Mailbox.']]]},
  {v:'1.4.7',date:'Oct 13, 2026',title:'🐍 Leviathan Stands Tall',sections:[
@@ -1218,6 +1305,39 @@ const PATCHES=[
    Common options: c/c2 colors (#rrggbb), g emoji, n count, sz size, d delay(ms), on:'self'. */
 const HIT=280; // ms from skill start to impact (matches the wind-up in useSkill)
 const SKVFX={
+ // v1.5.0 element versions (batch 1)
+ 'Magma Coil':[['slash',{c:'#ff5a1f',c2:'#ffd166',r:1.6,rot:2.4,len:3.2,w:.42}],['rain',{c:'#ff8a1f',up:1,st:HIT,len:380,rate:.5,sz:5}]],
+ 'Searing Lash':[['bite',{c:'#ff6b3d',c2:'#ffd166'}],['slash',{c:'#ff8a1f',c2:'#ffe08a',r:1.3,rot:-.9,st:HIT}]],
+ 'Caldera Eruption':[['meteor',{c:'#ff5a1f',c2:'#ffd166',dx:-120,n:4,gap:70,sz:9}],['quake',{c:'#ff5a1f',px:9}]],
+ 'Gale Coil':[['slash',{c:'#3fd17f',c2:'#eaffef',r:1.3,rot:-.9}]],
+ 'Twister Lash':[['bite',{c:'#3fd17f',c2:'#ffffff'}],['tornado',{c:'#c9ffe0',c2:'#ffffff',h:2,st:HIT}]],
+ 'Hurricane Spiral':[['tornado',{c:'#3fd17f',c2:'#eaffef',h:3.6}],['aura',{c:'#c9ffe0',c2:'#3fd17f',g:'💨',st:HIT}]],
+ 'Halo Coil':[['slash',{c:'#ffe27a',c2:'#ffffff',r:1.3,rot:-.9}],['ring',{c:'#7cff9e',c2:'#ffe27a',plus:'💚',st:HIT,flat:1}]],
+ 'Judgement Lash':[['bite',{c:'#ffe27a',c2:'#ffffff'}],['pillar',{c:'#ffe27a',c2:'#ffffff',w:.8,st:HIT}]],
+ 'Radiant Deluge':[['wave',{c:'#c9a86a',c2:'#fff6dc',th:150,amp:14,a:.6}],['pillar',{c:'#ffe27a',c2:'#ffffff',w:1,st:HIT+100}]],
+ 'Nether Coil':[['slash',{c:'#ff3d6e',c2:'#a66bff',r:1.6,rot:2.4,len:3.2,w:.42}],['quake',{c:'#7a3fd1',px:5}]],
+ 'Grave Lash':[['bite',{c:'#ff3d6e',c2:'#2a0612'}],['slash',{c:'#a66bff',c2:'#ff3d6e',r:1.3,rot:-.9,st:HIT}]],
+ 'Maw of Torment':[['vortex',{c:'#4b1fa0',c2:'#ff3d6e',in:1,arms:5,r:2.4}],['quake',{c:'#7a3fd1',px:8}]],
+ 'Sunfire Strike':[['beam',{c:'#ff8a1f',c2:'#ffe08a',w:6}],['burst',{c:'#ffd166',c2:'#ff6b3d',rays:7,r:1.8,st:HIT+40}]],
+ 'Phoenix Blessing':[['pillar',{c:'#ff8a1f',c2:'#ffe08a',w:1.2,st:HIT-200,len:700}],['ring',{c:'#ffb03d',c2:'#7cff9e',plus:'🔥',flat:1,st:HIT}]],
+ 'Tidal Prism':[['beam',{c:'#5ec8ff',c2:'#e6fbff',w:5}],['burst',{c:'#bff8ff',c2:'#3da5ff',rays:6,r:1.8,st:HIT+40}]],
+ 'Rainfall Blessing':[['rain',{g:'💧',c:'#5ec8ff',heal:1,sz:14}],['ring',{c:'#7cff9e',c2:'#3da5ff',plus:'💙',flat:1,st:HIT}]],
+ 'Prism Gust':[['beam',{rb:1,c:'#c9ffe0',w:5}],['burst',{c:'#eaffef',c2:'#3fd17f',rays:6,r:1.8,st:HIT+40}]],
+ 'Rainbow Tailwind':[['petals',{g:['🍃','🌈'],c:'#3fd17f',r:1.5,spin:3}],['ring',{rb:1,c:'#7cff9e',c2:'#c9ffe0',plus:'💚',flat:1,st:HIT}]],
+ 'Eclipse Strike':[['beam',{c:'#4b1fa0',c2:'#ff3d6e',w:6}],['burst',{c:'#a66bff',c2:'#ff3d6e',rays:6,r:1.8,st:HIT+40}]],
+ 'Nightmare Blessing':[['wave',{c:'#2a0a4a',c2:'#ff7ae0',th:120,amp:10,a:.6,dark:1}],['ring',{c:'#ff7ae0',c2:'#7cff9e',plus:'🖤',flat:1,st:HIT+120}]],
+ 'Splashtail':[['proj',{s:'orb',c:'#5ec8ff',c2:'#e6fbff',n:2,gap:80,arc:55,sz:7}]],
+ 'Tide Dance':[['shield',{c:'#3da5ff',c2:'#bfe6ff'}],['slash',{c:'#5ec8ff',c2:'#e6fbff',r:1.2,st:HIT}]],
+ 'Nine-Tail Torrent':[['wave',{c:'#1f6fd6',c2:'#bff8ff',th:130,amp:12,a:.6}]],
+ 'Gusttail':[['slash',{c:'#3fd17f',c2:'#eaffef',n:3,gap:70,r:1.1}]],
+ 'Wind Dance':[['aura',{c:'#c9ffe0',c2:'#3fd17f',g:'💨'}],['slash',{c:'#3fd17f',c2:'#eaffef',n:2,gap:90,r:1.2,st:HIT}]],
+ 'Nine-Tail Cyclone':[['proj',{s:'orb',c:'#3fd17f',c2:'#eaffef',n:5,gap:40,fan:30,arc:40,sz:6,stg:25}],['tornado',{c:'#c9ffe0',c2:'#ffffff',h:2.2,d:200}]],
+ 'Halo Tail':[['slash',{c:'#ffe27a',c2:'#ffffff',r:1.2}],['ring',{c:'#7cff9e',c2:'#ffe27a',plus:'💚',st:HIT,flat:1}]],
+ 'Sanctuary Dance':[['shield',{c:'#ffe27a',c2:'#ffffff'}],['ring',{c:'#7cff9e',c2:'#ffe27a',plus:'💛',st:HIT,flat:1}]],
+ 'Nine-Tail Halo':[['proj',{s:'orb',c:'#ffe27a',c2:'#ffffff',n:3,gap:35,fan:26,arc:40,sz:7,stg:30}],['burst',{c:'#ffe27a',c2:'#ffffff',rays:9,r:2,st:HIT+60}]],
+ 'Hextail':[['slash',{c:'#a66bff',c2:'#ff3d6e',n:2,gap:80,r:1.2}]],
+ 'Shadow Dance':[['aura',{on:'self',c:'#a66bff',c2:'#ff3d6e',g:'🗡️',st:0,len:420}],['slash',{c:'#ff3d6e',c2:'#a66bff',n:2,gap:90,r:1.3,st:HIT}]],
+ 'Nine-Tail Curse':[['proj',{s:'orb',c:'#a66bff',c2:'#ff3d6e',n:3,gap:35,fan:26,arc:40,sz:7,stg:30}],['rain',{c:'#8a3dff',up:1,st:HIT,len:380,rate:.5,sz:5}]],
  // FIRE
  'Spark Poke':[['proj',{s:'star',c:'#ffd166',c2:'#ff9a3d',sz:6,arc:26}]],
  'Hot Take':[['proj',{s:'emoji',g:'🌶️',sz:7,arc:60,spin:2,c:'#ff3d3d'}],['burst',{c:'#ff3d3d',c2:'#ffb03d',rays:8,r:2}]],
@@ -1362,8 +1482,36 @@ const ART={
  jellyking:{p:['#7fd3ff','#e6f7ff','#2b84e0'],a:'#ffd166',e:'#123a6e',head:'jelly',body:'none',top:['crown'],back:['cape'],mouth:'grin',boss:1},
  crystalwyrm:{p:['#7fd8ff','#ecfcff','#3a7bd5'],a:'#d6f6ff',e:'#ff7ad9',head:'wide',top:['spikes'],wings:'crystal',tail:'dragon',mouth:'fang',boss:1},
 };
+// v1.5.0 element-version overlays (front 'ovf' / behind 'ovk' layers, sprite viewBox 0 -12 120 128)
+const OVL={
+ flameCrest:`<path d="M44 14 Q46 -6 54 6 Q58 -10 64 4 Q72 -6 74 14 Z" fill="#ffcf3d" stroke="#b3200a" stroke-width="1.5"/><path d="M52 12 Q55 2 59 8 Q63 0 66 12Z" fill="#fff3b0"/>`,
+ embers:`<g fill="#ffb03d"><circle cx="16" cy="40" r="2.2"/><circle cx="104" cy="30" r="2.6"/><circle cx="100" cy="70" r="1.8"/><circle cx="20" cy="80" r="2"/></g>`,
+ fireHalo:`<circle cx="60" cy="52" r="52" fill="none" stroke="#ff6b3d" stroke-width="3" stroke-dasharray="6 5" opacity=".6"/>`,
+ coralHorns:`<g fill="#ff7a9a" stroke="#a8324f" stroke-width="1.3"><path d="M38 20 L30 2 L34 2 L36 -6 L40 4 L44 0 L42 18Z"/><path d="M82 20 L90 2 L86 2 L84 -6 L80 4 L76 0 L78 18Z"/></g>`,
+ bubbles:`<g fill="#bff0ff" fill-opacity=".55" stroke="#ffffff" stroke-width="1.2"><circle cx="14" cy="30" r="6"/><circle cx="106" cy="44" r="4.5"/><circle cx="100" cy="18" r="3"/><circle cx="20" cy="70" r="3.5"/></g>`,
+ wave:`<path d="M6 104 Q20 94 34 104 T62 104 T90 104 T118 104" fill="none" stroke="#7fd8ff" stroke-width="4" stroke-linecap="round"/>`,
+ leafPlume:`<g stroke="#1f6b3a" stroke-width="1.3"><path d="M56 12 Q40 -10 30 0 Q42 4 52 14Z" fill="#7fe0a8"/><path d="M62 10 Q66 -14 78 -6 Q70 0 66 14Z" fill="#3fd17f"/></g>`,
+ swirls:`<g fill="none" stroke="#c9ffe0" stroke-width="2.4" stroke-linecap="round" opacity=".9"><path d="M8 50 q8 -10 16 0 q-6 6 -10 0"/><path d="M96 26 q8 -10 16 0 q-6 6 -10 0"/><path d="M98 84 q8 -10 16 0"/></g>`,
+ goggles:`<g><rect x="38" y="30" width="44" height="6" rx="3" fill="#8a5c3a"/><circle cx="46" cy="33" r="6" fill="#bff6ff" stroke="#5a3300" stroke-width="2"/><circle cx="74" cy="33" r="6" fill="#bff6ff" stroke="#5a3300" stroke-width="2"/></g>`,
+ halo:`<ellipse cx="60" cy="-4" rx="20" ry="5" fill="none" stroke="#ffd65a" stroke-width="3.5"/>`,
+ sunRays:`<g stroke="#ffe9a0" stroke-width="3" stroke-linecap="round" opacity=".7">${[...Array(12)].map((_,i)=>{const a=i/12*6.283;return`<line x1="${(60+Math.cos(a)*50).toFixed(1)}" y1="${(52+Math.sin(a)*50).toFixed(1)}" x2="${(60+Math.cos(a)*60).toFixed(1)}" y2="${(52+Math.sin(a)*60).toFixed(1)}"/>`}).join('')}</g>`,
+ laurel:`<g fill="#e8c24a" stroke="#9a7a10" stroke-width=".8">${[0,1,2,3].map(i=>`<ellipse cx="${40+i*4}" cy="${16-i*2}" rx="4" ry="2" transform="rotate(-30 ${40+i*4} ${16-i*2})"/><ellipse cx="${80-i*4}" cy="${16-i*2}" rx="4" ry="2" transform="rotate(30 ${80-i*4} ${16-i*2})"/>`).join('')}</g>`,
+ hellHorns:`<g fill="#2a0612" stroke="#ff3d6e" stroke-width="1.4"><path d="M40 18 Q26 6 30 -10 Q36 4 48 12Z"/><path d="M80 18 Q94 6 90 -10 Q84 4 72 12Z"/></g>`,
+ chains:`<g fill="none" stroke="#8a8a9a" stroke-width="2.2">${[0,1,2,3,4].map(i=>`<ellipse cx="${36+i*12}" cy="${86+Math.abs(i-2)*2}" rx="6" ry="3.4"/>`).join('')}</g>`,
+ hellfire:`<g fill="#8a3dff" opacity=".75"><path d="M10 110 Q4 92 14 84 Q14 96 22 98 Q20 88 28 82 Q30 100 26 110Z"/><path d="M110 110 Q116 92 106 84 Q106 96 98 98 Q100 88 92 82 Q90 100 94 110Z"/></g>`,
+ skull:`<g transform="translate(80 70)"><circle r="6" fill="#f4efe2" stroke="#2a0612" stroke-width="1.2"/><circle cx="-2.2" cy="-1" r="1.5" fill="#2a0612"/><circle cx="2.2" cy="-1" r="1.5" fill="#2a0612"/></g>`};
+const ovl=(f,k)=>({ovf:(f||[]).map(x=>OVL[x]).join(''),ovk:(k||[]).map(x=>OVL[x]).join('')});
+function artVar(id,base,o,f,k){const a=Object.assign({},ART[base],o,ovl(f,k));if(a.rb===0)delete a.rb;if(a.sc2===null)delete a.sc2;ART[id]=a;}
+artVar('cinderfox_water','cinderfox',{p:['#3f9fe0','#dff3ff','#1d5a9e'],a:'#bff0ff',e:'#0d2a5c',acc:['pearls'],sc2:null,mark:['grooves'],tail:'fish'},['coralHorns','bubbles'],['wave']);
+artVar('cinderfox_wind','cinderfox',{p:['#9fdc8a','#f0fbe6','#4f9a3a'],a:'#fff6c8',e:'#1f6b3a',acc:['scarf'],sc2:'#3fd17f',tail:'fox3',wings:'fairy',mark:['stripes']},['leafPlume','swirls','goggles']);
+artVar('cinderfox_heaven','cinderfox',{p:['#fff6e8','#ffffff','#e6cf9a'],a:'#ffd65a',e:'#3d6ad6',acc:['olive'],wings:'feather',mark:['dots']},['halo','laurel'],['sunRays']);
+artVar('cinderfox_hell','cinderfox',{p:['#3a1a3e','#a06ab0','#14060f'],a:'#ff3d6e',e:'#ff3d6e',acc:['collar'],eyes:'glow',mark:['cracks'],mouth:'fang',brow:1},['hellHorns','skull'],['hellfire']);
+artVar('prismane_fire','prismane',{rb:0,p:['#ff9a4a','#ffe0c0','#c9461a'],hair:'#ff3d1f',a:'#ffd166',e:'#6a1a00',mark:['spots'],acc:['scarf'],sc2:'#ffcf3d',wings:'dragon'},['embers'],['fireHalo']);
+artVar('prismane_water','prismane',{rb:0,p:['#7fd3e8','#e6fbff','#2f8fae'],hair:'#2f6fd6',a:'#bff0ff',e:'#0d2a5c',ears:'fin',tail:'fish',acc:['pearls','bubbles']},['bubbles'],['wave']);
+artVar('prismane_wind','prismane',{rb:0,p:['#e8fff0','#ffffff','#9fd8b0'],hair:'#3fd17f',a:'#fff6c8',e:'#1f6b3a',wings:'fairy',top:['unicorn','hair2','leaf'],mark:['stripes']},['swirls']);
+artVar('prismane_hell','prismane',{rb:0,p:['#2a1640','#7a5aa8','#0e0620'],hair:'#ff3d6e',a:'#ff3d6e',e:'#ff3d6e',eyes:'glow',wings:'bat',mouth:'fang',top:['unicorn','hair2','devil'],mark:['moon'],acc:['collar']},['chains'],['hellfire']);
 // v1.4.4 awakened art: ART[id+'_aw'] = base art + palette shift toward the element's awakening tint + accessory overlay + aura/sparkles
-const AWTINT={fire:'#ffd166',water:'#8ff0ff',wind:'#d6ff8a',light:'#fff3b0',dark:'#ff7ae0'};
+const AWTINT={fire:'#ffd166',water:'#8ff0ff',wind:'#d6ff8a',heaven:'#fff3b0',hell:'#ff7ae0'};elAlias(AWTINT);
 for(const id in AWK){const b=ART[id];if(!b||!MD[id])continue;const x=AWK[id].x||{},tn=AWTINT[MD[id].el];
  const sh=c=>mixc(mixc(c,tn,.28),'#ffffff',.08);
  const o=Object.assign({},b,{p:(b.p||['#9b8cff','#e0dbff','#5a4bb0']).map(sh)},b.h?{h:b.h.map(sh)}:{},x);
@@ -1371,10 +1519,12 @@ for(const id in AWK){const b=ART[id];if(!b||!MD[id])continue;const x=AWK[id].x||
  if(b.wings&&x.wings)o.wings=b.wings; // keep its own wings
  o.awk=1;o.awc=tn;ART[id+'_aw']=o;}
 /* ---------- v1.4.5 Leviathan / Carter: custom sea-serpent sprite (ART[id].svg) ---------- */
-function levSvg(aw,face){const ko=face==='ko',hit=face==='hit',atk=face==='attack',ch=face==='cheer',anim=!SPR.still&&!ko;
+function levSvg(aw,face,V){const ko=face==='ko',hit=face==='hit',atk=face==='attack',ch=face==='cheer',anim=!SPR.still&&!ko;
  if(face==='blink')return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="22 6 368 392"></svg>`; // the serpent never blinks
- const OL='#050a14',o=aw?{rim:'#3a6ad0',tip:'#d8ffff',body:['#1a2c5c','#070d22'],fin:['#2fd8ff','#0b2a66'],scale:'#38e1ff',belly:'#3a5fa0',eye:'#7ff8ff',glow:'#5ff0ff',w:46,hs:1.55,spike:36,step:.05}
+ const OL='#050a14';let o=aw?{rim:'#3a6ad0',tip:'#d8ffff',body:['#1a2c5c','#070d22'],fin:['#2fd8ff','#0b2a66'],scale:'#38e1ff',belly:'#3a5fa0',eye:'#7ff8ff',glow:'#5ff0ff',w:46,hs:1.55,spike:36,step:.05}
   :{rim:'#6fd0c4',tip:'#b8fff0',body:['#2f7f86','#163d52'],fin:['#5cc2b8','#1d5a66'],scale:'#0a2230',belly:'#8fd6c4',eye:'#d8ff5a',glow:'#5ff0d0',w:40,hs:1.6,spike:26,step:.06};
+ if(V){o=Object.assign({},o,V.pal);if(aw){const tn=V.awt;['rim','tip','scale','belly','glow'].forEach(k=>o[k]=mixc(o[k],tn,.3));o.body=o.body.map(c=>mixc(c,tn,.15));o.fin=o.fin.map(c=>mixc(c,tn,.25));o.w+=4;o.spike+=6;o.hs-=.05;}}
+ const vs=V&&V.sp,P=(bx,by,tx,ty,nx,ny)=>(a,b)=>`${(bx+tx*a+nx*b).toFixed(1)} ${(by+ty*a+ny*b).toFixed(1)}`;
  const an=(v,dur)=>anim?`<animate attributeName="opacity" values="${v}" dur="${dur}s" repeatCount="indefinite"/>`:'';
  const SEG=[[40,330,30,250,120,230,150,290],[150,290,175,340,260,335,285,280],[285,280,310,225,250,190,215,205],[215,205,185,218,190,175,225,150]];
  const bz=(s,t)=>{const u=1-t;return[u*u*u*s[0]+3*u*u*t*s[2]+3*u*t*t*s[4]+t*t*t*s[6],u*u*u*s[1]+3*u*u*t*s[3]+3*u*t*t*s[5]+t*t*t*s[7]];};
@@ -1394,18 +1544,30 @@ function levSvg(aw,face){const ko=face==='ko',hit=face==='hit',atk=face==='attac
  let f='',r='';for(let t=0.08;t<0.93;t+=o.step){const a=at(t),b=at(t+.004);let tx=b[0]-a[0],ty=b[1]-a[1];const n0=Math.hypot(tx,ty)||1;tx/=n0;ty/=n0;let nx=ty,ny=-tx;
   if(ny>0&&t<0.55){nx=-nx;ny=-ny;}if(t>=0.55&&nx<0){nx=-nx;ny=-ny;}
   const h=o.spike*(1-Math.abs(t-.5)*.6),off=o.w/2-2,bx=a[0]+nx*off,by=a[1]+ny*off,F=v=>v.toFixed(1);
-  f+=`<path d="M${F(bx-tx*7)} ${F(by-ty*7)} L${F(bx+nx*h+tx*6)} ${F(by+ny*h+ty*6)} L${F(bx+tx*7)} ${F(by+ty*7)}Z" fill="url(#fn)" stroke="${OL}" stroke-width="3.5" stroke-linejoin="round"/><path d="M${F(bx)} ${F(by)} L${F(bx+nx*h*.75+tx*4)} ${F(by+ny*h*.75+ty*4)}" stroke="${o.glow}" stroke-width="1.2" opacity=".7"/>`;
+  const q=P(bx,by,tx,ty,nx,ny);
+  if(vs==='flame')f+=`<path d="M${q(-8,0)} Q${q(-12,h*.55)} ${q(-2,h*.75)} Q${q(1,h*.9)} ${q(5,h*1.2)} Q${q(12,h*.6)} ${q(8,0)}Z" fill="url(#fn)" stroke="${OL}" stroke-width="3.2" stroke-linejoin="round"/><path d="M${q(-3,0)} Q${q(-4,h*.4)} ${q(2,h*.65)} Q${q(5,h*.35)} ${q(3,0)}Z" fill="${o.tip}" opacity=".85"/>`;
+  else if(vs==='feather')f+=`<path d="M${q(-6,0)} Q${q(-6,h*.9)} ${q(16,h*1.25)} Q${q(8,h*.5)} ${q(7,0)}Z" fill="url(#fn)" stroke="${OL}" stroke-width="3" stroke-linejoin="round"/><path d="M${q(0,0)} Q${q(1,h*.6)} ${q(13,h*1.1)}" stroke="${o.scale}" stroke-width="1.4" fill="none" opacity=".8"/>`;
+  else if(vs==='round')f+=`<path d="M${q(-9,0)} Q${q(-8,h*1.5)} ${q(0,h*1.5)} Q${q(8,h*1.5)} ${q(9,0)}Z" fill="url(#fn)" stroke="${OL}" stroke-width="3" stroke-linejoin="round"/><circle cx="${q(0,h*.85).split(' ')[0]}" cy="${q(0,h*.85).split(' ')[1]}" r="2.6" fill="${o.tip}"/>`;
+  else if(vs==='barb')f+=`<path d="M${q(-7,0)} L${q(3,h*1.15)} L${q(-7,h*.8)} L${q(-1,h*.62)} L${q(8,0)}Z" fill="url(#fn)" stroke="${OL}" stroke-width="3.4" stroke-linejoin="round"/><path d="M${q(0,2)} L${q(2,h*.9)}" stroke="${o.glow}" stroke-width="1.3" opacity=".8"/>`;
+  else f+=`<path d="M${F(bx-tx*7)} ${F(by-ty*7)} L${F(bx+nx*h+tx*6)} ${F(by+ny*h+ty*6)} L${F(bx+tx*7)} ${F(by+ty*7)}Z" fill="url(#fn)" stroke="${OL}" stroke-width="3.5" stroke-linejoin="round"/><path d="M${F(bx)} ${F(by)} L${F(bx+nx*h*.75+tx*4)} ${F(by+ny*h*.75+ty*4)}" stroke="${o.glow}" stroke-width="1.2" opacity=".7"/>`;
   if(aw){if(Math.round(t*100)%2===0)r+=`<path d="M${F(a[0]-4)} ${F(a[1]-5)} L${F(a[0]+4)} ${F(a[1])} L${F(a[0]-4)} ${F(a[1]+5)} M${F(a[0]+5)} ${F(a[1]-5)} L${F(a[0]+5)} ${F(a[1]+5)}" stroke="${o.glow}" stroke-width="2.4" fill="none" stroke-linecap="round" filter="url(#gl)"/>`;}
+  else if(V&&V.mk==='cracks')r+=`<path d="M${F(a[0]-nx*12-tx*5)} ${F(a[1]-ny*12-ty*5)} L${F(a[0]-nx*4+tx*3)} ${F(a[1]-ny*4+ty*3)} L${F(a[0]+nx*4-tx*2)} ${F(a[1]+ny*4-ty*2)}" stroke="${o.glow}" stroke-width="2.6" fill="none" stroke-linecap="round" filter="url(#gl)"/>`;
+  else if(V&&V.mk==='bands')r+=`<path d="M${F(a[0]-nx*(o.w/2-3))} ${F(a[1]-ny*(o.w/2-3))} L${F(a[0]+nx*(o.w/2-3))} ${F(a[1]+ny*(o.w/2-3))}" stroke="#e8b830" stroke-width="3.4" opacity=".9"/>`;
+  else if(V&&V.mk==='swirl')r+=`<path d="M${F(a[0]-5)} ${F(a[1])} q5 -7 10 0 q-3 4 -6 0" stroke="#ffffff" stroke-width="1.8" fill="none" opacity=".85"/>`;
+  else if(V&&V.mk==='runes')r+=`<path d="M${F(a[0]-nx*6-3)} ${F(a[1]-ny*6-4)} l6 4 l-6 4" stroke="${o.glow}" stroke-width="2" fill="none" filter="url(#gl)"/>`;
   else r+=`<circle cx="${F(a[0]-nx*6)}" cy="${F(a[1]-ny*6)}" r="2.2" fill="${o.glow}" opacity=".85" filter="url(#gl)"/>`;}
+ if(V&&V.wing){const w0=at(.66),w1=at(.3);const W=(x,y,sx)=>V.wing==='angel'?`<g transform="translate(${x.toFixed(0)} ${y.toFixed(0)}) scale(${sx} 1)"><path d="M0 0 C-30 -70 -90 -110 -150 -100 C-120 -80 -110 -70 -105 -55 C-130 -60 -140 -40 -130 -30 C-100 -40 -80 -30 -70 -20 C-90 -12 -90 4 -80 10 C-50 -4 -20 -2 0 6Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/><path d="M-20 -10 C-50 -40 -90 -70 -130 -85 M-25 -2 C-60 -20 -90 -35 -115 -40" stroke="${o.rim}" stroke-width="2" fill="none" opacity=".8"/></g>`:`<g transform="translate(${x.toFixed(0)} ${y.toFixed(0)}) scale(${sx} 1)"><path d="M0 0 C-20 -40 -60 -60 -95 -55 C-70 -40 -60 -25 -55 -12 C-40 -16 -20 -10 0 4Z" fill="url(#fn)" stroke="${OL}" stroke-width="3.5" stroke-linejoin="round" opacity=".95"/><path d="M-8 -6 C-30 -26 -55 -40 -80 -48" stroke="#ffffff" stroke-width="2" fill="none" opacity=".7"/></g>`;
+  g+=V.wing==='angel'?W(w0[0],w0[1]-6,-1)+W(w0[0]-20,w0[1]-4,1):W(w0[0],w0[1]-4,-1)+W(w1[0],w1[1]-6,1);}
  g+=f;
- g+=`<path d="${tailP}" stroke="${OL}" stroke-width="30" fill="none" stroke-linecap="round"/><path d="${tailP}" stroke="url(#bd)" stroke-width="22" fill="none" stroke-linecap="round"/><path d="M372 255 L360 205 L382 236 L398 200 L388 262Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/>`;
+ g+=`<path d="${tailP}" stroke="${OL}" stroke-width="30" fill="none" stroke-linecap="round"/><path d="${tailP}" stroke="url(#bd)" stroke-width="22" fill="none" stroke-linecap="round"/>${!V||!V.tl?`<path d="M372 255 L360 205 L382 236 L398 200 L388 262Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/>`:V.tl==='flame'?`<path d="M366 262 C340 240 352 214 360 196 C362 214 370 220 374 208 C376 190 384 180 392 166 C390 190 404 204 398 228 C410 222 412 210 414 204 C420 236 404 262 380 268Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/><path d="M372 258 C362 244 368 230 374 222 C376 234 384 236 388 226 C394 244 388 258 380 262Z" fill="${o.tip}" opacity=".9"/>`:V.tl==='fan'?[-38,-10,18].map(a=>`<path transform="rotate(${a} 372 255)" d="M368 258 C356 220 362 190 376 170 C390 192 392 222 378 258Z" fill="url(#fn)" stroke="${OL}" stroke-width="3.5" stroke-linejoin="round"/><path transform="rotate(${a} 372 255)" d="M373 255 L376 178" stroke="${o.scale}" stroke-width="1.5" opacity=".8"/>`).join(''):V.tl==='plume'?`<path d="M368 260 C340 230 350 196 372 178 C368 204 380 214 388 196 C398 222 392 250 380 264Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/><ellipse cx="372" cy="258" rx="14" ry="6" fill="none" stroke="#e8b830" stroke-width="4"/>`:`<path d="M372 258 L350 236 L364 234 L374 196 L388 234 L402 232 L384 262Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/><path d="M374 206 L376 244" stroke="${o.glow}" stroke-width="2" filter="url(#gl)"/>`}`;
  g+=`<path d="${body}" stroke="${OL}" stroke-width="${o.w+9}" fill="none" stroke-linecap="round"/><path d="${body}" stroke="url(#bd)" stroke-width="${o.w}" fill="none" stroke-linecap="round"/><path d="${body}" stroke="url(#sc)" stroke-width="${o.w}" fill="none" stroke-linecap="round"/>
  <path d="${body}" stroke="${o.belly}" stroke-width="${o.w*.3}" fill="none" stroke-linecap="round" stroke-dasharray="7 4" opacity=".4" transform="translate(4 7)"/><path d="${body}" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".28" transform="translate(-5 -8)" stroke-dasharray="40 26"/><g>${an('1;.55;1','1.8')}${r}</g>`;
+ if(V&&V.chain)for(let t=.12;t<.5;t+=.045){const a=at(t);g+=`<ellipse cx="${a[0].toFixed(1)}" cy="${(a[1]+o.w*.32).toFixed(1)}" rx="9" ry="5.5" transform="rotate(${(t*400)%180} ${a[0].toFixed(1)} ${(a[1]+o.w*.32).toFixed(1)})" fill="none" stroke="#1a1a24" stroke-width="6"/><ellipse cx="${a[0].toFixed(1)}" cy="${(a[1]+o.w*.32).toFixed(1)}" rx="9" ry="5.5" transform="rotate(${(t*400)%180} ${a[0].toFixed(1)} ${(a[1]+o.w*.32).toFixed(1)})" fill="none" stroke="#a8a8bc" stroke-width="3"/>`;}
  if(aw&&!ko)g+=`<circle cx="232" cy="222" r="9" fill="url(#gm)" stroke="${OL}" stroke-width="3" filter="url(#gl)"/><circle cx="232" cy="222" r="18" fill="${o.glow}" opacity=".22">${an('.3;.1;.3','1.6')}</circle>`;
  const jaw=atk?18:ch?10:ko?4:0,hr=atk?-22:ch?-18:hit?2:ko?20:-12;
  const eye=ko?`<path d="M-20 -14 L-6 -4 M-6 -14 L-20 -4" stroke="${OL}" stroke-width="3"/>`:hit?`<path d="M-24 -8 L4 -14" stroke="${OL}" stroke-width="3.5"/>`:`<path d="M-24 -6 L6 -16 L2 -6 Z" fill="${o.eye}" filter="url(#gl)"/><path d="M-6 -12 L-4 -7" stroke="${OL}" stroke-width="2.5"/>`;
  g+=`<g transform="translate(225 150) rotate(${hr}) scale(${o.hs})">
- ${aw?`<path d="M10 -20 L60 -78 L34 -18Z M-8 -24 L20 -92 L14 -20Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/>`:`<path d="M14 -18 L44 -50 L32 -12Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/>`}
+ ${V?levHead(V.hd,o,OL,aw):aw?`<path d="M10 -20 L60 -78 L34 -18Z M-8 -24 L20 -92 L14 -20Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/>`:`<path d="M14 -18 L44 -50 L32 -12Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/>`}
  <path d="M30 -10 L58 -2 L40 10 L62 22 L30 26Z" fill="url(#fn)" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/>
  <g transform="rotate(${jaw} 30 22)"><path d="M30 18 L-70 34 L-62 44 L-20 44 L34 34Z" fill="${o.body[1]}" stroke="${OL}" stroke-width="5" stroke-linejoin="round"/>
  <path d="M-64 34 L-58 22 L-52 34 L-46 23 L-40 33 L-34 24 L-28 32 L-22 25 L-16 31" fill="#f4f7ff" stroke="${OL}" stroke-width="1.5" stroke-linejoin="round"/></g>
@@ -1419,12 +1581,31 @@ function levSvg(aw,face){const ko=face==='ko',hit=face==='hit',atk=face==='attac
  </g></g>`;
  s+=g;
  // dark water at the base
- s+=`<path d="M10 330 C50 316 80 340 130 326 S220 310 260 330 S350 340 392 322 L384 352 C300 368 100 368 18 352Z" fill="${aw?'#081a3a':'#0b2c44'}" stroke="${OL}" stroke-width="4" stroke-linejoin="round" opacity=".95"/>
+ if(V&&V.base)s+=levBase(V.base,aw,OL);else s+=`<path d="M10 330 C50 316 80 340 130 326 S220 310 260 330 S350 340 392 322 L384 352 C300 368 100 368 18 352Z" fill="${aw?'#081a3a':'#0b2c44'}" stroke="${OL}" stroke-width="4" stroke-linejoin="round" opacity=".95"/>
  <path d="M30 330 C60 320 80 334 110 326 M180 320 C210 312 230 326 255 326 M320 334 C345 328 360 330 380 322" stroke="${aw?'#7ff8ff':'#9fe6e0'}" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/>`;
  if(!ko)s+=[[60,250,3],[110,200,2.2],[340,180,2.6],[310,90,2],[90,120,2.4],[150,70,1.6]].map(([x,y,rr])=>`<circle cx="${x}" cy="${y}" r="${rr}" fill="${o.glow}" opacity=".8" filter="url(#gl)"/>`).join('');
  return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="22 6 368 392">${s}</svg>`;}
+// v1.5.0 element versions of the sea serpent: head crests and bases per element
+function levHead(k,o,OL,aw){const S=`stroke="${OL}" stroke-width="4" stroke-linejoin="round"`;
+ if(k==='fire')return[[-26,-22,-62,-6],[-6,-28,-84,4],[16,-24,-70,14],[34,-12,-46,18]].map(([x,y,h,l])=>`<path d="M${x-9} ${y+4} C${x-14} ${y+h*.5} ${x+2} ${y+h*.6} ${x+l*.4} ${y+h} C${x+12} ${y+h*.55} ${x+8} ${y+h*.3} ${x+10} ${y+2}Z" fill="url(#fn)" ${S}/><path d="M${x-3} ${y+2} C${x-5} ${y+h*.35} ${x+3} ${y+h*.45} ${x+4} ${y+h*.55} C${x+6} ${y+h*.3} ${x+5} ${y} ${x+5} ${y+2}Z" fill="${o.tip}"/>`).join('')+(aw?`<path d="M-40 -30 L-34 -58 L-26 -34 L-16 -66 L-8 -36Z" fill="#ffd166" ${S}/>`:'');
+ if(k==='wind')return`<path d="M30 -16 C60 -40 100 -40 130 -20 C100 -24 80 -14 66 -2 C90 -4 108 6 118 20 C86 8 60 6 34 12Z" fill="url(#fn)" ${S}/><path d="M40 -10 C70 -26 100 -28 122 -20 M40 4 C70 0 94 8 112 16" stroke="${o.scale}" stroke-width="2" fill="none" opacity=".8"/><path d="M-78 12 C-96 30 -100 50 -86 66 M-70 18 C-80 40 -74 56 -60 66" stroke="${o.tip}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`+(aw?`<path d="M-4 -30 L4 -70 L10 -34 L22 -78 L26 -30Z" fill="${o.glow}" ${S}/>`:'');
+ if(k==='heaven')return`<path d="M-36 -20 L-60 -96 L-22 -24Z" fill="#ffe27a" ${S}/><path d="M-40 -34 L-50 -72" stroke="#ffffff" stroke-width="2.5" opacity=".8"/><ellipse cx="-4" cy="-${aw?96:84}" rx="${aw?44:36}" ry="${aw?11:9}" fill="none" stroke="#ffd65a" stroke-width="${aw?8:7}"/><path d="M14 -18 C30 -40 56 -44 70 -36 C54 -30 46 -22 40 -10Z" fill="url(#fn)" ${S}/>`;
+ if(k==='hell')return`<path d="M8 -22 C20 -70 70 -84 84 -50 C92 -30 74 -16 60 -26 C70 -34 70 -50 58 -52 C40 -54 32 -36 26 -14Z" fill="#2a0612" stroke="${o.glow}" stroke-width="3.5" stroke-linejoin="round"/><path d="M-14 -24 C-14 -66 26 -96 50 -78 C34 -78 18 -64 12 -22Z" fill="#1a0610" stroke="${o.glow}" stroke-width="3.5" stroke-linejoin="round"/><path d="M-80 2 L-60 -10 L-40 -4" stroke="#f4efe2" stroke-width="4" fill="none" stroke-linecap="round"/>`+(aw?`<path d="M-30 -24 L-22 -52 L-14 -26Z M-50 -14 L-46 -40 L-38 -16Z" fill="${o.glow}" ${S}/>`:'');
+ return'';}
+function levBase(k,aw,OL){const S=`stroke="${OL}" stroke-width="4" stroke-linejoin="round"`;
+ if(k==='lava')return`<path d="M10 330 C50 316 80 340 130 326 S220 310 260 330 S350 340 392 322 L384 352 C300 368 100 368 18 352Z" fill="${aw?'#5a1206':'#3a0a04'}" ${S}/><path d="M30 334 C60 324 80 338 110 330 M180 324 C210 316 230 330 255 330 M320 338 C345 332 360 334 380 326" stroke="#ff8a2e" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="90" cy="344" r="4" fill="#ffd166"/><circle cx="300" cy="350" r="3" fill="#ffd166"/>`;
+ if(k==='cloud'||k==='cloudgold'){const c=k==='cloud'?['#f4fbff','#bfe0e8']:['#fff6dc','#e8c870'];return`<path d="M14 352 C0 330 30 312 52 324 C60 300 100 300 112 322 C126 306 160 310 166 330 C190 312 230 316 236 338 C256 318 300 320 304 340 C330 322 372 326 380 344 C400 346 396 364 380 366 L24 366 C6 366 4 356 14 352Z" fill="${c[0]}" ${S}/><path d="M40 350 C80 342 120 356 160 348 S260 344 300 354 S360 352 380 350" stroke="${c[1]}" stroke-width="4" fill="none"/>`;}
+ if(k==='hellfire')return`<path d="M10 330 C50 316 80 340 130 326 S220 310 260 330 S350 340 392 322 L384 352 C300 368 100 368 18 352Z" fill="#12030c" ${S}/>`+[[40,330],[120,322],[210,318],[300,330],[370,322]].map(([x,y],i)=>`<path d="M${x-12} ${y+8} C${x-16} ${y-14} ${x-4} ${y-18} ${x} ${y-34-i%2*10} C${x+6} ${y-16} ${x+16} ${y-12} ${x+12} ${y+8}Z" fill="#8a3dff" opacity=".85"/>`).join('');
+ return'';}
 ART.leviathan={svg:f=>levSvg(0,f)};ART.leviathan_aw={svg:f=>levSvg(1,f),awk:1,awc:AWTINT.water};
-const AURA={fire:['#ff4d1f','#ffb03d'],water:['#1f8fff','#3de0d0'],wind:['#2fd16b','#f5e663'],light:['#ffffff','#ffd166'],dark:['#8a3dff','#12041f']};
+// v1.5.0 element versions of Leviathan: own palette + body width, spike shape, tail end, head crest, wings/chains, marks and base
+const LEVV={
+ leviathan_fire:{awt:'#ffd166',sp:'flame',tl:'flame',hd:'fire',mk:'cracks',base:'lava',pal:{rim:'#ffb03d',tip:'#fff0a0',body:['#c9301a','#4a0e06'],fin:['#ff8a2e','#7a1a08'],scale:'#2a0602',belly:'#ffd08a',eye:'#ffffff',glow:'#ff8a2e',w:48,hs:1.6,spike:30,step:.07}},
+ leviathan_wind:{awt:'#d6ff8a',sp:'feather',tl:'fan',hd:'wind',mk:'swirl',wing:'fin',base:'cloud',pal:{rim:'#e8fff0',tip:'#ffffff',body:['#5fbf8a','#1f5a42'],fin:['#e8fff8','#3a8a62'],scale:'#2f7a52',belly:'#e8fff0',eye:'#ffe27a',glow:'#c9ffe0',w:32,hs:1.45,spike:40,step:.055}},
+ leviathan_heaven:{awt:'#fff3b0',sp:'round',tl:'plume',hd:'heaven',mk:'bands',wing:'angel',base:'cloudgold',pal:{rim:'#ffe9a0',tip:'#ffffff',body:['#f4ead0','#c9a86a'],fin:['#ffd65a','#a8801a'],scale:'#c9a86a',belly:'#ffffff',eye:'#3d6ad6',glow:'#fff3b0',w:40,hs:1.55,spike:14,step:.085}},
+ leviathan_hell:{awt:'#ff7ae0',sp:'barb',tl:'spade',hd:'hell',mk:'runes',chain:1,base:'hellfire',pal:{rim:'#ff3d6e',tip:'#ffb0c4',body:['#3a1430','#0e030c'],fin:['#8a1a3a','#2a0612'],scale:'#ff3d6e',belly:'#5a1a4a',eye:'#ff3d6e',glow:'#ff3d6e',w:42,hs:1.6,spike:36,step:.06}}};
+for(const id in LEVV){ART[id]={svg:f=>levSvg(0,f,LEVV[id])};ART[id+'_aw']={svg:f=>levSvg(1,f,LEVV[id]),awk:1,awc:LEVV[id].awt};}
+const AURA={fire:['#ff4d1f','#ffb03d'],water:['#1f8fff','#3de0d0'],wind:['#2fd16b','#f5e663'],heaven:['#ffffff','#ffd166'],hell:['#8a3dff','#12041f']};elAlias(AURA);
 function mixc(a,b,t){const p=x=>[1,3,5].map(i=>parseInt(x.substr(i,2),16));const A=p(a),B2=p(b);return'#'+A.map((v,i)=>Math.round(v+(B2[i]-v)*t).toString(16).padStart(2,'0')).join('');}
 const SPR={c:{}};
 function sprSrc(id,face){const k=id+'|'+(face||'idle')+(ART[id]&&ART[id].svg&&SPR.still?'|s':'');return SPR.c[k]||(SPR.c[k]='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(sprSvg(id,face||'idle')));}
@@ -1595,7 +1776,7 @@ function sprSvg(id,face){if(ART[id]&&ART[id].svg)return ART[id].svg(face);
   glow=`<ellipse cx="60" cy="${hy+18}" rx="58" ry="62" fill="url(#aw)" opacity="${ch||atk?.95:.75}"/>`;
   if(!a.rb)front+=[[14,26,3.2],[106,34,2.8],[102,98,2.4],[12,90,2.2],[88,2,2]].map(([x,y,r],i)=>`<path d="M${x} ${y-r*2} L${x+r*.45} ${y-r*.45} L${x+r*2} ${y} L${x+r*.45} ${y+r*.45} L${x} ${y+r*2} L${x-r*.45} ${y+r*.45} L${x-r*2} ${y} L${x-r*.45} ${y-r*.45}Z" fill="${i%2?'#ffffff':a.awc}"/>`).join('');}
  const content=glow+back+body+ears+head+top+faceS+front;
- return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -12 120 128">${defs}${boss?`<g transform="translate(60 112) scale(1.04) translate(-60 -112)">${content}</g>`:content}</svg>`;}
+ return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -12 120 128">${defs}${a.ovk||''}${boss?`<g transform="translate(60 112) scale(1.04) translate(-60 -112)">${content}</g>`:content}${a.ovf||''}</svg>`;}
 
 /* ---------- custom sprites (ART[id].svg) ---------- */
 SPR.still=false; // set at init / LITE toggle / reduced-motion: drops the in-SVG idle animation
@@ -1803,7 +1984,7 @@ function migrate(){ // home for future update migrations
  // unique monsters: one per save (dedupe imported/edited saves), natural stars, permanently locked
  const my=S.mons.filter(m=>MD[m.id].uniq);if(my.length){const keep=new Set();my.slice().sort((a,b)=>b.lvl-a.lvl).forEach(m=>{if(keep.has(m.id))S.mons=S.mons.filter(x=>x!==m);else{keep.add(m.id);m.lock=true;m.stars=MD[m.id].rar;}});}
  if(!Array.isArray(S.mail))S.mail=[];if(!S.mailGot||typeof S.mailGot!=='object')S.mailGot={};if(!S.redeemed||typeof S.redeemed!=='object')S.redeemed={};
- deliverMail('welcome-v130');shopState();essState(); // v1.4.2 shop state (purchases, pass, age gate)
+ deliverMail('welcome-v130');shopState();migrateV150();essState(); // v1.4.2 shop state (purchases, pass, age gate)
  S.team=S.team.filter(u=>S.mons.some(m=>m.uid===u)).slice(0,4);
  runeSanity();}
 
@@ -1813,7 +1994,7 @@ function addMon(id,stars,lvl){const d=MD[id];if(d.uniq&&S.mons.some(m=>m.id===id
 const monByUid=u=>S.mons.find(m=>m.uid===u);
 const maxLvl=m=>m.stars*10;
 const xpNeed=l=>Math.floor(25+l*l*1.2+l*10);
-const dexCount=()=>DEXREQ.filter(d=>S.dex[d.id]).length;
+const dexCount=()=>DEXREQ.filter(d=>S.dex[d.id]||lineOf(d.id).some(v=>S.dex[v.id])).length; // v1.5.0: a line counts once any of its versions is found
 function addXp(m,x){const b=m.lvl;if(m.lvl>=maxLvl(m))return 0;m.xp+=x;while(m.lvl<maxLvl(m)&&m.xp>=xpNeed(m.lvl)){m.xp-=xpNeed(m.lvl);m.lvl++;}if(m.lvl>=maxLvl(m))m.xp=0;return m.lvl-b;}
 function baseStats(id,lvl,stars){const d=MD[id];const g=1+0.07*(lvl-1),sm=1+0.12*(stars-d.rar);
  return{hp:Math.round(d.hp*g*sm*SCALE.hp),atk:Math.round(d.atk*g*sm*SCALE.atk),def:Math.round(d.def*g*sm*SCALE.def),spd:d.spd+(stars-d.rar)*2+Math.floor(lvl/10),cr:d.cr,cd:d.cdm,res:15,acc:0};}
@@ -1825,6 +2006,10 @@ function monStats(m){const b=baseStats(m.id,m.lvl,m.stars);if(m.aw&&canAwaken(m.
 function power(m){const t=monStats(m).t;return Math.round(t.hp/8+t.atk*2+t.def*1.2+t.spd*3+t.cr*4+t.cd*2+t.res+t.acc);}
 function removeMon(uid){const m=monByUid(uid);if(!m||MD[m.id].uniq)return;(m.ru||[]).forEach(u=>{const r=runeByUid(u);if(r)r.on=0;});S.mons=S.mons.filter(x=>x.uid!==uid);S.team=S.team.filter(u=>u!==uid);}
 /* =================== v1.4.4 AWAKENING =================== */
+// v1.5.0: Light -> Heaven, Dark -> Hell. Element-keyed save data (essences) moves to the new keys; safe to run any number of times.
+function migrateV150(){if(S.ess&&typeof S.ess==='object')for(const o in EL_REN){if(!Object.prototype.hasOwnProperty.call(S.ess,o))continue;const v=S.ess[o],n=EL_REN[o],w=S.ess[n];
+  if(Array.isArray(v))S.ess[n]=[0,1,2].map(i=>Math.max(0,(Array.isArray(w)?w[i]|0:0)+(v[i]|0)));delete S.ess[o];}
+ S.elv=2;}
 function essState(){if(!S.ess||typeof S.ess!=='object')S.ess={};for(const e in ELEM){const v=S.ess[e];S.ess[e]=Array.isArray(v)?[0,1,2].map(i=>Math.max(0,v[i]|0)):[0,0,0];}return S.ess;}
 const artId=m=>m&&m.aw&&canAwaken(m.id)?m.id+'_aw':m.id;
 const monName=m=>m&&m.aw&&canAwaken(m.id)?AWK[m.id].n:MD[m.id].n;
@@ -2020,8 +2205,14 @@ function renderMonsters(){const sub=UI.monSub;
   <div class="mgrid">${sortedMons(S.mons).map(m=>monCard(m,`openMon(${m.uid})`)).join('')}</div>`;}
  else if(sub==='runes'){h+=runeInvHtml();}
  else{h+=`<div class="card"><p class="mut">Discovered <b>${dexCount()}/${DEXREQ.length}</b> monsters. Summon or obtain monsters to fill in the Monsterpedia!</p><div class="prog" style="margin-top:6px"><i style="width:${dexCount()/DEXREQ.length*100}%"></i></div></div>
-  <div class="mgrid">${DEXLIST.slice().sort((a,b)=>a.rar-b.rar||Object.keys(ELEM).indexOf(a.el)-Object.keys(ELEM).indexOf(b.el)).map(d=>S.dex[d.id]?`<div class="mc r${d.rar} el-${d.el} ${d.th?d.th.cls:''}" onclick="openDex('${d.id}')">${avHtml(d.id,0,'',d.rar)}${starsHtml(d.rar)}<div class="nm">${d.n}</div></div>`:`<div class="mc r${d.rar}" onclick="toast('Not discovered yet! Keep summoning. 🌀')"><div class="av pf unknown ${frc(d.rar)}">${sprImg(d.id)}</div>${starsHtml(d.rar)}<div class="nm">???</div></div>`).join('')}</div>`;}
+  ${dexLinesHtml()}`;}
  return h;}
+// v1.5.0 Monsterpedia: one row per monster line with 5 element slots (Fire, Water, Wind, Heaven, Hell)
+function dexCardHtml(d){return S.dex[d.id]?`<div class="mc r${d.rar} el-${d.el} ${d.th?d.th.cls:''}" data-id="${d.id}" onclick="openDex('${d.id}')">${avHtml(d.id,0,'',d.rar)}${starsHtml(d.rar)}<div class="nm">${d.n}</div></div>`:`<div class="mc r${d.rar}" data-id="${d.id}" onclick="toast('Not discovered yet! Keep summoning. 🌀')"><div class="av pf unknown ${frc(d.rar)}">${sprImg(d.id)}</div>${starsHtml(d.rar)}<div class="nm">???</div></div>`;}
+function dexLinesHtml(){const ek=Object.keys(ELEM),lines=LINES.slice().sort((a,b)=>MD[a].rar-MD[b].rar||ek.indexOf(MD[a].el)-ek.indexOf(MD[b].el));
+ const rest=DEXLIST.filter(d=>!d.vof&&!LINES.includes(d.id)).sort((a,b)=>a.rar-b.rar);
+ return lines.map(l=>{const vs=lineOf(l);const got=vs.filter(d=>S.dex[d.id]).length;return`<div class="dexline" data-line="${l}"><div class="dlh">${S.dex[l]||got?MD[l].n:'???'} line <span class="mut">${got}/${vs.length} found</span></div><div class="dlg">${ek.map(e=>{const d=vs.find(x=>x.el===e);return d?dexCardHtml(d):`<div class="mc soon el-${e}"><div class="soonx">${ELEM[e].i}</div><div class="nm">Coming soon</div></div>`;}).join('')}</div></div>`;}).join('')
+  +(rest.length?`<div class="dexline"><div class="dlh">Others</div><div class="mgrid">${rest.map(dexCardHtml).join('')}</div></div>`:'');}
 function pasHtml(p){return`<div class="skill pas"><b>${p.i} ${p.n}</b><span class="cdtag pt">Passive</span><br>${p.d}</div>`;}
 function skillHtml(sk){const tgt={e:'Single enemy',ae:'All enemies',a:'Single ally',aa:'All allies',s:'Self'}[sk.t];return`<div class="skill"><b>${sk.i} ${sk.n}</b>${sk.every?'<span class="cdtag">♾️ Every turn</span>':sk.cd?`<span class="cdtag">⏳ Cooldown ${sk.cd}</span>`:'<span class="cdtag">Basic</span>'}<br>${sk.d}<br><span class="mut">🎯 ${tgt}${sk.fx.length?' · '+sk.fx.map(f=>FX[f[0]].i+' '+FX[f[0]].n).join(', '):''}</span></div>`;}
 function openDex(id){const d=MD[id];const b=baseStats(id,1,d.rar);
@@ -2151,7 +2342,7 @@ function doImport(){try{const d=JSON.parse(decodeURIComponent(escape(atob($('#im
 
 /* =================== BATTLE TEXT (neutral defaults; content packs may override) =================== */
 const TX={taken:'⛓️ Bound',takenTip:'Bound: can never be revived',takenInfo:'⛓️ Bound: cannot be revived',noRevive:'Bound: cannot revive',
- extra:'Extra turn!',extraMsg:u=>`${spi(u.id)} ${u.n} acts again!`,revived:'Revived! ✨',reviveMsg:(s,t)=>`${spi(t.id)} ${t.n} rises again at 50% HP!`,
+ execute:'💀 Low HP: +50%',atbBack:v=>`⏪ ATB -${v}%`,atbUp:v=>`⏩ ATB +${v}%`,extra:'Extra turn!',extraMsg:u=>`${spi(u.id)} ${u.n} acts again!`,revived:'Revived! ✨',reviveMsg:(s,t)=>`${spi(t.id)} ${t.n} rises again at 50% HP!`,
  ampOn:'Empowered!',ampOff:'Power fades',ampIcon:'✨',ampTip:'Empowered',ampDesc:'Empowered',ampInfo:u=>'Empowered'};
 
 /* =================== SEALED CONTENT (v1.3.2) ===================
@@ -2601,7 +2792,7 @@ let B=null;
 function later(fn,ms){const b=B;if(!b)return;const run=()=>{if(B!==b||b.closed)return;if(document.hidden){(b.pq=b.pq||[]).push(run);return;}fn();};setTimeout(run,ms/b.speed);}
 function mkUnit(side,spec){const d=MD[spec.id];const ms=spec.m?monStats(spec.m):null;const st=ms?ms.t:baseStats(spec.id,spec.lvl,spec.stars);const bs=ms?ms.b:{...st};const fx=ms?ms.fx:{};
  const awk=!!(spec.m&&spec.m.aw&&canAwaken(spec.id));
- const u={bid:++B.uc,side,id:spec.id,n:awk?AWK[spec.id].n:d.n,art:awk?spec.id+'_aw':spec.id,awk,awg:awk&&(!AWK[spec.id].sk||!!AWK[spec.id].g),e:d.e,el:d.el,lvl:spec.m?spec.m.lvl:spec.lvl,stars:spec.m?spec.m.stars:spec.stars,boss:!!spec.boss,m:spec.m||null,
+ const u={bid:++B.uc,side,id:spec.id,n:awk?AWK[spec.id].n:d.n,art:awk?spec.id+'_aw':spec.id,awk,awg:awk&&(!AWK[spec.id].sk||!!AWK[spec.id].g),e:d.e,el:elKey(d.el),lvl:spec.m?spec.m.lvl:spec.lvl,stars:spec.m?spec.m.stars:spec.stars,boss:!!spec.boss,m:spec.m||null,
   hp:st.hp,atk:st.atk,def:st.def,spd:st.spd,cr:st.cr,cd:st.cd,res:st.res,acc:st.acc,b:bs,violent:!!fx.violent,vamp:!!fx.vampire,despair:!!fx.despair,will:!!fx.will,atb:Math.random()*20,fx:[],cds:d.skills.map(()=>0),skills:d.skills,
   uniq:!!d.uniq,th:d.th||null,glow:!!(d.passives||[]).some(p=>p.k==='glow'),sl:spec.m?(spec.m.sl||0):0,amp:!!(d.passives||[]).some(p=>p.k==='amp'),reap:!!(d.passives||[]).some(p=>p.k==='reap'),first:!!(d.passives||[]).some(p=>p.first),owed:0,chain:0,ign:d.ignDef||0}; // ign = fraction of the target's CURRENT DEF ignored (1 = 100%, buffs included)
  if(spec.em){u.hp=Math.round(u.hp*spec.em[0]);u.atk=Math.round(u.atk*spec.em[1]);u.def=Math.round(u.def*spec.em[2]);} // v1.4 content: enemy stat multipliers
@@ -2755,7 +2946,7 @@ function startTurn(u){B.tn=(B.tn||0)+1;if(B.tn>TURN_CAP&&!B.over){B.timeUp=1;ban
  setCam(u);hopAnim(u);
  if(u.side==='p'&&!B.auto){B.awaiting=true;B.sel=0;setMsg(`${spi(u.id)} ${u.n}'s turn!`);renderBattle();return;}
  later(()=>aiAct(u),u.side==='p'?350:600);}
-function endTurn(u){if(!B||B.over)return;u.atb=0;if(u.glow)glowPulse(u);
+function endTurn(u){if(!B||B.over)return;u.atb=u._ga||0;u._ga=0;if(u.glow)glowPulse(u);
  if(!u.bonus){u.fx.forEach(f=>{if(f.fresh)f.fresh=false;else f.t--;});u.fx=u.fx.filter(f=>f.t>0);} // a bonus turn is "free": buffs don't tick
  const wasBonus=u.bonus;u.bonus=false;B.awaiting=false;B.actor=null;const h=B.reap;B.reap=null;renderBattle();
  // v1.3.4 'reap': every action that kills earns exactly ONE extra turn (however many it kills), normal or extra turn alike.
@@ -2811,18 +3002,28 @@ function skillMotion(u,sk,tgt){const rc=(SKVFX[sk.n]||[]).map(r=>r[0]),off=sk.m>
  if(t&&rc.includes('dive'))leapAnim(u,t);else if(t&&off&&rc.some(k=>k==='slash'||k==='bite'||k==='bonk')&&!rc.includes('proj')&&!rc.includes('beam'))dashAnim(u,t,sk.h);else castAnim(u,!off);}
 function resolveSkill(u,sk,tgt){const foes=foesOf(u),friends=friendsOf(u);
  if(!sk.selfAfter)(sk.self||[]).forEach(([id,t])=>addFx(u,u,id,t,100)); // selfAfter: self-buff lands after the damage
+ if(sk.selfHeal&&u.hp>0)heal(u,Math.round(u.maxHp*sk.selfHeal)); // v1.5.0
+ if(sk.post&&sk.post.pre)postFx(u,sk);
  let targets;if(sk.t==='e')targets=[tgt&&tgt.hp>0&&tgt.side!==u.side?tgt:foes[0]];else if(sk.t==='ae')targets=foes;else if(sk.t==='a')targets=[tgt&&tgt.hp>0&&tgt.side===u.side?tgt:u];else if(sk.t==='aa')targets=friends;else targets=[u];
  targets=targets.filter(Boolean);const off=sk.t==='e'||sk.t==='ae';
  if(sk.t==='ae'&&sk.m>0)flashField(ELEM[u.el].c);if(!off&&sk.heal)sfx('heal');else if(!off)sfx('buff');
  let total=0;
- targets.forEach(t=>{if(off&&sk.m>0){for(let h=0;h<sk.h;h++){if(t.hp<=0)break;total+=strike(u,t,sk,h);}}
+ if(sk.rnd){for(let i=0;i<sk.rnd;i++){const al=foes.filter(f=>f.hp>0);if(!al.length)break;const t=pick(al);total+=strike(u,t,sk,i%4);(sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,ch);});}targets=[];} // v1.5.0: hits on random enemies
+ targets.forEach(t=>{if(off&&sk.m>0){for(let h=0;h<sk.h;h++){if(t.hp<=0)break;total+=strike(u,t,sk,h);if(sk.fxh&&t.hp>0)(sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,sk.upFx?upCh(u,sk,ch):ch);});}}
   if(t.hp>0){if(sk.heal)heal(t,Math.round((sk.hb?u.maxHp:t.maxHp)*healPct(u,sk)));if(sk.hb&&u.awk&&!sk.cleanse){const i=t.fx.findIndex(f=>!FX[f.id].buff);if(i>=0){t.fx.splice(i,1);float(t,'Cleansed ✨','info',1);}}if(sk.cleanse){const n=t.fx.length;t.fx=t.fx.filter(f=>FX[f.id].buff);if(t.fx.length<n)float(t,'Cleansed ✨','info',1);}
-   (sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,sk.upFx?upCh(u,sk,ch):ch);});if(sk.awAtb&&u.awk&&t.hp>0&&t.side!==u.side)t.atb=Math.max(0,t.atb-sk.awAtb);if(sk.atb&&t!==u)t.atb=Math.min(100,t.atb+sk.atb);}});
- if(sk.tail&&u.hp>0){const al=foes.filter(f=>f.hp>0);if(al.length){const t2=al.reduce((a,b)=>b.hp<a.hp?b:a);B.lastTail=t2.bid;total+=strike(u,t2,Object.assign({},sk,{m:sk.tail.m}),1);if(t2.hp>0)addFx(u,t2,'stun',1,upCh(u,sk,sk.tail.st));}}
+   if(!sk.fxh)(sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,sk.upFx?upCh(u,sk,ch):ch);});if(sk.awAtb&&u.awk&&t.hp>0&&t.side!==u.side)t.atb=Math.max(0,t.atb-sk.awAtb);if(sk.atb&&t!==u)t.atb=Math.min(100,t.atb+sk.atb);}});
+ if(sk.tail&&u.hp>0){const al=foes.filter(f=>f.hp>0);if(al.length){const T=sk.tail,t2=al.reduce((a,b)=>b.hp<a.hp?b:a);B.lastTail=t2.bid;const lb=!!(T.lowB&&t2.hp<t2.maxHp*.5);if(lb)float(t2,TX.execute,'crim',2);total+=strike(u,t2,Object.assign({},sk,{m:T.m*(lb?1+T.lowB:1),debB:0}),1);
+  if(t2.hp>0){if(T.st!=null)addFx(u,t2,'stun',1,upCh(u,sk,T.st));if(T.fx)addFx(u,t2,T.fx[0],T.fx[1],upCh(u,sk,T.fx[2]));if(T.push){const pv=upCh(u,sk,T.push);t2.atb=Math.max(0,t2.atb-pv);float(t2,TX.atbBack(pv),'info',2);}}}}
+ if(sk.healLow&&u.hp>0){const fr=friendsOf(u).filter(f=>f.hp>0&&!f.tk);if(fr.length){const w=fr.reduce((a,b)=>b.hp/b.maxHp<a.hp/a.maxHp?b:a);heal(w,Math.round(w.maxHp*sk.healLow));}}
+ if(sk.post&&!sk.post.pre&&u.hp>0)postFx(u,sk);
+ if(sk.ga){u._ga=sk.ga;float(u,TX.atbUp(sk.ga),'info',2);}
  if(sk.drain&&total>0&&u.hp>0)heal(u,Math.round(total*sk.drain));
  if(sk.selfAfter&&u.hp>0)(sk.self||[]).forEach(([id,t])=>addFx(u,u,id,t,100));}
+// v1.5.0: 'post' = effect on every living ally after (or before, pre:1) the attack: heal (hb: % of caster's max HP; skill-ups via sk.up), cl: remove 1 harmful effect, fx: buffs
+function postFx(u,sk){const P=sk.post;friendsOf(u).filter(f=>f.hp>0&&!f.tk).forEach(f=>{if(P.heal){const n=sk.upFx?0:Math.min(u.sl||0,(sk.up||[]).length);const pc=(n>0?sk.up[n-1]:P.heal)+(u.awg&&!P.hb?0.05:0);heal(f,Math.round((P.hb?u.maxHp:f.maxHp)*pc));}
+ if(P.cl){const i=f.fx.findIndex(x=>!FX[x.id].buff);if(i>=0){f.fx.splice(i,1);float(f,'Cleansed ✨','info',1);}}(P.fx||[]).forEach(([id,t])=>addFx(u,f,id,t,100));});}
 function strike(u,t,sk,h){const em=elemMod(u.el,t.el);const cr=Math.min(100,eff(u,'cr')+(em>0?15:em<0?-15:0));const glance=em<0&&Math.random()<0.3;const crit=!glance&&Math.random()*100<cr;
- const stat=sk.sc==='def'?eff(u,'def')*1.8*SCALE.atk/SCALE.def:eff(u,'atk');const tdef=eff(t,'def')*(1-Math.min(1,u.ign||0));let d=stat*sk.m*DMG_C*(DMG_K/(DMG_K+tdef));
+ const stat=sk.sc==='def'?eff(u,'def')*1.8*SCALE.atk/SCALE.def:eff(u,'atk');const tdef=eff(t,'def')*(1-Math.min(1,u.ign||0));let d=stat*sk.m*DMG_C*(DMG_K/(DMG_K+tdef));if(sk.debB&&t.fx.some(f=>!FX[f.id].buff))d*=1+sk.debB; // v1.5.0: bonus vs a target with a harmful effect
  if(em>0)d*=1.3;else if(em<0)d*=0.85;if(crit)d*=1+eff(u,'cd')/100;if(glance)d*=0.7;d*=0.95+Math.random()*0.1;d=Math.max(1,Math.round(d));
  hurt(t,d,u);float(t,(crit?'💥':'')+fmt(d)+(crit?'!':''),(crit?'crit':glance?'glance':'dmg')+' x-'+u.el,h);
  if(u.vamp&&u.hp>0)heal(u,Math.round(d*0.35)); // Vampire set
