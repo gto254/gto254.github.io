@@ -714,7 +714,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.5.2';
+const VERSION='1.5.3';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -1054,6 +1054,58 @@ MV('shellbert','heaven','Halobert',"A monk turtle who meditates for hours. Mostl
 MV('shellbert','hell','Gloombert',"His shell grew spikes during a very bad week. The week ended. The spikes stayed.",[
  SK('Shade Bonk','🐚','Bonk (1.0x). Removes 1 beneficial effect from the target.',{m:1,strip:1}),
  SK('Leech Shell','🕸️','Bonks (1.5x) and heals itself for 35% of the damage dealt.',{cd:3,m:1.5,drain:.35})]);
+// =========== v1.5.3 ELEMENT VERSIONS (batch 4: Tidesinger, Tentacular, Leviadrift lines; same skill count + cooldowns as each original) ===========
+// Tidesinger line (note / cd-3 team song / cd-5 chorus + leader skill)
+MV('tidesinger','fire','Kindletta',"A mermaid who sings so hot the sea around her simmers. Her fans bring towels. And sunscreen.",[
+ SK('Ember Note','🎵','Hit (1.1x). 35% chance to Burn for 2 turns.',{m:1.1,fx:[['dot',2,35]]}),
+ SK('Blaze Shanty','🎺','All allies gain ATK Up for 2 turns.',{cd:3,t:'aa',m:0,fx:[['atkUp',2,100]]}),
+ SK('Bonfire Chorus','🔥','ALL enemies (1.2x). 50% chance of DEF Break for 2 turns.',{cd:5,t:'ae',m:1.2,fx:[['defBreak',2,50]]})],LD('atk',25));
+MV('tidesinger','wind','Gustetta',"A harpy-mermaid who sings from the clouds. Nobody knows the words. Everybody hums along anyway.",[
+ SK('Breeze Note','🎵','Hit (1.1x). Gains +20% ATB.',{m:1.1,ga:20}),
+ SK('Tailwind Shanty','🪁','All allies gain SPD Up for 2 turns.',{cd:3,t:'aa',m:0,fx:[['spdUp',2,100]]}),
+ SK('Whirlwind Chorus','🌬️','ALL enemies (1.0x). Pushes every enemy\'s ATB back 20%, then all allies gain +20% ATB.',{cd:5,t:'ae',m:1,push:20,post:{atb:20}})],LD('spd',15));
+MV('tidesinger','heaven','Hymnetta',"Leads a choir of one. Insists it is a full choir. Has a very loud echo.",[
+ SK('Psalm Note','🎵','Hit (1.1x). Heals the ally with the lowest HP for 8% of max HP.',{m:1.1,healLow:.08}),
+ SK('Vesper Shanty','🕊️','All allies gain Regen for 2 turns.',{cd:3,t:'aa',m:0,fx:[['regen',2,100]]}),
+ SK('Choir of Dawn','🔔','ALL enemies (1.0x), then all allies gain Immunity for 2 turns.',{cd:5,t:'ae',m:1,post:{fx:[['immune',2]]}})],LD('def',25));
+MV('tidesinger','hell','Dirgetta',"Only sings sad songs. Takes requests, as long as the request is a sad song.",[
+ SK('Hex Note','🎵','Hit (1.1x). Removes 1 beneficial effect from the target.',{m:1.1,strip:1}),
+ SK('Lament Shanty','🥀','ALL enemies (0.8x). 45% chance of ATK Break for 2 turns.',{cd:3,t:'ae',m:.8,fx:[['atkDown',2,45]]}),
+ SK('Requiem Chorus','💀','ALL enemies (1.3x). +40% damage to each enemy below 50% HP.',{cd:5,t:'ae',m:1.3,lowB:.4})],LD('cr',11));
+// Tentacular line (ink / cd-3 eight slaps / cd-4 crushing grip + leader skill)
+MV('tentacular','fire','Scorchtopus',"An octopus living in a volcano. It has eight arms and zero oven mitts.",[
+ SK('Cinder Ink','🖋️','Hit (1.1x). 40% chance to Burn for 2 turns.',{m:1.1,fx:[['dot',2,40]]}),
+ SK('Scorch Slap','🔥','Eight burning slaps (0.36x each). Each slap 12% chance of DEF Break for 2 turns.',{cd:3,m:.36,h:8,fx:[['defBreak',2,12]],fxh:1}),
+ SK('Furnace Grip','🌋','Crushing grip (2.4x). Ignores 30% of the target\'s DEF.',{cd:4,m:2.4,ign:.3})],LD('atk',25));
+MV('tentacular','wind','Gustopus',"Floats around like a balloon. Got stuck in a tree twice. Calls it 'scouting'.",[
+ SK('Squall Ink','🖋️','Hit (1.1x). Pushes the target\'s ATB back 15%.',{m:1.1,push:15}),
+ SK('Whirl Slap','🌪️','Eight slaps on random enemies (0.36x each).',{cd:3,t:'ae',m:.36,rnd:8}),
+ SK('Updraft Grip','🌬️','Crushing grip (2.4x). If it defeats the target, gains another turn.',{cd:4,m:2.4,kx:1})],LD('spd',15));
+MV('tentacular','heaven','Haloctopus',"Wears a gold ring on every arm. Says they are all wedding rings. It is married to the sea.",[
+ SK('Halo Ink','🖋️','Hit (1.1x). Heals the ally with the lowest HP for 8% of max HP.',{m:1.1,healLow:.08}),
+ SK('Blessed Slap','✨','Eight slaps (0.34x each), then all allies gain DEF Up for 1 turn.',{cd:3,m:.34,h:8,post:{fx:[['defUp',1]]}}),
+ SK('Aurora Grip','☀️','Crushing grip (2.4x). Damage scales with DEF.',{cd:4,m:2.4,sc:'def'})],LD('def',25));
+MV('tentacular','hell','Gloomtopus',"Has more eyes than it needs and uses all of them to glare at you.",[
+ SK('Gloom Ink','🖋️','Hit (1.1x). Removes 1 beneficial effect from the target.',{m:1.1,strip:1}),
+ SK('Leech Slap','🦑','Eight slaps (0.36x each). Heals itself for 25% of the damage dealt.',{cd:3,m:.36,h:8,drain:.25}),
+ SK('Dread Grip','🕳️','Crushing grip (2.5x). +50% damage if the target has a harmful effect.',{cd:4,m:2.5,debB:.5})],LD('cr',11));
+// Leviadrift line (splash / cd-4 wave / cd-4 team mercy + leader skill)
+MV('leviadrift','fire','Kilndrift',"A whale that swims through lava. Its spout makes excellent toast for anyone brave enough.",[
+ SK('Magma Splash','💦','Hit (1.3x). 30% chance to Burn for 2 turns.',{m:1.3,fx:[['dot',2,30]]}),
+ SK('Cinder Wave','🌋','ALL enemies (1.4x). 50% chance of DEF Break for 2 turns.',{cd:4,t:'ae',m:1.4,fx:[['defBreak',2,50]]}),
+ SK('Kindle Mercy','🔥','All allies gain ATK Up and DEF Up for 2 turns.',{cd:4,t:'aa',m:0,fx:[['atkUp',2,100],['defUp',2,100]]})],LD('atk',33));
+MV('leviadrift','wind','Squalldrift',"A whale that swims through the sky. Birds keep asking for directions. It always says 'up'.",[
+ SK('Zephyr Splash','💦','Hit (1.3x). Gains +20% ATB.',{m:1.3,ga:20}),
+ SK('Tempest Wave','🌪️','ALL enemies (1.3x). Pushes every enemy\'s ATB back 25%.',{cd:4,t:'ae',m:1.3,push:25}),
+ SK('Sky Mercy','🍃','All allies gain SPD Up for 2 turns and +20% ATB.',{cd:4,t:'aa',m:0,fx:[['spdUp',2,100]],post:{atb:20}})],LD('spd',20));
+MV('leviadrift','heaven','Hallowdrift',"A gentle whale with a halo. Lost sailors follow its glow home. It charges nothing. It does accept fish.",[
+ SK('Seraph Splash','💦','Hit (1.3x). Heals the ally with the lowest HP for 10% of max HP.',{m:1.3,healLow:.1}),
+ SK('Halo Wave','🌅','ALL enemies (1.3x). 35% chance to Stun for 1 turn.',{cd:4,t:'ae',m:1.3,fx:[['stun',1,35]]}),
+ SK('Solar Mercy','🕊️','Removes all harmful effects from all allies and grants Immunity for 2 turns.',{cd:4,t:'aa',m:0,cleanse:1,fx:[['immune',2,100]]})],LD('def',33));
+MV('leviadrift','hell','Umbradrift',"A whale from the deepest, darkest trench. Still gentle. Still hates being called 'chonky'. Hates it more now.",[
+ SK('Brimstone Splash','💦','Hit (1.3x). Removes 1 beneficial effect from the target.',{m:1.3,strip:1}),
+ SK('Curse Wave','🌑','ALL enemies (1.4x). 50% chance of ATK Break for 2 turns.',{cd:4,t:'ae',m:1.4,fx:[['atkDown',2,50]]}),
+ SK('Shade Mercy','🖤','ALL enemies (1.0x). Heals itself for 30% of the damage dealt.',{cd:4,t:'ae',m:1,drain:.3})],LD('cr',15));
 const SUMMONABLE=Object.values(MD).filter(d=>!d.boss&&!d.fodder&&!d.uniq);
 const DEXLIST=Object.values(MD).filter(d=>!d.boss);
 /* ---------- v1.4.4 AWAKENING (Summoners War style, once per monster; unique monsters are never awakenable) ----------
@@ -1106,6 +1158,14 @@ Object.assign(AWK,{
  magmander_heaven:{n:'Aurumdrake',b:['res',20],x:{wings:'feather',top:['tiara']}},magmander_hell:{n:'Sootdrake',b:['cr',12],x:{wings:'bat',top:['crown']},awf:['ironChains']},
  blazemane_water:{n:'Tidethrone',b:['res',20],x:{wings:'crystal',top:['crown']},awf:['bubbles']},blazemane_wind:{n:'Galethrone',b:['acc',20],x:{top:['crown']},awf:['stormHalo']},
  blazemane_heaven:{n:'Halothrone',b:['res',20],x:{wings:'feather',top:['halo']},awk2:['goldCape']},blazemane_hell:{n:'Grimthrone',b:['cr',12],x:{top:['crown']},awf:['chains','hellfire']}});
+// v1.5.3 element versions (batch 4): awakened names + looks
+Object.assign(AWK,{
+ tidesinger_fire:{n:'Cinderlune',b:['cd',20],x:{top:['crown']},awf:['embers']},tidesinger_wind:{n:'Gustlune',b:['acc',20],x:{top:['crest']},awk2:['windRing']},
+ tidesinger_heaven:{n:'Choirlune',b:['res',20],x:{top:['tiara']},awk2:['sunRays']},tidesinger_hell:{n:'Shadelune',b:['cr',12],x:{wings:'bat',top:['crown']},awf:['hellfire']},
+ tentacular_fire:{n:'Pyravira',b:['cd',20],x:{top:['crown']},awf:['embers']},tentacular_wind:{n:'Galevira',b:['acc',20],x:{top:['crest']},awk2:['windRing']},
+ tentacular_heaven:{n:'Halovira',b:['res',20],x:{top:['tiara']},awk2:['sunDisc']},tentacular_hell:{n:'Noxvira',b:['cr',12],x:{wings:'bat',top:['crown']},awf:['chains']},
+ leviadrift_fire:{n:'Magmorra',b:['cd',20],x:{top:['crown']},awf:['embers']},leviadrift_wind:{n:'Ventorra',b:['acc',20],x:{top:['crest']},awk2:['tornado']},
+ leviadrift_heaven:{n:'Solorra',b:['res',20],x:{top:['crown']},awk2:['sunRays']},leviadrift_hell:{n:'Umborra',b:['cr',12],x:{wings:'bat',top:['crown']},awf:['smoke']}});
 // v1.5.2 element versions (batch 3): awakened names + looks
 Object.assign(AWK,{
  pyrewyrm_water:{n:'Marindrax',b:['res',20],x:{wings:'crystal',top:['crown']}},pyrewyrm_wind:{n:'Zephydrax',b:['acc',20],x:{top:['crown']},awk2:['tornado']},
@@ -1263,6 +1323,9 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.5.3',date:'Oct 17, 2026',title:'🌈 Element Versions IV',sections:[
+  ['🌈 12 New Monsters',['Tidesinger, Tentacular and Leviadrift now come in all five elements. Each new version has its own name, look, skills, leader skill and awakened form, and keeps the same number of skills as the original.','🧜 Tidesinger line: Kindletta (Fire), Gustetta (Wind), Hymnetta (Heaven), Dirgetta (Hell).','🐙 Tentacular line: Scorchtopus (Fire), Gustopus (Wind), Haloctopus (Heaven), Gloomtopus (Hell).','🐋 Leviadrift line: Kilndrift (Fire), Squalldrift (Wind), Hallowdrift (Heaven), Umbradrift (Hell).','Awakened Hell versions (Shadelune, Noxvira, Umborra) have the black-with-white-trim look.','Find them in summons (see the Odds tab: your chance of each star rarity is unchanged) and fill their slots in the 📖 Monsterpedia.']],
+  ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.5.2',date:'Oct 17, 2026',title:'🌈 Element Versions III',sections:[
   ['🌈 12 New Monsters',['Pyrewyrm, Bubblefin and Shellbert now come in all five elements. Each new version has its own name, look, skills and awakened form, and keeps the same number of skills as the original.','🐉 Pyrewyrm line: Undawyrm (Water), Zephwyrm (Wind), Haloverm (Heaven), Scornwyrm (Hell), each with its own leader skill.','🐟 Bubblefin line: Fizzlefin (Fire), Flitfin (Wind), Glimfin (Heaven), Grimfin (Hell).','🐢 Shellbert line: Kilnbert (Fire), Breezebert (Wind), Halobert (Heaven), Gloombert (Hell).','Find them in summons (see the Odds tab: your chance of each star rarity is unchanged) and fill their slots in the 📖 Monsterpedia.']],
   ['🔱 Awakened Hell Look',['Every awakened Hell version now has a darker look: mostly black with white trim, keeping its own horns, wings, crowns and other parts. That\'s Vorathrax, Nocthorne, Hexkitsu, Hexlume, Sootdrake, Grimthrone, Gravedrax, Nightquin and Sir Shadewick.']],
@@ -1417,6 +1480,43 @@ const PATCHES=[
    Common options: c/c2 colors (#rrggbb), g emoji, n count, sz size, d delay(ms), on:'self'. */
 const HIT=280; // ms from skill start to impact (matches the wind-up in useSkill)
 const SKVFX={
+ // v1.5.3 element versions (batch 4)
+ 'Ember Note':[['notes',{c:'#ff6b3d',n:3}],['burst',{c:'#ffd166',c2:'#ff6b3d',rays:6,r:1.4,st:HIT+20}]],
+ 'Blaze Shanty':[['notes',{c:'#ff6b3d',n:2,heal:1,gl:['🎺','🔥']}],['aura',{c:'#ff6b3d',c2:'#ffd166',g:'⚔️',st:HIT}]],
+ 'Bonfire Chorus':[['notes',{c:'#ff5a1f',n:4}],['rain',{c:'#ff5a1f',up:1,st:HIT,len:420,rate:.6,sz:6}],['quake',{c:'#ff6b3d',px:5}]],
+ 'Breeze Note':[['notes',{c:'#3fd17f',n:3}],['aura',{on:'self',c:'#c9ffe0',c2:'#3fd17f',g:'💨',st:HIT}]],
+ 'Tailwind Shanty':[['notes',{c:'#3fd17f',n:2,heal:1,gl:['🪁','💨']}],['ring',{c:'#c9ffe0',c2:'#3fd17f',plus:'💨',flat:1,st:HIT}]],
+ 'Whirlwind Chorus':[['notes',{c:'#3fd17f',n:4}],['tornado',{c:'#c9ffe0',c2:'#ffffff',h:2.4,st:HIT}]],
+ 'Psalm Note':[['notes',{c:'#ffe27a',n:3}],['ring',{c:'#7cff9e',c2:'#ffe27a',plus:'💚',st:HIT,flat:1}]],
+ 'Vesper Shanty':[['notes',{c:'#ffe27a',n:2,heal:1,gl:['🕊️','💚']}],['ring',{c:'#7cff9e',c2:'#ffe27a',plus:'💚',st:HIT}]],
+ 'Choir of Dawn':[['notes',{c:'#ffe27a',n:4}],['burst',{c:'#ffffff',c2:'#ffe27a',rays:12,r:2.2,st:HIT}],['shield',{c:'#ffe27a',c2:'#ffffff',st:HIT+80}]],
+ 'Hex Note':[['notes',{c:'#a66bff',n:3}]],
+ 'Lament Shanty':[['notes',{c:'#8a3dff',n:4}],['rain',{c:'#8a3dff',up:1,st:HIT,len:380,rate:.5,sz:5}]],
+ 'Requiem Chorus':[['notes',{c:'#4b1fa0',n:4}],['vortex',{c:'#4b1fa0',c2:'#ff3d6e',in:1,arms:4,r:2,st:HIT}],['quake',{c:'#7a3fd1',px:7}]],
+ 'Cinder Ink':[['proj',{s:'blob',c:'#7a1a08',c2:'#ff6b3d',sz:9,arc:20}],['burst',{c:'#ffd166',c2:'#ff6b3d',rays:6,r:1.3,st:HIT+20}]],
+ 'Scorch Slap':[['slash',{n:8,gap:45,c:'#ff6b3d',c2:'#ffd166',r:.9,alt:1.3,sw:90,bn:3}]],
+ 'Furnace Grip':[['vortex',{c:'#ff5a1f',c2:'#ffd166',in:1,arms:4,r:2}],['quake',{c:'#ff6b3d',px:5}]],
+ 'Squall Ink':[['proj',{s:'blob',c:'#6aa8d0',c2:'#ffffff',sz:9,arc:30}]],
+ 'Whirl Slap':[['slash',{n:8,gap:45,c:'#3fd17f',c2:'#eaffef',r:.9,alt:1.3,sw:90,bn:3}],['tornado',{c:'#c9ffe0',c2:'#ffffff',h:1.6,d:200}]],
+ 'Updraft Grip':[['vortex',{c:'#3fd17f',c2:'#eaffef',in:1,arms:4,r:2}],['tornado',{c:'#c9ffe0',c2:'#ffffff',h:1.8,st:HIT}]],
+ 'Halo Ink':[['proj',{s:'star',c:'#ffe27a',c2:'#ffffff',sz:7,arc:24}],['ring',{c:'#7cff9e',c2:'#ffe27a',plus:'💚',st:HIT,flat:1}]],
+ 'Blessed Slap':[['slash',{n:8,gap:45,c:'#ffe27a',c2:'#ffffff',r:.9,alt:1.3,sw:90,bn:3}],['shield',{hex:1,c:'#ffe27a',c2:'#ffffff',st:HIT+300}]],
+ 'Aurora Grip':[['vortex',{rb:1,c:'#ffe27a',c2:'#ffffff',in:1,arms:5,r:2}],['burst',{c:'#ffffff',c2:'#ffe27a',rays:10,r:2,st:HIT+40}]],
+ 'Gloom Ink':[['proj',{s:'blob',c:'#1a0a2a',c2:'#a66bff',sz:9,arc:20}]],
+ 'Leech Slap':[['slash',{n:8,gap:45,c:'#a66bff',c2:'#ff3d6e',r:.9,alt:1.3,sw:90,bn:3}],['ring',{on:'self',c:'#7cff9e',c2:'#ff3d6e',plus:'💚',flat:1,st:HIT+300,sp:0,rings:1}]],
+ 'Dread Grip':[['vortex',{c:'#2a0a4a',c2:'#ff3d6e',in:1,arms:4,r:2}],['quake',{c:'#7a3fd1',px:6}]],
+ 'Magma Splash':[['bonk',{g:'💦',c:'#ff6b3d',sz:1.1}],['burst',{c:'#ff6b3d',c2:'#ffd166',rays:10,r:2.2}]],
+ 'Cinder Wave':[['wave',{c:'#c9361a',c2:'#ffd166',th:150,amp:14,a:.65}],['quake',{c:'#ff6b3d',px:6}]],
+ 'Kindle Mercy':[['rain',{c:'#ff6b3d',c2:'#ffd166',heal:1,sz:6}],['shield',{c:'#ff6b3d',c2:'#ffd166',st:HIT+40}]],
+ 'Zephyr Splash':[['bonk',{g:'💦',c:'#3fd17f',sz:1.1}],['aura',{on:'self',c:'#c9ffe0',c2:'#3fd17f',g:'💨',st:HIT}]],
+ 'Tempest Wave':[['wave',{c:'#3f9a7a',c2:'#eaffef',th:150,amp:14,a:.6}],['tornado',{c:'#c9ffe0',c2:'#ffffff',h:2.2,st:HIT}]],
+ 'Sky Mercy':[['rain',{c:'#c9ffe0',c2:'#3fd17f',heal:1,sz:6}],['ring',{c:'#c9ffe0',c2:'#3fd17f',plus:'💨',flat:1,st:HIT+40}]],
+ 'Seraph Splash':[['bonk',{g:'💦',c:'#ffe27a',sz:1.1}],['ring',{c:'#7cff9e',c2:'#ffe27a',plus:'💚',st:HIT,flat:1}]],
+ 'Halo Wave':[['wave',{rb:1,c:'#ffe27a',c2:'#ffffff',th:150,amp:14,a:.6}],['burst',{c:'#ffffff',c2:'#ffe27a',rays:12,r:2.4,st:HIT+40}]],
+ 'Solar Mercy':[['rain',{c:'#ffe27a',c2:'#ffffff',heal:1,sz:6}],['shield',{c:'#ffe27a',c2:'#ffffff',st:HIT+40}],['ring',{c:'#ffe27a',plus:'✨',rings:1,flat:1,sp:0}]],
+ 'Brimstone Splash':[['bonk',{g:'💦',c:'#a66bff',sz:1.1}],['burst',{c:'#ff3d6e',c2:'#2a0612',rays:8,r:1.8}]],
+ 'Curse Wave':[['wave',{c:'#2a0a4a',c2:'#ff7ae0',th:150,amp:14,a:.65,dark:1}],['quake',{c:'#7a3fd1',px:6}]],
+ 'Shade Mercy':[['wave',{c:'#2a0a4a',c2:'#a66bff',th:120,amp:10,a:.6,dark:1}],['ring',{on:'self',c:'#7cff9e',c2:'#ff3d6e',plus:'💚',flat:1,st:HIT+120,sp:0,rings:1}]],
  // v1.5.2 element versions (batch 3)
  'Surge Bite':[['bite',{c:'#3da5ff',c2:'#e6fbff'}],['burst',{c:'#bff8ff',c2:'#3da5ff',rays:6,r:1.5,st:HIT+20}]],
  'Tidal Wing':[['wave',{c:'#1f6fd6',c2:'#bff8ff',th:120,amp:12,a:.6}]],
@@ -1754,6 +1854,38 @@ artVar('shellbert_fire','shellbert',{p:['#d8784a','#ffd8b8','#8a3a1a'],a:'#ffcf3
 artVar('shellbert_wind','shellbert',{p:['#9ad8b8','#effff6','#3f8a6a'],a:'#5ec8ff',e:'#1f4a3a',acc:['scarf'],sc2:'#ffe27a',mouth:'smile',lids:undefined},['propeller'],['cloudTrail']);
 artVar('shellbert_heaven','shellbert',{p:['#f4e8c8','#fffaf0','#c9b07a'],a:'#ffd65a',e:'#5a3a10',body:'robe',robe:['#c98a3a','#e8b860','#7a4a1a'],mouth:'smile'},['prayerBeads','shellCross'],[]);
 artVar('shellbert_hell','shellbert',{p:['#4a3a5a','#a090b8','#1e1428'],a:'#ff3d6e',e:'#ff3d6e',eyes:'glow',mouth:'fang',brow:1,lids:undefined},['shellSpikes','skull'],[]);
+// v1.5.3 element versions (batch 4) overlays
+Object.assign(OVL,{
+  emberNotes:`<g fill="#ffb02e" stroke="#7a1a08" stroke-width="1">${[[12,20,1],[104,14,.85],[108,62,.8],[10,64,.9]].map(([x,y,k])=>`<g transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="8" rx="4" ry="3"/><path d="M3.6 8 L3.6 -6 Q8 -4 9 0" fill="none" stroke="#ffb02e" stroke-width="2"/><path d="M0 -10 q-3 -5 1 -8 q0 4 3 3 q1 4 -4 5z" fill="#ff5a1f" stroke="none"/></g>`).join('')}</g>`,
+  fireLyre:`<g transform="translate(92 66)"><path d="M-10 18 Q-16 -2 -6 -14 M10 18 Q16 -2 6 -14" fill="none" stroke="#e8a030" stroke-width="3" stroke-linecap="round"/><line x1="-10" y1="18" x2="10" y2="18" stroke="#8a4a10" stroke-width="3"/><g stroke="#fff3c0" stroke-width="1"><line x1="-4" y1="-6" x2="-4" y2="17"/><line x1="0" y1="-8" x2="0" y2="17"/><line x1="4" y1="-6" x2="4" y2="17"/></g><path d="M-6 -14 q-4 -8 2 -12 q0 6 4 4 q2 6 -6 8z M6 -14 q4 -8 -2 -12 q0 6 -4 4 q-2 6 6 8z" fill="#ff6b1f"/></g>`,
+  windNotes:`<g fill="#e8fff0" stroke="#2f7f5a" stroke-width="1">${[[10,22],[106,18],[110,64]].map(([x,y])=>`<g transform="translate(${x} ${y})"><ellipse cx="0" cy="8" rx="4" ry="3"/><path d="M3.6 8 L3.6 -6 L10 -4" fill="none" stroke="#e8fff0" stroke-width="2"/></g>`).join('')}</g><g fill="none" stroke="#bff5d8" stroke-width="2" stroke-linecap="round" opacity=".8"><path d="M2 40 q10 -6 20 0"/><path d="M98 40 q10 -6 20 0"/></g>`,
+  panFlute:`<g transform="translate(88 70) rotate(-12)">${[0,1,2,3,4].map(i=>`<rect x="${i*5}" y="0" width="4.4" height="${22-i*3}" rx="1.6" fill="#c9a36a" stroke="#5a3a1a" stroke-width="1"/>`).join('')}<rect x="-1" y="5" width="26" height="3" fill="#3fbf8a"/></g>`,
+  hymnBook:`<g transform="translate(60 84)"><path d="M-16 -6 L0 -2 L16 -6 L16 10 L0 14 L-16 10Z" fill="#fffaf0" stroke="#c9a03a" stroke-width="1.6"/><line x1="0" y1="-2" x2="0" y2="14" stroke="#c9a03a" stroke-width="1.4"/><g stroke="#c9a03a" stroke-width=".8"><line x1="-12" y1="0" x2="-4" y2="2"/><line x1="-12" y1="4" x2="-4" y2="6"/><line x1="4" y1="2" x2="12" y2="0"/><line x1="4" y1="6" x2="12" y2="4"/></g></g>`,
+  bellChime:`<g fill="#ffe27a" stroke="#8a6a10" stroke-width="1.2">${[[14,24],[106,24]].map(([x,y])=>`<g transform="translate(${x} ${y})"><line x1="0" y1="-12" x2="0" y2="-4" stroke="#8a6a10"/><path d="M-7 8 Q-7 -4 0 -4 Q7 -4 7 8Z"/><circle cx="0" cy="10" r="2"/></g>`).join('')}</g>`,
+  blackRose:`<g transform="translate(90 72)"><path d="M0 0 L-4 26" stroke="#2a5a2a" stroke-width="2"/><path d="M-2 14 q-8 -2 -8 4 q6 2 8 -4z" fill="#2a5a2a"/><circle cx="0" cy="0" r="8" fill="#2a0612" stroke="#ff3d6e" stroke-width="1.4"/><path d="M-4 -2 q4 -6 8 0 q-4 4 -8 0z M-5 2 q5 5 10 0" fill="none" stroke="#ff3d6e" stroke-width="1"/></g>`,
+  dirgeNotes:`<g fill="#8a3dff" stroke="#2a0612" stroke-width="1">${[[12,18],[104,20],[106,66],[8,62]].map(([x,y])=>`<g transform="translate(${x} ${y})"><ellipse cx="0" cy="8" rx="4" ry="3"/><ellipse cx="9" cy="6" rx="4" ry="3"/><path d="M3.6 8 L3.6 -6 L12.6 -8 L12.6 6" fill="none" stroke="#8a3dff" stroke-width="2"/></g>`).join('')}</g>`,
+  lavaPool:`<ellipse cx="60" cy="112" rx="50" ry="8" fill="#7a1a08"/><ellipse cx="60" cy="111" rx="40" ry="5" fill="#ff6b1f"/><g fill="#ffcf3d"><circle cx="34" cy="110" r="2.4"/><circle cx="80" cy="112" r="2"/><circle cx="58" cy="109" r="1.6"/></g>`,
+  magmaSuckers:`<g fill="#ffcf3d" stroke="#b3200a" stroke-width="1">${[[30,96],[42,102],[56,104],[70,104],[84,100],[94,94]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.6"/>`).join('')}</g>`,
+  kiteTails:`<g fill="none" stroke-width="3" stroke-linecap="round"><path d="M38 90 q-14 10 -6 22 q6 8 -4 14" stroke="#ff6b9a"/><path d="M82 90 q14 10 6 22 q-6 8 4 14" stroke="#5ec8ff"/></g><g fill="#ffe27a">${[[30,106],[90,106],[28,120],[92,120]].map(([x,y])=>`<path d="M${x} ${y-4} l3 4 l-3 4 l-3 -4z"/>`).join('')}</g>`,
+  goldRings:`<g fill="none" stroke="#ffd65a" stroke-width="2.6">${[[30,94],[46,100],[60,102],[74,100],[90,94]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="5" ry="2.2"/>`).join('')}</g>`,
+  inkCloud:`<g fill="#1a0a2a" opacity=".85"><circle cx="16" cy="96" r="12"/><circle cx="28" cy="106" r="9"/><circle cx="104" cy="96" r="11"/><circle cx="92" cy="108" r="8"/><circle cx="10" cy="80" r="6"/></g><g fill="#8a3dff" opacity=".6"><circle cx="18" cy="94" r="3"/><circle cx="102" cy="94" r="3"/></g>`,
+  fireSpout:`<g transform="translate(60 24) scale(.8)"><path d="M-10 6 q-6 -14 4 -22 q0 8 6 8 q-2 -10 6 -16 q4 12 4 16 q6 -2 6 -8 q8 10 0 22z" fill="#ff6b1f" stroke="#7a1a08" stroke-width="1.6"/><path d="M-4 4 q-2 -8 4 -12 q0 6 4 4 q2 6 -2 8z" fill="#ffcf3d"/></g>`,
+  goldSpout:`<g transform="translate(60 24) scale(.8)" fill="#fff6c8" stroke="#c9a03a" stroke-width="1.2"><path d="M-2 6 q-10 -10 -14 -20 q8 4 12 12z M2 6 q10 -10 14 -20 q-8 4 -12 12z M0 6 L0 -20"/><path d="M0 -26 l2.4 5 l5 .8 l-3.7 3.6 l.9 5.2 l-4.6 -2.4 l-4.6 2.4 l.9 -5.2 l-3.7 -3.6 l5 -.8z" fill="#ffd65a"/></g>`,
+  shadowSpout:`<g transform="translate(60 22) scale(.8)"><path d="M-8 6 q-8 -10 0 -20 q0 8 6 6 q-2 -10 4 -14 q6 10 2 16 q8 -2 6 -8 q6 10 -2 20z" fill="#8a3dff" stroke="#2a0612" stroke-width="1.4" opacity=".9"/><circle cx="-12" cy="-20" r="2.4" fill="#ff3d6e"/><circle cx="12" cy="-24" r="2" fill="#ff3d6e"/></g>`,
+  skyRibbon:`<path d="M4 70 Q30 54 60 66 T116 58" fill="none" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round" opacity=".85"/><path d="M8 82 Q34 70 60 80 T112 74" fill="none" stroke="#bfe8ff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>`,
+});
+artVar('tidesinger_fire','tidesinger',{p:['#ffd2b8','#fff0e6','#d88a6a'],a:'#ff8a2e',e:'#7a1a08',hair:'#ff5a1f',top:['hair3','flame'],back:['hairback'],acc:['scarf'],sc2:'#ffcf3d',mark:['spots']},['fireLyre'],['emberNotes']);
+artVar('tidesinger_wind','tidesinger',{p:['#e0f4d8','#f6fff0','#9ac88a'],a:'#3fbf8a',e:'#1f4a3a',hair:'#6fd0a0',top:['hair2','leaf'],back:['hairback'],acc:[],wings:'feather',wc:'#e8fff0',lids:'smug'},['panFlute'],['windNotes']);
+artVar('tidesinger_heaven','tidesinger',{p:['#fff0dc','#fffaf2','#e0c49a'],a:'#ffd65a',e:'#3d6ad6',hair:'#ffe9a8',body:'robe',robe:['#fffaf0','#ffffff','#e0d0a8'],top:['hair','halo'],back:['hairback'],acc:[],wings:'feather',wc:'#fffaf0',lids:'sleepy'},['hymnBook'],['bellChime']);
+artVar('tidesinger_hell','tidesinger',{p:['#c8bcd8','#ece4f6','#7a6a96'],a:'#8a3dff',e:'#ff3d6e',hair:'#3a1a4a',top:['hair3','devil'],back:['hairback'],acc:['collar'],eyes:'glow'},['blackRose'],['dirgeNotes']);
+artVar('tentacular_fire','tentacular',{p:['#ff6b3d','#ffd0b0','#b3200a'],a:'#ffcf3d',e:'#3a0a04',top:['spikes'],mark:['cracks'],mouth:'fang'},['magmaSuckers'],['lavaPool']);
+artVar('tentacular_wind','tentacular',{p:['#bfe8ff','#f4fbff','#6aa8d0'],a:'#ffffff',e:'#1d4f8e',top:['tuft'],mark:['dots'],acc:['goggles'],mouth:'o'},['cloudPuff'],['kiteTails']);
+artVar('tentacular_heaven','tentacular',{p:['#fff3d6','#ffffff','#e0c070'],a:'#ffd65a',e:'#3d6ad6',top:['halo'],wings:'crystal',mark:['gem'],lids:'sleepy'},['goldRings'],[]);
+artVar('tentacular_hell','tentacular',{p:['#4a2a5e','#a080c0','#1a0a2a'],a:'#ff3d6e',e:'#ff3d6e',top:['devil'],eyes:'multi',mark:['spots'],mouth:'teeth',brow:1},[],['inkCloud']);
+artVar('leviadrift_fire','leviadrift',{p:['#8a2a1a','#ffb08a','#3a0a04'],a:'#ffcf3d',e:'#ffcf3d',acc:[],mark:['cracks'],eyes:'glow',mouth:'fang'},['fireSpout'],['lavaPool']);
+artVar('leviadrift_wind','leviadrift',{p:['#cfeaf8','#ffffff','#7ab0d0'],a:'#ffffff',e:'#1d4f8e',acc:['scarf'],sc2:'#3fbf8a',wings:'feather',wc:'#ffffff',mark:['stripes']},['cloudTrail'],['skyRibbon']);
+artVar('leviadrift_heaven','leviadrift',{p:['#fff3e0','#ffffff','#d8b880'],a:'#ffd65a',e:'#5a3a10',acc:[],top:['halo'],wings:'bigfeather',wc:'#fffaf0',mark:['grooves','gem']},['goldSpout'],['starburst']);
+artVar('leviadrift_hell','leviadrift',{p:['#3a2a4e','#9a88b8','#140a20'],a:'#8a3dff',e:'#ff3d6e',acc:[],top:['bighorns'],eyes:'glow',mark:['moon','grooves'],brow:1},['shadowSpout'],['purpleRing']);
 // v1.4.4 awakened art: ART[id+'_aw'] = base art + palette shift toward the element's awakening tint + accessory overlay + aura/sparkles
 const AWTINT={fire:'#ffd166',water:'#8ff0ff',wind:'#d6ff8a',heaven:'#fff3b0',hell:'#ff7ae0'};elAlias(AWTINT);
 for(const id in AWK){const b=ART[id];if(!b||!MD[id])continue;const x=AWK[id].x||{},tn=AWTINT[MD[id].el];
