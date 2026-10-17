@@ -714,7 +714,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.5.6';
+const VERSION='1.5.7';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -1246,6 +1246,50 @@ MV('gleamhorn','hell','Hexhorn',"A dark unicorn that casts hexes with its horn. 
  SK('Curse Horn','🦄','Hit (1.2x). Removes 1 beneficial effect from the target.',{m:1.2,strip:1}),
  SK('Shade Ward','🛡️','All allies gain Immunity for 2 turns.',{cd:4,t:'aa',m:0,fx:[['immune',2,100]]}),
  SK('Nightmare Charge','💫','Charge (3.0x). +50% damage if the target has a harmful effect.',{cd:4,m:3,debB:.5})],LD('cr',11));
+// =========== v1.5.7 ELEMENT VERSIONS (batch 8: Seraphyne, Bonejangle, Nocturnipper lines; same skill count + cooldowns as each original) ===========
+// Seraphyne line (ray / cd-4 sanctuary / cd-5 verdict + leader skill)
+MV('seraphyne','fire','Ignisera',"A guardian angel with a burning halo. Judges you warmly. Very warmly. Please stand back.",[
+ SK('Blaze Ray','🔆','Hit (1.3x). 30% chance to Burn for 2 turns.',{m:1.3,fx:[['dot',2,30]]}),
+ SK('Pyre Sanctuary','⛪','All allies gain ATK Up for 2 turns and +20% ATB.',{cd:4,t:'aa',m:0,fx:[['atkUp',2,100]],atb:20}),
+ SK('Conflagration','👁️','ALL enemies (1.6x). 50% chance of DEF Break for 2 turns.',{cd:5,t:'ae',m:1.6,fx:[['defBreak',2,50]]})],LD('atk',33));
+MV('seraphyne','water','Coralsera',"A sea angel who guards the coral reefs. Hands out verdicts with a splash. Mostly the splash.",[
+ SK('Tide Ray','🔆','Hit (1.3x). 25% chance to Freeze for 1 turn.',{m:1.3,fx:[['freeze',1,25]]}),
+ SK('Tide Sanctuary','⛪','All allies gain DEF Up and Regen for 2 turns.',{cd:4,t:'aa',m:0,fx:[['defUp',2,100],['regen',2,100]]}),
+ SK('Tsunami Verdict','👁️','ALL enemies (1.5x). 50% chance to Slow for 2 turns.',{cd:5,t:'ae',m:1.5,fx:[['slow',2,50]]})],LD('hp',33));
+MV('seraphyne','wind','Aerisera',"An angel who rides the high winds. Delivers verdicts at speed and leaves before the appeal.",[
+ SK('Gale Ray','🔆','Hit (1.3x). Gains +20% ATB.',{m:1.3,ga:20}),
+ SK('Sky Sanctuary','⛪','All allies gain SPD Up for 2 turns and Immunity for 1 turn.',{cd:4,t:'aa',m:0,fx:[['spdUp',2,100],['immune',1,100]]}),
+ SK('Tempest Verdict','👁️','ALL enemies (1.6x). Pushes every enemy\'s ATB back 30%.',{cd:5,t:'ae',m:1.6,push:30})],LD('spd',20));
+MV('seraphyne','hell','Grimsera',"A dark angel with excellent posture and no patience. Judges you silently. Then not silently.",[
+ SK('Grim Ray','🔆','Hit (1.3x). Removes 1 beneficial effect from the target.',{m:1.3,strip:1}),
+ SK('Dark Sanctuary','⛪','ALL enemies (0.8x). Heals itself for 40% of the damage dealt.',{cd:4,t:'ae',m:.8,drain:.4}),
+ SK('Doom Verdict','👁️','ALL enemies (1.7x). +40% damage to each enemy below 50% HP.',{cd:5,t:'ae',m:1.7,lowB:.4})],LD('cr',15));
+// Bonejangle line (rattle / cd-3 dance; no leader skill, like the original; the original is Hell, so the versions are Fire, Water, Wind, Heaven)
+MV('bonejangle','fire','Cinderjangle',"A skeleton with maracas made of embers. Rattles when nervous. Smoulders when very nervous.",[
+ SK('Ember Rattle','🦴','Hit (1.0x). 30% chance to Burn for 2 turns.',{fx:[['dot',2,30]]}),
+ SK('Fire Dance','💃','Hit (1.4x). Ignores 30% of the target\'s DEF.',{cd:3,m:1.4,ign:.3})]);
+MV('bonejangle','water','Coraljangle',"A coral-pink skeleton from the bottom of the sea. Its bones jingle like seashells.",[
+ SK('Coral Rattle','🦴','Hit (1.0x). 20% chance to Slow for 2 turns.',{fx:[['slow',2,20]]}),
+ SK('Reef Dance','💃','Hit (1.3x). Heals itself for 40% of the damage dealt.',{cd:3,m:1.3,drain:.4})]);
+MV('bonejangle','wind','Gustjangle',"A skeleton with wind chimes for ribs. On breezy days it plays a tune without meaning to.",[
+ SK('Gust Rattle','🦴','Hit (1.0x). Gains +20% ATB.',{ga:20}),
+ SK('Whirl Dance','💃','ALL enemies (0.6x). 30% chance of DEF Break for 2 turns.',{cd:3,t:'ae',m:.6,fx:[['defBreak',2,30]]})]);
+MV('bonejangle','heaven','Glowjangle',"A glowing skeleton with a tiny halo. Still nervous, but now in a very holy way.",[
+ SK('Halo Rattle','🦴','Hit (1.0x). Heals the ally with the lowest HP for 6% of max HP.',{healLow:.06}),
+ SK('Holy Dance','💃','Hit (1.4x). 30% chance to Stun for 1 turn.',{cd:3,m:1.4,fx:[['stun',1,30]]})]);
+// Nocturnipper line (nip / cd-3 screech; no leader skill, like the original; the original is Hell, so the versions are Fire, Water, Wind, Heaven)
+MV('nocturnipper','fire','Embernipper',"A vampire bat that only eats chili peppers. Its breath could melt a candle.",[
+ SK('Ember Nip','🦇','Hit (1.0x). 30% chance to Burn for 2 turns.',{fx:[['dot',2,30]]}),
+ SK('Ember Screech','📢','ALL enemies (0.6x). 30% chance of DEF Break for 2 turns.',{cd:3,t:'ae',m:.6,fx:[['defBreak',2,30]]})]);
+MV('nocturnipper','water','Tidenipper',"A vampire bat that lives on cucumber slices. Very refreshing. Very hydrated.",[
+ SK('Tide Nip','🦇','Hit (1.0x). 15% chance to Freeze for 1 turn.',{fx:[['freeze',1,15]]}),
+ SK('Tide Screech','📢','ALL enemies (0.55x), then heals all allies for 10% of max HP.',{cd:3,t:'ae',m:.55,post:{heal:.1}})]);
+MV('nocturnipper','wind','Galenipper',"A vampire bat that flies with a leek. Nobody knows why. It will not explain.",[
+ SK('Gust Nip','🦇','Hit (1.0x). Gains +20% ATB.',{ga:20}),
+ SK('Gust Screech','📢','ALL enemies (0.6x). Pushes every enemy\'s ATB back 20%.',{cd:3,t:'ae',m:.6,push:20})]);
+MV('nocturnipper','heaven','Dawnnipper',"A morning vampire bat with a bow tie. Loves parsnips and sunrises, which worries the other bats.",[
+ SK('Sun Nip','🦇','Hit (1.0x). Heals the ally with the lowest HP for 8% of max HP.',{healLow:.08}),
+ SK('Sun Screech','📢','ALL enemies (0.6x). 30% chance of ATK Break for 2 turns.',{cd:3,t:'ae',m:.6,fx:[['atkDown',2,30]]})]);
 const SUMMONABLE=Object.values(MD).filter(d=>!d.boss&&!d.fodder&&!d.uniq);
 const DEXLIST=Object.values(MD).filter(d=>!d.boss);
 /* ---------- v1.4.4 AWAKENING (Summoners War style, once per monster; unique monsters are never awakenable) ----------
@@ -1340,6 +1384,20 @@ Object.assign(AWK,{
  gleamhorn_water:{n:'Tidespire',b:['res',20],x:{top:['tiara']},awk2:['wave']},
  gleamhorn_wind:{n:'Breezespire',b:['acc',20],x:{top:['crown']},awk2:['windRing']},
  gleamhorn_hell:{n:'Murkspire',b:['cr',12],x:{top:['crown']},awf:['chains']}});
+// v1.5.7 element versions (batch 8): awakened names + looks
+Object.assign(AWK,{
+ seraphyne_fire:{n:'Flamivra',b:['cd',20],x:{top:['crown']},awf:['embers']},
+ seraphyne_water:{n:'Tidivra',b:['res',20],x:{top:['tiara']},awk2:['wave']},
+ seraphyne_wind:{n:'Zephivra',b:['acc',20],x:{top:['crown']},awk2:['windRing']},
+ seraphyne_hell:{n:'Umbrivra',b:['cr',12],x:{top:['crown']},awf:['chains']},
+ bonejangle_fire:{n:'Cinderjig',b:['cd',20],x:{top:['crown']},awf:['embers']},
+ bonejangle_water:{n:'Coraljig',b:['res',20],x:{top:['tiara']},awk2:['wave']},
+ bonejangle_wind:{n:'Galejig',b:['acc',20],x:{top:['crown']},awk2:['tornado']},
+ bonejangle_heaven:{n:'Hymnjig',b:['res',20],x:{top:['crown']},awk2:['starburst']},
+ nocturnipper_fire:{n:'Count Radishpire',b:['cd',20],x:{top:['crown']},awf:['emberCracks']},
+ nocturnipper_water:{n:'Count Cucumpire',b:['res',20],x:{top:['tiara']},awk2:['pearlOrbit']},
+ nocturnipper_wind:{n:'Count Leekpire',b:['acc',20],x:{top:['crown']},awk2:['windRing']},
+ nocturnipper_heaven:{n:'Count Parsnipire',b:['res',20],x:{top:['crown']},awk2:['bigHalo']}});
 // v1.5.3 element versions (batch 4): awakened names + looks
 Object.assign(AWK,{
  tidesinger_fire:{n:'Cinderlune',b:['cd',20],x:{top:['crown']},awf:['embers']},tidesinger_wind:{n:'Gustlune',b:['acc',20],x:{top:['crest']},awk2:['windRing']},
@@ -1505,6 +1563,9 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.5.7',date:'Oct 17, 2026',title:'🌈 Element Versions VIII',sections:[
+  ['🌈 12 New Monsters',['Seraphyne, Bonejangle and Nocturnipper now come in all five elements. Each new version has its own name, look, skills and awakened form, and keeps the same number of skills as the original.','👼 Seraphyne line: Ignisera (Fire), Coralsera (Water), Aerisera (Wind), Grimsera (Hell), each with its own leader skill.','💀 Bonejangle line: Cinderjangle (Fire), Coraljangle (Water), Gustjangle (Wind), Glowjangle (Heaven). Bonejangle itself is the Hell version.','🦇 Nocturnipper line: Embernipper (Fire), Tidenipper (Water), Galenipper (Wind), Dawnnipper (Heaven). Nocturnipper itself is the Hell version.','The awakened Hell version Umbrivra has the black-with-white-trim look.','Find them in summons (see the Odds tab: your chance of each star rarity is unchanged, and within a rarity every monster is equally likely). Skill-ups need a duplicate of the exact same version.']],
+  ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.5.6',date:'Oct 17, 2026',title:'🌈 Element Versions VII',sections:[
   ['🌈 12 New Monsters',['Dawnstag, Halodove and Gleamhorn now come in all five elements. Each new version has its own name, look, skills and awakened form, and keeps the same number of skills as the original.','🦌 Dawnstag line: Blazestag (Fire), Brookstag (Water), Galestag (Wind), Duskstag (Hell).','🕊️ Halodove line: Kindledove (Fire), Brinedove (Water), Gustdove (Wind), Sootdove (Hell), each with its own leader skill.','🦄 Gleamhorn line: Kilnhorn (Fire), Pearlhorn (Water), Breezehorn (Wind), Hexhorn (Hell), each with its own leader skill.','Awakened Hell versions (Gloomantler, Gloomcote, Murkspire) have the black-with-white-trim look.','Find them in summons (see the Odds tab: your chance of each star rarity is unchanged, and within a rarity every monster is equally likely). Skill-ups need a duplicate of the exact same version.']],
   ['💾 Your Save',['Nothing to do: everything carries over.']]]},
@@ -1704,6 +1765,35 @@ const SKVFX={
  'Curse Horn':[['beam',{c:'#7a3fd1',c2:'#ff3d6e'}]],
  'Shade Ward':[['shield',{hex:1,c:'#3a2a50',c2:'#ff7ae0'}],['aura',{c:'#7a3fd1'}]],
  'Nightmare Charge':[['dive',{c:'#2a0a4a',c2:'#ff3d6e'}],['vortex',{c:'#2a0a4a',c2:'#ff3d6e',in:1,arms:4,r:2}]],
+ // v1.5.7 element versions (batch 8)
+ 'Blaze Ray':[['pillar',{c:'#ff6b1f',c2:'#ffd166',w:.9,hitfx:1}],['burst',{c:'#ffd166',c2:'#ff5a1f',rays:6,r:1.2,st:HIT+20}]],
+ 'Pyre Sanctuary':[['pillar',{c:'#ff8a3d',c2:'#ffd166',w:1.2,st:HIT-200,len:700}],['ring',{c:'#ffd166',c2:'#ff6b1f',plus:'🔥',flat:1,st:HIT}]],
+ 'Conflagration':[['meteor',{c:'#ff5a1f',c2:'#ffd166'}],['quake',{c:'#ff6b3d',px:6}]],
+ 'Tide Ray':[['pillar',{c:'#3da5ff',c2:'#bff8ff',w:.9,hitfx:1}],['burst',{c:'#bff8ff',c2:'#3da5ff',rays:6,r:1.2,st:HIT+20}]],
+ 'Tide Sanctuary':[['shield',{hex:1,c:'#8fd8ff',c2:'#bff8ff'}],['ring',{c:'#7cff9e',c2:'#3da5ff',plus:'💧',st:HIT+60,rings:1}]],
+ 'Tsunami Verdict':[['wave',{c:'#1f6fd6',c2:'#bff8ff',th:120,amp:12,a:.55}],['rain',{c:'#8fd8ff',sz:5,st:HIT,len:400}]],
+ 'Gale Ray':[['pillar',{c:'#a8f0b8',c2:'#ffffff',w:.9,hitfx:1}],['streak',{c:'#3fd17f',c2:'#e0ffc8'}]],
+ 'Sky Sanctuary':[['shield',{c:'#a8f0b8',c2:'#ffffff'}],['petals',{g:['🍃','✨'],c:'#3fd17f'}]],
+ 'Tempest Verdict':[['tornado',{c:'#a8f0b8',c2:'#ffffff',h:2}],['swarm',{c:'#3fd17f',c2:'#e0ffc8'}]],
+ 'Grim Ray':[['pillar',{c:'#7a3fd1',c2:'#ff3d6e',w:.9,hitfx:1}]],
+ 'Dark Sanctuary':[['vortex',{c:'#2a0a4a',c2:'#ff3d6e',r:1.8,arms:3}],['ring',{on:'self',c:'#7cff9e',c2:'#ff3d6e',plus:'💜',flat:1,st:HIT+200,sp:0,rings:1}]],
+ 'Doom Verdict':[['runes',{c:'#ff3d6e',c2:'#2a0612',flat:1}],['pillar',{c:'#3a1a5e',c2:'#ff3d6e',w:.6,st:HIT,len:380}]],
+ 'Ember Rattle':[['proj',{s:'emoji',g:'🦴',sz:7,spin:6,arc:45,c:'#ff8a3d'}],['burst',{c:'#ffd166',c2:'#ff5a1f',rays:6,r:1.1,st:HIT+20}]],
+ 'Fire Dance':[['bonk',{c:'#ff8a3d'}],['pillar',{c:'#ff6b1f',c2:'#ffd166',w:.8,st:HIT,len:400}]],
+ 'Coral Rattle':[['proj',{s:'emoji',g:'🦴',sz:7,spin:6,arc:45,c:'#ffb0c8'}],['wave',{c:'#3da5ff',c2:'#bff8ff',th:60,amp:6,a:.4}]],
+ 'Reef Dance':[['bonk',{c:'#ff9ab8'}],['drain',{c:'#3da5ff',n:4}]],
+ 'Gust Rattle':[['proj',{s:'emoji',g:'🦴',sz:7,spin:6,arc:45,c:'#a8f0b8'}],['streak',{c:'#3fd17f',c2:'#e0ffc8'}]],
+ 'Whirl Dance':[['tornado',{c:'#a8f0b8',c2:'#ffffff',h:1.6}],['quake',{c:'#3fd17f',px:4}]],
+ 'Halo Rattle':[['proj',{s:'emoji',g:'🦴',sz:7,spin:6,arc:45,c:'#ffe27a'}],['ring',{c:'#ffe27a',c2:'#7cff9e',plus:'✨',rings:1,flat:1,sp:0,st:HIT+80}]],
+ 'Holy Dance':[['bonk',{c:'#ffe27a'}],['bolt',{c:'#fff6c8',c2:'#ffe27a',n:1}]],
+ 'Ember Nip':[['bite',{c:'#ff6b1f',c2:'#ffd166'}],['burst',{c:'#ffd166',c2:'#ff5a1f',rays:6,r:1.1,st:HIT+20}]],
+ 'Ember Screech':[['ring',{on:'self',c:'#ff8a3d',rings:3,sp:0,st:0,len:400}],['proj',{s:'ripple',c:'#ff6b1f',sz:12,fl:220,tr:0}]],
+ 'Tide Nip':[['bite',{c:'#3da5ff',c2:'#bff8ff'}],['burst',{c:'#bff8ff',c2:'#3da5ff',rays:6,r:1.1,st:HIT+20}]],
+ 'Tide Screech':[['proj',{s:'ripple',c:'#3da5ff',sz:12,fl:220,tr:0}],['rain',{c:'#8fd8ff',c2:'#7cff9e',heal:1,sz:5,st:HIT+120}]],
+ 'Gust Nip':[['bite',{c:'#3fd17f',c2:'#e0ffc8'}],['streak',{c:'#3fd17f',c2:'#e0ffc8'}]],
+ 'Gust Screech':[['ring',{on:'self',c:'#a8f0b8',rings:3,sp:0,st:0,len:400}],['swarm',{c:'#3fd17f',c2:'#e0ffc8'}]],
+ 'Sun Nip':[['bite',{c:'#ffe27a',c2:'#ffffff'}],['ring',{c:'#ffe27a',c2:'#7cff9e',plus:'✨',rings:1,flat:1,sp:0,st:HIT+80}]],
+ 'Sun Screech':[['ring',{on:'self',c:'#ffe27a',rings:3,sp:0,st:0,len:400}],['proj',{s:'ripple',c:'#ffe27a',sz:12,fl:220,tr:0}]],
  // v1.5.5 element versions (batch 6)
  'Spark Flick':[['proj',{s:'star',c:'#ffcf3d',c2:'#ff6b1f',sz:7,arc:22}],['burst',{c:'#ffd166',c2:'#ff5a1f',rays:6,r:1.2,st:HIT+20}]],
  'Kindling Gust':[['aura',{c:'#ff8a3d'}],['petals',{g:['🔥','✨'],c:'#ffb02e'}]],
@@ -2257,6 +2347,33 @@ artVar('gleamhorn_fire','gleamhorn',{p:['#ff9a5a','#ffe6d0','#c8501a'],hair:'#ff
 artVar('gleamhorn_water','gleamhorn',{p:['#e0f4ff','#ffffff','#9ac8e8'],hair:'#3da5ff',a:'#ffc8e0',e:'#1f5fc4',ears:'fin',tail:'fish',acc:['pearls']},['pearlShell'],['bubbles']);
 artVar('gleamhorn_wind','gleamhorn',{p:['#e8ffe0','#ffffff','#a8d890'],hair:'#3fd17f',a:'#fff6c8',e:'#1f6b3a',top:['unicorn','hair2','leaf'],wings:'fairy',acc:['scarf'],sc2:'#3fd17f'},['windRibbons'],['cloudTrail']);
 artVar('gleamhorn_hell','gleamhorn',{p:['#4a3a5a','#9a88b0','#1a1024'],hair:'#2a1a3e',a:'#ff3d6e',e:'#ff3d6e',top:['unicorn','hair2','devil'],wings:'bat',eyes:'glow',mark:['moon']},['hexRunes'],['hellfire']);
+// v1.5.7 element versions (batch 8) overlays
+Object.assign(OVL,{
+  phoenixBrazier:`<g transform="translate(98 74)"><line x1="0" y1="-4" x2="0" y2="30" stroke="#8a5a1a" stroke-width="2.6" stroke-linecap="round"/><path d="M-8 -6 h16 l-3 8 h-10z" fill="#c9a03a" stroke="#6a4a10" stroke-width="1.2"/><path d="M-6 -6 q-4 -10 2 -16 q0 6 4 6 q0 -8 6 -10 q2 10 -2 20z" fill="#ff6b1f" stroke="#7a1a08" stroke-width="1"/><path d="M-2 -8 q-2 -5 1 -8 q1 3 3 3 q0 3 -4 5z" fill="#ffcf3d"/></g>`,
+  waterUrn:`<g transform="translate(96 84)"><path d="M-8 -10 h16 q-2 4 2 8 q4 8 -2 16 h-16 q-6 -8 -2 -16 q4 -4 2 -8z" fill="#9ad0ff" stroke="#1f5fc4" stroke-width="1.4"/><path d="M-6 0 q6 3 12 0" stroke="#ffffff" stroke-width="1.2" fill="none"/><path d="M8 -10 q8 0 10 8 q2 6 -2 14" fill="none" stroke="#8fd8ff" stroke-width="3" stroke-linecap="round"/><g fill="#bff8ff"><circle cx="16" cy="16" r="1.8"/><circle cx="12" cy="22" r="1.4"/></g></g>`,
+  windHarp:`<g transform="translate(96 76)"><path d="M-8 18 q-6 -22 6 -30 q14 4 12 30z" fill="none" stroke="#c9a03a" stroke-width="2.6" stroke-linejoin="round"/><g stroke="#fff6c8" stroke-width=".9">${[-4,-1,2,5].map(x=>`<line x1="${x}" y1="${-8+Math.abs(x)}" x2="${x}" y2="17"/>`).join('')}</g><g fill="none" stroke="#3fd17f" stroke-width="1.4" stroke-linecap="round"><path d="M10 -10 q6 -4 10 0"/><path d="M12 -2 q6 -4 10 0"/></g></g>`,
+  darkScales:`<g transform="translate(96 66)"><line x1="0" y1="-14" x2="0" y2="20" stroke="#5a4a6a" stroke-width="2"/><line x1="-12" y1="-8" x2="12" y2="-8" stroke="#5a4a6a" stroke-width="2"/><g fill="#3a2a50" stroke="#ff3d6e" stroke-width="1"><path d="M-16 2 q4 6 8 0z"/><path d="M8 4 q4 6 8 0z"/></g><g stroke="#5a4a6a" stroke-width=".8"><path d="M-12 -8 l-4 10 M-12 -8 l4 10 M12 -8 l-4 12 M12 -8 l4 12"/></g><circle cy="-16" r="2.4" fill="#ff3d6e"/></g>`,
+  emberMaracas:`<g>${[[14,76,-20],[106,76,20]].map(([x,y,r])=>`<g transform="translate(${x} ${y}) rotate(${r})"><line x1="0" y1="2" x2="0" y2="16" stroke="#e8d8c0" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="0" cy="-4" rx="6" ry="7" fill="#ffb02e" stroke="#7a1a08" stroke-width="1.2"/><path d="M-3 -8 q-3 -6 1 -9 q0 3 2 3 q1 4 -3 6z" fill="#ff5a1f"/></g>`).join('')}</g>`,
+  coralBranches:`<g fill="none" stroke="#ff7a9a" stroke-width="3" stroke-linecap="round">${[[8,104,1],[112,104,-1]].map(([x,y,d])=>`<path d="M${x} ${y} v-18 M${x} ${y-10} l${6*d} -8 M${x} ${y-14} l${-5*d} -6 M${x+6*d} ${y-18} v-4"/>`).join('')}</g>`,
+  boneChimes:`<g transform="translate(96 56)"><line x1="-10" y1="-10" x2="12" y2="-10" stroke="#8a7a6a" stroke-width="2"/>${[-6,0,6].map((x,i)=>`<line x1="${x}" y1="-10" x2="${x}" y2="${-2+i*2}" stroke="#8a7a6a" stroke-width=".8"/><rect x="${x-1.6}" y="${-2+i*2}" width="3.2" height="12" rx="1.6" fill="#f4efe2" stroke="#8a7a6a" stroke-width=".8"/>`).join('')}<path d="M14 0 q6 -4 10 0 M14 8 q6 -4 10 0" fill="none" stroke="#3fd17f" stroke-width="1.4" stroke-linecap="round"/></g>`,
+  bellTambourine:`<g transform="translate(96 80)"><circle r="10" fill="#fff3b0" stroke="#c9a03a" stroke-width="2"/><circle r="6" fill="none" stroke="#e0c070" stroke-width="1"/>${[0,72,144,216,288].map(r=>`<g transform="rotate(${r}) translate(0 -10)"><rect x="-2.4" y="-1.6" width="4.8" height="3.2" rx="1" fill="#ffd65a" stroke="#a8740a" stroke-width=".6"/></g>`).join('')}<g fill="#ffd65a"><path d="M14 -10 l1.6 3.4 3.4 1.6 -3.4 1.6 -1.6 3.4 -1.6 -3.4 -3.4 -1.6 3.4 -1.6z"/></g></g>`,
+  chiliPepper:`<g transform="translate(92 86) rotate(30)"><path d="M0 -10 q8 2 6 14 q-2 10 -8 16 q-2 -10 -2 -16 q0 -10 4 -14z" fill="#e8281a" stroke="#7a1a08" stroke-width="1.2"/><path d="M0 -10 q-2 -6 2 -8" fill="none" stroke="#2f8a3a" stroke-width="2.4" stroke-linecap="round"/><path d="M1 -4 q2 4 1 8" stroke="#ff8a7a" stroke-width="1.2" fill="none"/></g>`,
+  cucumberSlice:`<g transform="translate(94 86)"><circle r="10" fill="#3a8a3a" stroke="#1f4a1a" stroke-width="1.2"/><circle r="8" fill="#c8f0a8"/><g fill="#eaffd8">${[0,60,120,180,240,300].map(r=>`<ellipse transform="rotate(${r}) translate(0 -4)" rx="1.2" ry="2"/>`).join('')}</g></g>`,
+  leekStalk:`<g transform="translate(96 82) rotate(-18)"><rect x="-4" y="-6" width="8" height="26" rx="4" fill="#fffaf0" stroke="#8a9a6a" stroke-width="1.2"/><path d="M-3 -6 q-6 -14 -2 -22 M0 -6 q0 -14 2 -24 M3 -6 q6 -12 4 -20" fill="none" stroke="#3fbf5a" stroke-width="3" stroke-linecap="round"/><path d="M-3 20 l-2 4 M0 20 v5 M3 20 l2 4" stroke="#c8b890" stroke-width="1"/></g>`,
+  parsnip:`<g transform="translate(94 84) rotate(25)"><path d="M-6 -8 q6 -2 12 0 q-2 14 -6 26 q-4 -12 -6 -26z" fill="#fff0c8" stroke="#a8844a" stroke-width="1.2"/><path d="M-3 0 h4 M-2 6 h3" stroke="#d8b880" stroke-width="1"/><path d="M-2 -8 q-6 -8 -2 -14 M1 -8 q2 -8 6 -12" fill="none" stroke="#5ab05a" stroke-width="2.4" stroke-linecap="round"/><circle cx="0" cy="-14" r="6" fill="#fff6c8" opacity=".35"/></g>`,
+});
+artVar('seraphyne_fire','seraphyne',{p:['#ffd8c0','#fff0e4','#e0a07a'],robe:['#ff8a3d','#ffe0b0','#b3420a'],hair:'#ff6b1f',a:'#ffcf3d',e:'#b33a0a',top:['hair','flame'],wc:'#ff8a3d'},['phoenixBrazier'],['fireHalo']);
+artVar('seraphyne_water','seraphyne',{p:['#e0f0ff','#f4fbff','#a8c8e8'],robe:['#5aa8e0','#e6f6ff','#2f6fd6'],hair:'#3da5ff',a:'#8ff0ff',e:'#1f5fc4',top:['hair2'],ears:'fin',wings:'crystal',acc:['pearls']},['waterUrn'],['waterSpout']);
+artVar('seraphyne_wind','seraphyne',{p:['#fff0e0','#fffaf2','#e0c0a0'],robe:['#c8f0b0','#ffffff','#6ab05a'],hair:'#3fd17f',a:'#fff6c8',e:'#1f6b3a',top:['hair','leaf'],wings:'bigfeather',wc:'#eaffd8',acc:['scarf'],sc2:'#3fd17f'},['windHarp'],['cloudTrail']);
+artVar('seraphyne_hell','seraphyne',{p:['#d8c8d8','#f0e8f0','#a898a8'],robe:['#3a2a50','#8a78a8','#140a20'],hair:'#2a1a3e',a:'#ff3d6e',e:'#ff3d6e',top:['hair3','devil'],wings:'bat',wc:'#3a2a4e',eyes:'glow'},['darkScales'],['hellfire']);
+artVar('bonejangle_fire','bonejangle',{p:['#e0a070','#ffe0c0','#8a4a2a'],a:'#ff6b1f',e:'#ffcf3d',top:['flame'],mark:['cracks']},['emberMaracas'],['lavaDrops']);
+artVar('bonejangle_water','bonejangle',{p:['#ffd0d8','#ffffff','#c88a9a'],a:'#3da5ff',e:'#3da5ff',top:['dorsal'],acc:['bone','pearls']},['coralBranches'],['bubbles']);
+artVar('bonejangle_wind','bonejangle',{p:['#e8f4d8','#ffffff','#a8c890'],a:'#3fd17f',e:'#3fd17f',top:['leaf'],acc:['scarf'],sc2:'#3fd17f'},['boneChimes'],['windStreaks']);
+artVar('bonejangle_heaven','bonejangle',{p:['#fffaf0','#ffffff','#e0d0a0'],a:'#ffd65a',e:'#ffd65a',top:['halo'],wings:'feather',acc:['olive']},['bellTambourine'],['sunRays']);
+artVar('nocturnipper_fire','nocturnipper',{p:['#c8401a','#ffb08a','#6a1a08'],a:'#ffcf3d',e:'#ffcf3d',top:['flame'],acc:['scarf'],sc2:'#ff6b1f'},['chiliPepper'],['fireHalo']);
+artVar('nocturnipper_water','nocturnipper',{p:['#2f78c0','#bfe0ff','#14386a'],a:'#8ff0ff',e:'#ffcc33',ears:'fin',acc:['pearls']},['cucumberSlice'],['puddle']);
+artVar('nocturnipper_wind','nocturnipper',{p:['#4a9a6a','#c8f0d8','#1f5a3a'],a:'#fff6c8',e:'#ffcc33',top:['leaf'],acc:['goggles']},['leekStalk'],['cloudPuff']);
+artVar('nocturnipper_heaven','nocturnipper',{p:['#fff0d0','#ffffff','#d8b880'],a:'#ffd65a',e:'#3a2a10',top:['halo'],wings:'feather',wc:'#fffaf0',acc:['bowtie']},['parsnip'],['laurel']);
 // v1.4.4 awakened art: ART[id+'_aw'] = base art + palette shift toward the element's awakening tint + accessory overlay + aura/sparkles
 const AWTINT={fire:'#ffd166',water:'#8ff0ff',wind:'#d6ff8a',heaven:'#fff3b0',hell:'#ff7ae0'};elAlias(AWTINT);
 for(const id in AWK){const b=ART[id];if(!b||!MD[id])continue;const x=AWK[id].x||{},tn=AWTINT[MD[id].el];
