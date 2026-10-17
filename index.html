@@ -714,7 +714,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.5.0';
+const VERSION='1.5.1';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -966,6 +966,50 @@ MV('cinderfox','hell','Hexfox',"Curses anyone who steps on its tails. Has nine t
  SK('Hextail','😈','Two cursed tail hits (0.6x each). Each hit has a 25% chance of ATK Break for 2 turns.',{m:.6,h:2,fx:[['atkDown',2,25]],fxh:1}),
  SK('Shadow Dance','🗡️','Gains ATK Up for 2 turns, then strikes (1.4x); +25% damage if the target has a harmful effect.',{cd:3,m:1.4,self:[['atkUp',2]],debB:.25}),
  SK('Nine-Tail Curse','🔱','ALL enemies (0.8x). 50% chance of DEF Break and 30% chance to Burn for 2 turns.',{cd:4,t:'ae',m:.8,fx:[['defBreak',2,50],['dot',2,30]]})],LD('cr',7));
+// =========== v1.5.1 ELEMENT VERSIONS (batch 2: Flickerwisp, Magmander, Blazemane lines; same skill count as each original) ===========
+// Flickerwisp line
+MV('flickerwisp','water','Dripwisp',"A tiny rain spirit with a tiny rain cloud. The cloud follows it everywhere. It has asked the cloud to stop.",[
+ SK('Drizzle Flicker','💧','Hit (1.0x). Heals itself for 8% of max HP.',{m:1,selfHeal:.08}),
+ SK('Cold Take','🧊','Delivers a frosty opinion (1.5x). 35% chance to Freeze for 1 turn.',{cd:3,m:1.5,fx:[['freeze',1,35]]})]);
+MV('flickerwisp','wind','Puffwisp',"Made of one very confident breeze. Carries a pinwheel so everyone knows which way it's blowing.",[
+ SK('Puff Flicker','🌬️','Hit (1.0x). Pushes the target\'s ATB back 15%.',{m:1,push:15}),
+ SK('Hot Air','🎈','Blows hot air at ALL enemies (0.6x), then gives all allies +15% ATB.',{cd:3,t:'ae',m:.6,post:{atb:15}})]);
+MV('flickerwisp','heaven','Candlewisp',"Lives on top of a candle and takes the job of being a night light extremely seriously.",[
+ SK('Candle Flicker','🕯️','Hit (1.0x). Removes 1 harmful effect from the ally with the lowest HP.',{m:1,clLow:1}),
+ SK('Warm Take','🙏','Says something nice, very loudly (1.4x). 25% chance to Stun for 1 turn.',{cd:3,m:1.4,fx:[['stun',1,25]]})]);
+MV('flickerwisp','hell','Hexwisp',"A purple flame that writes curses in the air. Mostly they say 'boo'. They work anyway.",[
+ SK('Hex Flicker','🕸️','Hit (1.0x). 30% chance of DEF Break for 2 turns.',{m:1,fx:[['defBreak',2,30]]}),
+ SK('Cursed Take','🗯️','Delivers a cursed opinion (1.5x). +50% damage if the target has a harmful effect.',{cd:3,m:1.5,debB:.5})]);
+// Magmander line
+MV('magmander','water','Mudmander',"An axolotl-ish salamander who lives in a puddle and calls it 'the lake house'.",[
+ SK('Mud Lick','👅','Licks an enemy (1.0x). 35% chance to Slow for 2 turns.',{m:1,fx:[['slow',2,35]]}),
+ SK('Sludge Tail','🌊','Smacks with a muddy tail (1.9x) and heals itself for 30% of the damage dealt.',{cd:3,m:1.9,drain:.3})]);
+MV('magmander','wind','Glidemander',"Glides between treetops wearing goggles and a scarf. Lands badly every single time. Never admits it.",[
+ SK('Glide Lick','👅','Licks an enemy (1.0x). Gains +20% ATB.',{m:1,ga:20}),
+ SK('Updraft Tail','🪂','Dive-bombs with its tail (1.8x). If it defeats the target, gains another turn.',{cd:3,m:1.8,kx:1})]);
+MV('magmander','heaven','Halomander',"A golden salamander who carries a tiny shield for protection. Its own, mostly. It is very small.",[
+ SK('Gilded Lick','👅','Licks an enemy (1.0x). 35% chance of ATK Break for 2 turns.',{m:1,fx:[['atkDown',2,35]]}),
+ SK('Aegis Tail','🛡️','Smacks with a golden tail (1.8x), then all allies gain DEF Up for 1 turn.',{cd:3,m:1.8,post:{fx:[['defUp',1]]}})]);
+MV('magmander','hell','Ashmander',"Napped in a volcano for so long it turned to charcoal. Still warm. Still rating the lava 3/5.",[
+ SK('Ash Lick','👅','Licks an enemy (1.0x). Removes 1 beneficial effect from the target.',{m:1,strip:1}),
+ SK('Cinder Tail','⚱️','Smacks with a smouldering tail (1.9x). +40% damage if the target is below 50% HP.',{cd:3,m:1.9,lowB:.4})]);
+// Blazemane line (keeps the swipe / rally / pounce kit and a leader skill)
+MV('blazemane','water','Surfmane',"Half lion, half fish, all drama. His mane is a wave and he insists you call it 'the tide'.",[
+ SK('Surf Swipe','🐾','Swipe (1.2x). 20% chance to Freeze for 1 turn.',{m:1.2,fx:[['freeze',1,20]]}),
+ SK('Tide Rally','🌧️','All allies heal 10% of max HP and gain Regen for 2 turns.',{cd:4,t:'aa',m:0,heal:.1,fx:[['regen',2,100]]}),
+ SK('Riptide Pounce','🌊','Massive pounce (2.9x). 60% chance to Slow for 2 turns.',{cd:4,m:2.9,fx:[['slow',2,60]]})],LD('hp',25));
+MV('blazemane','wind','Stormroar',"A winged lion who roars thunder. The thunder is mostly for effect. The lightning is not.",[
+ SK('Gust Swipe','🐾','Swipe (1.2x). Pushes the target\'s ATB back 20%.',{m:1.2,push:20}),
+ SK('Gale Rally','📣','All allies gain SPD Up for 2 turns.',{cd:4,t:'aa',m:0,fx:[['spdUp',2,100]]}),
+ SK('Cyclone Pounce','🌪️','Massive pounce (2.8x) that ignores 30% of the target\'s DEF.',{cd:4,m:2.8,ign:.3})],LD('spd',15));
+MV('blazemane','heaven','Solmane',"His mane is the actual sun, or so he claims. Do not look directly at him. He loves that.",[
+ SK('Sun Swipe','🐾','Swipe (1.2x). Heals the ally with the lowest HP for 10% of max HP.',{m:1.2,healLow:.1}),
+ SK('Sanctum Rally','📣','Removes all harmful effects from all allies and grants Immunity for 1 turn.',{cd:4,t:'aa',m:0,cleanse:1,fx:[['immune',1,100]]}),
+ SK('Judgement Pounce','⚖️','Massive pounce (2.6x) that scales with DEF. 30% chance to Stun for 1 turn.',{cd:4,m:2.6,sc:'def',fx:[['stun',1,30]]})],LD('def',25));
+MV('blazemane','hell','Brimroar',"Horns, bat wings and a scorpion tail. He is not sure what he is either, but he is sure he is in charge.",[
+ SK('Brim Swipe','🐾','Two cursed swipes (0.65x each). Each swipe has a 30% chance to Burn for 2 turns.',{m:.65,h:2,fx:[['dot',2,30]],fxh:1}),
+ SK('Dread Roar','📣','Removes 1 beneficial effect from ALL enemies, then hits them all (0.7x).',{cd:4,t:'ae',m:.7,strip:1}),
+ SK('Brimstone Pounce','🔱','Massive pounce (3.0x). +40% damage if the target has a harmful effect.',{cd:4,m:3,debB:.4})],LD('cr',11));
 const SUMMONABLE=Object.values(MD).filter(d=>!d.boss&&!d.fodder&&!d.uniq);
 const DEXLIST=Object.values(MD).filter(d=>!d.boss);
 /* ---------- v1.4.4 AWAKENING (Summoners War style, once per monster; unique monsters are never awakenable) ----------
@@ -1010,6 +1054,14 @@ Object.assign(AWK,{
  prismane_hell:{n:'Nocthorne',b:['res',20],g:1,x:{top:['unicorn','hair2','devil','crown']},sk:'Effect chances +10% and her Glow heals 20% (was 15%).'},
  cinderfox_water:{n:'Coralkitsu',b:['res',20],x:{top:['tiara'],acc:['bubbles']}},cinderfox_wind:{n:'Galekitsu',b:['acc',20],x:{top:['leaf','crown']}},
  cinderfox_heaven:{n:'Aurakitsu',b:['res',20],x:{top:['halo','tiara']}},cinderfox_hell:{n:'Hexkitsu',b:['cr',12],x:{top:['devil','crown'],wings:'bat'}}});
+// v1.5.1 element versions (batch 2): awakened names + looks (extra overlay layers: awf front / awk2 behind)
+Object.assign(AWK,{
+ flickerwisp_water:{n:'Tidelume',b:['res',20],x:{top:['tiara']},awf:['pearlOrbit']},flickerwisp_wind:{n:'Galelume',b:['acc',20],x:{top:['crest']},awk2:['tornado']},
+ flickerwisp_heaven:{n:'Vigilume',b:['res',20],x:{top:['halo']},awf:['candelabra']},flickerwisp_hell:{n:'Hexlume',b:['cr',12],x:{top:['crown']},awf:['orbitWisps']},
+ magmander_water:{n:'Brinedrake',b:['res',20],x:{top:['crown']},awf:['trident']},magmander_wind:{n:'Cyclodrake',b:['acc',20],x:{top:['crest']},awk2:['windRing']},
+ magmander_heaven:{n:'Aurumdrake',b:['res',20],x:{wings:'feather',top:['tiara']}},magmander_hell:{n:'Sootdrake',b:['cr',12],x:{wings:'bat',top:['crown']},awf:['ironChains']},
+ blazemane_water:{n:'Tidethrone',b:['res',20],x:{wings:'crystal',top:['crown']},awf:['bubbles']},blazemane_wind:{n:'Galethrone',b:['acc',20],x:{top:['crown']},awf:['stormHalo']},
+ blazemane_heaven:{n:'Halothrone',b:['res',20],x:{wings:'feather',top:['halo']},awk2:['goldCape']},blazemane_hell:{n:'Grimthrone',b:['cr',12],x:{top:['crown']},awf:['chains','hellfire']}});
 const AW_MULT=0.12,AW_SPD=6; // awakening: +12% base HP/ATK/DEF, +6 SPD, plus the bonus stat
 const AW_SK='Effect chances +10% and healing +5% (of max HP).';
 const AWC={1:{l:5,m:0,h:0,mana:5000},2:{l:10,m:3,h:0,mana:10000},3:{l:15,m:6,h:1,mana:25000},4:{l:20,m:10,h:3,mana:50000},5:{l:25,m:15,h:6,mana:100000}};
@@ -1159,6 +1211,10 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.5.1',date:'Oct 17, 2026',title:'🌈 Element Versions II',sections:[
+  ['🌈 12 New Monsters',['Flickerwisp, Magmander and Blazemane now come in all five elements. Each new version has its own name, look, skills and awakened form, and keeps the same number of skills as the original.','🔥 Flickerwisp line: Dripwisp (Water), Puffwisp (Wind), Candlewisp (Heaven), Hexwisp (Hell).','🦎 Magmander line: Mudmander (Water), Glidemander (Wind), Halomander (Heaven), Ashmander (Hell).','🦁 Blazemane line: Surfmane (Water), Stormroar (Wind), Solmane (Heaven), Brimroar (Hell), each with its own leader skill.','Find them in summons (see the Odds tab: your chance of each star rarity is unchanged) and fill their slots in the 📖 Monsterpedia.']],
+  ['⚔️ New Skill Effects',['New effects include pushing back an enemy\'s turn gauge, stealing away buffs, healing from damage dealt, an extra turn on a defeat, ignoring part of the target\'s DEF and bonus damage against weakened or low-HP enemies.']],
+  ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.5.0',date:'Oct 17, 2026',title:'🌈 Element Versions',sections:[
   ['☀️ Heaven & 🔱 Hell',['The Light element is now called ☀️ Heaven and Dark is now 🔱 Hell. Nothing else changes: your monsters, essences and progress carry over automatically.','Heaven and Hell still beat each other.']],
   ['🌈 12 New Monsters',['Leviathan, Prismane and Cinderfox now come in all five elements. Each new version has its own name, look, skills, leader skill and awakened form.','🐍 Leviathan line: Infernathan (Fire), Stormcoil (Wind), Aurelithan (Heaven), Nethrathan (Hell).','🦄 Prismane line: Emberhoof (Fire), Brinehoof (Water), Skyprance (Wind), Nyxmare (Hell).','🦊 Cinderfox line: Riptail (Water), Zephyrkit (Wind), Haloveil (Heaven), Hexfox (Hell).','They join the summon pools at their star level. The chance of each star level is unchanged; within a star level every monster is equally likely (see the Odds tab).','Skill-ups need a duplicate of the exact same version.']],
@@ -1305,6 +1361,35 @@ const PATCHES=[
    Common options: c/c2 colors (#rrggbb), g emoji, n count, sz size, d delay(ms), on:'self'. */
 const HIT=280; // ms from skill start to impact (matches the wind-up in useSkill)
 const SKVFX={
+ // v1.5.1 element versions (batch 2)
+ 'Drizzle Flicker':[['proj',{s:'orb',c:'#5ec8ff',c2:'#e6fbff',sz:6,arc:30}],['ring',{on:'self',c:'#7cff9e',c2:'#5ec8ff',plus:'💚',flat:1,st:HIT,sp:0,rings:1}]],
+ 'Cold Take':[['proj',{s:'emoji',g:'🧊',sz:7,arc:60,spin:2,c:'#5ec8ff'}],['burst',{c:'#bff8ff',c2:'#3da5ff',rays:8,r:2}]],
+ 'Puff Flicker':[['proj',{s:'orb',c:'#c9ffe0',c2:'#ffffff',sz:6,arc:20}],['burst',{c:'#eaffef',c2:'#3fd17f',rays:5,r:1.4,st:HIT+20}]],
+ 'Hot Air':[['tornado',{c:'#ffd1a8',c2:'#c9ffe0',h:2.4}],['aura',{c:'#c9ffe0',c2:'#3fd17f',g:'🎈',st:HIT}]],
+ 'Candle Flicker':[['proj',{s:'star',c:'#ffe27a',c2:'#ffffff',sz:6,arc:26}],['ring',{c:'#ffe27a',c2:'#ffffff',plus:'✨',flat:1,st:HIT,sp:0,rings:1}]],
+ 'Warm Take':[['proj',{s:'emoji',g:'💛',sz:7,arc:60,spin:1,c:'#ffe27a'}],['burst',{c:'#ffffff',c2:'#ffe27a',rays:9,r:2}]],
+ 'Hex Flicker':[['proj',{s:'orb',c:'#a66bff',c2:'#ff3d6e',sz:6,arc:30}],['burst',{c:'#a66bff',c2:'#2a0612',rays:5,r:1.4,st:HIT+20}]],
+ 'Cursed Take':[['proj',{s:'emoji',g:'🗯️',sz:7,arc:60,spin:2,c:'#a66bff'}],['burst',{c:'#ff3d6e',c2:'#a66bff',rays:8,r:2}]],
+ 'Mud Lick':[['beam',{c:'#7a6a4a',c2:'#bfe0ff',w:7,wob:1}],['rain',{c:'#6a5a3a',up:1,st:HIT,len:380,rate:.5,sz:5}]],
+ 'Sludge Tail':[['slash',{c:'#5a7a8a',c2:'#bfe6ff',r:1.6,rot:2.4,len:3.2,w:.42}],['ring',{on:'self',c:'#7cff9e',c2:'#3da5ff',plus:'💚',flat:1,st:HIT+80,sp:0,rings:1}]],
+ 'Glide Lick':[['beam',{c:'#3fd17f',c2:'#eaffef',w:6,wob:1}]],
+ 'Updraft Tail':[['dive',{g:'@',c:'#3fd17f',c2:'#eaffef'}],['tornado',{c:'#c9ffe0',c2:'#ffffff',h:1.8,st:HIT}]],
+ 'Gilded Lick':[['beam',{c:'#ffd65a',c2:'#ffffff',w:7,wob:1}],['burst',{c:'#ffe27a',c2:'#ffffff',rays:6,r:1.5,st:HIT+20}]],
+ 'Aegis Tail':[['slash',{c:'#ffd65a',c2:'#ffffff',r:1.6,rot:2.4,len:3.2,w:.42}],['shield',{c:'#ffe27a',c2:'#ffffff',st:HIT+80}]],
+ 'Ash Lick':[['beam',{c:'#7a7488',c2:'#ff6b1f',w:7,wob:1}],['rain',{c:'#7a7488',up:1,st:HIT,len:380,rate:.5,sz:5}]],
+ 'Cinder Tail':[['slash',{c:'#ff6b1f',c2:'#4a4452',r:1.6,rot:2.4,len:3.2,w:.42}],['quake',{c:'#7a3fd1',px:5}]],
+ 'Surf Swipe':[['slash',{c:'#5ec8ff',c2:'#e6fbff',r:1.3,rot:-.9}]],
+ 'Tide Rally':[['rain',{g:'💧',c:'#5ec8ff',heal:1,sz:14}],['ring',{c:'#7cff9e',c2:'#3da5ff',plus:'💚',flat:1,st:HIT}]],
+ 'Riptide Pounce':[['dive',{g:'@',c:'#3da5ff',c2:'#bff8ff'}],['wave',{c:'#1f6fd6',c2:'#bff8ff',th:110,amp:10,a:.6,st:HIT}]],
+ 'Gust Swipe':[['slash',{c:'#3fd17f',c2:'#eaffef',r:1.3,rot:-.9}],['tornado',{c:'#c9ffe0',c2:'#ffffff',h:1.4,st:HIT}]],
+ 'Gale Rally':[['petals',{g:['🍃','💨'],c:'#3fd17f',r:1.5,spin:3}],['aura',{c:'#c9ffe0',c2:'#3fd17f',g:'💨',st:HIT}]],
+ 'Cyclone Pounce':[['dive',{g:'@',c:'#3fd17f',c2:'#ffffff'}],['tornado',{c:'#3fd17f',c2:'#eaffef',h:2.6,st:HIT}]],
+ 'Sun Swipe':[['slash',{c:'#ffe27a',c2:'#ffffff',r:1.3,rot:-.9}],['ring',{c:'#7cff9e',c2:'#ffe27a',plus:'💚',st:HIT,flat:1}]],
+ 'Sanctum Rally':[['shield',{c:'#ffe27a',c2:'#ffffff'}],['ring',{c:'#ffe27a',c2:'#ffffff',plus:'🔰',rings:1,st:HIT+80,sp:0}]],
+ 'Judgement Pounce':[['dive',{g:'@',c:'#ffe27a',c2:'#ffffff'}],['pillar',{c:'#ffe27a',c2:'#ffffff',w:1,st:HIT}]],
+ 'Brim Swipe':[['slash',{c:'#a66bff',c2:'#ff3d6e',n:2,gap:80,r:1.2}],['rain',{c:'#8a3dff',up:1,st:HIT,len:380,rate:.5,sz:5}]],
+ 'Dread Roar':[['vortex',{c:'#4b1fa0',c2:'#ff3d6e',in:1,arms:4,r:2}],['quake',{c:'#7a3fd1',px:6}]],
+ 'Brimstone Pounce':[['dive',{g:'@',c:'#ff3d6e',c2:'#a66bff'}],['meteor',{c:'#8a3dff',c2:'#ff3d6e',dx:-80,n:2,gap:70,sz:9,st:HIT-100}],['quake',{c:'#7a3fd1',px:8}]],
  // v1.5.0 element versions (batch 1)
  'Magma Coil':[['slash',{c:'#ff5a1f',c2:'#ffd166',r:1.6,rot:2.4,len:3.2,w:.42}],['rain',{c:'#ff8a1f',up:1,st:HIT,len:380,rate:.5,sz:5}]],
  'Searing Lash':[['bite',{c:'#ff6b3d',c2:'#ffd166'}],['slash',{c:'#ff8a1f',c2:'#ffe08a',r:1.3,rot:-.9,st:HIT}]],
@@ -1510,6 +1595,46 @@ artVar('prismane_fire','prismane',{rb:0,p:['#ff9a4a','#ffe0c0','#c9461a'],hair:'
 artVar('prismane_water','prismane',{rb:0,p:['#7fd3e8','#e6fbff','#2f8fae'],hair:'#2f6fd6',a:'#bff0ff',e:'#0d2a5c',ears:'fin',tail:'fish',acc:['pearls','bubbles']},['bubbles'],['wave']);
 artVar('prismane_wind','prismane',{rb:0,p:['#e8fff0','#ffffff','#9fd8b0'],hair:'#3fd17f',a:'#fff6c8',e:'#1f6b3a',wings:'fairy',top:['unicorn','hair2','leaf'],mark:['stripes']},['swirls']);
 artVar('prismane_hell','prismane',{rb:0,p:['#2a1640','#7a5aa8','#0e0620'],hair:'#ff3d6e',a:'#ff3d6e',e:'#ff3d6e',eyes:'glow',wings:'bat',mouth:'fang',top:['unicorn','hair2','devil'],mark:['moon'],acc:['collar']},['chains'],['hellfire']);
+// v1.5.1 element versions (batch 2) overlays
+Object.assign(OVL,{
+  raincloud:`<g transform="translate(60 4) scale(.72)"><path d="M-30 6 q-12 0 -10 -10 q2 -10 14 -8 q6 -12 20 -6 q12 -8 20 4 q12 0 10 12 q-2 8 -12 8z" fill="#e6f4ff" stroke="#5a7fa8" stroke-width="2"/><g fill="#7fd0ff" stroke="#2f6fae" stroke-width="1"><path d="M-22 14 q-4 7 0 10 q4 -3 0 -10z"/><path d="M0 16 q-4 7 0 10 q4 -3 0 -10z"/><path d="M22 14 q-4 7 0 10 q4 -3 0 -10z"/></g></g>`,
+  pearlOrbit:`<g><ellipse cx="60" cy="58" rx="54" ry="16" fill="none" stroke="#bff0ff" stroke-width="1.5" opacity=".7"/>${[[8,58],[30,72],[90,72],[112,58],[60,74]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4" fill="#fdfcff" stroke="#7aa8c8" stroke-width="1"/>`).join('')}</g>`,
+  pinwheel:`<g transform="translate(98 14)"><line x1="0" y1="0" x2="0" y2="40" stroke="#8a5c3a" stroke-width="2.5"/>${[0,90,180,270].map((r,i)=>`<path d="M0 0 L14 -4 L10 8Z" fill="${['#ff6b9a','#ffe27a','#5ec8ff','#7fe0a8'][i]}" stroke="#2a4a3a" stroke-width="1" transform="rotate(${r})"/>`).join('')}<circle r="2.4" fill="#fff"/></g>`,
+  tornado:`<g fill="none" stroke="#c9ffe0" stroke-width="3" stroke-linecap="round" opacity=".85"><path d="M30 92 q30 10 60 0"/><path d="M38 102 q22 8 44 0"/><path d="M46 110 q14 5 28 0"/><path d="M54 116 q6 2 12 0"/></g>`,
+  candle:`<g><ellipse cx="60" cy="112" rx="30" ry="6" fill="#e8c24a" stroke="#9a7a10" stroke-width="1.6"/><path d="M44 72 L44 108 Q60 114 76 108 L76 72Z" fill="#fff6e8" stroke="#c9a86a" stroke-width="1.6"/><path d="M44 74 q3 12 6 0 q3 16 6 0 M66 74 q3 10 6 0" fill="#fff6e8" stroke="#c9a86a" stroke-width="1.2"/><path d="M84 108 q6 -4 8 2 q-2 6 -10 4" fill="#e8c24a" stroke="#9a7a10" stroke-width="1.2"/></g>`,
+  whiteFlame:`<path d="M48 22 Q48 4 60 -8 Q60 4 66 2 Q74 10 72 22 Z" fill="#fffbe6" stroke="#e6c25a" stroke-width="1.6"/><path d="M55 20 Q56 8 61 2 Q63 10 66 12 Q67 18 65 20Z" fill="#ffe27a"/>`,
+  candelabra:`<g>${[[16,74],[104,74]].map(([x,y])=>`<rect x="${x-5}" y="${y}" width="10" height="20" rx="2" fill="#fff6e8" stroke="#c9a86a" stroke-width="1.3"/><path d="M${x} ${y-2} q-5 -6 0 -14 q5 8 0 14z" fill="#ffe27a" stroke="#e6a01a" stroke-width="1"/>`).join('')}</g>`,
+  hexCircle:`<g fill="none" stroke="#b46bff" stroke-width="1.8" opacity=".85"><circle cx="60" cy="104" rx="0" r="0"/><ellipse cx="60" cy="108" rx="44" ry="9"/><ellipse cx="60" cy="108" rx="34" ry="6"/><path d="M26 108 L60 100 L94 108 L60 116Z"/></g>`,
+  orbitWisps:`<g fill="#b46bff" stroke="#4a1a6e" stroke-width="1">${[[12,40],[108,36],[100,90],[18,92]].map(([x,y])=>`<path d="M${x} ${y+8} q-7 -6 0 -16 q2 6 5 6 q2 6 -5 10z"/><circle cx="${x+1}" cy="${y+2}" r="1.3" fill="#ffe0ff" stroke="none"/>`).join('')}</g>`,
+  gills:`<g fill="#ff8ab8" stroke="#a83a6a" stroke-width="1.2">${[-1,1].map(s=>[0,1,2].map(i=>`<path d="M${60+s*28} ${36+i*9} q${s*14} ${-6+i*3} ${s*20} ${-2+i*4} q${-s*8} ${4} ${-s*20} ${6}z"/>`).join('')).join('')}</g>`,
+  puddle:`<ellipse cx="60" cy="112" rx="50" ry="7" fill="#6a5a3a" opacity=".55"/><ellipse cx="44" cy="111" rx="10" ry="2" fill="#bfe0ff" opacity=".6"/>`,
+  trident:`<g transform="translate(100 18) rotate(10)" fill="#ffd65a" stroke="#8a6a10" stroke-width="1.3"><rect x="-1.6" y="0" width="3.2" height="74" rx="1.5"/><path d="M-10 4 L-10 -10 L-7 -2 L-3 -2 L0 -16 L3 -2 L7 -2 L10 -10 L10 4Z"/></g>`,
+  cloudPuff:`<g fill="#ffffff" stroke="#9fd8b0" stroke-width="1.6"><path d="M14 112 q-8 -10 4 -14 q4 -10 16 -6 q8 -8 18 0 q10 -6 18 2 q12 -4 16 6 q12 2 6 12z"/></g>`,
+  windRing:`<g fill="none" stroke="#e8fff0" stroke-width="2.6" stroke-linecap="round" opacity=".8"><path d="M6 40 A56 22 0 0 1 114 40"/><path d="M14 30 A48 18 0 0 1 106 30" stroke-dasharray="6 6"/></g>`,
+  sunDisc:`<circle cx="60" cy="42" r="50" fill="#ffe27a" opacity=".35"/><circle cx="60" cy="42" r="50" fill="none" stroke="#ffd65a" stroke-width="2.5"/>`,
+  shieldBadge:`<g transform="translate(20 74)"><path d="M0 -12 L12 -8 L12 4 Q12 14 0 18 Q-12 14 -12 4 L-12 -8Z" fill="#ffe27a" stroke="#9a7a10" stroke-width="1.6"/><path d="M0 -6 L0 12 M-7 2 L7 2" stroke="#ffffff" stroke-width="2.2"/></g>`,
+  smoke:`<g fill="#7a7488" opacity=".6"><circle cx="18" cy="28" r="8"/><circle cx="10" cy="18" r="5"/><circle cx="102" cy="22" r="7"/><circle cx="110" cy="12" r="4"/><circle cx="96" cy="92" r="6"/></g>`,
+  emberCracks:`<g fill="#ff6b1f" opacity=".9"><circle cx="24" cy="34" r="1.6"/><circle cx="96" cy="30" r="1.6"/><circle cx="14" cy="60" r="1.2"/></g>`,
+  waveMane:`<g fill="#7fd8ff" stroke="#1d5a9e" stroke-width="1.6"><path d="M18 60 q-14 -30 10 -46 q-2 14 8 16 q-4 -20 22 -26 q-6 14 4 18 q8 -22 30 -10 q-12 6 -6 16 q16 -14 26 6 q-10 2 -10 10 q18 0 14 22 Z"/><path d="M30 30 q6 -4 10 2 M58 12 q6 -4 10 2 M86 24 q6 -4 10 2" fill="none" stroke="#ffffff" stroke-width="2"/></g>`,
+  stormCloud:`<g><path d="M14 22 q-14 -2 -10 -16 q4 -10 18 -6 q8 -14 26 -6 q14 -12 30 0 q14 -6 22 6 q14 2 8 18z" fill="#6a7f9a" stroke="#2a3a52" stroke-width="1.6"/><path d="M28 22 l-6 14 h6 l-4 12 l12 -16 h-6 l4 -10z M92 22 l-6 14 h6 l-4 12 l12 -16 h-6 l4 -10z" fill="#ffe27a" stroke="#6a5a00" stroke-width="1"/></g>`,
+  stormHalo:`<g fill="#ffe27a" stroke="#6a5a00" stroke-width="1">${[-50,-25,0,25,50].map(a=>`<path d="M0 -6 l-3 7 h3 l-2 7 l6 -9 h-3 l2 -5z" transform="translate(${60+Math.sin(a/57.3)*30} ${4-Math.cos(a/57.3)*10})"/>`).join('')}</g>`,
+  sunMane:`<g fill="#ffd65a" stroke="#c98a1a" stroke-width="1.4">${[...Array(14)].map((_,i)=>{const a=i/14*6.283,x=60+Math.cos(a)*52,y=46+Math.sin(a)*50;return`<path d="M${60+Math.cos(a-.2)*30} ${46+Math.sin(a-.2)*30} Q${60+Math.cos(a)*46} ${46+Math.sin(a)*44} ${x} ${y} Q${60+Math.cos(a+.05)*42} ${46+Math.sin(a+.05)*40} ${60+Math.cos(a+.2)*30} ${46+Math.sin(a+.2)*30}Z"/>`}).join('')}</g>`,
+  brimMane:`<g fill="#8a3dff" stroke="#2a0a52" stroke-width="1.3" opacity=".9">${[...Array(10)].map((_,i)=>{const a=-3.14+i/9*3.14,x=60+Math.cos(a)*44,y=44+Math.sin(a)*40;return`<path d="M${60+Math.cos(a-.2)*30} ${44+Math.sin(a-.2)*30} Q${x} ${y-6} ${x+Math.cos(a)*4} ${y+Math.sin(a)*4} Q${60+Math.cos(a+.25)*36} ${44+Math.sin(a+.25)*36} ${60+Math.cos(a+.2)*30} ${44+Math.sin(a+.2)*30}Z"/>`}).join('')}</g>`,
+  goldCape:`<path d="M24 70 Q60 60 96 70 L108 116 Q60 104 12 116Z" fill="#ffe27a" stroke="#9a7a10" stroke-width="1.6" opacity=".9"/>`,
+  ironChains:`<g fill="none" stroke="#9a9aaa" stroke-width="2.4">${[0,1,2,3].map(i=>`<ellipse cx="${18+i*8}" cy="${70+i*8}" rx="4" ry="2.6" transform="rotate(50 ${18+i*8} ${70+i*8})"/><ellipse cx="${102-i*8}" cy="${70+i*8}" rx="4" ry="2.6" transform="rotate(-50 ${102-i*8} ${70+i*8})"/>`).join('')}</g>`,
+});
+artVar('flickerwisp_water','flickerwisp',{p:['#5ec8ff','#e6f8ff','#1f78c4'],a:'#bff0ff',e:'#0d2a5c',top:[],ears:'fin',tail:'fish',mouth:'o',lids:'sleepy'},['raincloud'],[]);
+artVar('flickerwisp_wind','flickerwisp',{p:['#bff6d8','#ffffff','#5fbf8a'],a:'#fff6c8',e:'#1f6b3a',head:'round',top:['leaf'],wings:'fairy',tail:undefined,mouth:'cat'},['pinwheel'],['swirls']);
+artVar('flickerwisp_heaven','flickerwisp',{p:['#fff3c4','#fffdf2','#e6c25a'],a:'#ffd65a',e:'#8a5a00',top:[],tail:undefined,mouth:'smile',lids:'sleepy'},['whiteFlame'],['candle']);
+artVar('flickerwisp_hell','flickerwisp',{p:['#6a3a9e','#d6b2ff','#2a1040'],a:'#ff3d6e',e:'#ff3d6e',top:['devil'],eyes:'glow',mouth:'fang',brow:1,acc:['runes'],tail:'sting'},[],['hexCircle']);
+artVar('magmander_water','magmander',{p:['#6a9ab8','#d8ecf4','#34607a'],a:'#ff8ab8',e:'#1d2e3c',ears:'none',tail:'fish',mark:['dots'],mouth:'o'},['gills'],['puddle']);
+artVar('magmander_wind','magmander',{p:['#7fd88a','#eaffe6','#2f8f4a'],a:'#fff6c8',e:'#1f4a2a',ears:'tuft',wings:'feather',wc:'#bff6d8',mark:['stripes'],mouth:'smile',acc:['scarf'],sc2:'#ffe27a'},['goggles'],['cloudPuff']);
+artVar('magmander_heaven','magmander',{p:['#ffe08a','#fff8dc','#c9a03a'],a:'#5ec8ff',e:'#3d4a8a',ears:'frill',top:['crest'],mark:['gem'],mouth:'smile',lids:'smug'},['shieldBadge'],['sunDisc']);
+artVar('magmander_hell','magmander',{p:['#4a4452','#9a90a8','#1e1a26'],a:'#ff6b1f',e:'#ff6b1f',top:['spikes'],mark:['cracks'],eyes:'glow',tail:'dragon',mouth:'fang',brow:1},['emberCracks'],['smoke']);
+artVar('blazemane_water','blazemane',{p:['#5aa8e0','#e0f2ff','#1f5f9e'],a:'#bff0ff',e:'#0d2a5c',ears:'fin',back:[],tail:'fish',top:['dorsal'],acc:['pearls']},[],['waveMane']);
+artVar('blazemane_wind','blazemane',{p:['#9ad0b0','#effff6','#3f7f62'],a:'#e8fff0',e:'#1f4a3a',ears:'tuft',back:['mane'],wings:'feather',wc:'#e8fff0',tail:'bolt',top:['crest'],acc:['bolts']},[],['stormCloud']);
+artVar('blazemane_heaven','blazemane',{p:['#fff0c8','#fffbee','#e0b860'],a:'#ffffff',e:'#3d6ad6',back:[],top:['crown'],mark:['gem']},[],['sunMane']);
+artVar('blazemane_hell','blazemane',{p:['#3a2a3e','#8a6a90','#140a16'],a:'#8a3dff',e:'#ff3d6e',back:[],top:['bighorns'],eyes:'glow',mouth:'fang',brow:1,wings:'bat',tail:'sting'},[],['brimMane']);
 // v1.4.4 awakened art: ART[id+'_aw'] = base art + palette shift toward the element's awakening tint + accessory overlay + aura/sparkles
 const AWTINT={fire:'#ffd166',water:'#8ff0ff',wind:'#d6ff8a',heaven:'#fff3b0',hell:'#ff7ae0'};elAlias(AWTINT);
 for(const id in AWK){const b=ART[id];if(!b||!MD[id])continue;const x=AWK[id].x||{},tn=AWTINT[MD[id].el];
@@ -1518,6 +1643,8 @@ for(const id in AWK){const b=ART[id];if(!b||!MD[id])continue;const x=AWK[id].x||
  if(!x.keep&&x.top)o.top=[...new Set([...(b.top||[]),...x.top])];if(x.acc)o.acc=[...new Set([...(b.acc||[]),...x.acc])];if(x.mark)o.mark=[...new Set([...(b.mark||[]),...x.mark])];
  if(b.wings&&x.wings)o.wings=b.wings; // keep its own wings
  o.awk=1;o.awc=tn;ART[id+'_aw']=o;}
+// v1.5.1: awakened forms can add their own overlay layers (awf front / awk2 behind)
+for(const id in AWK){const A=AWK[id],o=ART[id+'_aw'];if(!o)continue;if(A.awf)o.ovf=(o.ovf||'')+A.awf.map(k=>OVL[k]).join('');if(A.awk2)o.ovk=(o.ovk||'')+A.awk2.map(k=>OVL[k]).join('');}
 /* ---------- v1.4.5 Leviathan / Carter: custom sea-serpent sprite (ART[id].svg) ---------- */
 function levSvg(aw,face,V){const ko=face==='ko',hit=face==='hit',atk=face==='attack',ch=face==='cheer',anim=!SPR.still&&!ko;
  if(face==='blink')return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="22 6 368 392"></svg>`; // the serpent never blinks
@@ -2342,7 +2469,7 @@ function doImport(){try{const d=JSON.parse(decodeURIComponent(escape(atob($('#im
 
 /* =================== BATTLE TEXT (neutral defaults; content packs may override) =================== */
 const TX={taken:'⛓️ Bound',takenTip:'Bound: can never be revived',takenInfo:'⛓️ Bound: cannot be revived',noRevive:'Bound: cannot revive',
- execute:'💀 Low HP: +50%',atbBack:v=>`⏪ ATB -${v}%`,atbUp:v=>`⏩ ATB +${v}%`,extra:'Extra turn!',extraMsg:u=>`${spi(u.id)} ${u.n} acts again!`,revived:'Revived! ✨',reviveMsg:(s,t)=>`${spi(t.id)} ${t.n} rises again at 50% HP!`,
+ execute:'💀 Low HP: +50%',atbBack:v=>`⏪ ATB -${v}%`,atbUp:v=>`⏩ ATB +${v}%`,extra:'Extra turn!',strip:'🚫 Buff removed',lowHp:v=>`💀 Low HP: +${Math.round(v*100)}%`,extraMsg:u=>`${spi(u.id)} ${u.n} acts again!`,revived:'Revived! ✨',reviveMsg:(s,t)=>`${spi(t.id)} ${t.n} rises again at 50% HP!`,
  ampOn:'Empowered!',ampOff:'Power fades',ampIcon:'✨',ampTip:'Empowered',ampDesc:'Empowered',ampInfo:u=>'Empowered'};
 
 /* =================== SEALED CONTENT (v1.3.2) ===================
@@ -3007,23 +3134,30 @@ function resolveSkill(u,sk,tgt){const foes=foesOf(u),friends=friendsOf(u);
  let targets;if(sk.t==='e')targets=[tgt&&tgt.hp>0&&tgt.side!==u.side?tgt:foes[0]];else if(sk.t==='ae')targets=foes;else if(sk.t==='a')targets=[tgt&&tgt.hp>0&&tgt.side===u.side?tgt:u];else if(sk.t==='aa')targets=friends;else targets=[u];
  targets=targets.filter(Boolean);const off=sk.t==='e'||sk.t==='ae';
  if(sk.t==='ae'&&sk.m>0)flashField(ELEM[u.el].c);if(!off&&sk.heal)sfx('heal');else if(!off)sfx('buff');
- let total=0;
+ let total=0,killed=0;
  if(sk.rnd){for(let i=0;i<sk.rnd;i++){const al=foes.filter(f=>f.hp>0);if(!al.length)break;const t=pick(al);total+=strike(u,t,sk,i%4);(sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,ch);});}targets=[];} // v1.5.0: hits on random enemies
- targets.forEach(t=>{if(off&&sk.m>0){for(let h=0;h<sk.h;h++){if(t.hp<=0)break;total+=strike(u,t,sk,h);if(sk.fxh&&t.hp>0)(sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,sk.upFx?upCh(u,sk,ch):ch);});}}
+ targets.forEach(t=>{if(sk.strip&&off&&t.hp>0){const i=t.fx.findIndex(f=>FX[f.id].buff);if(i>=0){t.fx.splice(i,1);float(t,TX.strip,'info',1);}} // v1.5.1: remove 1 beneficial effect
+  const alive=t.hp>0;if(off&&sk.m>0){for(let h=0;h<sk.h;h++){if(t.hp<=0)break;total+=strike(u,t,sk,h);if(sk.fxh&&t.hp>0)(sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,sk.upFx?upCh(u,sk,ch):ch);});}}
   if(t.hp>0){if(sk.heal)heal(t,Math.round((sk.hb?u.maxHp:t.maxHp)*healPct(u,sk)));if(sk.hb&&u.awk&&!sk.cleanse){const i=t.fx.findIndex(f=>!FX[f.id].buff);if(i>=0){t.fx.splice(i,1);float(t,'Cleansed ✨','info',1);}}if(sk.cleanse){const n=t.fx.length;t.fx=t.fx.filter(f=>FX[f.id].buff);if(t.fx.length<n)float(t,'Cleansed ✨','info',1);}
-   if(!sk.fxh)(sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,sk.upFx?upCh(u,sk,ch):ch);});if(sk.awAtb&&u.awk&&t.hp>0&&t.side!==u.side)t.atb=Math.max(0,t.atb-sk.awAtb);if(sk.atb&&t!==u)t.atb=Math.min(100,t.atb+sk.atb);}});
- if(sk.tail&&u.hp>0){const al=foes.filter(f=>f.hp>0);if(al.length){const T=sk.tail,t2=al.reduce((a,b)=>b.hp<a.hp?b:a);B.lastTail=t2.bid;const lb=!!(T.lowB&&t2.hp<t2.maxHp*.5);if(lb)float(t2,TX.execute,'crim',2);total+=strike(u,t2,Object.assign({},sk,{m:T.m*(lb?1+T.lowB:1),debB:0}),1);
+   if(!sk.fxh)(sk.fx||[]).forEach(([id,turns,ch])=>{if(t.hp>0)addFx(u,t,id,turns,sk.upFx?upCh(u,sk,ch):ch);});if(sk.awAtb&&u.awk&&t.hp>0&&t.side!==u.side)t.atb=Math.max(0,t.atb-sk.awAtb);if(sk.atb&&t!==u)t.atb=Math.min(100,t.atb+sk.atb);
+   if(sk.push&&off&&t.side!==u.side){t.atb=Math.max(0,t.atb-sk.push);float(t,TX.atbBack(sk.push),'info',2);}} // v1.5.1: ATB push on the target
+  if(alive&&t.hp<=0&&off)killed++;});
+ if(sk.tail&&u.hp>0){const al=foes.filter(f=>f.hp>0);if(al.length){const T=sk.tail,t2=al.reduce((a,b)=>b.hp<a.hp?b:a);B.lastTail=t2.bid;const lb=!!(T.lowB&&t2.hp<t2.maxHp*.5);if(lb)float(t2,TX.execute,'crim',2);total+=strike(u,t2,Object.assign({},sk,{m:T.m*(lb?1+T.lowB:1),debB:0,lowB:0,ign:0}),1);
   if(t2.hp>0){if(T.st!=null)addFx(u,t2,'stun',1,upCh(u,sk,T.st));if(T.fx)addFx(u,t2,T.fx[0],T.fx[1],upCh(u,sk,T.fx[2]));if(T.push){const pv=upCh(u,sk,T.push);t2.atb=Math.max(0,t2.atb-pv);float(t2,TX.atbBack(pv),'info',2);}}}}
  if(sk.healLow&&u.hp>0){const fr=friendsOf(u).filter(f=>f.hp>0&&!f.tk);if(fr.length){const w=fr.reduce((a,b)=>b.hp/b.maxHp<a.hp/a.maxHp?b:a);heal(w,Math.round(w.maxHp*sk.healLow));}}
+ if(sk.clLow&&u.hp>0){const fr=friendsOf(u).filter(f=>f.hp>0&&!f.tk);if(fr.length){const w=fr.reduce((a,b)=>b.hp/b.maxHp<a.hp/a.maxHp?b:a),i=w.fx.findIndex(f=>!FX[f.id].buff);if(i>=0){w.fx.splice(i,1);float(w,'Cleansed ✨','info',1);}}} // v1.5.1
  if(sk.post&&!sk.post.pre&&u.hp>0)postFx(u,sk);
  if(sk.ga){u._ga=sk.ga;float(u,TX.atbUp(sk.ga),'info',2);}
  if(sk.drain&&total>0&&u.hp>0)heal(u,Math.round(total*sk.drain));
+ if(sk.kx&&killed&&u.hp>0&&B.actor===u)B.reap=u; // v1.5.1: a defeat earns one extra turn (same bookkeeping as other extra turns)
  if(sk.selfAfter&&u.hp>0)(sk.self||[]).forEach(([id,t])=>addFx(u,u,id,t,100));}
 // v1.5.0: 'post' = effect on every living ally after (or before, pre:1) the attack: heal (hb: % of caster's max HP; skill-ups via sk.up), cl: remove 1 harmful effect, fx: buffs
 function postFx(u,sk){const P=sk.post;friendsOf(u).filter(f=>f.hp>0&&!f.tk).forEach(f=>{if(P.heal){const n=sk.upFx?0:Math.min(u.sl||0,(sk.up||[]).length);const pc=(n>0?sk.up[n-1]:P.heal)+(u.awg&&!P.hb?0.05:0);heal(f,Math.round((P.hb?u.maxHp:f.maxHp)*pc));}
- if(P.cl){const i=f.fx.findIndex(x=>!FX[x.id].buff);if(i>=0){f.fx.splice(i,1);float(f,'Cleansed ✨','info',1);}}(P.fx||[]).forEach(([id,t])=>addFx(u,f,id,t,100));});}
+ if(P.cl){const i=f.fx.findIndex(x=>!FX[x.id].buff);if(i>=0){f.fx.splice(i,1);float(f,'Cleansed ✨','info',1);}}(P.fx||[]).forEach(([id,t])=>addFx(u,f,id,t,100));
+ if(P.atb){if(f===u)u._ga=Math.min(100,(u._ga||0)+P.atb);else f.atb=Math.min(100,f.atb+P.atb);float(f,TX.atbUp(P.atb),'info',2);}});}
 function strike(u,t,sk,h){const em=elemMod(u.el,t.el);const cr=Math.min(100,eff(u,'cr')+(em>0?15:em<0?-15:0));const glance=em<0&&Math.random()<0.3;const crit=!glance&&Math.random()*100<cr;
- const stat=sk.sc==='def'?eff(u,'def')*1.8*SCALE.atk/SCALE.def:eff(u,'atk');const tdef=eff(t,'def')*(1-Math.min(1,u.ign||0));let d=stat*sk.m*DMG_C*(DMG_K/(DMG_K+tdef));if(sk.debB&&t.fx.some(f=>!FX[f.id].buff))d*=1+sk.debB; // v1.5.0: bonus vs a target with a harmful effect
+ const stat=sk.sc==='def'?eff(u,'def')*1.8*SCALE.atk/SCALE.def:eff(u,'atk');const tdef=eff(t,'def')*(1-Math.min(1,(u.ign||0)+(sk.ign||0)));let d=stat*sk.m*DMG_C*(DMG_K/(DMG_K+tdef));if(sk.lowB&&t.hp<t.maxHp*.5){d*=1+sk.lowB;if(h===0)float(t,TX.lowHp(sk.lowB),'crim',2);} // v1.5.1: bonus vs a target below 50% HP
+ if(sk.debB&&t.fx.some(f=>!FX[f.id].buff))d*=1+sk.debB; // v1.5.0: bonus vs a target with a harmful effect
  if(em>0)d*=1.3;else if(em<0)d*=0.85;if(crit)d*=1+eff(u,'cd')/100;if(glance)d*=0.7;d*=0.95+Math.random()*0.1;d=Math.max(1,Math.round(d));
  hurt(t,d,u);float(t,(crit?'💥':'')+fmt(d)+(crit?'!':''),(crit?'crit':glance?'glance':'dmg')+' x-'+u.el,h);
  if(u.vamp&&u.hp>0)heal(u,Math.round(d*0.35)); // Vampire set
