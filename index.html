@@ -714,7 +714,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.5.4';
+const VERSION='1.5.5';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -1150,6 +1150,54 @@ MV('galeclaw','hell','Gravequill',"A bone vulture that circles very slowly. It i
  SK('Curse Dive','🦅','Hit (1.2x). Removes 1 beneficial effect from the target.',{m:1.2,strip:1}),
  SK('Shade Rend','🩸','Hit (1.7x). +50% damage if the target has a harmful effect.',{cd:3,m:1.7,debB:.5}),
  SK('Grave Plunge','💀','Plummets out of the dark (2.7x). If it defeats the target, gains another turn.',{cd:4,m:2.7,kx:1})],LD('cr',8));
+// =========== v1.5.5 ELEMENT VERSIONS (batch 6: Zephyrlet, Tempestrix, Lumilamb lines; same skill count + cooldowns as each original) ===========
+// Zephyrlet line (flick / cd-4 team move / cd-4 pixie trick + leader skill)
+MV('zephyrlet','fire','Pyrelet',"A pixie who lights candles by sneezing. Has been asked to stop visiting birthday parties early.",[
+ SK('Spark Flick','🍃','Hit (1.1x). 35% chance to Burn for 2 turns.',{m:1.1,fx:[['dot',2,35]]}),
+ SK('Kindling Gust','🔥','All allies gain ATK Up for 2 turns.',{cd:4,t:'aa',m:0,fx:[['atkUp',2,100]]}),
+ SK('Ember Waltz','🌸','ALL enemies (1.0x). 45% chance of DEF Break for 2 turns.',{cd:4,t:'ae',m:1,fx:[['defBreak',2,45]]})],LD('atk',25));
+MV('zephyrlet','water','Dewlet',"A pixie who lives on a lily pad. Collects morning dew in a thimble. The thimble is always full.",[
+ SK('Dew Flick','💧','Hit (1.1x). 20% chance to Freeze for 1 turn.',{m:1.1,fx:[['freeze',1,20]]}),
+ SK('Tide Shield','🌊','All allies gain DEF Up for 2 turns.',{cd:4,t:'aa',m:0,fx:[['defUp',2,100]]}),
+ SK('Rain Mend','🌸','Removes all harmful effects from all allies, then heals the ally with the lowest HP for 25% of max HP.',{cd:4,t:'aa',m:0,cleanse:1,healLow:.25})],LD('hp',25));
+MV('zephyrlet','heaven','Gracelet',"A pixie with a star wand and perfect manners. Curtsies before every attack. The enemy is too charmed to dodge.",[
+ SK('Halo Flick','✨','Hit (1.1x). 25% chance to Stun for 1 turn.',{m:1.1,fx:[['stun',1,25]]}),
+ SK('Sanctum Breeze','🕊️','All allies gain Immunity for 2 turns.',{cd:4,t:'aa',m:0,fx:[['immune',2,100]]}),
+ SK('Grace Waltz','🌸','ALL enemies (1.0x). Damage scales with DEF.',{cd:4,t:'ae',m:1,sc:'def'})],LD('def',25));
+MV('zephyrlet','hell','Nyxlet',"A night pixie who spreads rumours to the moths. The moths believe every word.",[
+ SK('Hex Flick','🦇','Hit (1.1x). Removes 1 beneficial effect from the target.',{m:1.1,strip:1}),
+ SK('Gossip Hex','🌑','ALL enemies (0.8x). Pushes every enemy\'s ATB back 25%.',{cd:4,t:'ae',m:.8,push:25}),
+ SK('Nightmare Mend','🥀','ALL enemies (0.9x). Heals itself for 30% of the damage dealt.',{cd:4,t:'ae',m:.9,drain:.3})],LD('cr',11));
+// Tempestrix line (clap / cd-3 two-gust cyclone / cd-5 eye + leader skill)
+MV('tempestrix','fire','Flarerix',"A storm dragon whose lightning comes out on fire. Responsible for 87% of all lost barbecues.",[
+ SK('Flare Clap','⚡','Hit (1.3x). 30% chance to Burn for 2 turns.',{m:1.3,fx:[['dot',2,30]]}),
+ SK('Blaze Cyclone','🌪️','ALL enemies, two gusts (0.6x each). Each gust has a 15% chance of DEF Break for 2 turns.',{cd:3,t:'ae',m:.6,h:2,fx:[['defBreak',2,15]],fxh:1}),
+ SK('Eye of the Blaze','🌀','ALL enemies (1.9x). Ignores 30% of DEF.',{cd:5,t:'ae',m:1.9,ign:.3})],LD('atk',33));
+MV('tempestrix','water','Monsoonrix',"A monsoon dragon who brings a whole rainy season wherever it goes. Its umbrella collection is legendary.",[
+ SK('Hail Clap','⚡','Hit (1.3x). 20% chance to Freeze for 1 turn.',{m:1.3,fx:[['freeze',1,20]]}),
+ SK('Monsoon Cyclone','🌪️','ALL enemies, two gusts (0.55x each). Each gust has a 20% chance to Slow for 2 turns.',{cd:3,t:'ae',m:.55,h:2,fx:[['slow',2,20]],fxh:1}),
+ SK('Eye of the Deluge','🌀','ALL enemies (1.8x), then heals all allies for 15% of max HP.',{cd:5,t:'ae',m:1.8,post:{heal:.15}})],LD('hp',33));
+MV('tempestrix','heaven','Sanctrix',"A sky dragon that only strikes when it is sunny. Its thunder sounds like applause.",[
+ SK('Sun Clap','⚡','Hit (1.3x). Heals the ally with the lowest HP for 10% of max HP.',{m:1.3,healLow:.1}),
+ SK('Halo Cyclone','🌪️','ALL enemies, two gusts (0.55x each), then all allies gain DEF Up for 1 turn.',{cd:3,t:'ae',m:.55,h:2,post:{fx:[['defUp',1]]}}),
+ SK('Eye of Judgement','🌀','ALL enemies (1.8x). Damage scales with DEF.',{cd:5,t:'ae',m:1.8,sc:'def'})],LD('def',33));
+MV('tempestrix','hell','Dreadrix',"A doom dragon with red lightning. Rumbles ominously at birthday parties. Nobody invites it twice.",[
+ SK('Dread Clap','⚡','Hit (1.3x). +50% damage if the target has a harmful effect.',{m:1.3,debB:.5}),
+ SK('Nether Cyclone','🌪️','ALL enemies, two gusts (0.6x each). Each gust has a 15% chance of ATK Break for 2 turns.',{cd:3,t:'ae',m:.6,h:2,fx:[['atkDown',2,15]],fxh:1}),
+ SK('Eye of Ruin','🌀','ALL enemies (1.9x). +40% damage to each enemy below 50% HP.',{cd:5,t:'ae',m:1.9,lowB:.4})],LD('cr',15));
+// Lumilamb line (headbutt / cd-3 move; no leader skill, like the original)
+MV('lumilamb','fire','Toastlamb',"A lamb that sleeps next to the campfire. Its wool smells faintly of toasted marshmallow.",[
+ SK('Toasty Headbutt','🐑','Hit (1.0x). 30% chance to Burn for 2 turns.',{fx:[['dot',2,30]]}),
+ SK('Warm Fleece','🔥','One ally gains ATK Up for 2 turns.',{cd:3,t:'a',m:0,fx:[['atkUp',2,100]]})]);
+MV('lumilamb','water','Foamlamb',"A lamb made mostly of soap bubbles. Every hug leaves you squeaky clean.",[
+ SK('Bubble Headbutt','🐑','Hit (1.0x). 25% chance to Slow for 2 turns.',{fx:[['slow',2,25]]}),
+ SK('Foam Fleece','🫧','Removes all harmful effects from one ally and grants Regen for 2 turns.',{cd:3,t:'a',m:0,cleanse:1,fx:[['regen',2,100]]})]);
+MV('lumilamb','wind','Breezelamb',"A lamb so fluffy the wind carries it around. It has never once walked anywhere.",[
+ SK('Gust Headbutt','🐑','Hit (1.0x). Gains +20% ATB.',{ga:20}),
+ SK('Fluffy Tailwind','🍃','One ally gains SPD Up for 2 turns and +30% ATB.',{cd:3,t:'a',m:0,fx:[['spdUp',2,100]],atb:30})]);
+MV('lumilamb','hell','Grimlamb',"A black lamb with a little bell. When it rings, somebody's snacks go missing.",[
+ SK('Grim Headbutt','🐑','Hit (1.0x). Removes 1 beneficial effect from the target.',{strip:1}),
+ SK('Black Fleece','🖤','Hit (1.3x). Heals itself for 40% of the damage dealt.',{cd:3,m:1.3,drain:.4})]);
 const SUMMONABLE=Object.values(MD).filter(d=>!d.boss&&!d.fodder&&!d.uniq);
 const DEXLIST=Object.values(MD).filter(d=>!d.boss);
 /* ---------- v1.4.4 AWAKENING (Summoners War style, once per monster; unique monsters are never awakenable) ----------
@@ -1216,6 +1264,20 @@ Object.assign(AWK,{
  galeclaw_water:{n:'Surftalon',b:['res',20],x:{top:['tiara']},awk2:['bubbles']},
  galeclaw_heaven:{n:'Glorytalon',b:['res',20],x:{top:['crown']},awk2:['bigHalo']},
  galeclaw_hell:{n:'Bleaktalon',b:['cr',12],x:{top:['crown']},awf:['purpleRing']}});
+// v1.5.5 element versions (batch 6): awakened names + looks
+Object.assign(AWK,{
+ zephyrlet_fire:{n:'Scorchelle',b:['cd',20],x:{top:['crown']},awk2:['fireHalo']},
+ zephyrlet_water:{n:'Rainelle',b:['res',20],x:{top:['tiara']},awk2:['pearlOrbit']},
+ zephyrlet_heaven:{n:'Halorelle',b:['res',20],x:{top:['crown']},awk2:['bigHalo']},
+ zephyrlet_hell:{n:'Gloamelle',b:['cr',12],x:{top:['crown']},awf:['hexCircle']},
+ tempestrix_fire:{n:'Blazerexa',b:['cd',20],x:{top:['crown']},awf:['embers']},
+ tempestrix_water:{n:'Tiderexa',b:['res',20],x:{top:['tiara']},awk2:['wave']},
+ tempestrix_heaven:{n:'Dawnrexa',b:['res',20],x:{top:['crown']},awk2:['starburst']},
+ tempestrix_hell:{n:'Nyxrexa',b:['cr',12],x:{top:['crown']},awf:['chains']},
+ lumilamb_fire:{n:'Emberfleece',b:['cd',20],x:{top:['crown']},awk2:['fireHalo']},
+ lumilamb_water:{n:'Tidefleece',b:['res',20],x:{top:['tiara']},awk2:['pearlOrbit']},
+ lumilamb_wind:{n:'Driftfleece',b:['acc',20],x:{top:['crown']},awk2:['windRing']},
+ lumilamb_hell:{n:'Hexfleece',b:['cr',12],x:{top:['crown']},awf:['purpleRing']}});
 // v1.5.3 element versions (batch 4): awakened names + looks
 Object.assign(AWK,{
  tidesinger_fire:{n:'Cinderlune',b:['cd',20],x:{top:['crown']},awf:['embers']},tidesinger_wind:{n:'Gustlune',b:['acc',20],x:{top:['crest']},awk2:['windRing']},
@@ -1381,6 +1443,9 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.5.5',date:'Oct 17, 2026',title:'🌈 Element Versions VI',sections:[
+  ['🌈 12 New Monsters',['Zephyrlet, Tempestrix and Lumilamb now come in all five elements. Each new version has its own name, look, skills and awakened form, and keeps the same number of skills as the original.','🧚 Zephyrlet line: Pyrelet (Fire), Dewlet (Water), Gracelet (Heaven), Nyxlet (Hell), each with its own leader skill.','🐲 Tempestrix line: Flarerix (Fire), Monsoonrix (Water), Sanctrix (Heaven), Dreadrix (Hell), each with its own leader skill.','🐑 Lumilamb line: Toastlamb (Fire), Foamlamb (Water), Breezelamb (Wind), Grimlamb (Hell).','Awakened Hell versions (Gloamelle, Nyxrexa, Hexfleece) have the black-with-white-trim look.','Find them in summons (see the Odds tab: your chance of each star rarity is unchanged, and within a rarity every monster is equally likely). Skill-ups need a duplicate of the exact same version.']],
+  ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.5.4',date:'Oct 17, 2026',title:'🌈 Element Versions V',sections:[
   ['🌈 12 New Monsters',['Buzzsaw, Hootstorm and Galeclaw now come in all five elements. Each new version has its own name, look, skills and awakened form, and keeps the same number of skills as the original.','🐝 Buzzsaw line: Scorchbuzz (Fire), Drizzlebuzz (Water), Halobuzz (Heaven), Blightbuzz (Hell).','🦉 Hootstorm line: Hootblaze (Fire), Hoottide (Water), Hootdawn (Heaven), Hootshade (Hell).','🦅 Galeclaw line: Kilnquill (Fire), Brinequill (Water), Haloquill (Heaven), Gravequill (Hell), each with its own leader skill.','Awakened Hell versions (Cursevale, Gloomarch, Bleaktalon) have the black-with-white-trim look.','Find them in summons (see the Odds tab: your chance of each star rarity is unchanged) and fill their slots in the 📖 Monsterpedia.']],
   ['💾 Your Save',['Nothing to do: everything carries over.']]]},
@@ -1541,6 +1606,39 @@ const PATCHES=[
    Common options: c/c2 colors (#rrggbb), g emoji, n count, sz size, d delay(ms), on:'self'. */
 const HIT=280; // ms from skill start to impact (matches the wind-up in useSkill)
 const SKVFX={
+ // v1.5.5 element versions (batch 6)
+ 'Spark Flick':[['proj',{s:'star',c:'#ffcf3d',c2:'#ff6b1f',sz:7,arc:22}],['burst',{c:'#ffd166',c2:'#ff5a1f',rays:6,r:1.2,st:HIT+20}]],
+ 'Kindling Gust':[['aura',{c:'#ff8a3d'}],['petals',{g:['🔥','✨'],c:'#ffb02e'}]],
+ 'Ember Waltz':[['petals',{g:['🌸','🔥'],c:'#ff6b3d'}],['quake',{c:'#ff6b3d',px:5}]],
+ 'Dew Flick':[['proj',{s:'blob',c:'#8fd8ff',c2:'#ffffff',sz:7,arc:22}],['burst',{c:'#bff8ff',c2:'#3da5ff',rays:6,r:1.2,st:HIT+20}]],
+ 'Tide Shield':[['shield',{hex:1,c:'#3da5ff',c2:'#bff8ff'}]],
+ 'Rain Mend':[['rain',{c:'#8fd8ff',c2:'#7cff9e',heal:1,sz:6}],['ring',{c:'#7cff9e',c2:'#8fd8ff',plus:'💚',st:HIT+60,rings:1}]],
+ 'Halo Flick':[['proj',{s:'star',c:'#fff3b0',c2:'#ffffff',sz:7,arc:22}],['burst',{c:'#ffffff',c2:'#ffe27a',rays:6,r:1.2,st:HIT+20}]],
+ 'Sanctum Breeze':[['aura',{c:'#fff3b0'}],['shield',{c:'#ffe27a',c2:'#ffffff'}]],
+ 'Grace Waltz':[['petals',{g:['✨','🌸'],c:'#ffe27a'}],['beam',{c:'#fff3b0',c2:'#ffffff'}]],
+ 'Hex Flick':[['proj',{s:'blob',c:'#3a1a5e',c2:'#b06aff',sz:7,arc:22}]],
+ 'Gossip Hex':[['vortex',{c:'#5a2a8a',c2:'#ff7ae0',r:1.8,arms:3}]],
+ 'Nightmare Mend':[['petals',{g:['🥀','🦇'],c:'#7a3fd1'}],['ring',{on:'self',c:'#7cff9e',c2:'#ff3d6e',plus:'💜',flat:1,st:HIT+200,sp:0,rings:1}]],
+ 'Flare Clap':[['bolt',{c:'#ffcf3d',c2:'#ff6b1f',n:1}],['burst',{c:'#ffd166',c2:'#ff5a1f',rays:6,r:1.3,st:HIT+20}]],
+ 'Blaze Cyclone':[['tornado',{c:'#ff6b1f',c2:'#ffd166',h:2.2}]],
+ 'Eye of the Blaze':[['vortex',{c:'#ff5a1f',c2:'#ffd166',r:2.2,arms:5}],['meteor',{c:'#ff6b1f',c2:'#ffd166'}]],
+ 'Hail Clap':[['bolt',{c:'#bff8ff',c2:'#ffffff',n:1}],['burst',{c:'#e6fbff',c2:'#3da5ff',rays:6,r:1.3,st:HIT+20}]],
+ 'Monsoon Cyclone':[['tornado',{c:'#3da5ff',c2:'#bff8ff',h:2.2}],['rain',{c:'#8fd8ff',st:HIT,len:300,rate:.5,sz:5}]],
+ 'Eye of the Deluge':[['vortex',{c:'#1f6fd6',c2:'#bff8ff',r:2.2,arms:5}],['wave',{c:'#1f6fd6',c2:'#bff8ff',th:110,amp:10,a:.5}]],
+ 'Sun Clap':[['bolt',{c:'#fff3b0',c2:'#ffd65a',n:1}],['ring',{c:'#7cff9e',c2:'#ffe27a',plus:'💚',st:HIT+120,flat:1}]],
+ 'Halo Cyclone':[['tornado',{c:'#fff3b0',c2:'#ffffff',h:2.2}],['shield',{c:'#ffe27a',c2:'#ffffff',st:HIT+120}]],
+ 'Eye of Judgement':[['pillar',{c:'#fff3b0',c2:'#ffffff'}],['bolt',{c:'#ffe27a',c2:'#ffffff',n:2,gap:140}]],
+ 'Dread Clap':[['bolt',{c:'#ff3d6e',c2:'#2a0612',n:1}],['burst',{c:'#ff3d6e',c2:'#2a0612',rays:6,r:1.3,st:HIT+20}]],
+ 'Nether Cyclone':[['tornado',{c:'#4b1fa0',c2:'#ff3d6e',h:2.2}],['quake',{c:'#7a3fd1',px:5}]],
+ 'Eye of Ruin':[['vortex',{c:'#2a0a4a',c2:'#ff3d6e',r:2.2,arms:5}],['bolt',{c:'#ff3d6e',c2:'#b06aff',n:2,gap:140}]],
+ 'Toasty Headbutt':[['bonk',{c:'#ffb36b'}],['burst',{c:'#ffd166',c2:'#ff6b1f',rays:6,r:1.1,st:HIT+20}]],
+ 'Warm Fleece':[['aura',{c:'#ffb02e'}],['ring',{c:'#ffd166',plus:'🔥',rings:1,flat:1,sp:0,st:HIT}]],
+ 'Bubble Headbutt':[['bonk',{c:'#bff8ff'}],['proj',{s:'blob',c:'#e6fbff',c2:'#8fd8ff',sz:6,arc:16,st:HIT}]],
+ 'Foam Fleece':[['ring',{c:'#bff8ff',c2:'#7cff9e',plus:'🫧',g:'✨',sp:5}]],
+ 'Gust Headbutt':[['bonk',{c:'#a8f0b8'}],['streak',{c:'#3fd17f',c2:'#e0ffc8'}]],
+ 'Fluffy Tailwind':[['petals',{g:['🍃','☁️'],c:'#3fd17f'}],['aura',{c:'#a8f0b8'}]],
+ 'Grim Headbutt':[['bonk',{c:'#5a3a7a'}]],
+ 'Black Fleece':[['bite',{c:'#3a2a50',c2:'#ff3d6e'}],['ring',{on:'self',c:'#7cff9e',c2:'#ff3d6e',plus:'🖤',flat:1,st:HIT+200,sp:0,rings:1}]],
  // v1.5.4 element versions (batch 5)
  'Cinder Sting':[['slash',{n:3,gap:70,c:'#ff6b3d',c2:'#ffd166',r:.7,alt:1.2,sw:60,bn:2}],['burst',{c:'#ffd166',c2:'#ff6b3d',rays:6,r:1.2,st:HIT+120}]],
  'Smelter Hive':[['proj',{s:'blob',c:'#ffb02e',c2:'#ff5a1f',sz:9,arc:20}],['burst',{c:'#ffd166',c2:'#ff5a1f',rays:8,r:1.6,st:HIT+20}]],
@@ -2005,6 +2103,34 @@ artVar('galeclaw_fire','galeclaw',{p:['#c8401a','#ffd0a0','#6a1a08'],h:['#ffcf3d
 artVar('galeclaw_water','galeclaw',{p:['#2f6f8e','#d6eef8','#14384a'],h:['#f4fbff','#ffffff','#bcd4e0'],wc:'#2a5f7a',cc:'#e6f6ff',a:'#ffc233',e:'#0d1f52',top:['dorsal'],ears:'fin',acc:['goggles']},['fishCatch'],['waterSpout']);
 artVar('galeclaw_heaven','galeclaw',{p:['#f0d8a0','#fffaf0','#b8904a'],h:['#ffffff','#ffffff','#e8e0c8'],wc:'#fffaf0',cc:'#fff6dc',a:'#ffd65a',e:'#3d6ad6',top:['crest','halo'],wings:'bigfeather',acc:['olive'],mark:['gem']},['sunSpear'],['shieldBadge']);
 artVar('galeclaw_hell','galeclaw',{p:['#4a3a3a','#a89890','#1a1010'],h:['#c8bca6','#d6cab2','#8a7e6a'],wc:'#2a1a1a',cc:'#c0b49c',a:'#9ad14a',e:'#ff3d6e',top:['bighorns'],eyes:'skull',wings:'bat',acc:['bone']},['boneFeathers'],['graveMist']);
+// v1.5.5 element versions (batch 6) overlays
+Object.assign(OVL,{
+  sparkWand:`<g transform="translate(98 70) rotate(20)"><line x1="0" y1="-18" x2="0" y2="22" stroke="#7a1a08" stroke-width="2.6" stroke-linecap="round"/><path d="M0 -30 l3.5 7 7.5 1 -5.5 5 1.5 7.5 -7 -3.5 -7 3.5 1.5 -7.5 -5.5 -5 7.5 -1z" fill="#ffcf3d" stroke="#b3420a" stroke-width="1.2"/><path d="M0 -38 q-4 -6 0 -10 q4 4 0 10z" fill="#ff6b1f"/></g><g fill="#ffb02e"><circle cx="86" cy="40" r="1.8"/><circle cx="110" cy="46" r="1.4"/></g>`,
+  lilyPad:`<g transform="translate(60 110)"><ellipse rx="40" ry="8" fill="#3fbf8a" stroke="#1f6a4a" stroke-width="1.6"/><path d="M0 0 L22 -6" stroke="#1f6a4a" stroke-width="1.4"/><g transform="translate(-30 -4)"><path d="M0 0 q-6 -8 0 -12 q6 4 0 12z M0 0 q-10 -2 -10 -8 q6 -2 10 8z M0 0 q10 -2 10 -8 q-6 -2 -10 8z" fill="#ffc8e0" stroke="#c45a8a" stroke-width="1"/></g></g>`,
+  starWand:`<g transform="translate(98 70) rotate(20)"><line x1="0" y1="-18" x2="0" y2="22" stroke="#c9a03a" stroke-width="2.6" stroke-linecap="round"/><path d="M0 -32 l4 9 9 1 -7 6 2 9 -8 -5 -8 5 2 -9 -7 -6 9 -1z" fill="#fff3b0" stroke="#c9a03a" stroke-width="1.2"/><circle cx="0" cy="-20" r="14" fill="#fff6c8" opacity=".3"/></g>`,
+  hexWisp:`<g transform="translate(96 66)"><circle r="8" fill="#b06aff" opacity=".35"/><path d="M0 -10 q8 6 0 14 q-8 -6 0 -14z" fill="#d8a8ff" stroke="#5a2a8a" stroke-width="1.2"/><circle cy="-1" r="2.4" fill="#ff3d6e"/><path d="M-4 6 q4 10 -2 16" fill="none" stroke="#b06aff" stroke-width="1.6" stroke-linecap="round"/></g>`,
+  nightMoths:`<g fill="#5a3a7a" stroke="#1a0a2a" stroke-width=".8">${[[14,24,-20],[106,18,20],[10,90,10]].map(([x,y,r])=>`<g transform="translate(${x} ${y}) rotate(${r})"><path d="M0 0 q-8 -8 -10 0 q2 6 10 0z M0 0 q8 -8 10 0 q-2 6 -10 0z"/><circle cx="-5" cy="-1" r="1.2" fill="#ff7ae0" stroke="none"/><circle cx="5" cy="-1" r="1.2" fill="#ff7ae0" stroke="none"/></g>`).join('')}</g>`,
+  flareBolts:`<g stroke="#7a1a08" stroke-width="1.2" stroke-linejoin="round">${[[10,30,1],[110,34,-1]].map(([x,y,d])=>`<path d="M${x} ${y} l${6*d} 10 l${-4*d} 1 l${6*d} 12 l${-12*d} -14 l${4*d} -1 l${-4*d} -8z" fill="#ffcf3d"/>`).join('')}</g><g fill="#ff6b1f"><path d="M16 60 q-3 -6 1 -9 q0 4 3 3 q1 4 -4 6z"/><path d="M104 64 q-3 -6 1 -9 q0 4 3 3 q1 4 -4 6z"/></g>`,
+  hailStones:`<g fill="#eaffff" stroke="#3d8ad6" stroke-width="1.2">${[[12,22,4],[24,8,3],[100,10,3.4],[110,28,4.4],[8,48,3]].map(([x,y,r])=>`<path d="M${x} ${y-r} l${r} ${r} l${-r} ${r} l${-r} ${-r}z"/>`).join('')}</g>`,
+  sunBolts:`<g stroke="#a8740a" stroke-width="1.2" stroke-linejoin="round">${[[10,30,1],[110,34,-1]].map(([x,y,d])=>`<path d="M${x} ${y} l${6*d} 10 l${-4*d} 1 l${6*d} 12 l${-12*d} -14 l${4*d} -1 l${-4*d} -8z" fill="#fff6c8"/>`).join('')}</g><g fill="#ffd65a">${[[18,64],[102,68]].map(([x,y])=>`<path d="M${x} ${y-5} l1.6 3.4 3.4 1.6 -3.4 1.6 -1.6 3.4 -1.6 -3.4 -3.4 -1.6 3.4 -1.6z"/>`).join('')}</g>`,
+  redBolts:`<g stroke="#14060f" stroke-width="1.2" stroke-linejoin="round">${[[10,30,1],[110,34,-1]].map(([x,y,d])=>`<path d="M${x} ${y} l${6*d} 10 l${-4*d} 1 l${6*d} 12 l${-12*d} -14 l${4*d} -1 l${-4*d} -8z" fill="#ff3d6e"/>`).join('')}</g><g fill="#b06aff" opacity=".7"><circle cx="18" cy="66" r="2.4"/><circle cx="102" cy="70" r="2.4"/></g>`,
+  toastStick:`<g transform="translate(98 78) rotate(-28)"><line x1="0" y1="-4" x2="0" y2="30" stroke="#8a5a2a" stroke-width="2.4" stroke-linecap="round"/><rect x="-6" y="-16" width="12" height="13" rx="4" fill="#e0a060" stroke="#7a3a10" stroke-width="1.2"/><rect x="-4" y="-14" width="8" height="5" rx="2" fill="#fff4e0"/><path d="M-3 -18 q-3 -6 1 -9 q0 4 3 3 q1 4 -4 6z" fill="#ff6b1f"/></g>`,
+  soapFoam:`<g fill="#ffffff" stroke="#a8d0ec" stroke-width="1"><circle cx="22" cy="104" r="8"/><circle cx="34" cy="108" r="7"/><circle cx="86" cy="108" r="7"/><circle cx="98" cy="104" r="8"/><circle cx="60" cy="112" r="6"/></g><g fill="none" stroke="#8fd8ff" stroke-width="1.2"><circle cx="12" cy="30" r="4"/><circle cx="108" cy="22" r="5"/><circle cx="102" cy="40" r="2.6"/></g>`,
+  dandelion:`<g transform="translate(98 64)"><path d="M0 0 q-2 20 2 34" fill="none" stroke="#3a8a3a" stroke-width="2"/><circle r="9" fill="#ffffff" opacity=".85"/><g stroke="#cfe8c0" stroke-width="1">${[0,45,90,135].map(r=>`<line transform="rotate(${r})" x1="-9" x2="9"/>`).join('')}</g><circle r="2.4" fill="#a8d890"/></g><g fill="#ffffff" stroke="#cfe8c0" stroke-width=".8"><circle cx="84" cy="30" r="1.8"/><circle cx="112" cy="40" r="1.4"/><circle cx="12" cy="36" r="1.6"/></g>`,
+  hexBell:`<g transform="translate(60 84)"><path d="M-7 4 q0 -12 7 -12 q7 0 7 12 l2 3 h-18z" fill="#3a2a50" stroke="#ff3d6e" stroke-width="1.2"/><circle cy="9" r="2" fill="#ff3d6e"/><text y="2.4" text-anchor="middle" font-size="6" font-weight="900" fill="#ff7ae0">✦</text></g>`,
+});
+artVar('zephyrlet_fire','zephyrlet',{p:['#ffd8c0','#fff0e4','#e0a07a'],robe:['#ff8a3d','#ffd0a0','#b3420a'],hair:'#ff6b1f',a:'#ffcf3d',e:'#b33a0a',top:['hair','flame'],wc:'#ffb36b',mouth:'grin'},['sparkWand'],[]);
+artVar('zephyrlet_water','zephyrlet',{p:['#dff0ff','#f4fbff','#a8c8e8'],robe:['#5aa8e0','#e6f6ff','#2f6fd6'],hair:'#3da5ff',a:'#8ff0ff',e:'#1f5fc4',top:['hair2','leaf'],ears:'fin',wc:'#bfefff',mouth:'o'},['dewDrops'],['lilyPad']);
+artVar('zephyrlet_heaven','zephyrlet',{p:['#fff4e0','#fffaf2','#e8d0a8'],robe:['#fffaf0','#ffffff','#e0c88a'],hair:'#ffe27a',a:'#ffd65a',e:'#3d6ad6',top:['hair3','halo'],wings:'feather',wc:'#fffaf0',lids:'sleepy'},['starWand'],['sunRays']);
+artVar('zephyrlet_hell','zephyrlet',{p:['#c8b8d8','#e8dcf0','#8a78a8'],robe:['#3a2a50','#8a78a8','#140a20'],hair:'#3a2a50',a:'#ff3d6e',e:'#ff3d6e',top:['hair','devil'],wings:'bat',wc:'#3a2a4e',eyes:'glow',mouth:'smirk'},['hexWisp'],['nightMoths']);
+artVar('tempestrix_fire','tempestrix',{p:['#ff7a2e','#ffe0b0','#a8340a'],a:'#ffcf3d',e:'#ffcf3d',top:['horns','flame'],tail:'dragon',mark:['cracks']},['flareBolts'],['fireHalo']);
+artVar('tempestrix_water','tempestrix',{p:['#2f78c0','#d6eeff','#14386a'],a:'#bfefff',e:'#8ff0ff',ears:'fin',top:['dorsal'],tail:'fish',mark:['dots']},['hailStones'],['stormCloud']);
+artVar('tempestrix_heaven','tempestrix',{p:['#fff0c8','#ffffff','#d8b060'],a:'#ffd65a',e:'#3d6ad6',top:['horns','halo'],wings:'feather',wc:'#fffaf0',mark:['gem'],mouth:'smile',brow:0},['sunBolts'],['sunRays']);
+artVar('tempestrix_hell','tempestrix',{p:['#3a1a3e','#a06ab0','#14060f'],a:'#ff3d6e',e:'#ff3d6e',top:['bighorns'],wings:'bat',eyes:'glow',mark:['plates'],mouth:'teeth'},['redBolts'],['hellfire']);
+artVar('lumilamb_fire','lumilamb',{p:['#ffe0b8','#fff4e0','#d89a5a'],f:'#c87a3a',a:'#ff8a3d',e:'#5a2a10',top:['wool','flame'],acc:['scarf'],sc2:'#ff5a1f',glow:'#ffb36b'},['toastStick'],[]);
+artVar('lumilamb_water','lumilamb',{p:['#e6f6ff','#ffffff','#a8d0ec'],f:'#9ad0ff',a:'#3da5ff',e:'#1f5fc4',ears:'fin',top:['wool'],acc:['bubbles'],glow:'#bfefff',mouth:'o'},['soapFoam'],['puddle']);
+artVar('lumilamb_wind','lumilamb',{p:['#eaffd8','#ffffff','#a8d890'],f:'#bfeaa0',a:'#3fd17f',e:'#1f6b3a',top:['wool','leaf'],wings:'fairy',acc:['scarf'],sc2:'#3fd17f',glow:'#e0ffc8'},['dandelion'],['windStreaks']);
+artVar('lumilamb_hell','lumilamb',{p:['#4a4050','#8a8098','#1a1420'],f:'#2a2030',a:'#ff3d6e',e:'#ff3d6e',ears:'bat',top:['wool','devil'],eyes:'glow',acc:['collar'],glow:'#6a4a8a',mouth:'fang'},['hexBell'],['smoke']);
 // v1.4.4 awakened art: ART[id+'_aw'] = base art + palette shift toward the element's awakening tint + accessory overlay + aura/sparkles
 const AWTINT={fire:'#ffd166',water:'#8ff0ff',wind:'#d6ff8a',heaven:'#fff3b0',hell:'#ff7ae0'};elAlias(AWTINT);
 for(const id in AWK){const b=ART[id];if(!b||!MD[id])continue;const x=AWK[id].x||{},tn=AWTINT[MD[id].el];
