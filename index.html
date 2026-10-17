@@ -714,7 +714,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.5.5';
+const VERSION='1.5.6';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -1198,6 +1198,54 @@ MV('lumilamb','wind','Breezelamb',"A lamb so fluffy the wind carries it around. 
 MV('lumilamb','hell','Grimlamb',"A black lamb with a little bell. When it rings, somebody's snacks go missing.",[
  SK('Grim Headbutt','🐑','Hit (1.0x). Removes 1 beneficial effect from the target.',{strip:1}),
  SK('Black Fleece','🖤','Hit (1.3x). Heals itself for 40% of the damage dealt.',{cd:3,m:1.3,drain:.4})]);
+// =========== v1.5.6 ELEMENT VERSIONS (batch 7: Dawnstag, Halodove, Gleamhorn lines; same skill count + cooldowns as each original) ===========
+// Dawnstag line (antler hit / cd-4 call; no leader skill, like the original)
+MV('dawnstag','fire','Blazestag',"A deer whose antlers are always slightly on fire. Great at campfires. Terrible at hide-and-seek.",[
+ SK('Ember Antler','🦌','Hit (1.1x). 30% chance to Burn for 2 turns.',{m:1.1,fx:[['dot',2,30]]}),
+ SK('Bonfire Call','🔥','ALL enemies (0.7x). 30% chance of DEF Break for 2 turns.',{cd:4,t:'ae',m:.7,fx:[['defBreak',2,30]]})]);
+MV('dawnstag','water','Brookstag',"A deer that lives by a babbling brook. Water lilies grow on its antlers. It waters them every morning.",[
+ SK('Brook Antler','🦌','Hit (1.1x). 25% chance to Slow for 2 turns.',{m:1.1,fx:[['slow',2,25]]}),
+ SK('Spring Call','🌊','Heals all allies for 15% of max HP and grants Regen for 2 turns.',{cd:4,t:'aa',m:0,heal:.15,fx:[['regen',2,100]]})]);
+MV('dawnstag','wind','Galestag',"A winged deer that sleeps on the breeze. Has never once touched the ground on a Sunday.",[
+ SK('Gale Antler','🦌','Hit (1.1x). Gains +20% ATB.',{m:1.1,ga:20}),
+ SK('Breeze Call','🍃','All allies gain SPD Up for 2 turns.',{cd:4,t:'aa',m:0,fx:[['spdUp',2,100]]})]);
+MV('dawnstag','hell','Duskstag',"Only comes out at dusk. Howls at the moon. The moon has asked it to stop.",[
+ SK('Dusk Antler','🦌','Hit (1.1x). Removes 1 beneficial effect from the target.',{m:1.1,strip:1}),
+ SK('Howl Call','🌑','ALL enemies (0.7x). 35% chance of ATK Break for 2 turns.',{cd:4,t:'ae',m:.7,fx:[['atkDown',2,35]]})]);
+// Halodove line (peck / cd-3 branch / cd-4 feather storm + leader skill)
+MV('halodove','fire','Kindledove',"A dove that carries a smouldering twig everywhere. Means well. Has set several picnics on fire.",[
+ SK('Ember Peck','🕊️','Hit (1.0x). 30% chance to Burn for 2 turns.',{fx:[['dot',2,30]]}),
+ SK('Kindled Branch','🔥','All allies gain ATK Up for 2 turns.',{cd:3,t:'aa',m:0,fx:[['atkUp',2,100]]}),
+ SK('Cinder Storm','🌟','ALL enemies (1.1x). 25% chance of DEF Break for 2 turns.',{cd:4,t:'ae',m:1.1,fx:[['defBreak',2,25]]})],LD('atk',15));
+MV('halodove','water','Brinedove',"A sea dove that brings a kelp sprig instead of an olive branch. Nobody knows what it means.",[
+ SK('Brine Peck','🕊️','Hit (1.0x). 15% chance to Freeze for 1 turn.',{fx:[['freeze',1,15]]}),
+ SK('Rain Branch','🌿','Removes all harmful effects from all allies and grants Regen for 2 turns.',{cd:3,t:'aa',m:0,cleanse:1,fx:[['regen',2,100]]}),
+ SK('Squall Storm','🌟','ALL enemies (1.0x). 30% chance to Slow for 2 turns.',{cd:4,t:'ae',m:1,fx:[['slow',2,30]]})],LD('hp',15));
+MV('halodove','wind','Gustdove',"A dove that flies with a paper kite. Nobody is sure who is flying whom.",[
+ SK('Gust Peck','🕊️','Hit (1.0x). Gains +20% ATB.',{ga:20}),
+ SK('Tailwind Branch','🌿','All allies gain +25% ATB.',{cd:3,t:'aa',m:0,atb:25}),
+ SK('Whirl Storm','🌟','ALL enemies (1.0x). Pushes every enemy\'s ATB back 20%.',{cd:4,t:'ae',m:1,push:20})],LD('spd',9));
+MV('halodove','hell','Sootdove',"A soot-black dove that brings a thorny branch. It says it comes in peace. It does not.",[
+ SK('Hex Peck','🕊️','Hit (1.0x). Removes 1 beneficial effect from the target.',{strip:1}),
+ SK('Thorn Branch','🥀','ALL enemies (0.6x). Heals itself for 40% of the damage dealt.',{cd:3,t:'ae',m:.6,drain:.4}),
+ SK('Soot Storm','🌟','ALL enemies (1.1x). +40% damage to each enemy below 50% HP.',{cd:4,t:'ae',m:1.1,lowB:.4})],LD('cr',7));
+// Gleamhorn line (horn jab / cd-4 ward / cd-4 charge + leader skill)
+MV('gleamhorn','fire','Kilnhorn',"A unicorn whose horn is a candle. Makes wishes on itself. Very smug about it.",[
+ SK('Cinder Horn','🦄','Hit (1.2x). 30% chance to Burn for 2 turns.',{m:1.2,fx:[['dot',2,30]]}),
+ SK('Ember Ward','🔥','All allies gain ATK Up for 2 turns.',{cd:4,t:'aa',m:0,fx:[['atkUp',2,100]]}),
+ SK('Kiln Charge','💫','Charge (3.0x). Ignores 30% of the target\'s DEF.',{cd:4,m:3,ign:.3})],LD('atk',25));
+MV('gleamhorn','water','Pearlhorn',"A sea unicorn that keeps a pearl in a shell. Will not tell you where it found it.",[
+ SK('Pearl Prod','🦄','Hit (1.2x). 20% chance to Freeze for 1 turn.',{m:1.2,fx:[['freeze',1,20]]}),
+ SK('Pearl Ward','🛡️','Removes all harmful effects from all allies and grants Regen for 2 turns.',{cd:4,t:'aa',m:0,cleanse:1,fx:[['regen',2,100]]}),
+ SK('Tidal Charge','💫','Charge (2.8x). Heals itself for 30% of the damage dealt.',{cd:4,m:2.8,drain:.3})],LD('hp',25));
+MV('gleamhorn','wind','Breezehorn',"A breezy unicorn with ribbons in its mane. Gallops so fast its smugness arrives late.",[
+ SK('Zephyr Horn','🦄','Hit (1.2x). 30% chance to Slow for 2 turns.',{m:1.2,fx:[['slow',2,30]]}),
+ SK('Gust Ward','🛡️','All allies gain SPD Up for 2 turns and +20% ATB.',{cd:4,t:'aa',m:0,fx:[['spdUp',2,100]],atb:20}),
+ SK('Gale Charge','💫','Charge (2.8x). If it defeats the target, gains another turn.',{cd:4,m:2.8,kx:1})],LD('spd',15));
+MV('gleamhorn','hell','Hexhorn',"A dark unicorn that casts hexes with its horn. Mostly hexes people who say 'neigh'.",[
+ SK('Curse Horn','🦄','Hit (1.2x). Removes 1 beneficial effect from the target.',{m:1.2,strip:1}),
+ SK('Shade Ward','🛡️','All allies gain Immunity for 2 turns.',{cd:4,t:'aa',m:0,fx:[['immune',2,100]]}),
+ SK('Nightmare Charge','💫','Charge (3.0x). +50% damage if the target has a harmful effect.',{cd:4,m:3,debB:.5})],LD('cr',11));
 const SUMMONABLE=Object.values(MD).filter(d=>!d.boss&&!d.fodder&&!d.uniq);
 const DEXLIST=Object.values(MD).filter(d=>!d.boss);
 /* ---------- v1.4.4 AWAKENING (Summoners War style, once per monster; unique monsters are never awakenable) ----------
@@ -1278,6 +1326,20 @@ Object.assign(AWK,{
  lumilamb_water:{n:'Tidefleece',b:['res',20],x:{top:['tiara']},awk2:['pearlOrbit']},
  lumilamb_wind:{n:'Driftfleece',b:['acc',20],x:{top:['crown']},awk2:['windRing']},
  lumilamb_hell:{n:'Hexfleece',b:['cr',12],x:{top:['crown']},awf:['purpleRing']}});
+// v1.5.6 element versions (batch 7): awakened names + looks
+Object.assign(AWK,{
+ dawnstag_fire:{n:'Cinderantler',b:['cd',20],x:{top:['crown']},awf:['embers']},
+ dawnstag_water:{n:'Tideantler',b:['res',20],x:{top:['tiara']},awk2:['wave']},
+ dawnstag_wind:{n:'Galeantler',b:['acc',20],x:{top:['crown']},awk2:['windRing']},
+ dawnstag_hell:{n:'Gloomantler',b:['cr',12],x:{top:['crown']},awf:['ironChains']},
+ halodove_fire:{n:'Embercote',b:['cd',20],x:{top:['crown']},awf:['emberCracks']},
+ halodove_water:{n:'Tidecote',b:['res',20],x:{top:['tiara']},awk2:['pearlOrbit']},
+ halodove_wind:{n:'Galecote',b:['acc',20],x:{top:['crown']},awk2:['tornado']},
+ halodove_hell:{n:'Gloomcote',b:['cr',12],x:{top:['crown']},awf:['purpleRing']},
+ gleamhorn_fire:{n:'Flarespire',b:['cd',20],x:{top:['crown']},awk2:['fireHalo']},
+ gleamhorn_water:{n:'Tidespire',b:['res',20],x:{top:['tiara']},awk2:['wave']},
+ gleamhorn_wind:{n:'Breezespire',b:['acc',20],x:{top:['crown']},awk2:['windRing']},
+ gleamhorn_hell:{n:'Murkspire',b:['cr',12],x:{top:['crown']},awf:['chains']}});
 // v1.5.3 element versions (batch 4): awakened names + looks
 Object.assign(AWK,{
  tidesinger_fire:{n:'Cinderlune',b:['cd',20],x:{top:['crown']},awf:['embers']},tidesinger_wind:{n:'Gustlune',b:['acc',20],x:{top:['crest']},awk2:['windRing']},
@@ -1443,6 +1505,9 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.5.6',date:'Oct 17, 2026',title:'🌈 Element Versions VII',sections:[
+  ['🌈 12 New Monsters',['Dawnstag, Halodove and Gleamhorn now come in all five elements. Each new version has its own name, look, skills and awakened form, and keeps the same number of skills as the original.','🦌 Dawnstag line: Blazestag (Fire), Brookstag (Water), Galestag (Wind), Duskstag (Hell).','🕊️ Halodove line: Kindledove (Fire), Brinedove (Water), Gustdove (Wind), Sootdove (Hell), each with its own leader skill.','🦄 Gleamhorn line: Kilnhorn (Fire), Pearlhorn (Water), Breezehorn (Wind), Hexhorn (Hell), each with its own leader skill.','Awakened Hell versions (Gloomantler, Gloomcote, Murkspire) have the black-with-white-trim look.','Find them in summons (see the Odds tab: your chance of each star rarity is unchanged, and within a rarity every monster is equally likely). Skill-ups need a duplicate of the exact same version.']],
+  ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.5.5',date:'Oct 17, 2026',title:'🌈 Element Versions VI',sections:[
   ['🌈 12 New Monsters',['Zephyrlet, Tempestrix and Lumilamb now come in all five elements. Each new version has its own name, look, skills and awakened form, and keeps the same number of skills as the original.','🧚 Zephyrlet line: Pyrelet (Fire), Dewlet (Water), Gracelet (Heaven), Nyxlet (Hell), each with its own leader skill.','🐲 Tempestrix line: Flarerix (Fire), Monsoonrix (Water), Sanctrix (Heaven), Dreadrix (Hell), each with its own leader skill.','🐑 Lumilamb line: Toastlamb (Fire), Foamlamb (Water), Breezelamb (Wind), Grimlamb (Hell).','Awakened Hell versions (Gloamelle, Nyxrexa, Hexfleece) have the black-with-white-trim look.','Find them in summons (see the Odds tab: your chance of each star rarity is unchanged, and within a rarity every monster is equally likely). Skill-ups need a duplicate of the exact same version.']],
   ['💾 Your Save',['Nothing to do: everything carries over.']]]},
@@ -1606,6 +1671,39 @@ const PATCHES=[
    Common options: c/c2 colors (#rrggbb), g emoji, n count, sz size, d delay(ms), on:'self'. */
 const HIT=280; // ms from skill start to impact (matches the wind-up in useSkill)
 const SKVFX={
+ // v1.5.6 element versions (batch 7)
+ 'Ember Antler':[['bonk',{c:'#ff8a3d'}],['burst',{c:'#ffd166',c2:'#ff5a1f',rays:6,r:1.2,st:HIT+20}]],
+ 'Bonfire Call':[['pillar',{c:'#ff6b1f',c2:'#ffd166'}],['quake',{c:'#ff6b3d',px:5}]],
+ 'Brook Antler':[['bonk',{c:'#8fd8ff'}],['wave',{c:'#3da5ff',c2:'#bff8ff',th:60,amp:6,a:.4}]],
+ 'Spring Call':[['rain',{c:'#8fd8ff',c2:'#7cff9e',heal:1,sz:6}],['ring',{c:'#7cff9e',c2:'#3da5ff',plus:'💚',st:HIT+60,rings:1}]],
+ 'Gale Antler':[['bonk',{c:'#a8f0b8'}],['streak',{c:'#3fd17f',c2:'#e0ffc8'}]],
+ 'Breeze Call':[['petals',{g:['🍃','💨'],c:'#3fd17f'}],['aura',{c:'#a8f0b8'}]],
+ 'Dusk Antler':[['bonk',{c:'#5a3a7a'}],['proj',{s:'blob',c:'#1a0a2a',c2:'#ff3d6e',sz:6,arc:14,st:HIT}]],
+ 'Howl Call':[['vortex',{c:'#3a1a5e',c2:'#ff3d6e',r:1.8,arms:3}],['quake',{c:'#7a3fd1',px:5}]],
+ 'Ember Peck':[['proj',{s:'blob',c:'#ff6b3d',c2:'#ffd166',sz:7,arc:20}],['burst',{c:'#ffd166',c2:'#ff6b3d',rays:6,r:1.2,st:HIT+20}]],
+ 'Kindled Branch':[['aura',{c:'#ff8a3d'}],['ring',{c:'#ffd166',plus:'🔥',rings:1,flat:1,sp:0,st:HIT}]],
+ 'Cinder Storm':[['swarm',{c:'#ff8a3d',c2:'#ffd166'}],['quake',{c:'#ff6b3d',px:5}]],
+ 'Brine Peck':[['proj',{s:'blob',c:'#3da5ff',c2:'#e6fbff',sz:7,arc:20}],['burst',{c:'#bff8ff',c2:'#3da5ff',rays:6,r:1.2,st:HIT+20}]],
+ 'Rain Branch':[['rain',{c:'#8fd8ff',sz:5,st:0,len:360,rate:.5}],['ring',{c:'#bff8ff',c2:'#7cff9e',plus:'✨',rings:1,flat:1,sp:0,st:HIT+80}]],
+ 'Squall Storm':[['swarm',{c:'#8fd8ff',c2:'#ffffff'}],['wave',{c:'#1f6fd6',c2:'#bff8ff',th:110,amp:10,a:.5}]],
+ 'Gust Peck':[['proj',{s:'star',c:'#a8f0b8',c2:'#ffffff',sz:6,arc:20}],['streak',{c:'#3fd17f',c2:'#e0ffc8'}]],
+ 'Tailwind Branch':[['petals',{g:['🌿','💨'],c:'#3fd17f'}],['ring',{c:'#a8f0b8',plus:'⏩',rings:1,flat:1,sp:0,st:HIT}]],
+ 'Whirl Storm':[['tornado',{c:'#a8f0b8',c2:'#ffffff',h:2}],['swarm',{c:'#3fd17f',c2:'#e0ffc8'}]],
+ 'Hex Peck':[['proj',{s:'blob',c:'#2a0a3a',c2:'#b06aff',sz:7,arc:20}]],
+ 'Thorn Branch':[['petals',{g:['🥀','🌑'],c:'#7a3fd1'}],['ring',{on:'self',c:'#7cff9e',c2:'#ff3d6e',plus:'💜',flat:1,st:HIT+200,sp:0,rings:1}]],
+ 'Soot Storm':[['swarm',{c:'#3a3440',c2:'#ff3d6e'}],['burst',{c:'#ff3d6e',c2:'#2a0612',rays:8,r:1.6,st:HIT+20}]],
+ 'Cinder Horn':[['beam',{c:'#ff6b1f',c2:'#ffd166'}],['burst',{c:'#ffd166',c2:'#ff5a1f',rays:6,r:1.2,st:HIT+20}]],
+ 'Ember Ward':[['shield',{hex:1,c:'#ff8a3d',c2:'#ffd166'}],['aura',{c:'#ffb02e'}]],
+ 'Kiln Charge':[['dive',{c:'#ff6b1f',c2:'#ffd166'}],['meteor',{c:'#ff5a1f',c2:'#ffd166'}]],
+ 'Pearl Prod':[['beam',{c:'#bff8ff',c2:'#ffffff'}],['burst',{c:'#e6fbff',c2:'#3da5ff',rays:6,r:1.2,st:HIT+20}]],
+ 'Pearl Ward':[['shield',{hex:1,c:'#ffd8e8',c2:'#bff8ff'}],['ring',{c:'#7cff9e',c2:'#ffd8e8',plus:'🫧',st:HIT+60,rings:1}]],
+ 'Tidal Charge':[['dive',{c:'#3da5ff',c2:'#bff8ff'}],['wave',{c:'#1f6fd6',c2:'#bff8ff',th:80,amp:8,a:.5}]],
+ 'Zephyr Horn':[['beam',{c:'#a8f0b8',c2:'#ffffff'}],['streak',{c:'#3fd17f',c2:'#e0ffc8'}]],
+ 'Gust Ward':[['shield',{c:'#a8f0b8',c2:'#ffffff'}],['petals',{g:['🍃','✨'],c:'#3fd17f'}]],
+ 'Gale Charge':[['dive',{c:'#3fd17f',c2:'#e0ffc8'}],['tornado',{c:'#a8f0b8',c2:'#ffffff',h:1.6}]],
+ 'Curse Horn':[['beam',{c:'#7a3fd1',c2:'#ff3d6e'}]],
+ 'Shade Ward':[['shield',{hex:1,c:'#3a2a50',c2:'#ff7ae0'}],['aura',{c:'#7a3fd1'}]],
+ 'Nightmare Charge':[['dive',{c:'#2a0a4a',c2:'#ff3d6e'}],['vortex',{c:'#2a0a4a',c2:'#ff3d6e',in:1,arms:4,r:2}]],
  // v1.5.5 element versions (batch 6)
  'Spark Flick':[['proj',{s:'star',c:'#ffcf3d',c2:'#ff6b1f',sz:7,arc:22}],['burst',{c:'#ffd166',c2:'#ff5a1f',rays:6,r:1.2,st:HIT+20}]],
  'Kindling Gust':[['aura',{c:'#ff8a3d'}],['petals',{g:['🔥','✨'],c:'#ffb02e'}]],
@@ -2131,6 +2229,34 @@ artVar('lumilamb_fire','lumilamb',{p:['#ffe0b8','#fff4e0','#d89a5a'],f:'#c87a3a'
 artVar('lumilamb_water','lumilamb',{p:['#e6f6ff','#ffffff','#a8d0ec'],f:'#9ad0ff',a:'#3da5ff',e:'#1f5fc4',ears:'fin',top:['wool'],acc:['bubbles'],glow:'#bfefff',mouth:'o'},['soapFoam'],['puddle']);
 artVar('lumilamb_wind','lumilamb',{p:['#eaffd8','#ffffff','#a8d890'],f:'#bfeaa0',a:'#3fd17f',e:'#1f6b3a',top:['wool','leaf'],wings:'fairy',acc:['scarf'],sc2:'#3fd17f',glow:'#e0ffc8'},['dandelion'],['windStreaks']);
 artVar('lumilamb_hell','lumilamb',{p:['#4a4050','#8a8098','#1a1420'],f:'#2a2030',a:'#ff3d6e',e:'#ff3d6e',ears:'bat',top:['wool','devil'],eyes:'glow',acc:['collar'],glow:'#6a4a8a',mouth:'fang'},['hexBell'],['smoke']);
+// v1.5.6 element versions (batch 7) overlays
+Object.assign(OVL,{
+  emberAntlers:`<g fill="#ff6b1f" stroke="#7a1a08" stroke-width="1">${[[84,0],[90,10],[88,-4],[36,0],[30,10],[32,-4]].map(([x,y])=>`<path d="M${x} ${y+2} q-4 -6 0 -11 q1 4 3 3 q2 5 -3 8z"/>`).join('')}</g><g fill="#ffcf3d">${[[84,-2],[36,-2]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.6"/>`).join('')}</g>`,
+  lilyAntlers:`<g>${[[90,12],[30,12],[86,2],[34,2]].map(([x,y])=>`<path d="M${x} ${y} v8" stroke="#2f6fd6" stroke-width="1.2"/><g transform="translate(${x} ${y+10})"><path d="M0 0 q-4 -5 0 -8 q4 3 0 8z M0 0 q-6 -1 -6 -5 q4 -1 6 5z M0 0 q6 -1 6 -5 q-4 -1 -6 5z" fill="#ffd0e8" stroke="#c45a8a" stroke-width=".8"/></g>`).join('')}</g>`,
+  brookStream:`<path d="M-4 104 q16 -8 32 0 t32 0 t32 0 t32 0" fill="none" stroke="#5aa8e0" stroke-width="6" stroke-linecap="round" opacity=".8"/><path d="M4 112 q14 -6 28 0 t28 0 t28 0 t28 0" fill="none" stroke="#bfefff" stroke-width="3" stroke-linecap="round" opacity=".8"/><g fill="#9a8a7a" stroke="#5a4a3a" stroke-width="1"><ellipse cx="20" cy="108" rx="6" ry="3"/><ellipse cx="102" cy="110" rx="7" ry="3"/></g>`,
+  leafAntlers:`<g fill="#5ad17f" stroke="#1f6a3a" stroke-width="1">${[[84,0,30],[90,10,60],[36,0,-30],[30,10,-60]].map(([x,y,r])=>`<path transform="translate(${x} ${y}) rotate(${r})" d="M0 0 q-5 -6 0 -12 q5 6 0 12z"/>`).join('')}</g>`,
+  thornVines:`<g fill="none" stroke="#3a1a3e" stroke-width="2.4" stroke-linecap="round"><path d="M70 24 q8 -4 10 -14 q2 -6 -2 -12"/><path d="M50 24 q-8 -4 -10 -14 q-2 -6 2 -12"/></g><g fill="#3a1a3e">${[[78,12],[80,2],[42,12],[40,2]].map(([x,y])=>`<path d="M${x} ${y} l4 -2 l-2 4z"/>`).join('')}</g><g fill="#ff3d6e">${[[82,-2],[38,-2]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.4"/>`).join('')}</g>`,
+  emberTwig:`<g transform="translate(86 60) rotate(-12)"><line x1="-10" y1="0" x2="18" y2="0" stroke="#6a3a1a" stroke-width="2.4" stroke-linecap="round"/><path d="M14 -2 q-4 -8 2 -14 q0 6 4 6 q2 6 -6 8z" fill="#ff6b1f" stroke="#7a1a08" stroke-width="1"/><path d="M15 -4 q-2 -4 1 -7 q1 3 2 3 q0 3 -3 4z" fill="#ffcf3d"/><path d="M4 0 q2 -5 6 -6" fill="none" stroke="#6a3a1a" stroke-width="1.6"/></g>`,
+  kelpSprig:`<g transform="translate(86 62) rotate(-10)"><path d="M-8 0 q10 -2 22 0" fill="none" stroke="#1f6a4a" stroke-width="2.2" stroke-linecap="round"/>${[[2,-1,-30],[8,-1,-40],[14,0,-50],[6,1,30],[12,1,40]].map(([x,y,r])=>`<path transform="translate(${x} ${y}) rotate(${r})" d="M0 0 q-3 -5 0 -9 q3 4 0 9z" fill="#3fbf8a" stroke="#1f6a4a" stroke-width=".8"/>`).join('')}<circle cx="18" cy="-2" r="2.6" fill="#ffffff" stroke="#9ac8e8" stroke-width="1"/></g>`,
+  paperKite:`<g transform="translate(100 18) rotate(10)"><path d="M0 -12 l9 12 l-9 14 l-9 -14z" fill="#ffe27a" stroke="#c9a03a" stroke-width="1.2"/><path d="M0 -12 v26 M-9 0 h18" stroke="#c9a03a" stroke-width=".8"/><path d="M0 14 q-4 10 4 18 q-6 8 0 16" fill="none" stroke="#3fd17f" stroke-width="1.4"/><g fill="#ff9ad5"><path d="M-2 24 l4 -2 v4z"/><path d="M2 36 l4 -2 v4z"/></g></g><path d="M100 64 Q100 50 100 32" stroke="#ffffff" stroke-width=".8" fill="none" opacity=".7"/>`,
+  thornSprig:`<g transform="translate(86 62) rotate(-10)"><path d="M-8 0 q10 -2 22 0" fill="none" stroke="#2a1a2e" stroke-width="2.2" stroke-linecap="round"/><g fill="#2a1a2e">${[4,10].map(x=>`<path d="M${x} -1 l2 -4 l2 4z"/><path d="M${x+3} 1 l2 4 l2 -4z"/>`).join('')}</g><g transform="translate(16 -2)"><path d="M0 0 q-5 -3 -3 -7 q3 0 3 3 q0 -3 3 -3 q2 4 -3 7z" fill="#3a0a1a" stroke="#ff3d6e" stroke-width=".8"/></g></g>`,
+  flameHorn:`<g transform="translate(62 -11)"><path d="M0 4 q-7 -8 -2 -18 q1 6 4 6 q0 -8 5 -12 q2 10 -1 16 q2 6 -6 8z" fill="#ff6b1f" stroke="#7a1a08" stroke-width="1.2"/><path d="M0 2 q-3 -5 0 -10 q1 4 3 4 q1 4 -3 6z" fill="#ffcf3d"/></g>`,
+  pearlShell:`<g transform="translate(96 84)"><path d="M-12 6 Q-14 -10 0 -12 Q14 -10 12 6 Z" fill="#ffd8e8" stroke="#c45a8a" stroke-width="1.4"/><g stroke="#c45a8a" stroke-width=".8" fill="none"><path d="M0 6 L0 -11"/><path d="M0 6 L-7 -9"/><path d="M0 6 L7 -9"/><path d="M0 6 L-11 -3"/><path d="M0 6 L11 -3"/></g><circle cx="0" cy="7" r="4" fill="#ffffff" stroke="#9ac8e8" stroke-width="1"/></g>`,
+  windRibbons:`<g fill="none" stroke-width="3" stroke-linecap="round"><path d="M62 -8 q14 4 22 -2 q8 -6 18 0" stroke="#3fd17f"/><path d="M62 -4 q10 8 20 4 q10 -4 16 4" stroke="#ff9ad5" opacity=".9"/></g>`,
+  hexRunes:`<g fill="#ff7ae0" font-size="9" font-weight="900" text-anchor="middle" opacity=".9">${[[14,36,'ᚦ'],[106,30,'ᛟ'],[10,70,'ᛉ'],[110,74,'ᚱ']].map(([x,y,c])=>`<text x="${x}" y="${y}">${c}</text>`).join('')}</g><g fill="none" stroke="#b06aff" stroke-width="1.2" opacity=".7"><circle cx="14" cy="33" r="7"/><circle cx="106" cy="27" r="7"/></g>`,
+});
+artVar('dawnstag_fire','dawnstag',{p:['#c8501a','#ffd0a0','#7a2a08'],a:'#ffcf3d',e:'#3a0a04',top:['antlers','flame'],mark:['cracks'],mouth:'grin'},['emberAntlers'],[]);
+artVar('dawnstag_water','dawnstag',{p:['#5a9ac8','#e0f2ff','#2a5a8a'],a:'#bfefff',e:'#0d1f52',mark:['spots'],mouth:'o'},['lilyAntlers'],['brookStream']);
+artVar('dawnstag_wind','dawnstag',{p:['#8ac87a','#eaffd8','#3a7a2a'],a:'#fff6c8',e:'#1f4a1a',top:['antlers','leaf'],wings:'feather',acc:['scarf'],sc2:'#3fd17f'},['leafAntlers'],['windStreaks']);
+artVar('dawnstag_hell','dawnstag',{p:['#3a2a3e','#8a789a','#140a18'],a:'#ff3d6e',e:'#ff3d6e',eyes:'glow',mark:['moon'],mouth:'fang'},['thornVines'],['nightMoths']);
+artVar('halodove_fire','halodove',{p:['#ff8a3d','#ffe6c0','#b3420a'],wc:'#ff5a1f',a:'#ffcf3d',e:'#5a1a04',top:['flame'],acc:['scarf'],sc2:'#7a1a08'},['emberTwig'],['fireFeathers']);
+artVar('halodove_water','halodove',{p:['#7ac0e8','#eaf8ff','#2f78b0'],wc:'#bfefff',a:'#ffb347',e:'#0d1f52',top:['crest'],acc:['pearls'],mark:['dots']},['kelpSprig'],['seaSpray']);
+artVar('halodove_wind','halodove',{p:['#c8f0b0','#ffffff','#6ab05a'],wc:'#eaffd8',a:'#ffcf3d',e:'#1f4a1a',top:['leaf','tuft'],acc:['scarf'],sc2:'#3fd17f'},['paperKite'],['cloudPuff']);
+artVar('halodove_hell','halodove',{p:['#3a3440','#7a7488','#141018'],wc:'#2a2430',a:'#ff3d6e',e:'#ff3d6e',top:['hood'],eyes:'glow',acc:['collar'],mark:['cracks']},['thornSprig'],['smoke']);
+artVar('gleamhorn_fire','gleamhorn',{p:['#ff9a5a','#ffe6d0','#c8501a'],hair:'#ff3d1f',a:'#ffcf3d',e:'#6a1a00',top:['unicorn','hair2','flame'],mark:['spots']},['flameHorn'],['lavaDrops']);
+artVar('gleamhorn_water','gleamhorn',{p:['#e0f4ff','#ffffff','#9ac8e8'],hair:'#3da5ff',a:'#ffc8e0',e:'#1f5fc4',ears:'fin',tail:'fish',acc:['pearls']},['pearlShell'],['bubbles']);
+artVar('gleamhorn_wind','gleamhorn',{p:['#e8ffe0','#ffffff','#a8d890'],hair:'#3fd17f',a:'#fff6c8',e:'#1f6b3a',top:['unicorn','hair2','leaf'],wings:'fairy',acc:['scarf'],sc2:'#3fd17f'},['windRibbons'],['cloudTrail']);
+artVar('gleamhorn_hell','gleamhorn',{p:['#4a3a5a','#9a88b0','#1a1024'],hair:'#2a1a3e',a:'#ff3d6e',e:'#ff3d6e',top:['unicorn','hair2','devil'],wings:'bat',eyes:'glow',mark:['moon']},['hexRunes'],['hellfire']);
 // v1.4.4 awakened art: ART[id+'_aw'] = base art + palette shift toward the element's awakening tint + accessory overlay + aura/sparkles
 const AWTINT={fire:'#ffd166',water:'#8ff0ff',wind:'#d6ff8a',heaven:'#fff3b0',hell:'#ff7ae0'};elAlias(AWTINT);
 for(const id in AWK){const b=ART[id];if(!b||!MD[id])continue;const x=AWK[id].x||{},tn=AWTINT[MD[id].el];
