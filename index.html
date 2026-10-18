@@ -692,6 +692,11 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
 /* v1.4.7 Leviathan/Carter (MD.xl): drawn ~14% larger than other monsters, anchored at the bottom */
 .av.pf.xl img.sp{left:-15%;width:130%}
 .unit.xl img.sp{inset:auto 0 0 -7%;width:114%;height:114%}
+.dlg2{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-top:5px}.dlg2 .mc{padding:4px 1px 4px;min-width:0}.dlg2 .mc .av{width:46px;height:46px;margin:4px auto 2px}.dlg2 .mc .nm{font-size:9.5px}.dlg2 .mc .stars{font-size:8px}
+.awgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:8px;margin-top:8px}
+/* v1.5.9 Monsterpedia: monsters you don't own are drawn darker */
+.mc.unown{filter:brightness(.42) saturate(.55)}.mc.unown:active{filter:brightness(.55) saturate(.6)}
+@media (hover:hover){.mc.unown:hover{filter:brightness(.6) saturate(.7)}}
 </style>
 </head>
 <body>
@@ -714,7 +719,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.5.8';
+const VERSION='1.5.9';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -1629,6 +1634,9 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.5.9',date:'Oct 17, 2026',title:'📖 Monsterpedia: See Every Monster',sections:[
+  ['📖 Monsterpedia',['Every monster is now shown in the Monsterpedia, in every element and with its awakened form: art, name, stars and full stats.','Monsters you don\'t own yet are drawn darker. The ones in your collection look normal.','Tap any monster to see its stats, skills and awakened form. The info screen also says whether you own it.','Discovery progress still counts the monster lines you have found.']],
+  ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.5.8',date:'Oct 17, 2026',title:'🌈 Element Versions IX',sections:[
   ['🌈 12 New Monsters',['Widowmire, Shadowfang and Count Duskula now come in all five elements. Each new version has its own name, look, skills, leader skill and awakened form, and keeps the same number of skills as the original.','🕷️ Widowmire line: Emberwidow (Fire), Pearlwidow (Water), Breezewidow (Wind), Dawnwidow (Heaven).','🐺 Shadowfang line: Kilnfang (Fire), Pearlfang (Water), Driftfang (Wind), Lumifang (Heaven).','🧛 Count Duskula line: Count Emberula (Fire), Count Tidula (Water), Count Zephula (Wind), Count Dawnula (Heaven).','Widowmire, Shadowfang and Count Duskula themselves are the Hell versions of their lines.','With this update every monster line in the Monsterpedia is complete: no more "coming soon" slots.','Find them in summons (see the Odds tab: your chance of each star rarity is unchanged, and within a rarity every monster is equally likely). Skill-ups need a duplicate of the exact same version.']],
   ['💾 Your Save',['Nothing to do: everything carries over.']]]},
@@ -3211,19 +3219,24 @@ function renderMonsters(){const sub=UI.monSub;
  if(sub==='roster'){h+=`<div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;flex-wrap:wrap"><span class="mut">Sort:</span>${['stars','level','element','power'].map(s=>`<button class="btn sm ${UI.sort===s?'':'ghost'}" onclick="UI.sort='${s}';render()">${s[0].toUpperCase()+s.slice(1)}</button>`).join('')}</div>
   <div class="mgrid">${sortedMons(S.mons).map(m=>monCard(m,`openMon(${m.uid})`)).join('')}</div>`;}
  else if(sub==='runes'){h+=runeInvHtml();}
- else{h+=`<div class="card"><p class="mut">Discovered <b>${dexCount()}/${DEXREQ.length}</b> monsters. Summon or obtain monsters to fill in the Monsterpedia!</p><div class="prog" style="margin-top:6px"><i style="width:${dexCount()/DEXREQ.length*100}%"></i></div></div>
+ else{h+=`<div class="card"><p class="mut">Discovered <b>${dexCount()}/${DEXREQ.length}</b> monsters. Summon or obtain monsters to fill in the Monsterpedia!</p><p class="mut dexnote" style="margin-top:4px">Every monster and awakened form is shown. Ones you don't own yet are drawn darker.</p><div class="prog" style="margin-top:6px"><i style="width:${dexCount()/DEXREQ.length*100}%"></i></div></div>
   ${dexLinesHtml()}`;}
  return h;}
 // v1.5.0 Monsterpedia: one row per monster line with 5 element slots (Fire, Water, Wind, Heaven, Hell)
-function dexCardHtml(d){return S.dex[d.id]?`<div class="mc r${d.rar} el-${d.el} ${d.th?d.th.cls:''}" data-id="${d.id}" onclick="openDex('${d.id}')">${avHtml(d.id,0,'',d.rar)}${starsHtml(d.rar)}<div class="nm">${d.n}</div></div>`:`<div class="mc r${d.rar}" data-id="${d.id}" onclick="toast('Not discovered yet! Keep summoning. 🌀')"><div class="av pf unknown ${frc(d.rar)}">${sprImg(d.id)}</div>${starsHtml(d.rar)}<div class="nm">???</div></div>`;}
+// v1.5.9 Monsterpedia: every (non-unique) monster and awakened form is shown with art, name and stats; ones you do not own are drawn darker.
+// Unique monsters keep the old rule exactly (hidden as ??? until discovered).
+function dexCardOld(d){return S.dex[d.id]?`<div class="mc r${d.rar} el-${d.el} ${d.th?d.th.cls:''}" data-id="${d.id}" onclick="openDex('${d.id}')">${avHtml(d.id,0,'',d.rar)}${starsHtml(d.rar)}<div class="nm">${d.n}</div></div>`:`<div class="mc r${d.rar}" data-id="${d.id}" onclick="toast('Not discovered yet! Keep summoning. 🌀')"><div class="av pf unknown ${frc(d.rar)}">${sprImg(d.id)}</div>${starsHtml(d.rar)}<div class="nm">???</div></div>`;}
+const dexOwn=(id,aw)=>S.mons.some(m=>m.id===id&&(!aw||m.aw));
+function dexCardHtml(d){if(d.uniq)return dexCardOld(d);const own=dexOwn(d.id);return`<div class="mc r${d.rar} el-${d.el} ${d.th?d.th.cls:''} ${own?'own':'unown'}" data-id="${d.id}" data-own="${own?1:0}" onclick="openDex('${d.id}')">${avHtml(d.id,0,'',d.rar)}${starsHtml(d.rar)}<div class="nm">${d.n}</div></div>`;}
+function dexAwCardHtml(d){if(!d||d.uniq||!canAwaken(d.id))return'';const own=dexOwn(d.id,1);return`<div class="mc dexaw r${d.rar} el-${d.el} ${own?'own':'unown'}" data-aw="${d.id}" data-own="${own?1:0}" onclick="openDex('${d.id}')">${avHtml(d.id+'_aw',0,'',d.rar)}${starsHtml(d.rar)}<div class="nm">✦ ${AWK[d.id].n}</div></div>`;}
 function dexLinesHtml(){const ek=Object.keys(ELEM),lines=LINES.slice().sort((a,b)=>MD[a].rar-MD[b].rar||ek.indexOf(MD[a].el)-ek.indexOf(MD[b].el));
  const rest=DEXLIST.filter(d=>!d.vof&&!LINES.includes(d.id)).sort((a,b)=>a.rar-b.rar);
- return lines.map(l=>{const vs=lineOf(l);const got=vs.filter(d=>S.dex[d.id]).length;return`<div class="dexline" data-line="${l}"><div class="dlh">${S.dex[l]||got?MD[l].n:'???'} line <span class="mut">${got}/${vs.length} found</span></div><div class="dlg">${ek.map(e=>{const d=vs.find(x=>x.el===e);return d?dexCardHtml(d):`<div class="mc soon el-${e}"><div class="soonx">${ELEM[e].i}</div><div class="nm">Coming soon</div></div>`;}).join('')}</div></div>`;}).join('')
-  +(rest.length?`<div class="dexline"><div class="dlh">Others</div><div class="mgrid">${rest.map(dexCardHtml).join('')}</div></div>`:'');}
+ return lines.map(l=>{const vs=lineOf(l);const got=vs.filter(d=>S.dex[d.id]).length;return`<div class="dexline" data-line="${l}"><div class="dlh">${MD[l].n} line <span class="mut">${got}/${vs.length} found</span></div><div class="dlg">${ek.map(e=>{const d=vs.find(x=>x.el===e);return d?dexCardHtml(d):`<div class="mc soon el-${e}"><div class="soonx">${ELEM[e].i}</div><div class="nm">Coming soon</div></div>`;}).join('')}</div><div class="dlg2">${ek.map(e=>dexAwCardHtml(vs.find(x=>x.el===e))||'<div></div>').join('')}</div></div>`;}).join('')
+  +(rest.length?`<div class="dexline"><div class="dlh">Others</div><div class="mgrid">${rest.map(dexCardHtml).join('')}</div>${rest.some(d=>dexAwCardHtml(d))?`<div class="awgrid">${rest.map(dexAwCardHtml).join('')}</div>`:''}</div>`:'');}
 function pasHtml(p){return`<div class="skill pas"><b>${p.i} ${p.n}</b><span class="cdtag pt">Passive</span><br>${p.d}</div>`;}
 function skillHtml(sk){const tgt={e:'Single enemy',ae:'All enemies',a:'Single ally',aa:'All allies',s:'Self'}[sk.t];return`<div class="skill"><b>${sk.i} ${sk.n}</b>${sk.every?'<span class="cdtag">♾️ Every turn</span>':sk.cd?`<span class="cdtag">⏳ Cooldown ${sk.cd}</span>`:'<span class="cdtag">Basic</span>'}<br>${sk.d}<br><span class="mut">🎯 ${tgt}${sk.fx.length?' · '+sk.fx.map(f=>FX[f[0]].i+' '+FX[f[0]].n).join(', '):''}</span></div>`;}
 function openDex(id){const d=MD[id];const b=baseStats(id,1,d.rar);
- openModal(`<div class="mhead el-${d.el}">${avHtml(d.id,0,'',d.rar)}<div><h3>${d.n}</h3>${starsHtml(d.rar)} <span class="mut">${RNAME[d.rar]} · ${ELEM[d.el].i} ${ELEM[d.el].n}</span><br><span class="mut">Leader: ${leadText(d.lead)}</span></div></div><p class="desc">"${d.desc}"</p>
+ openModal(`<div class="mhead el-${d.el}">${avHtml(d.id,0,'',d.rar)}<div><h3>${d.n}</h3>${starsHtml(d.rar)} <span class="mut">${RNAME[d.rar]} · ${ELEM[d.el].i} ${ELEM[d.el].n}</span><br><span class="mut">Leader: ${leadText(d.lead)}</span></div></div>${d.uniq?'':`<div class="mut ownline" style="margin:4px 0">${dexOwn(d.id)?'✅ In your collection':'🔒 Not in your collection yet'}${canAwaken(d.id)?(dexOwn(d.id,1)?' · ✦ Awakened form owned':' · ✦ Awakened form not owned yet'):''}</div>`}<p class="desc">"${d.desc}"</p>
  <table class="stat-t">${['hp','atk','def','spd'].map(k=>`<tr><td>${STATN[k]} (Lv1)</td><td>${b[k]}</td></tr>`).join('')}<tr><td>CRI Rate / Dmg</td><td>${b.cr}% / ${b.cd}%</td></tr><tr><td>RES / ACC</td><td>${b.res}% / ${b.acc}%</td></tr></table>${d.skills.map(skillHtml).join('')}${(d.passives||[]).map(pasHtml).join('')}${canAwaken(d.id)?awDexHtml(d.id):''}`,'dex');}
 function openMon(uid){const m=monByUid(uid);if(!m)return;closeModal('mon');const d=MD[m.id];const st=monStats(m);const ml=maxLvl(m);const ti=S.team.indexOf(uid);
  openModal(`<div class="mhead el-${d.el}">${avHtml(artId(m),0,'',m.stars)}<div style="flex:1;min-width:0"><h3 id="monName">${monName(m)}${m.aw?` <span class="awbadge">✦ Awakened</span>`:''}</h3>${m.aw?`<div class="mut" style="margin-top:-4px">Awakened from ${d.n}</div>`:''}${starsHtml(m.stars)} <span class="mut">${d.th?`<b class="uqtag">${d.th.t}</b> · Unique`:'Natural '+d.rar+'★ '+RNAME[d.rar]} · ${ELEM[d.el].n}</span>
