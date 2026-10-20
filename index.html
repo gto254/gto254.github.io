@@ -721,7 +721,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.6.0';
+const VERSION='1.6.1';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -827,11 +827,11 @@ M('galeclaw','Galeclaw','🦅','wind',3,[720,86,46,112,25],LD('spd',10),"Dives a
  SK('Skyfall','⚡','Plummets from the heavens (3.0x).',{cd:4,m:3})]);
 M('zephyrlet','Zephyrlet','🧚','wind',4,[800,78,54,118],LD('spd',15),"A pixie who runs on wind and gossip. Mostly gossip.",[
  SK('Breeze Flick','🍃','Hit (1.1x). 40% chance to Slow.',{m:1.1,fx:[['slow',2,40]]}),
- SK('Tailwind','🌬️','All allies gain SPD Up for 2 turns and +30% ATB.',{cd:4,t:'aa',m:0,fx:[['spdUp',2,100]],atb:30}),
+ SK('Breezerush','🌬️','All allies gain SPD Up for 2 turns and +30% ATB.',{cd:4,t:'aa',m:0,fx:[['spdUp',2,100]],atb:30}),
  SK('Pixie Mend','🌸','Heals all allies 20% and grants Regen for 2 turns.',{cd:4,t:'aa',m:0,heal:0.2,fx:[['regen',2,100]]})]);
 M('tempestrix','Tempestrix','🐲','wind',5,[980,102,60,112,25,60],LD('spd',20),"Storm dragon. Responsible for 87% of all lost umbrellas.",[
- SK('Thunderclap','⚡','Hit (1.3x). 25% chance to Stun.',{m:1.3,fx:[['stun',1,25]]}),
- SK('Cyclone','🌪️','ALL enemies, two gusts (0.6x each).',{cd:3,t:'ae',m:0.6,h:2}),
+ SK('Gongstrike','⚡','Hit (1.3x). 25% chance to Stun.',{m:1.3,fx:[['stun',1,25]]}),
+ SK('Gale Spiral','🌪️','ALL enemies, two gusts (0.6x each).',{cd:3,t:'ae',m:0.6,h:2}),
  SK('Eye of the Storm','🌀','ALL enemies (2.0x). 40% chance to Stun.',{cd:5,t:'ae',m:2,fx:[['stun',1,40]]})]);
 // LIGHT
 M('lumilamb','Lumilamb','🐑','light',1,[600,58,42,100],null,"Fluffy, glowing, and legally classified as a nightlight.",[
@@ -850,7 +850,7 @@ M('gleamhorn','Gleamhorn','🦄','light',4,[860,86,58,105,20],LD('hp',25),"Its h
  SK('Starlight Charge','💫','Charge (3.0x). 35% chance to Stun.',{cd:4,m:3,fx:[['stun',1,35]]})]);
 M('seraphyne','Seraphyne','👼','light',5,[1000,100,64,108,20,60],LD('def',33),"Celestial guardian with excellent posture. Judges you silently. And also loudly.",[
  SK('Judgment Ray','🔆','Hit (1.3x).',{m:1.3}),
- SK('Sanctuary','⛪','Heals all allies 30% and removes all their debuffs.',{cd:4,t:'aa',m:0,heal:0.3,cleanse:1}),
+ SK('Halo Refuge','⛪','Heals all allies 30% and removes all their debuffs.',{cd:4,t:'aa',m:0,heal:0.3,cleanse:1}),
  SK('Revelation','👁️','ALL enemies (1.6x). 70% chance of ATK Break.',{cd:5,t:'ae',m:1.6,fx:[['atkDown',2,70]]})]);
 M('prismane','Prismane','🦄','light',5,[1060,92,66,105,15,50],LD('hp',33),"Leaves a rainbow wherever she trots. Insists the rainbow was already there and you just never noticed.",[
  SK('Prism Strike','🌈','Hit (1.1x). 40% chance to Stun for 1 turn.',{m:1.1,fx:[['stun',1,40]]}),
@@ -882,15 +882,15 @@ M('jellybop','Jellybop','🍮','light',1,[500,40,40,95],null,"Made of 100% pure 
 // BOSSES (not summonable)
 M('magmaw','Magmaw the Molten','👹','fire',3,[900,82,55,100],null,"Guardian of Emberfall. Eats volcanoes for breakfast. Brunch is worse.",[
  SK('Slag Slam','👊','Hit (1.3x).',{m:1.3}),
- SK('Eruption','🌋','ALL enemies (1.0x). 50% chance to Burn.',{cd:3,t:'ae',m:1,fx:[['dot',2,50]]}),
+ SK('Magma Burst','🌋','ALL enemies (1.0x). 50% chance to Burn.',{cd:3,t:'ae',m:1,fx:[['dot',2,50]]}),
  SK('Magma Armor','🛡️','Gains DEF Up and ATK Up for 2 turns.',{cd:4,t:'s',m:0,fx:[['defUp',2,100],['atkUp',2,100]]})],{boss:1});
 M('brinequeen','Brinequeen','🦈','water',4,[900,92,58,104],null,"Rules Tidewhisper Coast with an iron fin. Hates being hummed at.",[
  SK('Razor Fin','🦈','Hit (1.4x). 40% chance of DEF Break.',{m:1.4,fx:[['defBreak',2,40]]}),
- SK('Maelstrom','🌀','ALL enemies (1.2x). 50% chance to Slow.',{cd:3,t:'ae',m:1.2,fx:[['slow',2,50]]}),
+ SK('Whirl Crush','🌀','ALL enemies (1.2x). 50% chance to Slow.',{cd:3,t:'ae',m:1.2,fx:[['slow',2,50]]}),
  SK('Feeding Frenzy','🍽️','Three bites (1.0x each).',{cd:4,m:1,h:3})],{boss:1});
 M('thunderroc','Thunderroc','🌩️','wind',4,[900,96,56,110],null,"A bird so big it causes weather. Its sneezes are classified as hurricanes.",[
  SK('Gale Talon','🦅','Hit (1.4x).',{m:1.4}),
- SK('Thunderstorm','⛈️','ALL enemies (1.2x). 30% chance to Stun.',{cd:4,t:'ae',m:1.2,fx:[['stun',1,30]]}),
+ SK('Storm Volley','⛈️','ALL enemies (1.2x). 30% chance to Stun.',{cd:4,t:'ae',m:1.2,fx:[['stun',1,30]]}),
  SK('Updraft','🌬️','Gains ATK Up and SPD Up and heals 15%.',{cd:4,t:'s',m:0,heal:0.15,fx:[['atkUp',2,100],['spdUp',2,100]]})],{boss:1});
 M('umbral','Umbral Sovereign','👿','dark',5,[950,104,62,108,20,60],null,"The final boss. Wants to plunge the world into eternal night, mostly to finally get some decent sleep.",[
  SK('Void Lance','🗡️','Hit (1.5x). 50% chance of DEF Break.',{m:1.5,fx:[['defBreak',2,50]]}),
@@ -1351,7 +1351,7 @@ MV('duskula','heaven','Count Dawnula',"A count who loves mornings. Carries a sun
  SK('Dawn Waltz','🌒','Hit (4.0x). 50% chance of ATK Break for 2 turns.',{cd:5,m:4,fx:[['atkDown',2,50]]})],LD('def',33));
 const SUMMONABLE=Object.values(MD).filter(d=>!d.boss&&!d.fodder&&!d.uniq);
 const DEXLIST=Object.values(MD).filter(d=>!d.boss);
-/* ---------- v1.4.4 AWAKENING (Summoners War style, once per monster; unique monsters are never awakenable) ----------
+/* ---------- v1.4.4 AWAKENING (once per monster; unique monsters are never awakenable) ----------
    n: original awakened name · b: bonus stat · x: art overlay (accessory / parts added on top of the base art) */
 const AWK={
  flickerwisp:{n:'Solwisp',b:['cr',12],x:{top:['flame','crown']}},
@@ -1502,47 +1502,47 @@ const scrollEls=t=>t==='hh'?HHEL:FWW;
 const poolFor=(t,st)=>byRarEl(st,scrollEls(t));
 const hhLowPool=()=>SUMMONABLE.filter(d=>d.rar<=2&&HHEL.includes(d.el)&&!d.uniq&&!d.boss&&!d.fodder); // story-stage drops
 
-/* ---------- stats (v1.4: Summoners-War-style scale) ---------- */
+/* ---------- stats (v1.4 scale) ---------- */
 // Base stats are the v1.3 numbers scaled up; the damage formula scales with them, so an un-runed fight plays exactly like v1.3.
 // Runes are the new power curve (fully runed: ~4,000 ATK on damage dealers, ~4,000 DEF on tanks).
 const SCALE={hp:2,atk:1.5,def:1.8};
 const DMG_K=360,DMG_C=2*SCALE.hp/SCALE.atk; // damage = ATK x mult x DMG_C x DMG_K/(DMG_K+DEF)  (== v1.3 formula on scaled stats)
-const STATN={hp:'HP',atk:'ATK',def:'DEF',spd:'SPD',cr:'CRI Rate',cd:'CRI Dmg',res:'RES',acc:'ACC'};
+const STATN={hp:'HP',atk:'ATK',def:'DEF',spd:'SPD',cr:'Crit Chance',cd:'Crit Damage',res:'Resist',acc:'Accuracy'};
 const STAT8=['hp','atk','def','spd','cr','cd','res','acc'];
 const PCT_STAT=['cr','cd','res','acc'];
 
 /* ---------- runes (gear) ---------- */
 // rune stat keys: hpf/atkf/deff = flat; hp/atk/def = % of base; spd = flat; cr/cd/res/acc = percentage points
 const RSTAT={hpf:{s:'hp',n:'HP'},atkf:{s:'atk',n:'ATK'},deff:{s:'def',n:'DEF'},hp:{s:'hp',n:'HP',pct:1},atk:{s:'atk',n:'ATK',pct:1},def:{s:'def',n:'DEF',pct:1},
- spd:{s:'spd',n:'SPD'},cr:{s:'cr',n:'CRI Rate',pc:1},cd:{s:'cd',n:'CRI Dmg',pc:1},res:{s:'res',n:'RES',pc:1},acc:{s:'acc',n:'ACC',pc:1}};
-const RMAIN={atkf:[22,160],deff:[22,160],hpf:[360,2448],atk:[16,100],def:[16,100],hp:[16,100],spd:[7,42],cr:[7,58],cd:[11,80],res:[12,64],acc:[12,64]}; // 6★ at +0 / +15
-const RSUB={atkf:[10,20],deff:[10,20],hpf:[135,375],atk:[5,8],def:[5,8],hp:[5,8],spd:[4,6],cr:[4,6],cd:[4,7],res:[4,8],acc:[4,8]};          // 6★ per roll
+ spd:{s:'spd',n:'SPD'},cr:{s:'cr',n:'Crit Chance',pc:1},cd:{s:'cd',n:'Crit Damage',pc:1},res:{s:'res',n:'Resist',pc:1},acc:{s:'acc',n:'Accuracy',pc:1}};
+const RMAIN={atkf:[24,172],deff:[24,172],hpf:[390,2640],atk:[15,92],def:[15,92],hp:[15,92],spd:[6,39],cr:[8,54],cd:[12,74],res:[11,58],acc:[11,58]}; // 6★ at +0 / +15
+const RSUB={atkf:[11,22],deff:[11,22],hpf:[125,350],atk:[5,9],def:[5,9],hp:[5,9],spd:[4,6],cr:[4,6],cd:[4,8],res:[4,7],acc:[4,7]};          // 6★ per roll
 const RGF=[0,.36,.48,.6,.72,.85,1];  // grade (rune stars) factor
-const SLOTMAIN={1:['atkf'],2:['atk','def','hp','spd'],3:['deff'],4:['atk','def','hp','cr','cd'],5:['hpf'],6:['atk','def','hp','res','acc']};
-const RRAR=[{n:'Normal',c:'#b8bcc6'},{n:'Magic',c:'#6fcf97'},{n:'Rare',c:'#56ccf2'},{n:'Hero',c:'#c77dff'},{n:'Legend',c:'#ffb347'}];
+const SLOTMAIN={1:['atkf','hpf'],2:['atk','def','hp','spd'],3:['deff','atkf'],4:['atk','def','hp','cr','cd'],5:['hpf','deff'],6:['atk','def','hp','res','acc']}; // v1.6.1: odd slots offer two flat stats
+const RRAR=[{n:'Plain',c:'#b8bcc6'},{n:'Charged',c:'#6fcf97'},{n:'Gleaming',c:'#56ccf2'},{n:'Exalted',c:'#c77dff'},{n:'Astral',c:'#ffb347'}];
 const RUNE_MAX=15;
 const RSET={
- energy:{n:'Energy',i:'💚',need:2,b:{hp:15},d:'HP +15%'},
- guard:{n:'Guard',i:'🛡️',need:2,b:{def:15},d:'DEF +15%'},
- blade:{n:'Blade',i:'🗡️',need:2,b:{cr:12},d:'CRI Rate +12%'},
- focus:{n:'Focus',i:'🎯',need:2,b:{acc:20},d:'ACC +20%'},
- endure:{n:'Endure',i:'🪨',need:2,b:{res:20},d:'RES +20%'},
- will:{n:'Will',i:'🔰',need:2,fx:'will',d:'Immunity for 1 turn at the start of battle'},
- swift:{n:'Swift',i:'💨',need:4,b:{spd:25},d:'SPD +25%'},
- rage:{n:'Rage',i:'💢',need:4,b:{cd:40},d:'CRI Dmg +40%'},
- fatal:{n:'Fatal',i:'🔪',need:4,b:{atk:35},d:'ATK +35%'},
- violent:{n:'Violent',i:'🌀',need:4,fx:'violent',d:'22% chance to get an extra turn after a turn (never chains)'},
- vampire:{n:'Vampire',i:'🦇',need:4,fx:'vampire',d:'Recovers HP equal to 35% of the damage dealt'},
- despair:{n:'Despair',i:'😵',need:4,fx:'despair',d:'Damaging skills have a 25% chance to Stun (RES/ACC apply)'},
+ energy:{n:'Heartwood',i:'💚',need:2,b:{hp:12},d:'HP +12%'},
+ guard:{n:'Ironbark',i:'🛡️',need:2,b:{def:12},d:'DEF +12%'},
+ blade:{n:'Falcon',i:'🗡️',need:2,b:{cr:10},d:'Crit Chance +10%'},
+ focus:{n:'Lodestar',i:'🎯',need:2,b:{acc:18},d:'Accuracy +18%'},
+ endure:{n:'Anchor',i:'🪨',need:2,b:{res:18},d:'Resist +18%'},
+ will:{n:'Haven',i:'🔰',need:2,fx:'will',d:'Immunity for 2 turns at the start of battle'},
+ swift:{n:'Quickstep',i:'💨',need:4,b:{spd:22},d:'SPD +22%'},
+ rage:{n:'Emberedge',i:'💢',need:4,b:{cd:35},d:'Crit Damage +35%'},
+ fatal:{n:'Fang',i:'🔪',need:4,b:{atk:30},d:'ATK +30%'},
+ violent:{n:'Tempo',i:'🌀',need:4,fx:'violent',d:'18% chance to get an extra turn after a turn (never chains)'},
+ vampire:{n:'Sapdrinker',i:'🦇',need:4,fx:'vampire',d:'Recovers HP equal to 30% of the damage dealt'},
+ despair:{n:'Gongstrike',i:'😵',need:4,fx:'despair',d:'Damaging skills have a 20% chance to Stun (Resist/Accuracy apply)'},
 };
 // Rune dungeons: each drops its own sets. Tiers: Normal → Hard → Hell → INSANE (clear one to unlock the next).
 const RDUNG=[
- {id:'giant',n:"Giant's Keep",i:'🗿',boss:'goldgolem',pool:['shellbert','dawnstag','galeclaw','zephyrlet','buzzsaw','halodove'],sets:['energy','guard','swift','blade','rage','fatal'],scene:'dkeep',
-  bg:'linear-gradient(135deg,#ffd27a,#9a6a2a 55%,#2a1a08)',desc:'A fortress built by a golem who really, really likes walls. Drops the core sets.'},
- {id:'dragon',n:"Dragon's Lair",i:'🐉',boss:'crystalwyrm',pool:['magmander','cinderfox','blazemane','tentacular','shadowfang'],sets:['violent','will','focus'],scene:'dlair',
-  bg:'linear-gradient(135deg,#ff9a6a,#a12a3f 55%,#2a0614)',desc:'Hot, sparkly, and full of things with teeth. Drops Violent, Will and Focus.'},
- {id:'necro',n:'Necropolis',i:'⚰️',boss:'glyphwarden',pool:['bonejangle','nocturnipper','widowmire','hootstorm','duskula'],sets:['despair','vampire','endure'],scene:'dnecro',
-  bg:'linear-gradient(135deg,#a98bff,#3a2a8a 55%,#0d0826)',desc:'Quiet. Too quiet. Drops Despair, Vampire and Endure.'},
+ {id:'giant',n:'Golem Bastion',i:'🗿',boss:'goldgolem',pool:['shellbert','dawnstag','galeclaw','zephyrlet','buzzsaw','halodove'],sets:['energy','guard','endure','swift','fatal'],scene:'dkeep',
+  bg:'linear-gradient(135deg,#ffd27a,#9a6a2a 55%,#2a1a08)',desc:'A fortress built by a golem who really, really likes walls. Drops Heartwood, Ironbark, Anchor, Quickstep and Fang.'},
+ {id:'dragon',n:'Wyrm Hollow',i:'🐉',boss:'crystalwyrm',pool:['magmander','cinderfox','blazemane','tentacular','shadowfang'],sets:['violent','blade','rage'],scene:'dlair',
+  bg:'linear-gradient(135deg,#ff9a6a,#a12a3f 55%,#2a0614)',desc:'Hot, sparkly, and full of things with teeth. Drops Tempo, Falcon and Emberedge.'},
+ {id:'necro',n:'Marrow Grove',i:'⚰️',boss:'glyphwarden',pool:['bonejangle','nocturnipper','widowmire','hootstorm','duskula'],sets:['despair','vampire','focus','will'],scene:'dnecro',
+  bg:'linear-gradient(135deg,#a98bff,#3a2a8a 55%,#0d0826)',desc:'Quiet. Too quiet. Drops Gongstrike, Sapdrinker, Lodestar and Haven.'},
 ];
 // em = enemy stat multipliers (trash), bm = boss multipliers; INSANE boss: fixed 300,000 HP and very high SPD.
 const RTIER=[
@@ -1552,7 +1552,7 @@ const RTIER=[
  {n:'INSANE',k:'in',lv:60,g:[6,6],rar:[3,4],st:3,sc:6,en:12,pw:42000,em:[2.8,1.85,2.2],bm:[0,2.3,2.4],hpAbs:300000,spdAbs:300,gems:150,c:'insane'},
 ];
 const ENERGY_MAX=90,ENERGY_MIN=3; // +1 energy every 3 minutes
-// Story difficulties (Summoners-War style): Normal (the v1.3 campaign), then Hard and Hell.
+// Story difficulties: Normal (the v1.3 campaign), then Hard and Hell.
 const STORYD=[
  {n:'Normal',k:'n',lv:0,em:[1,1,1],bm:[1,1,1],spd:0,rune:0,gold:1,gems:1,c:'green'},
  {n:'Hard',k:'h',lv:28,em:[1.7,1.35,1.5],bm:[1.6,1.25,1.3],spd:10,rune:1,gold:2.2,gems:2,c:'',mech:1},
@@ -1561,7 +1561,7 @@ const STORYD=[
 // v1.4.1 story toughness per difficulty x chapter (area): [HP multipliers],[ATK multipliers]. Longer fights, not one-shots.
 const STORY_SC=[[[1,1.05,1.55,2],[1,1,1.08,1.12]],[[2.1,2.15,2.2,2.3],[1.1,1.1,1.12,1.15]],[[2.4,2.3,2,1.8],[1.05,1.05,1,1]]];
 const storySc=(a,d)=>{const T=STORY_SC[d||0]||STORY_SC[0];return[T[0][a]||T[0][T[0].length-1],T[1][a]||T[1][T[1].length-1]];};
-// Tower of Ascension: 100 floors (+ Hard after floor 100), a boss every 10th floor, monthly reset.
+// Rift Spire: 100 floors (+ Hard after floor 100), a boss every 10th floor, monthly reset.
 const TOA_BOSS=[
  {id:'magmaw',mech:'enrage'},{id:'brinequeen',mech:'regen'},{id:'thunderroc',mech:'fast'},{id:'goldgolem',mech:'shield'},{id:'jellyking',mech:'regen'},
  {id:'crystalwyrm',mech:'enrage'},{id:'glyphwarden',mech:'shield'},{id:'umbral',mech:'fast'},{id:'thunderroc',mech:'enrage'},{id:'umbral',mech:'all'}];
@@ -1582,18 +1582,18 @@ const EVENTS=[
  {id:'gold',n:'Gold Rush Vault',i:'💰',bg:'linear-gradient(135deg,#ffe08a,#c98a1a 60%,#5a3a05)',boss:'goldgolem',pool:['buzzsaw','flickerwisp','magmander','galeclaw'],reward:'Mountains of Gold (4x)',desc:"Bonk the golem, take its gold. It's basically a piñata with feelings."},
  {id:'glyph',n:'Rune Sanctum',i:'🔮',bg:'linear-gradient(135deg,#d6a6ff,#6a2fc4 60%,#1f0a45)',boss:'glyphwarden',pool:['widowmire','nocturnipper','bonejangle','halodove'],reward:'2–3 guaranteed Runes of any set',desc:'Ancient runes, freshly dusted. The Warden would like them back.'},
  {id:'jelly',n:'Jelly Grove',i:'🍮',bg:'linear-gradient(135deg,#ffd6a5,#ff8fab 60%,#7a2a4a)',boss:'jellyking',pool:['jellybop','bubblefin','shellbert','jellybop'],reward:'Jellybops (6x XP fodder) + 2x XP',desc:'Wobbly. Sticky. Educational. Bring a spoon.'},
- {id:'crystal',n:'Crystal Cavern',i:'💎',bg:'linear-gradient(135deg,#a5f3ff,#3a7bd5 60%,#1a1050)',boss:'crystalwyrm',pool:['cinderfox','tentacular','dawnstag','galeclaw'],reward:'Gems + Mystic Scroll chance',desc:'A cave made of premium currency. Suspiciously convenient.'},
+ {id:'crystal',n:'Crystal Cavern',i:'💎',bg:'linear-gradient(135deg,#a5f3ff,#3a7bd5 60%,#1a1050)',boss:'crystalwyrm',pool:['cinderfox','tentacular','dawnstag','galeclaw'],reward:'Gems + Arcane Scroll chance',desc:'A cave made of premium currency. Suspiciously convenient.'},
 ];
 const TIERS=[{n:'Easy',lv:6},{n:'Normal',lv:18},{n:'Hard',lv:32}];
 const FEATURED=[['pyrewyrm','shadowfang_water'],['leviadrift','blazemane'],['tempestrix','tidesinger'],['seraphyne_wind','tentacular'],['duskula_fire','zephyrlet']]; // v1.6.0: Fire/Water/Wind only
 const BANNER_DAYS=3;
-const RATES={common:[74.2,24.4,1.4,0,0],mystic:[0,0,91.5,8,0.5],featured:[0,0,91.5,8,0.5],radiant:[0,0,0,93.5,6.5],hh:[0,0,93.65,6,0.35]}; // v1.6.0: Summoners War-style rates
+const RATES={common:[74.2,24.4,1.4,0,0],mystic:[0,0,91.5,8,0.5],featured:[0,0,91.5,8,0.5],radiant:[0,0,0,93.5,6.5],hh:[0,0,93.65,6,0.35]}; // v1.6.0 summon rates
 const FWW=['fire','water','wind'],HHEL=['heaven','hell']; // regular scrolls pull Fire/Water/Wind; the Heaven & Hell Scroll pulls Heaven/Hell
 const HH_DROP=0.12; // v1.6.0: chance per story-stage clear of a 1-2★ Heaven/Hell monster
 const PITY=60;
 const SCROLLS={
  common:{n:'Common Scroll',i:'📃',bg:'linear-gradient(135deg,#5b6170,#2b2f3a)',desc:'Mostly 1–2★ Fire, Water & Wind friends. Great for fodder.'},
- mystic:{n:'Mystic Scroll',i:'📜',bg:'linear-gradient(135deg,#7c5cff,#3a1f8a)',desc:'3★ or better Fire, Water & Wind monsters. Counts toward the 5★ pity.'},
+ mystic:{n:'Arcane Scroll',i:'📜',bg:'linear-gradient(135deg,#7c5cff,#3a1f8a)',desc:'3★ or better Fire, Water & Wind monsters. Counts toward the 5★ pity.'},
  featured:{n:'Featured Banner',i:'🎉',bg:'linear-gradient(135deg,#ff7ad9,#7c2fd6 60%,#2a0f5e)',desc:'Limited time! Rate-up on the featured monsters (Fire, Water & Wind). Counts toward pity.'},
  radiant:{n:'Radiant Scroll',i:'🌟',bg:'linear-gradient(135deg,#ffe08a,#ff7ad9 60%,#7c2fd6)',desc:'Guaranteed 4★ or 5★ Fire, Water & Wind. Smells faintly of victory.'},
  hh:{n:'Heaven & Hell Scroll',i:'🌗',bg:'linear-gradient(135deg,#d9a93a,#7a4bd6 50%,#4a0c38)',desc:'Only Heaven & Hell monsters, 3★ or better. Has its own 5★ pity.'},
@@ -1623,7 +1623,7 @@ const ACH=[
  ['area2','🌩️','Bird Is The Word','Defeat Thunderroc atop Galeholm Peaks',s=>!!s.camp['2-4'],{gems:200,mystic:2}],
  ['area3','💡','Lights On','Defeat the Umbral Sovereign',s=>!!s.camp['3-4'],{radiant:1,gems:300}],
  ['perfect','💯','Flawless','Earn 3 stars on 10 stages',s=>Object.values(s.camp).filter(v=>v>=3).length>=10,{gems:150}],
- ['star','⭐','Ascension','Star-up a monster',s=>s.stats.starUps>=1,{gems:100}],
+ ['star','⭐','Star Climber','Star-up a monster',s=>s.stats.starUps>=1,{gems:100}],
  ['crit100','🎯','Critical Thinker','Land 100 critical hits',s=>s.stats.crits>=100,{gems:100}],
  ['big','💥','Big Number Go Brrr','Deal 3,000+ damage in a single hit',s=>s.stats.maxHit>=3000,{gems:150}],
  ['glyph10','🔧','Rune Tinkerer','Upgrade runes 10 times',s=>s.stats.glyphUps>=10,{gold:15000}],
@@ -1635,7 +1635,7 @@ const TIPS=[
  "Feed Jellybops to your monsters for 6x XP. The Jellybops consented. We checked. Twice.",
  "Stuck on a stage? Runes! Runes are the answer. Runes are always the answer.",
  "Shellbert is not slow. He is 'strategically unhurried'.",
- "A 5★ is guaranteed within 60 Mystic/Featured summons. The Rift is generous. Eventually.",
+ "A 5★ is guaranteed within 60 Arcane/Featured summons. The Rift is generous. Eventually.",
  "Auto-battle is great. Auto-battle at 3x speed is a lifestyle.",
  "Star-up resets level to 1, but stats grow a lot more. That's called character development.",
  "Your leader's bonus applies to the whole team. Choose wisely. Or choose the cutest one.",
@@ -1643,9 +1643,14 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.6.1',date:'Oct 20, 2026',title:'💠 Rune & Dungeon Rework',sections:[
+  ['💠 Rune Sets',['All 12 rune sets have new names and retuned bonuses: Heartwood (HP +12%), Ironbark (DEF +12%), Falcon (Crit Chance +10%), Lodestar (Accuracy +18%), Anchor (Resist +18%), Haven (Immunity for 2 turns at the start of battle), Quickstep (SPD +22%), Emberedge (Crit Damage +35%), Fang (ATK +30%), Tempo (18% extra-turn chance), Sapdrinker (heal 30% of damage dealt), Gongstrike (20% Stun chance).','Rune grades are now Plain, Charged, Gleaming, Exalted and Astral.','Slots 1, 3 and 5 now offer a choice of flat main stat: slot 1 ATK or HP, slot 3 DEF or ATK, slot 5 HP or DEF.','Rune main stats and substat rolls have been rebalanced.']],
+  ['🏰 Dungeons',['The Rune Dungeons are now the Golem Bastion (Heartwood, Ironbark, Anchor, Quickstep, Fang), the Wyrm Hollow (Tempo, Falcon, Emberedge) and the Marrow Grove (Gongstrike, Sapdrinker, Lodestar, Haven).','The 100-floor tower is now the Rift Spire.']],
+  ['📜 Names',['The 3★-or-better scroll is now the Arcane Scroll (same rates; scrolls you own carry over).','Stats now read Crit Chance, Crit Damage, Resist and Accuracy.','A few skills have new names: Breezerush, Gale Spiral, Halo Refuge, Magma Burst, Whirl Crush and Storm Volley.']],
+  ['💾 Your Save',['Nothing to do: your runes, scrolls, dungeon and tower progress carry over and simply show the new names.']]]},
  {v:'1.6.0',date:'Oct 19, 2026',title:'🌗 New Scrolls & Summon Rates',sections:[
-  ['🌗 Heaven & Hell Scroll',['A new scroll that only summons Heaven and Hell monsters, 3★ or better: 3★ 93.65%, 4★ 6%, 5★ 0.35%.','It has its own 5★ pity (guaranteed by summon #60) and every 10x has a 4★ or better.','Get it from the Shop (300 💎), Day 7 of the login calendar, Tower of Ascension floors 25 and 75, and a free one waiting in your Mailbox.']],
-  ['📜 Summon Rates',['Common, Mystic, Featured and Radiant scrolls now summon Fire, Water and Wind monsters only.','New rates: Common 1★ 74.2% / 2★ 24.4% / 3★ 1.4%. Mystic & Featured 3★ 91.5% / 4★ 8% / 5★ 0.5%. Radiant 4★ 93.5% / 5★ 6.5%.','Mystic/Featured keep the 5★ pity at summon #60 and the 4★-or-better in every 10x.','Rates are shown right on the Summon screen and in full in the Shop Odds tab.']],
+  ['🌗 Heaven & Hell Scroll',['A new scroll that only summons Heaven and Hell monsters, 3★ or better: 3★ 93.65%, 4★ 6%, 5★ 0.35%.','It has its own 5★ pity (guaranteed by summon #60) and every 10x has a 4★ or better.','Get it from the Shop (300 💎), Day 7 of the login calendar, Rift Spire floors 25 and 75, and a free one waiting in your Mailbox.']],
+  ['📜 Summon Rates',['Common, Arcane, Featured and Radiant scrolls now summon Fire, Water and Wind monsters only.','New rates: Common 1★ 74.2% / 2★ 24.4% / 3★ 1.4%. Arcane & Featured 3★ 91.5% / 4★ 8% / 5★ 0.5%. Radiant 4★ 93.5% / 5★ 6.5%.','Arcane/Featured keep the 5★ pity at summon #60 and the 4★-or-better in every 10x.','Rates are shown right on the Summon screen and in full in the Shop Odds tab.']],
   ['🗺️ Story Drops',['1★ and 2★ Heaven and Hell monsters can now drop from story stages.']],
   ['🎉 Featured Banners',['Featured banners now star Fire, Water and Wind monsters.']],
   ['💾 Your Save',['Nothing to do: everything carries over, and your scrolls keep working.']]]},
@@ -1689,25 +1694,25 @@ const PATCHES=[
  {v:'1.4.6',date:'Oct 13, 2026',title:'🐍 Leviathan Resized',sections:[
   ['🐍 Leviathan',['Leviathan and Carter are now drawn bigger, to match the size of the other monsters.']]]},
  {v:'1.4.5',date:'Oct 13, 2026',title:'🐍 Leviathan Rises',sections:[
-  ['🐍 New 5★ Water Monster: Leviathan',['A fearsome sea serpent has surfaced in the Rift! Find it in Mystic and Featured summons (see the Odds tab) and in the Monsterpedia.','🌊 Tail Sweep: sweeps ALL enemies with a 20% chance to Stun (up to 50% with skill-ups).','🦷 Bite & Lash: bites one enemy, then lashes the enemy with the lowest HP with a 20% chance to Stun (up to 50% with skill-ups).','🧊 Freezing Tidal Wave: a colossal icy wave crashes over ALL enemies with a 25% chance to Freeze each one (a frozen monster skips its next turn).','Feed a duplicate Leviathan in Power Up for a skill-up.']],
+  ['🐍 New 5★ Water Monster: Leviathan',['A fearsome sea serpent has surfaced in the Rift! Find it in Arcane and Featured summons (see the Odds tab) and in the Monsterpedia.','🌊 Tail Sweep: sweeps ALL enemies with a 20% chance to Stun (up to 50% with skill-ups).','🦷 Bite & Lash: bites one enemy, then lashes the enemy with the lowest HP with a 20% chance to Stun (up to 50% with skill-ups).','🧊 Freezing Tidal Wave: a colossal icy wave crashes over ALL enemies with a 25% chance to Freeze each one (a frozen monster skips its next turn).','Feed a duplicate Leviathan in Power Up for a skill-up.']],
   ['🌟 Carter',['Leviathan awakens into Carter, a crowned deep-sea serpent: +10% effect chances, and Freezing Tidal Wave also pushes back every enemy\'s turn gauge by 15%.']],
   ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.4.4',date:'Oct 11, 2026',title:'🌟 Awakening',sections:[
   ['🌟 Monster Awakening',['Monsters can now be awakened once! Open a monster and tap 🌟 Awaken.','Awakening costs Low / Mid / High essences of the monster\'s element plus mana, scaled by its natural stars. The confirm screen shows the cost and the stats before and after.','Awakened monsters get a new name, new look (new colours, a glowing aura and a crown, wings or jewels), +12% HP / ATK / DEF, +6 SPD, a bonus stat and a small skill upgrade.']],
   ['🦄 Paislynn',['Prismane awakens into Paislynn: Guardian Glow heals 20% and Rainbow Blessing also removes one harmful effect from each ally.']],
-  ['🧪 Essences',['Essences drop in Story (more on Hard and Hell), Rune Dungeons and the Tower of Ascension.','New Essence Bundle in the Shop Items tab, and a 🧪 My Essences view there.','The Monsterpedia shows every monster\'s awakened name and art.']],
+  ['🧪 Essences',['Essences drop in Story (more on Hard and Hell), Rune Dungeons and the Rift Spire.','New Essence Bundle in the Shop Items tab, and a 🧪 My Essences view there.','The Monsterpedia shows every monster\'s awakened name and art.']],
   ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.4.3',date:'Oct 11, 2026',title:'🦄 Prismane Arrives',sections:[
-  ['🦄 New 5★ Light Monster: Prismane',['A rainbow unicorn support has trotted into the Rift! Find her in Mystic and Featured summons (see the Odds tab) and in the Monsterpedia.','🌈 Prism Strike: hits one enemy with a 40% chance to Stun for 1 turn.','💖 Rainbow Blessing: heals all allies for 20% of her max HP (up to 40% with skill-ups).','✨ Guardian Glow (passive): at the end of each of her turns, heals the ally with the lowest HP%.']],
+  ['🦄 New 5★ Light Monster: Prismane',['A rainbow unicorn support has trotted into the Rift! Find her in Arcane and Featured summons (see the Odds tab) and in the Monsterpedia.','🌈 Prism Strike: hits one enemy with a 40% chance to Stun for 1 turn.','💖 Rainbow Blessing: heals all allies for 20% of her max HP (up to 40% with skill-ups).','✨ Guardian Glow (passive): at the end of each of her turns, heals the ally with the lowest HP%.']],
   ['🌈 Skill-ups',['Feed a duplicate Prismane in Power Up to level up Rainbow Blessing (25% / 30% / 35% / 40%).']],
   ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.4.2',date:'Oct 10, 2026',title:'🛒 New Shop (test mode)',sections:[
-  ['🛒 New Shop (test mode)',['The Shop has a new look with tabs for Crystals, Packs, Pass, Items and Odds. Open it from the island Shop or the bottom menu.','TEST MODE: prices are labels only and no real money is ever charged. A test-mode banner is always shown, and every purchase asks you to confirm first.','Crystal bundles from 300 to 19,500 crystals. Your first purchase of each bundle doubles its base crystals (once per account). The biggest bundle also unlocks a golden Rift Hoard frame for your team leader.','Starter Pack (once per account): 900 crystals, 3 Mystic Scrolls, a 4★ monster of your choice and 100 energy.',"Tamer’s Monthly Pass: 300 crystals now plus 70 every day for 30 days."]],
-  ['📊 Fair Summons',['New Odds tab with the exact chance of every rarity and every monster, for every scroll.','A 5★ is still guaranteed by Mystic/Featured summon #60, with the counter always visible.','Every 10x Mystic or Featured summon now contains at least one 4★ or better.','Summons are cheaper: 1 Mystic summon = 75 crystals (10x = 750), Featured = 110 (10x = 1,100). Mystic Scrolls you already own still summon as before.']],
+  ['🛒 New Shop (test mode)',['The Shop has a new look with tabs for Crystals, Packs, Pass, Items and Odds. Open it from the island Shop or the bottom menu.','TEST MODE: prices are labels only and no real money is ever charged. A test-mode banner is always shown, and every purchase asks you to confirm first.','Crystal bundles from 300 to 19,500 crystals. Your first purchase of each bundle doubles its base crystals (once per account). The biggest bundle also unlocks a golden Rift Hoard frame for your team leader.','Starter Pack (once per account): 900 crystals, 3 Arcane Scrolls, a 4★ monster of your choice and 100 energy.',"Tamer’s Monthly Pass: 300 crystals now plus 70 every day for 30 days."]],
+  ['📊 Fair Summons',['New Odds tab with the exact chance of every rarity and every monster, for every scroll.','A 5★ is still guaranteed by Arcane/Featured summon #60, with the counter always visible.','Every 10x Arcane or Featured summon now contains at least one 4★ or better.','Summons are cheaper: 1 Arcane summon = 75 crystals (10x = 750), Featured = 110 (10x = 1,100). Arcane Scrolls you already own still summon as before.']],
   ['👪 Younger Players',['Before the first purchase you are asked for your birth year. Players under 16 need a parent or guardian to approve each purchase.']],
   ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.4.1',date:'Oct 9, 2026',title:'✨ Living Worlds',sections:[
-  ['🎨 Richer Backgrounds',['Every scene got more depth: a distant haze layer, warmer lighting, a soft light pool under the fighters and framing foreground silhouettes.','New details per area: lava falls and heat shimmer in Emberfall, glittering sea and drifting fog in the ruins, icicles and aurora in the peaks, a ringed planet over the rift, torches in the Keep and moonbeams over the Necropolis.','The home island now has shallow water, sparkling waves, drifting cloud shadows and sun rays.']],
+  ['🎨 Richer Backgrounds',['Every scene got more depth: a distant haze layer, warmer lighting, a soft light pool under the fighters and framing foreground silhouettes.','New details per area: lava falls and heat shimmer in Emberfall, glittering sea and drifting fog in the ruins, icicles and aurora in the peaks, a ringed planet over the rift, torches in the Bastion and moonbeams over the Marrow Grove.','The home island now has shallow water, sparkling waves, drifting cloud shadows and sun rays.']],
   ['🌦️ Weather',['Each area has its own weather on top of its particles: falling leaves and fireflies in the forest, ash and embers over the lava, snow gusts in the peaks, drifting stars and the odd shooting star in the rift, rolling fog in the ruins.']],
   ['👑 Boss Arenas',['Boss waves now transform the battlefield: story bosses fight inside a glowing rune circle, Tower bosses (every 10th floor) on a sky platform, dungeon bosses in front of their throne, and INSANE bosses in a red storm with lightning.']],
   ['🫁 Idle Breathing',['Every monster now breathes and sways gently while waiting, in battle and on the Monster and Team screens. Bosses breathe slower and heavier. The motion pauses while a monster attacks, gets hit or moves.']],
@@ -1715,12 +1720,12 @@ const PATCHES=[
   ['⚔️ Tougher Story',['Story enemies are tougher in later chapters: more HP for enemies and bosses in later Normal chapters and across Hard and Hell, with only a small attack increase, so fights last longer instead of ending in one hit. The first two Normal chapters stay beginner-friendly.']],
   ['💾 Your Save',['Nothing to do: everything carries over.']]]},
  {v:'1.4.0',date:'Oct 9, 2026',title:'💠 Runes, Dungeons & the Tower',sections:[
-  ['🏝️ A Whole New Isle',['The home screen is now an illustrated island. Tap the Summoning Circle, Monster Altar, Rune Workshop, Dungeon Portal, Tower of Ascension, World Gate, Shop and Mailbox to jump straight in.','New top bar shows Energy, Mana, Crystals and Scrolls. The bottom quick-menu has Battle, Monsters, Shop and Settings.','The Battle menu branches into Story, Dungeons and the Tower.']],
-  ['🎨 New Backgrounds',['Every area and dungeon has its own layered, animated scene: misty forest, lava cavern, frozen peaks, starry rift, sunken ruins, a golem keep, a dragon lair, a necropolis and more.','Gentle drifting particles (embers, snow, fireflies, bubbles). Phones use fewer particles, and your device’s Reduce Motion setting (or turning battle effects off) stops the animation.']],
-  ['💠 Runes',['Glyphs have grown up into Runes: 6 slots per monster, 12 sets (Energy, Guard, Swift, Blade, Rage, Fatal, Violent, Vampire, Despair, Will, Focus, Endure) with 2- and 4-piece bonuses.','Slots 1/3/5 have flat ATK/DEF/HP main stats, slots 2/4/6 can roll %, SPD, CRI, RES or ACC. Up to 4 substats, power up to +15 (a substat roll every 3 levels), grades 1★ to 6★, rarities Normal to Legend.','New Rune inventory with filters, equip/unequip, power-up and sell. Monster details now show base + rune stats and all six rune slots.','New stats: RES and ACC decide whether harmful effects land.']],
-  ['🏰 Rune Dungeons',["Giant's Keep, Dragon's Lair and the Necropolis each drop their own rune sets.",'Four difficulties: Normal, Hard, Hell and INSANE. Higher tiers drop higher grades and rarer runes.','INSANE bosses have 300,000 HP, are very fast and can act several times in a row. Bring your best-runed team!','Dungeons cost Energy. Energy refills over time (1 every 3 minutes), or refill it with Crystals.']],
+  ['🏝️ A Whole New Isle',['The home screen is now an illustrated island. Tap the Summoning Circle, Monster Altar, Rune Workshop, Dungeon Portal, Rift Spire, World Gate, Shop and Mailbox to jump straight in.','New top bar shows Energy, Mana, Crystals and Scrolls. The bottom quick-menu has Battle, Monsters, Shop and Settings.','The Battle menu branches into Story, Dungeons and the Tower.']],
+  ['🎨 New Backgrounds',['Every area and dungeon has its own layered, animated scene: misty forest, lava cavern, frozen peaks, starry rift, sunken ruins, a golem bastion, a wyrm hollow, a marrow grove and more.','Gentle drifting particles (embers, snow, fireflies, bubbles). Phones use fewer particles, and your device’s Reduce Motion setting (or turning battle effects off) stops the animation.']],
+  ['💠 Runes',['Glyphs have grown up into Runes: 6 slots per monster, 12 sets (Heartwood, Ironbark, Quickstep, Falcon, Emberedge, Fang, Tempo, Sapdrinker, Gongstrike, Haven, Lodestar, Anchor) with 2- and 4-piece bonuses.','Slots 1/3/5 have flat ATK/DEF/HP main stats, slots 2/4/6 can roll %, SPD, Crit, Resist or Accuracy. Up to 4 substats, power up to +15 (a substat roll every 3 levels), grades 1★ to 6★, rarities Plain to Astral.','New Rune inventory with filters, equip/unequip, power-up and sell. Monster details now show base + rune stats and all six rune slots.','New stats: Resist and Accuracy decide whether harmful effects land.']],
+  ['🏰 Rune Dungeons',["Golem Bastion, Wyrm Hollow and the Marrow Grove each drop their own rune sets.",'Four difficulties: Normal, Hard, Hell and INSANE. Higher tiers drop higher grades and rarer runes.','INSANE bosses have 300,000 HP, are very fast and can act several times in a row. Bring your best-runed team!','Dungeons cost Energy. Energy refills over time (1 every 3 minutes), or refill it with Crystals.']],
   ['📖 Story Hard & Hell',['Story mode now has Hard and Hell difficulties, unlocked one after the other. Enemies are much stronger and faster, and bosses get special mechanics like Enrage, Regeneration and Shields.','Better rewards: runes, more mana and more crystals. Your existing story progress counts as Normal.']],
-  ['🗼 Tower of Ascension',['100 floors that get harder and harder, with a special boss every 10th floor.','Rewards on every floor: runes, crystals and scrolls, 6★ Legend runes at milestone floors and a Radiant Scroll at floors 50 and 100.','Clear floor 100 to open Tower Hard. The tower resets every month, and your best floor is remembered.']],
+  ['🗼 Rift Spire',['100 floors that get harder and harder, with a special boss every 10th floor.','Rewards on every floor: runes, crystals and scrolls, 6★ Astral runes at milestone floors and a Radiant Scroll at floors 50 and 100.','Clear floor 100 to open Tower Hard. The tower resets every month, and your best floor is remembered.']],
   ['💾 Your Save',['Nothing to do: all your monsters, levels, currency and story progress carry over.','Your old glyphs are converted to runes automatically. Equipped glyphs stay equipped, and no stats are lost.']]]},
  {v:'1.3.4',date:'Oct 8, 2026',title:'🐛 Turn Order Fix',sections:[
   ['🐛 Fixes',['Fixed extra turns that could be lost when a battle moved on to its third wave, and tidied up turn order at the start of each wave.']],
@@ -1792,9 +1797,9 @@ const PATCHES=[
  ]},
  {v:'1.0.0',date:'Oct 6, 2026',title:'🎉 Grand Opening!',sections:[
   ['✨ New Content',[
-   '25 original summonable monsters across Fire, Water, Wind, Light & Dark — plus one suspiciously delicious Jellybop and 8 bosses.',
-   'Summoning with Common, Mystic, Featured & Radiant scrolls. 5★ pity guaranteed by summon #60.',
-   'Your first 10x Mystic/Featured summon is guaranteed to contain a 4★ or better. You\'re welcome.',
+   '25 original summonable monsters across Fire, Water, Wind, Heaven & Hell — plus one suspiciously delicious Jellybop and 8 bosses.',
+   'Summoning with Common, Arcane, Featured & Radiant scrolls. 5★ pity guaranteed by summon #60.',
+   'Your first 10x Arcane/Featured summon is guaranteed to contain a 4★ or better. You\'re welcome.',
    'Campaign: 4 areas, 20 stages, 4 bosses who all have strong opinions.',
    'Rotating Event Dungeons (Gold, Glyph, Jelly, Crystal). Weekends: everything is open!',
    'Limited-time Featured Banner that rotates every 3 days.',
@@ -2153,10 +2158,10 @@ const SKVFX={
  'Gust Rend':[['proj',{s:'crescent',c:'#9dffb0',c2:'#ffffff',sz:12,fl:200}],['slash',{c:'#3fd17f',c2:'#eaffef',r:1.6,len:3.4,rot:-2.2}]],
  'Skyfall':[['meteor',{g:'@',c:'#3fd17f',c2:'#eaffef',dx:0,sz:10,big:1}],['burst',{c:'#9dffb0',rays:14,r:3}],['quake',{c:'#3fd17f',px:7}]],
  'Breeze Flick':[['proj',{s:'emoji',g:'🍃',sz:6,wig:4,spin:3,c:'#3fd17f'}]],
- 'Tailwind':[['streak',{c:'#c9f7ff',c2:'#3fd17f'}],['aura',{c:'#c9f7ff',g:'💨',n:4}]],
+ 'Breezerush':[['streak',{c:'#c9f7ff',c2:'#3fd17f'}],['aura',{c:'#c9f7ff',g:'💨',n:4}]],
  'Pixie Mend':[['petals',{g:['🌸','✨'],c:'#ff9ad5'}],['ring',{c:'#7cff9e',c2:'#ff9ad5',plus:'💚',st:HIT+60,rings:1}]],
- 'Thunderclap':[['bolt',{c:'#ffe27a',c2:'#ffffff'}],['quake',{c:'#ffe27a',px:5}]],
- 'Cyclone':[['tornado',{c:'#3fd17f',c2:'#c9f7ff',h:3.4}],['tornado',{c:'#c9f7ff',c2:'#ffffff',h:2.4,d:200}]],
+ 'Gongstrike':[['bolt',{c:'#ffe27a',c2:'#ffffff'}],['quake',{c:'#ffe27a',px:5}]],
+ 'Gale Spiral':[['tornado',{c:'#3fd17f',c2:'#c9f7ff',h:3.4}],['tornado',{c:'#c9f7ff',c2:'#ffffff',h:2.4,d:200}]],
  'Eye of the Storm':[['vortex',{c:'#3fd17f',c2:'#c9f7ff',r:2.2,arms:5}],['bolt',{c:'#c9f7ff',c2:'#ffffff',n:2,gap:140}]],
  // LIGHT
  'Fluffy Headbutt':[['bonk',{g:'☁️',c:'#fff6c8',sz:1.2}],['ring',{c:'#ffffff',sp:0,rings:3,len:400,st:HIT}]],
@@ -2172,7 +2177,7 @@ const SKVFX={
  'Judgment Ray':[['pillar',{c:'#ffe27a',c2:'#ffffff',w:.9,hitfx:1}]],
  'Prism Strike':[['beam',{rb:1,c:'#ffffff',w:5}],['burst',{c:'#ffe45a',c2:'#5ab8ff',rays:6,r:1.8,st:HIT+40}]],
  'Rainbow Blessing':[['pillar',{rb:1,c:'#ff9ad5',c2:'#ffffff',w:1.2,st:HIT-200,len:700}],['ring',{rb:1,c:'#7cff9e',c2:'#5ab8ff',plus:'🌈',flat:1,st:HIT}],['petals',{g:'✨',c:'#ffe45a',r:1.5,spin:3}]],
- 'Sanctuary':[['pillar',{c:'#fff6c8',c2:'#ffffff',w:1.2,st:HIT-200,len:700}],['ring',{c:'#ffe27a',c2:'#7cff9e',plus:'✨',flat:1,st:HIT}]],
+ 'Halo Refuge':[['pillar',{c:'#fff6c8',c2:'#ffffff',w:1.2,st:HIT-200,len:700}],['ring',{c:'#ffe27a',c2:'#7cff9e',plus:'✨',flat:1,st:HIT}]],
  'Revelation':[['runes',{c:'#ffe27a',c2:'#ffffff',flat:1}],['pillar',{c:'#ffe27a',w:.6,st:HIT,len:380}]],
  // DARK
  'Rattle':[['proj',{s:'emoji',g:'🦴',sz:7,spin:6,arc:45,c:'#e3c9ff'}]],
@@ -2193,13 +2198,13 @@ const SKVFX={
  'Wobble Heal':[['ring',{c:'#ffd166',c2:'#7cff9e',plus:'💛',rings:2,sp:4}]],
  // BOSSES
  'Slag Slam':[['bonk',{g:'👊',c:'#ff6b3d',sz:1.5}],['quake',{c:'#ff3d1f',px:9}]],
- 'Eruption':[['pillar',{geyser:1,c:'#ff5a1f',c2:'#ffd166',w:.8}],['quake',{c:'#ff5a1f',px:6}]],
+ 'Magma Burst':[['pillar',{geyser:1,c:'#ff5a1f',c2:'#ffd166',w:.8}],['quake',{c:'#ff5a1f',px:6}]],
  'Magma Armor':[['shield',{hex:1,c:'#ff6b3d',c2:'#ffd166',r:1.3}],['aura',{c:'#ff3d1f',g:'🛡️'}]],
  'Razor Fin':[['proj',{s:'shard',c:'#3da5ff',c2:'#e6f7ff',sz:10,fl:200}],['slash',{c:'#5ec8ff',c2:'#e6f7ff',r:1.4,rot:-.3}]],
- 'Maelstrom':[['vortex',{c:'#1f6fd6',c2:'#bfe6ff',r:2,arms:4,rev:1}]],
+ 'Whirl Crush':[['vortex',{c:'#1f6fd6',c2:'#bfe6ff',r:2,arms:4,rev:1}]],
  'Feeding Frenzy':[['bite',{n:3,gap:120,c:'#3da5ff',c2:'#ffffff'}]],
  'Gale Talon':[['proj',{s:'crescent',c:'#c9f7ff',c2:'#ffffff',n:2,gap:60,sz:9}],['slash',{claw:1,c:'#c9f7ff',c2:'#ffffff',r:1.4}]],
- 'Thunderstorm':[['rain',{c:'#9fd8ff',st:0,len:600,rate:.8,sz:5}],['bolt',{c:'#ffe27a',c2:'#ffffff',stg:70}]],
+ 'Storm Volley':[['rain',{c:'#9fd8ff',st:0,len:600,rate:.8,sz:5}],['bolt',{c:'#ffe27a',c2:'#ffffff',stg:70}]],
  'Updraft':[['tornado',{on:'self',c:'#c9f7ff',c2:'#ffffff',h:3.6}],['ring',{on:'self',c:'#7cff9e',plus:'💚',rings:1,st:HIT+100}]],
  'Void Lance':[['beam',{c:'#7a3fd1',c2:'#e3c9ff',w:10,lance:1,hold:160}],['burst',{c:'#a66bff',rays:6,r:2,st:HIT}]],
  'Eclipse Wave':[['wave',{c:'#4b1fa0',c2:'#c08bff',th:120,amp:10,a:.6,dark:1}]],
@@ -2821,10 +2826,10 @@ const SCN={
  coast:{n:'Sunken Ruins',sky:['#16224a','#3a5f9a','#f2a77a'],sun:'#ffd9a8',far:['sea','#2b5c8a'],mid:['pillars','#1a3352'],near:['rocks','#0b1830'],gnd:['#d8bf8a','#9a7a4a'],det:'shells',dc:'#ffffff',fog:'#cfe8ff',fogA:.22,pt:'bubble',pc:['#cff4ff','#ffffff']},
  peaks:{n:'Frozen Peaks',sky:['#0c1a3a','#3a6aa6','#d6ecff'],sun:'#ffffff',aurora:1,far:['snowpeaks','#a8c4e6'],mid:['glacier','#5a7fae'],near:['icepines','#1a2c4a'],gnd:['#e8f4ff','#9ab8d8'],det:'snow',dc:'#ffffff',fog:'#ffffff',fogA:.25,pt:'snow',pc:['#ffffff','#dff2ff']},
  rift:{n:'Starry Rift',sky:['#05020f','#1c0a3a','#4a1f7a'],sun:null,stars:1,nebula:'#c08bff',far:['islands','#2a1652'],mid:['spires','#170a33'],near:['shards','#0a0418'],gnd:['#2a1a4a','#0e0820'],det:'runes',dc:'#a98bff',fog:'#a98bff',fogA:.16,pt:'star',pc:['#ffffff','#c9b6ff','#7cf0ff']},
- keep:{n:"Giant's Keep",sky:['#2a1a08','#8a5a1a','#f0c070'],sun:'#fff0b0',far:['castle','#5a3a14'],mid:['columns','#3a240c'],near:['banners','#1a1006'],gnd:['#b08a4a','#5a4020'],det:'tiles',dc:'#ffe08a',fog:'#ffe0a0',fogA:.15,pt:'dust',pc:['#ffe8b0','#fff6d8'],rays:'#fff0b0'},
- lair:{n:"Dragon's Lair",sky:['#140408','#4a0c1a','#a2282a'],sun:null,far:['cavewall','#3a0a14'],mid:['bones','#220610'],near:['stalac','#0c0206'],gnd:['#4a1a18','#1a0808'],det:'gold',dc:'#ffd166',fog:'#ff7a4a',fogA:.16,pt:'ember',pc:['#ffb03d','#ff3a2a'],glow:'#ff3a2a'},
- necro:{n:'Necropolis',sky:['#050812','#1a2240','#4a5a7a'],sun:'#e8f0ff',moon:1,far:['castle','#1a2034'],mid:['tombs','#0e1222'],near:['deadtrees','#05070e'],gnd:['#2a3040','#0e1018'],det:'cracks',dc:'#7cf0c8',fog:'#9ad8c8',fogA:.3,pt:'wisp',pc:['#7cf0c8','#b8fff0']},
- tower:{n:'Tower of Ascension',sky:['#0a1440','#3a5ad8','#a8e0ff'],sun:'#ffffff',far:['cloudsea','#e0f0ff'],mid:['tower','#2a2a6a'],near:['clouds','#ffffff'],gnd:['#6a7ad8','#2a2a7a'],det:'tiles',dc:'#cfe6ff',fog:'#ffffff',fogA:.25,pt:'dust',pc:['#ffffff','#cfe6ff'],rays:'#ffffff'},
+ keep:{n:"Golem Bastion",sky:['#2a1a08','#8a5a1a','#f0c070'],sun:'#fff0b0',far:['castle','#5a3a14'],mid:['columns','#3a240c'],near:['banners','#1a1006'],gnd:['#b08a4a','#5a4020'],det:'tiles',dc:'#ffe08a',fog:'#ffe0a0',fogA:.15,pt:'dust',pc:['#ffe8b0','#fff6d8'],rays:'#fff0b0'},
+ lair:{n:"Wyrm Hollow",sky:['#140408','#4a0c1a','#a2282a'],sun:null,far:['cavewall','#3a0a14'],mid:['bones','#220610'],near:['stalac','#0c0206'],gnd:['#4a1a18','#1a0808'],det:'gold',dc:'#ffd166',fog:'#ff7a4a',fogA:.16,pt:'ember',pc:['#ffb03d','#ff3a2a'],glow:'#ff3a2a'},
+ necro:{n:'Marrow Grove',sky:['#050812','#1a2240','#4a5a7a'],sun:'#e8f0ff',moon:1,far:['castle','#1a2034'],mid:['tombs','#0e1222'],near:['deadtrees','#05070e'],gnd:['#2a3040','#0e1018'],det:'cracks',dc:'#7cf0c8',fog:'#9ad8c8',fogA:.3,pt:'wisp',pc:['#7cf0c8','#b8fff0']},
+ tower:{n:'Rift Spire',sky:['#0a1440','#3a5ad8','#a8e0ff'],sun:'#ffffff',far:['cloudsea','#e0f0ff'],mid:['tower','#2a2a6a'],near:['clouds','#ffffff'],gnd:['#6a7ad8','#2a2a7a'],det:'tiles',dc:'#cfe6ff',fog:'#ffffff',fogA:.25,pt:'dust',pc:['#ffffff','#cfe6ff'],rays:'#ffffff'},
  crystal:{n:'Crystal Cavern',sky:['#060a24','#1f3a8a','#3a7bd5'],sun:null,far:['crystals','#2a4aa0'],mid:['crystals2','#1a2a6a'],near:['stalac','#0a1030'],gnd:['#2a3a7a','#121a40'],det:'shards',dc:'#a5f3ff',fog:'#a5f3ff',fogA:.15,pt:'star',pc:['#a5f3ff','#ffffff']},
  candy:{n:'Jelly Grove',sky:['#ff9ad5','#ffd6a5','#fff3d0'],sun:'#ffffff',far:['candy','#ff7ab8'],mid:['forest','#e86aa0'],near:['ferns','#b8407a'],gnd:['#ffc6dc','#f598b8'],det:'sprinkles',dc:'#ffffff',fog:'#ffffff',fogA:.25,pt:'bubble',pc:['#ffffff','#ffd6f0']},
 };
@@ -3028,7 +3033,7 @@ const dexCount=()=>DEXREQ.filter(d=>S.dex[d.id]||lineOf(d.id).some(v=>S.dex[v.id
 function addXp(m,x){const b=m.lvl;if(m.lvl>=maxLvl(m))return 0;m.xp+=x;while(m.lvl<maxLvl(m)&&m.xp>=xpNeed(m.lvl)){m.xp-=xpNeed(m.lvl);m.lvl++;}if(m.lvl>=maxLvl(m))m.xp=0;return m.lvl-b;}
 function baseStats(id,lvl,stars){const d=MD[id];const g=1+0.07*(lvl-1),sm=1+0.12*(stars-d.rar);
  return{hp:Math.round(d.hp*g*sm*SCALE.hp),atk:Math.round(d.atk*g*sm*SCALE.atk),def:Math.round(d.def*g*sm*SCALE.def),spd:d.spd+(stars-d.rar)*2+Math.floor(lvl/10),cr:d.cr,cd:d.cdm,res:15,acc:0};}
-// stat panel: b = base (level + stars), bon = runes (mains, substats, set bonuses), t = total. % bonuses are % of base, like Summoners War.
+// stat panel: b = base (level + stars), bon = runes (mains, substats, set bonuses), t = total. % bonuses are % of base.
 function monStats(m){const b=baseStats(m.id,m.lvl,m.stars);if(m.aw&&canAwaken(m.id))awApply(b,m.id);const bon={hp:0,atk:0,def:0,spd:0,cr:0,cd:0,res:0,acc:0};const cnt={};
  (m.ru||[]).forEach(u=>{const r=runeByUid(u);if(!r)return;cnt[r.set]=(cnt[r.set]||0)+1;runeAdd(bon,b,r.main.k,runeMainVal(r));r.subs.forEach(x=>runeAdd(bon,b,x.k,x.v));});
  const act=[],fx={};for(const k in cnt){const rs=RSET[k];if(!rs)continue;const n=Math.floor(cnt[k]/rs.need);for(let i=0;i<n;i++){act.push(k);if(rs.b)for(const x in rs.b)bon[x]+=['hp','atk','def','spd'].includes(x)?b[x]*rs.b[x]/100:rs.b[x];if(rs.fx)fx[rs.fx]=1;}}
@@ -3068,7 +3073,7 @@ function awakenAnim(m,done){if(S.settings.motion==='off'||noMo()){done();return;
  ov.innerHTML=`<div class="awrays"></div><div class="awfl"></div><div class="awim a0">${sprImg(m.id)}</div><div class="awim a1">${sprImg(m.id+'_aw','cheer')}</div><div class="awtx">✦ ${AWK[m.id].n} ✦</div>`;
  document.body.appendChild(ov);let fin=false;const end=()=>{if(fin)return;fin=true;ov.remove();done();};ov.onclick=end;setTimeout(end,2600);}
 function openEssences(){const E=essState();closeModal('ess');
- openModal(`<h3>🧪 Essences</h3><p class="mut">Used to awaken monsters. They drop in Story (more on Hard and Hell), Rune Dungeons and the Tower of Ascension.</p>
+ openModal(`<h3>🧪 Essences</h3><p class="mut">Used to awaken monsters. They drop in Story (more on Hard and Hell), Rune Dungeons and the Rift Spire.</p>
  <table class="stat-t ess-t" id="essTable"><tr><th></th>${ESSN.map((n,i)=>`<th>${ESSI[i]} ${n}</th>`).join('')}</tr>${Object.keys(ELEM).map(e=>`<tr><td>${ELEM[e].i} ${ELEM[e].n}</td>${E[e].map(v=>`<td><b>${fmt(v)}</b></td>`).join('')}</tr>`).join('')}</table>
  <div class="mut" style="margin-top:8px">Awakening cost (Low / Mid / High of the monster's element + mana): ${Object.entries(AWC).map(([r,c])=>`${r}★ ${c.l}/${c.m}/${c.h} + 💰${fmt(c.mana)}`).join(' · ')}</div>
  <div class="row-btns c"><button class="btn ghost" onclick="closeModal('ess')">Close</button></div>`,'ess');}
@@ -3088,7 +3093,7 @@ function leadText(l){if(!l)return'None';return `All allies: +${l.v}% ${STATN[l.s
 function grant(r){if(r.gold)S.gold+=r.gold;if(r.gems)S.gems+=r.gems;['common','mystic','radiant','hh'].forEach(k=>{if(r[k])S.scrolls[k]=(S.scrolls[k]||0)+r[k];});
  if(r.jelly)for(let i=0;i<r.jelly;i++)addMon('jellybop',r.jellyStars||2);
  if(r.glyph)for(let i=0;i<(r.glyphN||1);i++)newRune({grade:r.glyph,rar:1});}
-function rewardText(r){const p=[];if(r.gold)p.push(`💰 ${fmt(r.gold)}`);if(r.gems)p.push(`💎 ${r.gems}`);if(r.mystic)p.push(`📜 ${r.mystic} Mystic`);if(r.common)p.push(`📃 ${r.common} Common`);if(r.radiant)p.push(`🌟 ${r.radiant} Radiant`);if(r.hh)p.push(`🌗 ${r.hh} Heaven & Hell`);if(r.jelly)p.push(`🍮 ${r.jelly}x ${r.jellyStars||2}★ Jellybop`);if(r.glyph)p.push(`💠 ${r.glyphN||1}x ${r.glyph}★ Rune`);return p.join(' · ')||'—';}
+function rewardText(r){const p=[];if(r.gold)p.push(`💰 ${fmt(r.gold)}`);if(r.gems)p.push(`💎 ${r.gems}`);if(r.mystic)p.push(`📜 ${r.mystic} Arcane`);if(r.common)p.push(`📃 ${r.common} Common`);if(r.radiant)p.push(`🌟 ${r.radiant} Radiant`);if(r.hh)p.push(`🌗 ${r.hh} Heaven & Hell`);if(r.jelly)p.push(`🍮 ${r.jelly}x ${r.jellyStars||2}★ Jellybop`);if(r.glyph)p.push(`💠 ${r.glyphN||1}x ${r.glyph}★ Rune`);return p.join(' · ')||'—';}
 
 /* ---------- daily / login / achievements ---------- */
 function ensureDaily(){const t=todayStr();if(S.daily.date!==t){S.daily={date:t,prog:{login:1},claimed:{}};save();}}
@@ -3136,7 +3141,7 @@ const TABS=[['home','🏝️','Isle'],['battle','⚔️','Battle'],['monsters','
 const TAB_SCN={home:'coast',battle:null,adventure:null,events:'keep',dungeons:'keep',toa:'tower',summon:'rift',monsters:'forest',team:'forest',quests:'candy',shop:'keep'};
 const TAB_PARENT={adventure:'battle',events:'battle',dungeons:'battle',toa:'battle',summon:'home',team:'home',quests:'home'};
 function setTab(t){if(t==='settings'){sfx('click');openSettings();return;}TAB=t;sfx('click');render();$('#view').scrollTop=0;}
-function renderTop(){$('#curbar').innerHTML=`<button class="cur" title="Energy (tap to refill)" aria-label="Energy" id="cEn" onclick="openEnergyInfo()">⚡ <span>${energyNow()}/${ENERGY_MAX}</span></button><span class="cur" title="Mana (gold)">💰 <span id="cGold">${fmt(S.gold)}</span></span><span class="cur" title="Crystals">💎 <span id="cGems">${fmt(S.gems)}</span></span><span class="cur" title="Mystic / Common Scrolls">📜 ${S.scrolls.mystic} · 📃 ${S.scrolls.common}</span>`;$('#verTag').textContent='v'+VERSION;const mb=$('#btnMail');if(mb)mb.classList.toggle('has',S.mail.some(x=>!x.claimed&&MAILS[x.id]));}
+function renderTop(){$('#curbar').innerHTML=`<button class="cur" title="Energy (tap to refill)" aria-label="Energy" id="cEn" onclick="openEnergyInfo()">⚡ <span>${energyNow()}/${ENERGY_MAX}</span></button><span class="cur" title="Mana (gold)">💰 <span id="cGold">${fmt(S.gold)}</span></span><span class="cur" title="Crystals">💎 <span id="cGems">${fmt(S.gems)}</span></span><span class="cur" title="Arcane / Common Scrolls">📜 ${S.scrolls.mystic} · 📃 ${S.scrolls.common}</span>`;$('#verTag').textContent='v'+VERSION;const mb=$('#btnMail');if(mb)mb.classList.toggle('has',S.mail.some(x=>!x.claimed&&MAILS[x.id]));}
 function renderTabs(){const q=claimables()>0,l=canLogin();
  const cur=TAB_PARENT[TAB]&&TAB_PARENT[TAB]!=='home'?TAB_PARENT[TAB]:TAB;$('#tabs').innerHTML=TABS.map(([id,i,n])=>`<button class="${cur===id?'on':''}" id="tab-${id}" aria-label="${n}" onclick="setTab('${id}')"><b>${i}</b><span class="tl">${n}</span>${id==='home'&&(q||l)?'<span class="dot"></span>':''}</button>`).join('');}
 function openEnergyInfo(){const n=energyNow();openModal(`<h3>⚡ Energy</h3><p>You have <b>⚡${n}/${ENERGY_MAX}</b>. Rune dungeons cost energy; it refills by 1 every 3 minutes${n<ENERGY_MAX?` (next in <b class="cnt" data-cd="${(S.enAt||Date.now())+EN_MS}">${fmtDur((S.enAt||Date.now())+EN_MS-Date.now())}</b>)`:''}.</p><div class="row-btns c"><button class="btn ghost" onclick="closeModal('energy')">Close</button><button class="btn gold" id="btnRefill" onclick="refillEnergy()" ${S.gems>=30?'':'disabled'}>Refill to ${ENERGY_MAX} · 💎30</button></div>`,'energy');}
@@ -3163,7 +3168,7 @@ function renderSummon(){return backBar('home','Isle')+renderSummon0();}
 function renderSummon0(){const [fa,fs]=bannerNow();
  const card=(type,extra,btns)=>{const sc=SCROLLS[type];return`<div class="scard" style="background:${sc.bg}"><span class="big">${sc.i}</span><h3>${sc.n}</h3><p class="mut" style="color:#eee">${sc.desc}</p>${rateLine(type)}${extra||''}<div class="row-btns">${btns}</div><details><summary>📊 Drop rates</summary>${rateTable(type)}${type==='featured'?`<p class="mut" style="color:#eee">50% of 5★ results are ${MD[fa].n}; 40% of 4★ results are ${MD[fs].n}.</p>`:''}${type==='mystic'||type==='featured'||type==='hh'?`<p class="mut" style="color:#eee">Pity: a 5★ is guaranteed on summon #${PITY} without one${type==='hh'?' (separate Heaven & Hell counter)':''}.</p>`:''}<p class="mut" style="color:#eee">Pulls: ${scrollEls(type).map(e=>ELEM[e].i+' '+ELEM[e].n).join(', ')}.</p></details></div>`;};
  const my=S.scrolls.mystic;
- return`<div class="card"><div class="sec">🌀 The Summoning Rift</div><p class="mut">Tap a scroll to tear open the Rift. 5★ pity: <b>${S.pity}/${PITY}</b></p><div class="prog" style="margin-top:6px"><i style="width:${S.pity/PITY*100}%"></i></div><p class="mut" style="margin-top:6px">🎁 Every 10x Mystic/Featured/Heaven &amp; Hell summon: <b>at least one 4★ or better</b></p><div class="row-btns"><button class="btn sm ghost" id="sumOdds" style="min-height:44px" onclick="UI.shopTab='odds';setTab('shop')">📊 Full odds &amp; pity</button></div></div>
+ return`<div class="card"><div class="sec">🌀 The Summoning Rift</div><p class="mut">Tap a scroll to tear open the Rift. 5★ pity: <b>${S.pity}/${PITY}</b></p><div class="prog" style="margin-top:6px"><i style="width:${S.pity/PITY*100}%"></i></div><p class="mut" style="margin-top:6px">🎁 Every 10x Arcane/Featured/Heaven &amp; Hell summon: <b>at least one 4★ or better</b></p><div class="row-btns"><button class="btn sm ghost" id="sumOdds" style="min-height:44px" onclick="UI.shopTab='odds';setTab('shop')">📊 Full odds &amp; pity</button></div></div>
  ${card('featured',`<div style="display:flex;gap:10px;align-items:center;margin:6px 0">${avHtml(fa,64)}<div><b style="font-size:16px">${MD[fa].n}</b> ${starsHtml(5)}<br><span>Rate-up: ${spi(fs)} ${MD[fs].n} ${starsHtml(4)}</span><br><span class="mut" style="color:#fde">Ends in <b class="cnt" data-cd="${bannerEnds()}">${fmtDur(bannerEnds()-Date.now())}</b></span></div></div>`,
   `<button class="btn gold" id="sumFeat1" onclick="doSummon('featured',1)">x1 · 💎${FEAT_CR}</button><button class="btn gold" onclick="doSummon('featured',10)">x10 · 💎${fmt(FEAT_CR*10)}</button>`)}
  ${card('mystic',`<p><b>Owned: ${my}</b></p>`,`<button class="btn" id="sumMys1" onclick="doSummon('mystic',1)">x1 · ${my>=1?'📜1':'💎'+SUMMON_CR}</button><button class="btn" id="sumMys10" onclick="doSummon('mystic',10)">x10 · ${my>=10?'📜10':'💎'+fmt(SUMMON_CR*10)}</button>`)}
@@ -3256,7 +3261,7 @@ function pasHtml(p){return`<div class="skill pas"><b>${p.i} ${p.n}</b><span clas
 function skillHtml(sk){const tgt={e:'Single enemy',ae:'All enemies',a:'Single ally',aa:'All allies',s:'Self'}[sk.t];return`<div class="skill"><b>${sk.i} ${sk.n}</b>${sk.every?'<span class="cdtag">♾️ Every turn</span>':sk.cd?`<span class="cdtag">⏳ Cooldown ${sk.cd}</span>`:'<span class="cdtag">Basic</span>'}<br>${sk.d}<br><span class="mut">🎯 ${tgt}${sk.fx.length?' · '+sk.fx.map(f=>FX[f[0]].i+' '+FX[f[0]].n).join(', '):''}</span></div>`;}
 function openDex(id){const d=MD[id];const b=baseStats(id,1,d.rar);
  openModal(`<div class="mhead el-${d.el}">${avHtml(d.id,0,'',d.rar)}<div><h3>${d.n}</h3>${starsHtml(d.rar)} <span class="mut">${RNAME[d.rar]} · ${ELEM[d.el].i} ${ELEM[d.el].n}</span><br><span class="mut">Leader: ${leadText(d.lead)}</span></div></div>${d.uniq?'':`<div class="mut ownline" style="margin:4px 0">${dexOwn(d.id)?'✅ In your collection':'🔒 Not in your collection yet'}${canAwaken(d.id)?(dexOwn(d.id,1)?' · ✦ Awakened form owned':' · ✦ Awakened form not owned yet'):''}</div>`}<p class="desc">"${d.desc}"</p>
- <table class="stat-t">${['hp','atk','def','spd'].map(k=>`<tr><td>${STATN[k]} (Lv1)</td><td>${b[k]}</td></tr>`).join('')}<tr><td>CRI Rate / Dmg</td><td>${b.cr}% / ${b.cd}%</td></tr><tr><td>RES / ACC</td><td>${b.res}% / ${b.acc}%</td></tr></table>${d.skills.map(skillHtml).join('')}${(d.passives||[]).map(pasHtml).join('')}${canAwaken(d.id)?awDexHtml(d.id):''}`,'dex');}
+ <table class="stat-t">${['hp','atk','def','spd'].map(k=>`<tr><td>${STATN[k]} (Lv1)</td><td>${b[k]}</td></tr>`).join('')}<tr><td>Crit Chance / Damage</td><td>${b.cr}% / ${b.cd}%</td></tr><tr><td>Resist / Accuracy</td><td>${b.res}% / ${b.acc}%</td></tr></table>${d.skills.map(skillHtml).join('')}${(d.passives||[]).map(pasHtml).join('')}${canAwaken(d.id)?awDexHtml(d.id):''}`,'dex');}
 function openMon(uid){const m=monByUid(uid);if(!m)return;closeModal('mon');const d=MD[m.id];const st=monStats(m);const ml=maxLvl(m);const ti=S.team.indexOf(uid);
  openModal(`<div class="mhead el-${d.el}">${avHtml(artId(m),0,'',m.stars)}<div style="flex:1;min-width:0"><h3 id="monName">${monName(m)}${m.aw?` <span class="awbadge">✦ Awakened</span>`:''}</h3>${m.aw?`<div class="mut" style="margin-top:-4px">Awakened from ${d.n}</div>`:''}${starsHtml(m.stars)} <span class="mut">${d.th?`<b class="uqtag">${d.th.t}</b> · Unique`:'Natural '+d.rar+'★ '+RNAME[d.rar]} · ${ELEM[d.el].n}</span>
   <div class="mut" style="margin-top:4px">Lv <b>${m.lvl}</b> / ${ml} · Power <b>${fmt(power(m))}</b></div><div class="xpbar"><i style="width:${m.lvl>=ml?100:m.xp/xpNeed(m.lvl)*100}%"></i></div><div class="mut">${m.lvl>=ml?(m.stars>=6?'MAX LEVEL — fully ascended ✨':'MAX LEVEL — ready to Star Up!'):`XP ${m.xp}/${xpNeed(m.lvl)}`}</div></div></div>
@@ -3493,7 +3498,7 @@ function runeAdd(bon,b,k,v){const d=RSTAT[k];if(!d)return;bon[d.s]+=d.pct?b[d.s]
 function addSub(r,rng){rng=rng||Math.random;const used=[r.main.k,...r.subs.map(x=>x.k)];const pool=Object.keys(RSUB).filter(k=>!used.includes(k));const k=pool[Math.floor(rng()*pool.length)];r.subs.push({k,v:subRoll(k,r.grade,rng),n:1});return r.subs[r.subs.length-1];}
 // +1 level; at +3/+6/+9/+12 a new substat appears (if < 4) or an existing one rolls up. Returns the touched substat (or null).
 function runeLevelUp(r,rng){if(r.lvl>=RUNE_MAX)return null;rng=rng||Math.random;r.lvl++;if(r.lvl%3===0&&r.lvl<=12){if(r.subs.length<4)return addSub(r,rng);const x=r.subs[Math.floor(rng()*r.subs.length)];x.v+=subRoll(x.k,r.grade,rng);x.n++;return x;}return null;}
-// rarity = number of starting substats (Normal 0 … Legend 4)
+// rarity = number of starting substats (Plain 0 … Astral 4)
 function newRune(o){o=o||{};const rng=o.rng||Math.random;const slot=o.slot||1+Math.floor(rng()*6);const sets=Object.keys(RSET);const set=RSET[o.set]?o.set:sets[Math.floor(rng()*sets.length)];
  const grade=clamp(Math.round(o.grade||2),1,6),rar=clamp(o.rar==null?rollRar(0,2,rng):o.rar,0,4);const mains=SLOTMAIN[slot];const mk=o.main&&mains.includes(o.main)?o.main:mains[Math.floor(rng()*mains.length)];
  const r={uid:o.uid||S.nextUid++,set,slot,grade,rar,lvl:0,main:{k:mk},subs:[],on:0};for(let i=0;i<rar;i++)addSub(r,rng);while(r.lvl<(o.lvl||0))runeLevelUp(r,rng);
@@ -3502,7 +3507,7 @@ function rollGrade(boost){const r=Math.random()+boost*0.16;return r<0.4?1:r<0.7?
 function rollRar(lo,hi,rng){const x=Math.pow((rng||Math.random)(),1.6);return Math.min(hi,lo+Math.floor(x*(hi-lo+1)));}
 function equipRune(m,r){if(r.on){const o=monByUid(r.on);if(o)o.ru=o.ru.map(x=>x===r.uid?0:x);}const cur=runeByUid(m.ru[r.slot-1]);if(cur&&cur!==r)cur.on=0;m.ru[r.slot-1]=r.uid;r.on=m.uid;}
 function unequipRune(r){const o=monByUid(r.on);if(o)o.ru=o.ru.map(x=>x===r.uid?0:x);r.on=0;}
-// costs: upgrades cost mana (gold 💰), rising with level and grade; removing a rune is free (like SW's rune removal, minus the fee)
+// costs: upgrades cost mana (gold 💰), rising with level and grade; removing a rune is free
 const runeUpCost=r=>Math.round((r.lvl+1)*r.grade*(r.lvl>=12?160:r.lvl>=9?130:100));
 const runeSell=r=>r.grade*300+r.lvl*150+r.rar*250;
 const slotShort=k=>({cr:'CR',cd:'CD'}[k]||RSTAT[k].n)+(RSTAT[k].pct?'%':'');
@@ -3515,7 +3520,7 @@ function migrateGlyphs(){if(!Array.isArray(S.glyphs)||!S.glyphs.length)return 0;
  const conv=S.glyphs.filter(g=>g&&GLEG[g.set]).map(g=>{const L=GLEG[g.set];const grade=clamp(g.grade|0||1,1,5),gl=clamp(g.lvl|0,0,9);
   const tb=L.pct?GLEGB.pct:GLEGB[L.s];const old=Math.round(tb[grade]*(1+gl*0.12));const mk=L.s;const allow=mk==='spd'?[2]:mk==='cr'?[4]:[2,4,6];
   let lv=Math.round(gl*15/9);while(lv<RUNE_MAX&&runeMainAt(mk,grade,lv)<old)lv++;return{g,grade,mk,allow,lv,old,to:L.to};});
- // old 2-piece set bonuses that would not stay active as runes (Fatal and Swift need 4): remember them per monster
+ // old 2-piece set bonuses that would not stay active as runes (Fang and Quickstep need 4): remember them per monster
  const lost={};S.glyphs.forEach(g=>{if(!g||!g.on||!GLEG[g.set])return;(lost[g.on]=lost[g.on]||{})[g.set]=((lost[g.on]||{})[g.set]||0)+1;});
  conv.sort((a,b)=>a.allow.length-b.allow.length); // spd/cr glyphs only fit one slot: place them first
  const made=[];
@@ -3569,7 +3574,7 @@ function runeInvHtml(){const f=UI.rf;let list=S.runes.filter(r=>!sealedGear(r)&&
  <div class="rgrid">${list.map(r=>runeCard(r,`openRune(${r.uid})`)).join('')||'<p class="mut">No runes fit these filters. Clear Rune Dungeons to find more!</p>'}</div>`;}
 function openSetInfo(){openModal(`<h3>📘 Rune sets</h3><p class="mut">Equip 2 or 4 runes of the same set to activate its bonus. 2-piece sets stack (3 × 2 = 3 bonuses).</p>
  <table class="stat-t">${Object.keys(RSET).map(k=>`<tr><td>${RSET[k].i} <b>${RSET[k].n}</b> (${RSET[k].need})</td><td>${RSET[k].d}</td></tr>`).join('')}</table>
- <p class="mut" style="margin-top:6px">Slots 1/3/5: flat ATK / DEF / HP. Slot 2: ATK%, DEF%, HP%, SPD. Slot 4: ATK%, DEF%, HP%, CRI Rate, CRI Dmg. Slot 6: ATK%, DEF%, HP%, RES, ACC.</p>`,'sets');}
+ <p class="mut" style="margin-top:6px">Slot 1: flat ATK or HP. Slot 3: flat DEF or ATK. Slot 5: flat HP or DEF. Slot 2: ATK%, DEF%, HP%, SPD. Slot 4: ATK%, DEF%, HP%, Crit Chance, Crit Damage. Slot 6: ATK%, DEF%, HP%, Resist, Accuracy.</p>`,'sets');}
 function statPanelHtml(st){const pc=k=>PCT_STAT.includes(k)?'%':'';
  return`<table class="stat-t sp" id="statPanel"><tr class="sh"><td>Stat</td><td>Base</td><td>Runes</td><td>Total</td></tr>${STAT8.map(k=>`<tr data-k="${k}"><td>${STATN[k]}</td><td>${fmt(st.b[k])}${pc(k)}</td><td class="plus">${st.bon[k]?'+'+fmt(st.bon[k])+pc(k):''}</td><td><b>${fmt(st.t[k])}${pc(k)}</b></td></tr>`).join('')}</table>`;}
 function monRunesHtml(m,st){const sets=st.sets.length?st.sets.map(k=>`<span class="tag">${setText(k)}</span>`).join(' '):'<span class="mut">No set bonus active. 2 or 4 runes of one set activate it.</span>';
@@ -3615,9 +3620,9 @@ function dungeonsHtml(){return`<div class="card" style="background:linear-gradie
  <div class="dtiers">${RTIER.map((T,ti)=>{const op=dungTierOpen(di,ti);return`<button class="btn sm ${T.c}" id="dg${di}-${ti}" ${op?'':'disabled'} onclick="openDungeon(${di},${ti})"><b>${op?'':'🔒 '}${T.n}</b><small>⚡${T.en} · ${T.g[0]}–${T.g[1]}★</small></button>`;}).join('')}</div></div>`).join('')}`;}
 function openDungeon(di,ti){if(!dungTierOpen(di,ti)){toast('🔒 Clear the previous difficulty first');return;}const cfg=dungeonCfg(di,ti);const D=RDUNG[di],T=RTIER[ti];const first=(S.dung[D.id]||0)<=ti;const tp=teamPower();
  openModal(`<h3>${cfg.name}</h3><div class="dinfo"><span class="tag ${T.c}">${T.n}</span> <span class="tag">⚡ ${T.en} energy</span> <span class="tag" style="background:${tp>=T.pw?'#1f9d55':'#a12a3f'}">Rec. power ${fmt(T.pw)} · yours ${fmt(tp)}</span></div>
- ${T.hpAbs?`<div class="card insane-warn">☠️ <b>INSANE boss:</b> ${fmt(T.hpAbs)} HP · SPD ${T.spdAbs} · hits very hard and often acts several times in a row. Bring a fully runed team (Swift, Fatal/Rage, Violent, Vampire…).</div>`:''}
+ ${T.hpAbs?`<div class="card insane-warn">☠️ <b>INSANE boss:</b> ${fmt(T.hpAbs)} HP · SPD ${T.spdAbs} · hits very hard and often acts several times in a row. Bring a fully runed team (Quickstep, Fang/Emberedge, Tempo, Sapdrinker…).</div>`:''}
  <p class="mut">Recommended Lv ${Math.min(60,cfg.lvl+5)}+ · 3 waves · Boss: ${MD[D.boss].n}</p>${wavePreview(cfg)}
- <div class="card" style="margin-top:10px"><b>Drops:</b> <span class="mut">${D.sets.map(k=>RSET[k].i+' '+RSET[k].n).join(', ')} runes · ${T.g[0]}–${T.g[1]}★ · ${RRAR[T.rar[0]].n}–${RRAR[T.rar[1]].n} · 1 guaranteed + ${ti>=2?50:35}% for a 2nd${ti===3?' + a guaranteed extra 6★ Legend-grade roll':''}${first?` · <b style="color:#ffd166">First clear: 💎${T.gems}${ti<3?' + unlocks '+RTIER[ti+1].n:''}</b>`:''}</span></div>
+ <div class="card" style="margin-top:10px"><b>Drops:</b> <span class="mut">${D.sets.map(k=>RSET[k].i+' '+RSET[k].n).join(', ')} runes · ${T.g[0]}–${T.g[1]}★ · ${RRAR[T.rar[0]].n}–${RRAR[T.rar[1]].n} · 1 guaranteed + ${ti>=2?50:35}% for a 2nd${ti===3?' + a guaranteed extra 6★ Astral-grade roll':''}${first?` · <b style="color:#ffd166">First clear: 💎${T.gems}${ti<3?' + unlocks '+RTIER[ti+1].n:''}</b>`:''}</span></div>
  <div class="mut">Your team:</div>${teamStrip()}
  <div class="row-btns c"><button class="btn ghost" onclick="closeModal();setTab('team')">Edit Team</button><button class="btn gold" id="btnFight" onclick="startBattle(dungeonCfg(${di},${ti}))">⚔️ Battle! · ⚡${T.en}</button></div>`,'dung');}
 
@@ -3627,7 +3632,7 @@ const storyOpen=d=>!d||!!campMap(d-1)['3-4'];
 function storyBossMech(a,d){return d===1?'enrage':d===2?['enrage','regen','fast','all'][a]:null;}
 function storyRewards(cfg){const D=STORYD[cfg.d];return{gold:Math.round((200+cfg.lvl*60)*D.gold),gems:cfg.s===4?40*D.gems:5*D.gems};}
 
-/* =================== TOWER OF ASCENSION (100 floors, Hard after 100, monthly reset) =================== */
+/* =================== RIFT SPIRE (id toa) (100 floors, Hard after 100, monthly reset) =================== */
 const monthKey=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');};
 function toaMonth(){const k=monthKey();if(S.toa.m!==k){const o=S.toa;S.toa={m:k,f:0,h:0,best:Math.max(o.best||0,o.f||0),bestH:Math.max(o.bestH||0,o.h||0),last:o.m||''};return true;}return false;}
 const toaNext=h=>(h?S.toa.h:S.toa.f)+1;
@@ -3635,17 +3640,17 @@ function toaFloorOpen(f,h){return (h?S.toa.f>=100:true)&&f<=toaNext(h);}
 function toaReward(f,h){const m=h?2:1;const r={gold:Math.round((600+f*80)*m),gems:0,mystic:0,radiant:0,rune:null};
  if(f%10===0)r.rune={grade:f>=20||h?6:5,rar:f>=20||h?4:3};else if(f%5===0){r.mystic=1*m;r.rune={grade:Math.min(6,4+Math.floor(f/40)+(h?1:0)),rar:Math.min(4,2+(h?1:0))};}else{r.gems=(10+Math.floor(f/5))*m;if(f%2===0)r.rune={grade:Math.min(6,3+Math.floor(f/30)+(h?1:0)),rar:Math.min(4,1+Math.floor(f/40)+(h?1:0))};}
  if(f===50||f===100)r.radiant=1*m;r.hh=(f===25||f===75)?1*m:0;return r;}
-function toaRewardText(f,h){const r=toaReward(f,h);const p=[`💰 ${fmt(r.gold)}`];if(r.gems)p.push(`💎 ${r.gems}`);if(r.mystic)p.push(`📜 ${r.mystic} Mystic`);if(r.radiant)p.push(`🌟 ${r.radiant} Radiant (rare)`);if(r.hh)p.push(`🌗 ${r.hh} Heaven & Hell Scroll`);if(r.rune)p.push(`💠 ${r.rune.grade}★ ${RRAR[r.rune.rar].n} rune`);return p.join(' · ');}
+function toaRewardText(f,h){const r=toaReward(f,h);const p=[`💰 ${fmt(r.gold)}`];if(r.gems)p.push(`💎 ${r.gems}`);if(r.mystic)p.push(`📜 ${r.mystic} Arcane`);if(r.radiant)p.push(`🌟 ${r.radiant} Radiant (rare)`);if(r.hh)p.push(`🌗 ${r.hh} Heaven & Hell Scroll`);if(r.rune)p.push(`💠 ${r.rune.grade}★ ${RRAR[r.rune.rar].n} rune`);return p.join(' · ');}
 function toaCfg(f,h){h=h?1:0;const rng=seeded(31337+f*101+h*7);const lvl=h?Math.min(70,55+Math.round(f*.15)):Math.min(60,8+Math.round(f*.52));
  const k=h?1.9+f*.009:1+f*.011,em=[+(k*1.15).toFixed(3),+(1+(k-1)*.75).toFixed(3),+(1+(k-1)*.8).toFixed(3)],spd=Math.round(h?14+f*.22:f*.18);const stars=h?6:Math.min(6,2+Math.floor(f/20));
  const pool=SUMMONABLE.map(d=>d.id).filter(id=>id!=='jellybop');const boss=f%10===0;const waves=[];
  for(let w=0;w<3;w++){const wave=[];const n=boss&&w===2?2:3;for(let i=0;i<n;i++){const id=pool[Math.floor(rng()*pool.length)];wave.push({id,lvl:lvl+(w>1?1:0),stars:Math.max(MD[id].rar,stars),em,spd});}
   if(boss&&w===2){const B0=TOA_BOSS[f/10-1];const bm=h?'all':B0.mech;wave.splice(1,0,{id:B0.id,lvl:lvl+2,stars:Math.max(MD[B0.id].rar,stars),boss:1,hpm:h?2.6+f/60:3.2+f/40,em:[em[0],em[1]*(h?.92:1.1),em[2]*1.05],spd:spd+10,mech:bm,res:40+(h?30:0)});}
   waves.push(wave);}
- return{type:'toa',f,h,lvl,waves,scene:'toa',name:`🗼 Tower of Ascension${h?' (Hard)':''} · Floor ${f}${boss?' (BOSS)':''}`,bg:'linear-gradient(135deg,#7ad7ff,#4b3ad8 55%,#120a3a)'};}
+ return{type:'toa',f,h,lvl,waves,scene:'toa',name:`🗼 Rift Spire${h?' (Hard)':''} · Floor ${f}${boss?' (BOSS)':''}`,bg:'linear-gradient(135deg,#7ad7ff,#4b3ad8 55%,#120a3a)'};}
 function toaHtml(){toaMonth();const h=UI.toaH?1:0;const nf=toaNext(h);const reset=new Date();reset.setMonth(reset.getMonth()+1,1);reset.setHours(0,0,0,0);
  const lo=UI.toaPg?clamp(UI.toaPg,1,91):Math.max(1,Math.min(91,Math.floor((Math.min(nf,100)-1)/10)*10+1));const floors=[];for(let f=lo+9;f>=lo;f--)floors.push(f);
- return`<div class="card toa-head" style="background:linear-gradient(135deg,#7ad7ff,#4b3ad8 55%,#120a3a)"><div class="sec" style="color:#fff">🗼 Tower of Ascension ${h?'<span class="tag insane">HARD</span>':''}</div>
+ return`<div class="card toa-head" style="background:linear-gradient(135deg,#7ad7ff,#4b3ad8 55%,#120a3a)"><div class="sec" style="color:#fff">🗼 Rift Spire ${h?'<span class="tag insane">HARD</span>':''}</div>
  <p style="font-size:14px">100 floors, a boss every 10th floor. Resets monthly: <b class="cnt" data-cd="${+reset}">${fmtDur(+reset-Date.now())}</b>. Best: ${S.toa.best||0}${S.toa.bestH?` · Hard ${S.toa.bestH}`:''}.</p>
  <div class="chips"><button class="chip ${h?'':'on'}" id="toaN" onclick="UI.toaH=0;UI.toaPg=0;render()">Normal · ${S.toa.f}/100</button><button class="chip ${h?'on':''}" id="toaH" ${S.toa.f>=100?'':'disabled'} onclick="UI.toaH=1;UI.toaPg=0;render()">${S.toa.f>=100?'':'🔒 '}Hard · ${S.toa.h}/100</button></div></div>
  <div class="toa-list">${floors.map(f=>{const done=f<nf,cur=f===nf,op=toaFloorOpen(f,h);const boss=f%10===0;return`<div class="tfloor ${done?'done':''} ${cur?'cur':''} ${boss?'boss':''}" id="toa${f}" onclick="${op?`openToa(${f},${h})`:`toast('🔒 Clear the floor below first')`}"><b>${boss?'👹 ':''}${f}F</b><span class="mut">${done?'✅ Cleared':toaRewardText(f,h)}</span>${boss?`<span class="tag">${BMECH[h?'all':TOA_BOSS[f/10-1].mech].i} ${MD[TOA_BOSS[f/10-1].id].n}</span>`:''}</div>`;}).join('')}</div>
@@ -3665,19 +3670,19 @@ function rewardV14(cfg,R,runes){let first=false,extra='';
   if(cfg.ti===3)runes.push(newRune({set:pick(D.sets),grade:6,rar:4}));S.stats.dungeons=(S.stats.dungeons||0)+1;if(cfg.ti===3)S.stats.insane=(S.stats.insane||0)+1;prog('event');}
  else if(cfg.type==='toa'){toaMonth();const f=cfg.f,h=cfg.h?1:0;first=f===toaNext(h);R.gold=Math.round((300+cfg.lvl*40)*rnd(.9,1.1));
   if(first){const r=toaReward(f,h);R.gold+=r.gold;R.gems+=r.gems;R.mystic+=r.mystic;if(r.radiant)R.radiant=(R.radiant||0)+r.radiant;if(r.hh)R.hh=(R.hh||0)+r.hh;if(r.rune)runes.push(newRune({grade:r.rune.grade,rar:r.rune.rar}));
-   if(h){S.toa.h=f;S.toa.bestH=Math.max(S.toa.bestH||0,f);}else{S.toa.f=f;S.toa.best=Math.max(S.toa.best||0,f);}if(f===100)extra=h?'🏆 Tower of Ascension (Hard) conquered!':'🏆 Floor 100! ToA Hard mode unlocked.';}
+   if(h){S.toa.h=f;S.toa.bestH=Math.max(S.toa.bestH||0,f);}else{S.toa.f=f;S.toa.best=Math.max(S.toa.best||0,f);}if(f===100)extra=h?'🏆 Rift Spire (Hard) conquered!':'🏆 Floor 100! Rift Spire Hard mode unlocked.';}
   S.stats.toa=(S.stats.toa||0)+1;}
  return{first,extra};}
 
-/* =================== HUB: the Rift Isle (SW-style world map) =================== */
+/* =================== HUB: the Rift Isle (world map) =================== */
 // places: [id, tab/action, label, icon, x%, y%, hint]
 const PLACES=[
  ['gate','battle','Battle Gate','⚔️',22,20,'Story · Dungeons · Tower'],
  ['arena','events','Event Arena','🎪',52,13,'Daily event dungeons'],
- ['tower','toa','Tower of Ascension','🗼',82,19,'100 floors · monthly'],
+ ['tower','toa','Rift Spire','🗼',82,19,'100 floors · monthly'],
  ['summon','summon','Summoning Circle','🌀',50,38,'Summon monsters'],
  ['altar','monsters','Monster Altar','🐾',19,45,'Your monsters'],
- ['portal','dungeons','Cairos Portal','🌌',81,44,'Rune dungeons'],
+ ['portal','dungeons','Rune Portal','🌌',81,44,'Rune dungeons'],
  ['runes','runes','Rune Workshop','💠',33,64,'Equip & upgrade runes'],
  ['shop','shop','Shop','🛒',67,62,'Crystals · packs · pass'],
  ['camp','team','Team Camp','🛡️',50,81,'Set up your team'],
@@ -3722,8 +3727,8 @@ function renderBattleMenu(){const [na,ns]=nextStage();const nf=toaNext(0);
  const card=(id,to,ic,t,d,bg)=>`<button class="bcard" id="${id}" onclick="${to}" style="background:${bg}"><span class="bci">${ic}</span><span class="bct"><b>${t}</b><small>${d}</small></span><span class="bgo">›</span></button>`;
  return`${backBar('home','Isle')}<div class="sec">⚔️ Battle</div><div class="bmenu">
  ${card('bmStory',"UI.area=null;setTab('adventure')",'🗺️','Story',`Normal${storyOpen(1)?' · Hard':''}${storyOpen(2)?' · Hell':''} · next ${na+1}-${ns+1}`,'linear-gradient(135deg,#ff8a3d,#a12a1f 60%,#3d0f0f)')}
- ${card('bmDung',"setTab('dungeons')",'🌌','Cairos Dungeons',`Giant's Keep · Dragon's Lair · Necropolis · ⚡${energyNow()}`,'linear-gradient(135deg,#5ee7df,#7c5cff 60%,#1a1050)')}
- ${card('bmToa',"setTab('toa')",'🗼','Tower of Ascension',`Floor ${Math.min(nf,100)}/100${S.toa.f>=100?' · Hard '+S.toa.h+'/100':''}`,'linear-gradient(135deg,#7ad7ff,#4b3ad8 60%,#120a3a)')}
+ ${card('bmDung',"setTab('dungeons')",'🌌','Rune Dungeons',`Golem Bastion · Wyrm Hollow · Marrow Grove · ⚡${energyNow()}`,'linear-gradient(135deg,#5ee7df,#7c5cff 60%,#1a1050)')}
+ ${card('bmToa',"setTab('toa')",'🗼','Rift Spire',`Floor ${Math.min(nf,100)}/100${S.toa.f>=100?' · Hard '+S.toa.h+'/100':''}`,'linear-gradient(135deg,#7ad7ff,#4b3ad8 60%,#120a3a)')}
  ${card('bmEvents',"setTab('events')",'🎪','Rift Events','Gold · Runes · Jelly · Crystals','linear-gradient(135deg,#ff7ad9,#7c5cff)')}</div>`;}
 function renderDungeons(){return backBar('battle','Battle')+dungeonsHtml();}
 function renderToa(){return backBar('battle','Battle')+toaHtml();}
@@ -3731,7 +3736,7 @@ function renderToa(){return backBar('battle','Battle')+toaHtml();}
 /* =================== SHOP =================== */
 const SHOP=[
  {id:'energy',i:'⚡',n:'Energy Refill',d:`Refill energy to ${ENERGY_MAX}`,c:30,f:()=>{S.energy=Math.max(energyNow(),ENERGY_MAX);S.enAt=Date.now();}},
- {id:'mystic',i:'📜',n:'Mystic Scroll',d:'Summons a 3–5★ monster (see Odds)',c:75,f:()=>{S.scrolls.mystic++;}},
+ {id:'mystic',i:'📜',n:'Arcane Scroll',d:'Summons a 3–5★ monster (see Odds)',c:75,f:()=>{S.scrolls.mystic++;}},
  {id:'common5',i:'📃',n:'5 Common Scrolls',d:'Summons 1–3★ monsters',c:60,f:()=>{S.scrolls.common+=5;}},
  {id:'mana',i:'💰',n:'Mana Chest',d:'60,000 mana (gold) for rune upgrades',c:120,f:()=>{S.gold+=60000;}},
  {id:'runes',i:'💠',n:'Rune Pack',d:'3 random 5★ runes (Rare or better)',c:150,f:()=>{for(let i=0;i<3;i++)newRune({grade:5,rar:rollRar(2,4)});}},
@@ -3745,7 +3750,7 @@ const SHOP=[
    Regulatory wiring: posted odds, visible pity, 10x 4★ guarantee, an age gate with a parent-approval step for under-16s,
    and a region flag that blocks paid random packs (e.g. Belgium) once test mode is off. */
 const SHOP_CFG={testMode:true,region:'',noRandomPaid:['BE'],minAge:16};
-const SUMMON_CR=75,FEAT_CR=110; // 1 Mystic summon = 75 crystals (10x = 750); Featured 110 (10x = 1,100)
+const SUMMON_CR=75,FEAT_CR=110; // 1 Arcane summon = 75 crystals (10x = 750); Featured 110 (10x = 1,100)
 const CR_PACKS=[
  {id:'c1',n:'Handful of Crystals',i:'💎',usd:1.99,base:300,bonus:0,pct:0},
  {id:'c2',n:'Pouch of Crystals',i:'💎',usd:5.99,base:900,bonus:0,pct:0},
@@ -3770,8 +3775,8 @@ function renderShop(){shopState();const t=UI.shopTab||'crystals';
  const tabs=[['crystals','💎 Crystals'],['packs','🎁 Packs'],['pass','🗓️ Pass'],['items','🛒 Items'],['odds','📊 Odds']];
  let h=`${backBar('home','Isle')}${SHOP_CFG.testMode?tmBanner():''}<div class="sec">🛒 Shop <span class="mut" style="margin-left:auto">💎 ${fmt(S.gems)} crystals</span></div>
  <div class="subtabs shop-tabs" role="tablist">${tabs.map(([k,n])=>`<button class="btn sm ${t===k?'':'ghost'}" id="stab-${k}" role="tab" aria-selected="${t===k}" onclick="UI.shopTab='${k}';render()">${n}</button>`).join('')}</div>`;
- if(t==='crystals')h+=`<p class="mut" style="margin-bottom:8px">1 Mystic summon = 💎${SUMMON_CR}. Every bundle buys whole summons. ★ First purchase of each bundle: base crystals doubled (once per account).</p><div class="cgrid">${CR_PACKS.map(p=>{const f=!shopState().first[p.id];return`<button class="cpack ${p.frame?'prem':''}" id="pk-${p.id}" onclick="buyPack('${p.id}')">${f?'<span class="dbl">2× FIRST BUY</span>':''}<span class="ci">${p.i}</span><b>${p.n}</b><span class="camt">💎 ${fmt(crTotal(p))}</span><small>${fmt(p.base)}${p.bonus?` + ${fmt(p.bonus)} bonus`:''}${f?` + ${fmt(p.base)} first-buy`:''}</small><small>= ${(n=>n+(n===1?' summon':' summons'))(Math.floor((p.base+p.bonus)/SUMMON_CR))}${p.pct?` · +${p.pct}%`:''}${p.frame?' · 🖼️ Hoard frame':''}</small><span class="price">${usd(p.usd)}</span></button>`;}).join('')}</div>`;
- else if(t==='packs'){const got=shopState().starter;const bl=randomBlocked(STARTER);h+=`<div class="pack-card" id="pk-starter"><span class="ci">${STARTER.i}</span><div><b>${STARTER.n}</b> <span class="tag">Once per account</span><ul><li>💎 ${fmt(STARTER.gems)} crystals</li><li>📜 ${STARTER.mystic} Mystic Scrolls (random, see Odds)</li><li>⭐ A 4★ monster of your choice (not random)</li><li>⚡ ${STARTER.energy} energy</li></ul>
+ if(t==='crystals')h+=`<p class="mut" style="margin-bottom:8px">1 Arcane summon = 💎${SUMMON_CR}. Every bundle buys whole summons. ★ First purchase of each bundle: base crystals doubled (once per account).</p><div class="cgrid">${CR_PACKS.map(p=>{const f=!shopState().first[p.id];return`<button class="cpack ${p.frame?'prem':''}" id="pk-${p.id}" onclick="buyPack('${p.id}')">${f?'<span class="dbl">2× FIRST BUY</span>':''}<span class="ci">${p.i}</span><b>${p.n}</b><span class="camt">💎 ${fmt(crTotal(p))}</span><small>${fmt(p.base)}${p.bonus?` + ${fmt(p.bonus)} bonus`:''}${f?` + ${fmt(p.base)} first-buy`:''}</small><small>= ${(n=>n+(n===1?' summon':' summons'))(Math.floor((p.base+p.bonus)/SUMMON_CR))}${p.pct?` · +${p.pct}%`:''}${p.frame?' · 🖼️ Hoard frame':''}</small><span class="price">${usd(p.usd)}</span></button>`;}).join('')}</div>`;
+ else if(t==='packs'){const got=shopState().starter;const bl=randomBlocked(STARTER);h+=`<div class="pack-card" id="pk-starter"><span class="ci">${STARTER.i}</span><div><b>${STARTER.n}</b> <span class="tag">Once per account</span><ul><li>💎 ${fmt(STARTER.gems)} crystals</li><li>📜 ${STARTER.mystic} Arcane Scrolls (random, see Odds)</li><li>⭐ A 4★ monster of your choice (not random)</li><li>⚡ ${STARTER.energy} energy</li></ul>
   ${got?'<button class="btn" disabled>✅ Purchased</button>':bl?'<button class="btn" disabled>🚫 Not available in your region</button>':`<button class="btn gold" id="buy-starter" onclick="buyPack('starter')">${usd(STARTER.usd)}</button>`}</div></div>`;}
  else if(t==='pass'){const pi=passInfo();h+=`<div class="pack-card" id="pk-pass"><span class="ci">${PASS.i}</span><div><b>${PASS.n}</b><p class="mut">💎 ${PASS.now} at once + 💎 ${PASS.daily} every day for ${PASS.days} days = 💎 ${fmt(PASS.now+PASS.daily*PASS.days)} in total. Claim once per day here; a missed day is not carried over.</p>
   ${pi.active?`<p><b>Active:</b> day ${pi.day}/${PASS.days} · claimed ${pi.claimed}/${PASS.days} · ${pi.left} day${pi.left===1?'':'s'} left</p><div class="prog"><i style="width:${pi.claimed/PASS.days*100}%"></i></div><div class="row-btns"><button class="btn gold" id="passClaim" onclick="claimPass()" ${pi.canClaim?'':'disabled'}>${pi.canClaim?`Claim 💎${PASS.daily}`:'✅ Claimed today'}</button></div>`
@@ -3788,7 +3793,7 @@ function oddsRows(type){const rt=RATES[type];const [f5,f4]=bannerNow();const row
   if(type==='featured'&&st===4){ids.forEach(id=>per[id]=p*.6/ids.length);per[f4]=(per[f4]||0)+p*.4;}
   rows.push({st,p,per});});return rows;}
 function oddsHtml(){const types=['mystic','featured','hh','common','radiant'];
- return`<div class="card odds" id="oddsPanel"><div class="sec">📊 Drop Odds</div><p class="mut">Exact chances for every summon. Pity: a 5★ is guaranteed by Mystic/Featured summon #${PITY} (yours: <b id="oddsPity">${S.pity}/${PITY}</b>). Heaven &amp; Hell Scrolls have their own pity (yours: <b id="oddsPityHH">${S.pityHH||0}/${PITY}</b>). Every 10× Mystic, Featured or Heaven &amp; Hell summon contains at least one 4★ or better. Heaven &amp; Hell Scrolls pull Heaven/Hell only; every other scroll pulls Fire/Water/Wind only. Starter Pack scrolls use the Mystic odds.</p>
+ return`<div class="card odds" id="oddsPanel"><div class="sec">📊 Drop Odds</div><p class="mut">Exact chances for every summon. Pity: a 5★ is guaranteed by Arcane/Featured summon #${PITY} (yours: <b id="oddsPity">${S.pity}/${PITY}</b>). Heaven &amp; Hell Scrolls have their own pity (yours: <b id="oddsPityHH">${S.pityHH||0}/${PITY}</b>). Every 10× Arcane, Featured or Heaven &amp; Hell summon contains at least one 4★ or better. Heaven &amp; Hell Scrolls pull Heaven/Hell only; every other scroll pulls Fire/Water/Wind only. Starter Pack scrolls use the Arcane odds.</p>
  ${types.map(t=>{const rows=oddsRows(t);const tot=rows.reduce((a,r)=>a+r.p,0);return`<details ${t==='mystic'?'open':''} id="odds-${t}"><summary><b>${SCROLLS[t].i} ${SCROLLS[t].n}</b> · cost ${t==='mystic'?`💎${SUMMON_CR} or 1 scroll`:t==='featured'?`💎${FEAT_CR}`:'scroll only'} · ${scrollEls(t).map(e=>ELEM[e].i).join('')}</summary>
   <table class="rates">${rows.map(r=>`<tr><td>${starsHtml(r.st)} ${RNAME[r.st]}</td><td style="text-align:right" data-p="${r.p}">${r.p}%</td></tr><tr><td colspan="2" class="mut" style="font-size:12px">${Object.entries(r.per).map(([id,q])=>`${MD[id].n} ${(+q.toFixed(4))}%`).join(' · ')}</td></tr>`).join('')}<tr><td><b>Total</b></td><td style="text-align:right" class="otot"><b>${+tot.toFixed(4)}%</b></td></tr></table></details>`;}).join('')}</div>`;}
 /* purchase flow: (region) -> age gate -> parent approval (under 16) -> TEST MODE confirm -> grant */
@@ -3810,7 +3815,7 @@ function parentGate(next){if(!isMinor()){next();return;}window._pgNext=next;
 function parentSubmit(){const c=$('#pgChk');if(!c||!c.checked){toast('A parent or guardian needs to tick the box first.');return;}closeModal('parent');const n=window._pgNext;window._pgNext=null;if(n)n();}
 function openStarterPick(){openModal(`<h3>🎁 Starter Pack: choose your 4★</h3><p class="mut">Pick one. This choice is not random.</p><div class="spick">${starterPicks().map(id=>`<button class="spk-b" id="spk-${id}" onclick="closeModal('spick');buyPack('starter','${id}')">${avHtml(id,56,'',4)}<small>${MD[id].n}</small></button>`).join('')}</div>`,'spick');}
 function packLines(p,pick){if(p===PASS)return[`💎 ${PASS.now} now`,`💎 ${PASS.daily}/day for ${PASS.days} days (claim daily)`];
- if(p===STARTER)return[`💎 ${fmt(p.gems)} crystals`,`📜 ${p.mystic} Mystic Scrolls`,`⭐ ${MD[pick].n} (4★)`,`⚡ ${p.energy} energy`];
+ if(p===STARTER)return[`💎 ${fmt(p.gems)} crystals`,`📜 ${p.mystic} Arcane Scrolls`,`⭐ ${MD[pick].n} (4★)`,`⚡ ${p.energy} energy`];
  const f=!shopState().first[p.id];return[`💎 ${fmt(crTotal(p))} crystals${f?' (first-buy double included)':''}`].concat(p.frame?['🖼️ Rift Hoard portrait frame']:[]);}
 function shopConfirm(p,pick){window._spBuy=()=>grantPack(p.id,pick);
  openModal(`${tmBanner()}<h3>${p.i} ${p.n}</h3><ul class="plines">${packLines(p,pick).map(x=>`<li>${x}</li>`).join('')}</ul><p class="tm-note" id="tmNote"><b>Test mode: no real money is charged.</b> Price label: ${usd(p.usd)}.</p><div class="row-btns c"><button class="btn ghost" onclick="closeModal('buy')">Cancel</button><button class="btn gold" id="buyOk" onclick="closeModal('buy');window._spBuy()">Get it (test)</button></div>`,'buy');}
@@ -3862,8 +3867,8 @@ function startBattle(cfg){const team=S.team.map(monByUid).filter(Boolean);
  B={cfg,uc:0,wave:0,allies:[],enemies:[],speed:S.settings.speed,auto:S.settings.auto,over:false,deaths:0,awaiting:false,actor:null,sel:0,closed:false};
  B.allies=team.map(m=>mkUnit('p',{id:m.id,m}));
  const lead=MD[team[0].id].lead;B.reap=null;
- if(lead)B.allies.forEach(u=>{if(['cr','cd','res','acc'].includes(lead.s))u[lead.s]+=lead.v;else{u[lead.s]+=Math.round(u.b[lead.s]*lead.v/100);if(lead.s==='hp')u.maxHp=u.hp;}}); // leader: % of BASE stats (SW style)
- B.allies.forEach(u=>{if(u.will)u.fx.push({id:'immune',t:1,fresh:false});}); // Will set
+ if(lead)B.allies.forEach(u=>{if(['cr','cd','res','acc'].includes(lead.s))u[lead.s]+=lead.v;else{u[lead.s]+=Math.round(u.b[lead.s]*lead.v/100);if(lead.s==='hp')u.maxHp=u.hp;}}); // leader: % of BASE stats
+ B.allies.forEach(u=>{if(u.will)u.fx.push({id:'immune',t:2,fresh:false});}); // Haven set (id 'will')
  S.stats.battles++;save();
  const el=document.createElement('div');el.id='battle';
  el.innerHTML=`${sceneHtml(cfg,S.settings.vfx===false)}
@@ -3953,7 +3958,7 @@ function renderBattle(){if(!B||!$('#battle'))return;
   dd.innerHTML=`<b>${spi(actor.id)} ${actor.n}'s ${actor.bonus?'<span style="color:#ff6a8a">extra </span>':''}turn</b> — ${sk.d}${actor.amp?`<br><span style="color:#ff8a3d">${TX.ampDesc}</span>`:''}<br><span style="color:#7cff9e">👉 Tap a glowing ${sk.t==='e'||sk.t==='ae'?'enemy':sk.t==='s'?'(self)':'ally'} to use it.</span>`;}
  else{sb.innerHTML=actor?`<div class="mut" style="padding:14px">${actor.side==='p'?(B.auto?'🤖 Auto-battling…':''):`${spi(actor.id)} ${actor.n} is thinking…`}</div>`:'<div class="mut" style="padding:14px">…</div>';dd.innerHTML='';}}
 
-// SW-style turn order preview: who acts next, from the current turn meters (ATB) and speeds
+// turn order preview: who acts next, from the current turn meters (ATB) and speeds
 function renderOrder(){const el=$('#bOrder');if(!el||!B)return;const al=allUnits().filter(u=>u.hp>0);if(!al.length){el.innerHTML='';return;}
  const sim=al.map(u=>({u,atb:u===B.actor?0:u.atb,s:Math.max(1,eff(u,'spd'))}));const q=[];if(B.actor&&B.actor.hp>0)q.push(B.actor);
  for(let k=0;k<7&&q.length<8;k++){let best=null,bt=Infinity;for(const x of sim){const t=Math.max(0,100-x.atb)/x.s;if(t<bt){bt=t;best=x;}}for(const x of sim)x.atb+=x.s*bt;best.atb=0;q.push(best.u);}
@@ -3997,12 +4002,12 @@ function endTurn(u){if(!B||B.over)return;u.atb=u._ga||0;u._ga=0;if(u.glow)glowPu
  if(h===u&&u.hp>0)u.owed=Math.min(MAXOWED,(u.owed||0)+1);
  if(u.owed>0&&u.hp>0&&foesOf(u).length){if(u.chain<MAXCHAIN){u.owed--;u.chain++;later(()=>bonusTurn(u),380);return;}u.owed=0;}
  if(B.wave>=B.cfg.waves.length-1&&!foesOf(u).length)u.owed=0; // final wave cleared: victory, nothing to carry
- if(!wasBonus&&!(u.owed>0)&&u.hp>0&&foesOf(u).length&&((u.violent&&Math.random()<0.22)||(u.mech&&u.mech.fast&&Math.random()<0.3))){later(()=>bonusTurn(u,u.violent?'violent':'fast'),380);return;} // Violent set / boss frenzy: never chains
+ if(!wasBonus&&!(u.owed>0)&&u.hp>0&&foesOf(u).length&&((u.violent&&Math.random()<0.18)||(u.mech&&u.mech.fast&&Math.random()<0.3))){later(()=>bonusTurn(u,u.violent?'violent':'fast'),380);return;} // Tempo set (id 'violent') / boss frenzy: never chains
  later(nextTurn,320);}
 const MAXCHAIN=8,MAXOWED=2;
 // kill passive ('reap'): extra turn bookkeeping lives in endTurn (owed / chain)
 function bonusTurn(u,kind){if(!B||B.over)return;if(u.hp<=0||!foesOf(u).length){if(u.hp>0&&!kind)u.owed++;later(nextTurn,100);return;}
- B.actor=u;u.bonus=true;u.atb=100;S.stats.bonusTurns=(S.stats.bonusTurns||0)+1;if(kind){float(u,kind==='violent'?'🌀 Violent: extra turn!':'⚡ Frenzy: acts again!','info',0);setMsg(`${spi(u.id)} ${u.n} ${kind==='violent'?'acts again (Violent)':'is too fast: it acts again'}!`);}else{float(u,TX.extra,'crim',0);setMsg(TX.extraMsg(u));}
+ B.actor=u;u.bonus=true;u.atb=100;S.stats.bonusTurns=(S.stats.bonusTurns||0)+1;if(kind){float(u,kind==='violent'?'🌀 Tempo: extra turn!':'⚡ Frenzy: acts again!','info',0);setMsg(`${spi(u.id)} ${u.n} ${kind==='violent'?'acts again (Tempo)':'is too fast: it acts again'}!`);}else{float(u,TX.extra,'crim',0);setMsg(TX.extraMsg(u));}
  setCam(u);hopAnim(u,20);renderBattle();
  if(u.side==='p'&&!B.auto){B.awaiting=true;B.sel=0;renderBattle();return;}
  later(()=>aiAct(u),u.side==='p'?380:600);}
@@ -4027,7 +4032,7 @@ function selSkill(i){if(!B||!B.awaiting)return;const u=B.actor;if(u.cds[i]>0){to
 function unitInfo(u){const g={};u.fx.forEach(f=>{g[f.id]=Math.max(g[f.id]||0,f.t);});let fx=Object.keys(g).map(k=>`${FX[k].i} ${FX[k].n} (${g[k]}t): ${FX[k].d}`).join('<br>');
  if(u.amp)fx=TX.ampInfo(u)+(fx?'<br>'+fx:'');if(u.tk)fx=TX.takenInfo+(fx?'<br>'+fx:'');
  if(u.mech)fx=Object.keys(u.mech).map(k=>`${BMECH[k].i} ${BMECH[k].n}: ${BMECH[k].d}`).join('<br>')+(fx?'<br>'+fx:'');
- return`${spi(u.id)} <b>${u.n}</b> Lv${u.lvl} · ❤️ ${fmt(u.hp)}/${fmt(u.maxHp)}<br><span class="mut">ATK ${fmt(eff(u,'atk'))} · DEF ${fmt(eff(u,'def'))} · SPD ${Math.round(eff(u,'spd'))} · RES ${Math.round(eff(u,'res'))}% · ACC ${Math.round(eff(u,'acc'))}%</span>${fx?'<br>'+fx:''}`;}
+ return`${spi(u.id)} <b>${u.n}</b> Lv${u.lvl} · ❤️ ${fmt(u.hp)}/${fmt(u.maxHp)}<br><span class="mut">ATK ${fmt(eff(u,'atk'))} · DEF ${fmt(eff(u,'def'))} · SPD ${Math.round(eff(u,'spd'))} · Resist ${Math.round(eff(u,'res'))}% · Accuracy ${Math.round(eff(u,'acc'))}%</span>${fx?'<br>'+fx:''}`;}
 function tapUnit(bid){if(!B)return;const t=allUnits().find(x=>x.bid===bid);if(!t)return;
  if(!B.awaiting){toast(unitInfo(t));return;} // tap = inspect (replaces hover tooltips)
  const u=B.actor;const sk=u.skills[B.sel];
@@ -4074,8 +4079,8 @@ function strike(u,t,sk,h){const em=elemMod(u.el,t.el);const cr=Math.min(100,eff(
  if(sk.debB&&t.fx.some(f=>!FX[f.id].buff))d*=1+sk.debB; // v1.5.0: bonus vs a target with a harmful effect
  if(em>0)d*=1.3;else if(em<0)d*=0.85;if(crit)d*=1+eff(u,'cd')/100;if(glance)d*=0.7;d*=0.95+Math.random()*0.1;d=Math.max(1,Math.round(d));
  hurt(t,d,u);float(t,(crit?'💥':'')+fmt(d)+(crit?'!':''),(crit?'crit':glance?'glance':'dmg')+' x-'+u.el,h);
- if(u.vamp&&u.hp>0)heal(u,Math.round(d*0.35)); // Vampire set
- if(u.despair&&h===0&&t.hp>0&&Math.random()<0.25)addFx(u,t,'stun',1,100,'despair'); // Despair set
+ if(u.vamp&&u.hp>0)heal(u,Math.round(d*0.30)); // Sapdrinker set (id 'vampire')
+ if(u.despair&&h===0&&t.hp>0&&Math.random()<0.20)addFx(u,t,'stun',1,100,'despair'); // Gongstrike set (id 'despair')
  if(h===0&&em>0)float(t,'▲ Advantage','advt',h+1);if(h===0&&u.ign>=1&&eff(t,'def')>0)float(t,'🗡️ Ignores DEF','crim',h+(em>0?2:1));if(h===0&&glance)float(t,'Glancing','info',h+1);
  if(u.side==='p'){if(crit)S.stats.crits++;if(d>S.stats.maxHit)S.stats.maxHit=d;}
  sfx(crit?'crit':'hit');hitAnim(t);return d;}
@@ -4105,8 +4110,8 @@ function heal(t,a){if(t.hp<=0||t.tk||a<=0)return;const b=t.hp;t.hp=Math.min(t.ma
 function addFx(src,t,id,turns,ch,why){const buff=FX[id].buff;
  if(!buff&&(t.fx.some(f=>f.id==='immune')||(t.mech&&t.mech.shield))){float(t,'🔰 Immune','info',1);return;}
  if(!buff){let c=ch;if(src&&src.awg&&c<100)c=Math.min(100,c+10);if(elemMod(src.el,t.el)<0)c*=0.75;if(t.boss&&(id==='stun'||id==='freeze'))c*=0.5;if(Math.random()*100>=c){if(ch>=50)float(t,'Resisted','info',1);return;}
-  const rs=clamp((t.res||0)-(src.acc||0),0,85);if(rs>0&&Math.random()*100<rs){float(t,'Resisted','info',1);return;}} // RES vs ACC: resist chance = RES − ACC (max 85%)
- if(why==='despair')float(t,'😵 Despair','info',2);
+  const rs=clamp((t.res||0)-(src.acc||0),0,85);if(rs>0&&Math.random()*100<rs){float(t,'Resisted','info',1);return;}} // Resist vs Accuracy: resist chance = Resist − Accuracy (max 85%)
+ if(why==='despair')float(t,'😵 Gongstrike','info',2);
  const fresh=B.actor===t;
  if(id==='dot'){if(t.fx.filter(f=>f.id==='dot').length<5)t.fx.push({id,t:turns,fresh});}
  else{const ex=t.fx.find(f=>f.id===id);if(ex){ex.t=Math.max(ex.t,turns);ex.fresh=ex.fresh||fresh;}else t.fx.push({id,t:turns,fresh});}
