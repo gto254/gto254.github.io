@@ -697,6 +697,8 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
 /* v1.5.9 Monsterpedia: monsters you don't own are drawn darker */
 .mc.unown{filter:brightness(.42) saturate(.55)}.mc.unown:active{filter:brightness(.55) saturate(.6)}
 @media (hover:hover){.mc.unown:hover{filter:brightness(.6) saturate(.7)}}
+.rline{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;margin:6px 0;padding:6px 9px;border-radius:9px;background:#0006;font-size:13px;color:#fff}.rline b{color:#ffe48a}.rline .rel{margin-left:auto;letter-spacing:2px}
+.vhh{margin:6px auto;padding:6px 10px;border-radius:10px;background:linear-gradient(135deg,#d9a93a55,#7a4bd655);display:inline-block}
 </style>
 </head>
 <body>
@@ -719,7 +721,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.5.9';
+const VERSION='1.6.0';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -1495,6 +1497,10 @@ const DEXREQ=DEXLIST.filter(d=>!d.uniq&&!d.vof); // v1.5.0: Monsterpedia complet
 const LINES=SUMMONABLE.filter(d=>!d.vof).map(d=>d.id);
 const lineOf=id=>{const b=MD[id]&&MD[id].vof||id;return[MD[b],...Object.values(MD).filter(d=>d.vof===b)].filter(Boolean);};
 const byRar=r=>SUMMONABLE.filter(d=>d.rar===r);
+const byRarEl=(r,els)=>SUMMONABLE.filter(d=>d.rar===r&&els.includes(d.el)&&!d.uniq&&!d.boss&&!d.fodder); // v1.6.0 scroll pools (still only SUMMONABLE)
+const scrollEls=t=>t==='hh'?HHEL:FWW;
+const poolFor=(t,st)=>byRarEl(st,scrollEls(t));
+const hhLowPool=()=>SUMMONABLE.filter(d=>d.rar<=2&&HHEL.includes(d.el)&&!d.uniq&&!d.boss&&!d.fodder); // story-stage drops
 
 /* ---------- stats (v1.4: Summoners-War-style scale) ---------- */
 // Base stats are the v1.3 numbers scaled up; the damage formula scales with them, so an un-runed fight plays exactly like v1.3.
@@ -1579,17 +1585,20 @@ const EVENTS=[
  {id:'crystal',n:'Crystal Cavern',i:'💎',bg:'linear-gradient(135deg,#a5f3ff,#3a7bd5 60%,#1a1050)',boss:'crystalwyrm',pool:['cinderfox','tentacular','dawnstag','galeclaw'],reward:'Gems + Mystic Scroll chance',desc:'A cave made of premium currency. Suspiciously convenient.'},
 ];
 const TIERS=[{n:'Easy',lv:6},{n:'Normal',lv:18},{n:'Hard',lv:32}];
-const FEATURED=[['pyrewyrm','shadowfang'],['leviadrift','blazemane'],['tempestrix','tidesinger'],['seraphyne','tentacular'],['duskula','zephyrlet']];
+const FEATURED=[['pyrewyrm','shadowfang_water'],['leviadrift','blazemane'],['tempestrix','tidesinger'],['seraphyne_wind','tentacular'],['duskula_fire','zephyrlet']]; // v1.6.0: Fire/Water/Wind only
 const BANNER_DAYS=3;
-const RATES={common:[55,35,9,0.9,0.1],mystic:[0,0,85,13,2],featured:[0,0,85,13,2],radiant:[0,0,0,85,15]};
+const RATES={common:[74.2,24.4,1.4,0,0],mystic:[0,0,91.5,8,0.5],featured:[0,0,91.5,8,0.5],radiant:[0,0,0,93.5,6.5],hh:[0,0,93.65,6,0.35]}; // v1.6.0: Summoners War-style rates
+const FWW=['fire','water','wind'],HHEL=['heaven','hell']; // regular scrolls pull Fire/Water/Wind; the Heaven & Hell Scroll pulls Heaven/Hell
+const HH_DROP=0.12; // v1.6.0: chance per story-stage clear of a 1-2★ Heaven/Hell monster
 const PITY=60;
 const SCROLLS={
- common:{n:'Common Scroll',i:'📃',bg:'linear-gradient(135deg,#5b6170,#2b2f3a)',desc:'Mostly 1–2★ friends. Great for fodder. Occasionally a miracle.'},
- mystic:{n:'Mystic Scroll',i:'📜',bg:'linear-gradient(135deg,#7c5cff,#3a1f8a)',desc:'3★ or better, every time. Counts toward the 5★ pity.'},
- featured:{n:'Featured Banner',i:'🎉',bg:'linear-gradient(135deg,#ff7ad9,#7c2fd6 60%,#2a0f5e)',desc:'Limited time! Rate-up on the featured monsters. Counts toward pity.'},
- radiant:{n:'Radiant Scroll',i:'🌟',bg:'linear-gradient(135deg,#ffe08a,#ff7ad9 60%,#7c2fd6)',desc:'Guaranteed 4★ or 5★. Smells faintly of victory.'},
+ common:{n:'Common Scroll',i:'📃',bg:'linear-gradient(135deg,#5b6170,#2b2f3a)',desc:'Mostly 1–2★ Fire, Water & Wind friends. Great for fodder.'},
+ mystic:{n:'Mystic Scroll',i:'📜',bg:'linear-gradient(135deg,#7c5cff,#3a1f8a)',desc:'3★ or better Fire, Water & Wind monsters. Counts toward the 5★ pity.'},
+ featured:{n:'Featured Banner',i:'🎉',bg:'linear-gradient(135deg,#ff7ad9,#7c2fd6 60%,#2a0f5e)',desc:'Limited time! Rate-up on the featured monsters (Fire, Water & Wind). Counts toward pity.'},
+ radiant:{n:'Radiant Scroll',i:'🌟',bg:'linear-gradient(135deg,#ffe08a,#ff7ad9 60%,#7c2fd6)',desc:'Guaranteed 4★ or 5★ Fire, Water & Wind. Smells faintly of victory.'},
+ hh:{n:'Heaven & Hell Scroll',i:'🌗',bg:'linear-gradient(135deg,#d9a93a,#7a4bd6 50%,#4a0c38)',desc:'Only Heaven & Hell monsters, 3★ or better. Has its own 5★ pity.'},
 };
-const LOGIN=[{gold:3000},{gems:50},{common:3},{gems:100},{mystic:1},{gold:8000,jelly:2,jellyStars:3},{radiant:1,gems:150}];
+const LOGIN=[{gold:3000},{gems:50},{common:3},{gems:100},{mystic:1},{gold:8000,jelly:2,jellyStars:3},{radiant:1,gems:150,hh:1}];
 const DAILY_Q=[
  {id:'login',i:'👋',n:'Show up!',d:'Log in today',goal:1,r:{gold:1000}},
  {id:'summon',i:'🌀',n:'Rift Curious',d:'Summon 3 monsters',goal:3,r:{gems:30}},
@@ -1634,6 +1643,12 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.6.0',date:'Oct 19, 2026',title:'🌗 New Scrolls & Summon Rates',sections:[
+  ['🌗 Heaven & Hell Scroll',['A new scroll that only summons Heaven and Hell monsters, 3★ or better: 3★ 93.65%, 4★ 6%, 5★ 0.35%.','It has its own 5★ pity (guaranteed by summon #60) and every 10x has a 4★ or better.','Get it from the Shop (300 💎), Day 7 of the login calendar, Tower of Ascension floors 25 and 75, and a free one waiting in your Mailbox.']],
+  ['📜 Summon Rates',['Common, Mystic, Featured and Radiant scrolls now summon Fire, Water and Wind monsters only.','New rates: Common 1★ 74.2% / 2★ 24.4% / 3★ 1.4%. Mystic & Featured 3★ 91.5% / 4★ 8% / 5★ 0.5%. Radiant 4★ 93.5% / 5★ 6.5%.','Mystic/Featured keep the 5★ pity at summon #60 and the 4★-or-better in every 10x.','Rates are shown right on the Summon screen and in full in the Shop Odds tab.']],
+  ['🗺️ Story Drops',['1★ and 2★ Heaven and Hell monsters can now drop from story stages.']],
+  ['🎉 Featured Banners',['Featured banners now star Fire, Water and Wind monsters.']],
+  ['💾 Your Save',['Nothing to do: everything carries over, and your scrolls keep working.']]]},
  {v:'1.5.9',date:'Oct 17, 2026',title:'📖 Monsterpedia: See Every Monster',sections:[
   ['📖 Monsterpedia',['Every monster is now shown in the Monsterpedia, in every element and with its awakened form: art, name, stars and full stats.','Monsters you don\'t own yet are drawn darker. The ones in your collection look normal.','Tap any monster to see its stats, skills and awakened form. The info screen also says whether you own it.','Discovery progress still counts the monster lines you have found.']],
   ['💾 Your Save',['Nothing to do: everything carries over.']]]},
@@ -2982,7 +2997,7 @@ function menuScene(key){const el=document.getElementById('menuBg');if(!el)return
 let S=null;
 let TAB='home';
 const UI={monSub:'roster',sort:'stars',area:null,qSub:'daily',sd:0,evSub:'dung',rf:{set:'',slot:0,free:false,sort:'grade'}};
-function defaultState(){return{v:VERSION,gems:1500,gold:20000,scrolls:{common:5,mystic:10,radiant:0},nextUid:1,mons:[],glyphs:[],runes:[],dung:{},energy:ENERGY_MAX,enAt:Date.now(),campD:{h:{},x:{}},toa:{m:'',f:0,h:0,best:0,bestH:0},team:[],camp:{},pity:0,firstMulti:false,dex:{},
+function defaultState(){return{v:VERSION,gems:1500,gold:20000,scrolls:{common:5,mystic:10,radiant:0,hh:0},pityHH:0,nextUid:1,mons:[],glyphs:[],runes:[],dung:{},energy:ENERGY_MAX,enAt:Date.now(),campD:{h:{},x:{}},toa:{m:'',f:0,h:0,best:0,bestH:0},team:[],camp:{},pity:0,firstMulti:false,dex:{},
  stats:{summons:0,fives:0,wins:0,battles:0,crits:0,maxHit:0,starUps:0,glyphUps:0,events:0,logins:0,bosses:0,losses:0},
  login:{last:'',count:0},daily:{date:'',prog:{},claimed:{}},ach:{},settings:{sound:true,speed:1,auto:false,vfx:true},seenPatch:'',created:Date.now(),mail:[],mailGot:{},redeemed:{}};}
 function deepMerge(base,over){if(Array.isArray(base)||typeof base!=='object'||base===null)return over===undefined?base:over;const out={...base};for(const k in over){out[k]=(k in base&&base[k]&&typeof base[k]==='object'&&!Array.isArray(base[k]))?deepMerge(base[k],over[k]):over[k];}return out;}
@@ -2990,7 +3005,7 @@ function save(){try{S.v=VERSION;localStorage.setItem(SAVE_KEY,JSON.stringify(S))
 function newGame(){S=defaultState();
  ['cinderfox','shellbert','hootstorm','lumilamb'].forEach(id=>{const m=addMon(id);S.team.push(m.uid);});
  newRune({set:'fatal',slot:1,grade:2,rar:1});newRune({set:'energy',slot:5,grade:2,rar:1});
- deliverMail('welcome-v130');save();}
+ deliverMail('welcome-v130');deliverMail('hhscroll-v160');save();}
 function load(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw){newGame();return;}S=deepMerge(defaultState(),JSON.parse(raw));migrate();}catch(e){console.warn('load failed, new game',e);newGame();}}
 function migrate(){ // home for future update migrations
  // monsters whose data isn't available on this device are set aside (never deleted) and come back once it is
@@ -2999,7 +3014,7 @@ function migrate(){ // home for future update migrations
  // unique monsters: one per save (dedupe imported/edited saves), natural stars, permanently locked
  const my=S.mons.filter(m=>MD[m.id].uniq);if(my.length){const keep=new Set();my.slice().sort((a,b)=>b.lvl-a.lvl).forEach(m=>{if(keep.has(m.id))S.mons=S.mons.filter(x=>x!==m);else{keep.add(m.id);m.lock=true;m.stars=MD[m.id].rar;}});}
  if(!Array.isArray(S.mail))S.mail=[];if(!S.mailGot||typeof S.mailGot!=='object')S.mailGot={};if(!S.redeemed||typeof S.redeemed!=='object')S.redeemed={};
- deliverMail('welcome-v130');shopState();migrateV150();essState(); // v1.4.2 shop state (purchases, pass, age gate)
+ deliverMail('welcome-v130');migrateV160();shopState();migrateV150();essState(); // v1.4.2 shop state (purchases, pass, age gate)
  S.team=S.team.filter(u=>S.mons.some(m=>m.uid===u)).slice(0,4);
  runeSanity();}
 
@@ -3022,6 +3037,7 @@ function power(m){const t=monStats(m).t;return Math.round(t.hp/8+t.atk*2+t.def*1
 function removeMon(uid){const m=monByUid(uid);if(!m||MD[m.id].uniq)return;(m.ru||[]).forEach(u=>{const r=runeByUid(u);if(r)r.on=0;});S.mons=S.mons.filter(x=>x.uid!==uid);S.team=S.team.filter(u=>u!==uid);}
 /* =================== v1.4.4 AWAKENING =================== */
 // v1.5.0: Light -> Heaven, Dark -> Hell. Element-keyed save data (essences) moves to the new keys; safe to run any number of times.
+function migrateV160(){if(!S.scrolls||typeof S.scrolls!=='object')S.scrolls={common:0,mystic:0,radiant:0};['common','mystic','radiant','hh'].forEach(k=>{if(!(S.scrolls[k]>=0))S.scrolls[k]=0;});if(!(S.pityHH>=0))S.pityHH=0;deliverMail('hhscroll-v160');}
 function migrateV150(){if(S.ess&&typeof S.ess==='object')for(const o in EL_REN){if(!Object.prototype.hasOwnProperty.call(S.ess,o))continue;const v=S.ess[o],n=EL_REN[o],w=S.ess[n];
   if(Array.isArray(v))S.ess[n]=[0,1,2].map(i=>Math.max(0,(Array.isArray(w)?w[i]|0:0)+(v[i]|0)));delete S.ess[o];}
  S.elv=2;}
@@ -3069,10 +3085,10 @@ function leadText(l){if(!l)return'None';return `All allies: +${l.v}% ${STATN[l.s
 
 
 /* ---------- rewards ---------- */
-function grant(r){if(r.gold)S.gold+=r.gold;if(r.gems)S.gems+=r.gems;['common','mystic','radiant'].forEach(k=>{if(r[k])S.scrolls[k]+=r[k];});
+function grant(r){if(r.gold)S.gold+=r.gold;if(r.gems)S.gems+=r.gems;['common','mystic','radiant','hh'].forEach(k=>{if(r[k])S.scrolls[k]=(S.scrolls[k]||0)+r[k];});
  if(r.jelly)for(let i=0;i<r.jelly;i++)addMon('jellybop',r.jellyStars||2);
  if(r.glyph)for(let i=0;i<(r.glyphN||1);i++)newRune({grade:r.glyph,rar:1});}
-function rewardText(r){const p=[];if(r.gold)p.push(`💰 ${fmt(r.gold)}`);if(r.gems)p.push(`💎 ${r.gems}`);if(r.mystic)p.push(`📜 ${r.mystic} Mystic`);if(r.common)p.push(`📃 ${r.common} Common`);if(r.radiant)p.push(`🌟 ${r.radiant} Radiant`);if(r.jelly)p.push(`🍮 ${r.jelly}x ${r.jellyStars||2}★ Jellybop`);if(r.glyph)p.push(`💠 ${r.glyphN||1}x ${r.glyph}★ Rune`);return p.join(' · ')||'—';}
+function rewardText(r){const p=[];if(r.gold)p.push(`💰 ${fmt(r.gold)}`);if(r.gems)p.push(`💎 ${r.gems}`);if(r.mystic)p.push(`📜 ${r.mystic} Mystic`);if(r.common)p.push(`📃 ${r.common} Common`);if(r.radiant)p.push(`🌟 ${r.radiant} Radiant`);if(r.hh)p.push(`🌗 ${r.hh} Heaven & Hell`);if(r.jelly)p.push(`🍮 ${r.jelly}x ${r.jellyStars||2}★ Jellybop`);if(r.glyph)p.push(`💠 ${r.glyphN||1}x ${r.glyph}★ Rune`);return p.join(' · ')||'—';}
 
 /* ---------- daily / login / achievements ---------- */
 function ensureDaily(){const t=todayStr();if(S.daily.date!==t){S.daily={date:t,prog:{login:1},claimed:{}};save();}}
@@ -3141,29 +3157,32 @@ function sortedMons(list){const s=UI.sort;return list.slice().sort((a,b)=>s==='l
 function nextStage(){for(let a=0;a<AREAS.length;a++){if(!areaUnlocked(a))break;for(let s=0;s<5;s++)if(!S.camp[a+'-'+s])return[a,s];}return[AREAS.length-1,4];}
 
 /* =================== SUMMON =================== */
+function rateLine(type){const r=RATES[type];const els=scrollEls(type).map(e=>ELEM[e].i).join('');return`<div class="rline" data-rl="${type}">${r.map((p,i)=>p?`<span>${i+1}★ <b>${p}%</b></span>`:'').join('')}<span class="rel">${els}</span></div>`;}
 function rateTable(type){const r=RATES[type];return`<table class="rates">${r.map((p,i)=>p?`<tr><td>${starsHtml(i+1)} ${RNAME[i+1]}</td><td style="text-align:right">${p}%</td></tr>`:'').join('')}</table>`;}
 function renderSummon(){return backBar('home','Isle')+renderSummon0();}
 function renderSummon0(){const [fa,fs]=bannerNow();
- const card=(type,extra,btns)=>{const sc=SCROLLS[type];return`<div class="scard" style="background:${sc.bg}"><span class="big">${sc.i}</span><h3>${sc.n}</h3><p class="mut" style="color:#eee">${sc.desc}</p>${extra||''}<div class="row-btns">${btns}</div><details><summary>📊 Drop rates</summary>${rateTable(type)}${type==='featured'?`<p class="mut" style="color:#eee">50% of 5★ results are ${MD[fa].n}; 40% of 4★ results are ${MD[fs].n}.</p>`:''}${type==='mystic'||type==='featured'?`<p class="mut" style="color:#eee">Pity: a 5★ is guaranteed on summon #${PITY} without one.</p>`:''}</details></div>`;};
+ const card=(type,extra,btns)=>{const sc=SCROLLS[type];return`<div class="scard" style="background:${sc.bg}"><span class="big">${sc.i}</span><h3>${sc.n}</h3><p class="mut" style="color:#eee">${sc.desc}</p>${rateLine(type)}${extra||''}<div class="row-btns">${btns}</div><details><summary>📊 Drop rates</summary>${rateTable(type)}${type==='featured'?`<p class="mut" style="color:#eee">50% of 5★ results are ${MD[fa].n}; 40% of 4★ results are ${MD[fs].n}.</p>`:''}${type==='mystic'||type==='featured'||type==='hh'?`<p class="mut" style="color:#eee">Pity: a 5★ is guaranteed on summon #${PITY} without one${type==='hh'?' (separate Heaven & Hell counter)':''}.</p>`:''}<p class="mut" style="color:#eee">Pulls: ${scrollEls(type).map(e=>ELEM[e].i+' '+ELEM[e].n).join(', ')}.</p></details></div>`;};
  const my=S.scrolls.mystic;
- return`<div class="card"><div class="sec">🌀 The Summoning Rift</div><p class="mut">Tap a scroll to tear open the Rift. 5★ pity: <b>${S.pity}/${PITY}</b></p><div class="prog" style="margin-top:6px"><i style="width:${S.pity/PITY*100}%"></i></div><p class="mut" style="margin-top:6px">🎁 Every 10x Mystic/Featured summon: <b>at least one 4★ or better</b></p><div class="row-btns"><button class="btn sm ghost" id="sumOdds" style="min-height:44px" onclick="UI.shopTab='odds';setTab('shop')">📊 Full odds &amp; pity</button></div></div>
+ return`<div class="card"><div class="sec">🌀 The Summoning Rift</div><p class="mut">Tap a scroll to tear open the Rift. 5★ pity: <b>${S.pity}/${PITY}</b></p><div class="prog" style="margin-top:6px"><i style="width:${S.pity/PITY*100}%"></i></div><p class="mut" style="margin-top:6px">🎁 Every 10x Mystic/Featured/Heaven &amp; Hell summon: <b>at least one 4★ or better</b></p><div class="row-btns"><button class="btn sm ghost" id="sumOdds" style="min-height:44px" onclick="UI.shopTab='odds';setTab('shop')">📊 Full odds &amp; pity</button></div></div>
  ${card('featured',`<div style="display:flex;gap:10px;align-items:center;margin:6px 0">${avHtml(fa,64)}<div><b style="font-size:16px">${MD[fa].n}</b> ${starsHtml(5)}<br><span>Rate-up: ${spi(fs)} ${MD[fs].n} ${starsHtml(4)}</span><br><span class="mut" style="color:#fde">Ends in <b class="cnt" data-cd="${bannerEnds()}">${fmtDur(bannerEnds()-Date.now())}</b></span></div></div>`,
   `<button class="btn gold" id="sumFeat1" onclick="doSummon('featured',1)">x1 · 💎${FEAT_CR}</button><button class="btn gold" onclick="doSummon('featured',10)">x10 · 💎${fmt(FEAT_CR*10)}</button>`)}
  ${card('mystic',`<p><b>Owned: ${my}</b></p>`,`<button class="btn" id="sumMys1" onclick="doSummon('mystic',1)">x1 · ${my>=1?'📜1':'💎'+SUMMON_CR}</button><button class="btn" id="sumMys10" onclick="doSummon('mystic',10)">x10 · ${my>=10?'📜10':'💎'+fmt(SUMMON_CR*10)}</button>`)}
+ ${card('hh',`<p><b>Owned: ${S.scrolls.hh||0}</b> · 5★ pity <b id="hhPity">${S.pityHH||0}/${PITY}</b></p><div class="prog"><i style="width:${(S.pityHH||0)/PITY*100}%"></i></div>`,`<button class="btn gold" id="sumHH1" onclick="doSummon('hh',1)" ${(S.scrolls.hh||0)<1?'disabled':''}>x1 · 🌗1</button><button class="btn gold" id="sumHH10" onclick="doSummon('hh',10)" ${(S.scrolls.hh||0)<10?'disabled':''}>x10 · 🌗10</button>`)}
  ${card('radiant',`<p><b>Owned: ${S.scrolls.radiant}</b></p>`,`<button class="btn gold" onclick="doSummon('radiant',1)" ${S.scrolls.radiant<1?'disabled':''}>Summon x1</button>`)}
  ${card('common',`<p><b>Owned: ${S.scrolls.common}</b></p>`,`<button class="btn ghost" id="sumCom1" onclick="doSummon('common',1)" ${S.scrolls.common<1?'disabled':''}>x1</button><button class="btn ghost" onclick="doSummon('common',10)" ${S.scrolls.common<10?'disabled':''}>x10</button>`)}`;}
-function rollStars(type){if((type==='mystic'||type==='featured')&&S.pity>=PITY-1)return 5;let r=Math.random()*100;const rt=RATES[type];for(let i=0;i<5;i++){if(r<rt[i])return i+1;r-=rt[i];}return rt.findIndex(x=>x>0)+1;}
-function rollSummon(type){const st=rollStars(type);if(type==='mystic'||type==='featured'){S.pity=st===5?0:S.pity+1;}
+function rollStars(type){if((type==='mystic'||type==='featured')&&S.pity>=PITY-1)return 5;if(type==='hh'&&S.pityHH>=PITY-1)return 5;let r=Math.random()*100;const rt=RATES[type];for(let i=0;i<5;i++){if(r<rt[i])return i+1;r-=rt[i];}return rt.findIndex(x=>x>0)+1;}
+function rollSummon(type){const st=rollStars(type);if(type==='mystic'||type==='featured'){S.pity=st===5?0:S.pity+1;}if(type==='hh'){S.pityHH=st===5?0:S.pityHH+1;}
  const [f5,f4]=bannerNow();if(type==='featured'){if(st===5&&Math.random()<0.5)return{id:f5,stars:5};if(st===4&&Math.random()<0.4)return{id:f4,stars:4};}
- return{id:pick(byRar(st)).id,stars:st};}
+ return{id:pick(poolFor(type,st)).id,stars:st};}
 function doSummon(type,n){let ok=false;
  if(type==='common'){if(S.scrolls.common>=n){S.scrolls.common-=n;ok=true;}}
  else if(type==='mystic'){if(S.scrolls.mystic>=n){S.scrolls.mystic-=n;ok=true;}else{const c=SUMMON_CR*n;if(S.gems>=c){S.gems-=c;ok=true;}}}
  else if(type==='featured'){const c=FEAT_CR*n;if(S.gems>=c){S.gems-=c;ok=true;}}
  else if(type==='radiant'){if(S.scrolls.radiant>=n){S.scrolls.radiant-=n;ok=true;}}
- if(!ok){toast('Not enough currency! Clear stages, events & quests to earn more. 💎');return;}
+ else if(type==='hh'){if((S.scrolls.hh||0)>=n){S.scrolls.hh-=n;ok=true;}} // scroll only: no crystal summon
+ if(!ok){toast(type==='hh'?'No Heaven & Hell Scrolls! Get them in the Shop, the login calendar or the Tower. 🌗':'Not enough currency! Clear stages, events & quests to earn more. 💎');return;}
  const res=[];for(let i=0;i<n;i++)res.push(rollSummon(type));
- if(n===10&&(type==='mystic'||type==='featured')){if(!res.some(r=>r.stars>=4)){const [,f4]=bannerNow();res[9]={id:type==='featured'&&Math.random()<.4?f4:pick(byRar(4)).id,stars:4};}S.firstMulti=true;} // v1.4.2: every 10x contains a 4★ or better
+ if(n===10&&(type==='mystic'||type==='featured'||type==='hh')){if(!res.some(r=>r.stars>=4)){const [,f4]=bannerNow();res[9]={id:type==='featured'&&Math.random()<.4?f4:pick(poolFor(type,4)).id,stars:4};}if(type!=='hh')S.firstMulti=true;} // v1.4.2: every 10x contains a 4★ or better
  const mons=res.map(r=>{const isNew=!S.dex[r.id];const m=addMon(r.id,r.stars);m._new=isNew;if(r.stars>=5)m.lock=true;return m;});
  S.stats.summons+=n;S.stats.fives+=mons.filter(m=>m.stars>=5).length;prog('summon',n);
  const out=mons.map(m=>{const o={uid:m.uid,id:m.id,stars:m.stars,isNew:m._new};delete m._new;return o;});
@@ -3331,7 +3350,7 @@ function openEvent(ei,tier){if(!eventOpen(EVENTS[ei])){toast('This event is clos
 function renderQuests(){ensureDaily();const sub=UI.qSub;
  let h=`${backBar('home','Isle')}<div class="subtabs"><button class="${sub==='daily'?'on':''}" onclick="UI.qSub='daily';render()">📅 Daily</button><button class="${sub==='ach'?'on':''}" onclick="UI.qSub='ach';render()">🏆 Achievements (${Object.keys(S.ach).length}/${ACH.length})</button></div>`;
  if(sub==='daily'){const day=S.login.count%7;
-  h+=`<div class="card"><div class="sec">📅 7-Day Login Calendar</div><div class="login-row">${LOGIN.map((r,i)=>{const got=i<day||(i===day&&!canLogin()&&false);const today=i===day&&canLogin();return`<div class="lday ${i<day?'got':''} ${today?'today':''}"><div class="li">${r.radiant?'🌟':r.mystic?'📜':r.jelly?'🍮':r.common?'📃':r.gems?'💎':'💰'}</div>Day ${i+1}${i<day?'<br>✅':''}</div>`;}).join('')}</div>
+  h+=`<div class="card"><div class="sec">📅 7-Day Login Calendar</div><div class="login-row">${LOGIN.map((r,i)=>{const got=i<day||(i===day&&!canLogin()&&false);const today=i===day&&canLogin();return`<div class="lday ${i<day?'got':''} ${today?'today':''}"><div class="li">${r.hh?'🌗':r.radiant?'🌟':r.mystic?'📜':r.jelly?'🍮':r.common?'📃':r.gems?'💎':'💰'}</div>Day ${i+1}${i<day?'<br>✅':''}</div>`;}).join('')}</div>
   <div class="row-btns">${canLogin()?`<button class="btn gold" id="qLogin" onclick="claimLogin()">🎁 Claim Day ${day+1}: ${rewardText(LOGIN[day])}</button>`:`<span class="mut">Come back in <b class="cnt" data-cd="${nextMidnight()}">${fmtDur(nextMidnight()-Date.now())}</b> for Day ${day+1}!</span>`}</div></div>
   <div class="sec">✅ Daily Quests <span class="mut" style="margin-left:auto">Resets in <span class="cnt" data-cd="${nextMidnight()}">${fmtDur(nextMidnight()-Date.now())}</span></span></div>
   ${DAILY_Q.map(q=>qRow(q.id,q.i,q.n,q.d,Math.min(S.daily.prog[q.id]||0,q.goal),q.goal,q.r,`claimQuest('${q.id}')`,!!S.daily.claimed[q.id])).join('')}
@@ -3414,6 +3433,7 @@ function openReseal(){S.resealAsked=Date.now();save();closeModal('reseal');
 
 /* =================== MAILBOX & REDEEM CODES (v1.3) =================== */
 const MAILS={
+ 'hhscroll-v160':{i:'🌗',from:'The Rift Post Office',title:'Gift: Heaven & Hell Scroll',body:'A brand-new scroll that only summons Heaven and Hell monsters. Here is one on the house!',r:{hh:1}},
  'welcome-v130':{i:'💌',from:'The Rift Post Office',title:'Welcome to the Mailbox!',body:'Gifts, letters and rewards will arrive here. This one is a small welcome present. The postman insists it is not a bribe.',r:{gold:3000,gems:50}},
  'gift-leviathan-v145':{i:'🐍',from:'The Rift Post Office',title:'Gift: Leviathan',body:'Something enormous is waiting in the deep… and it has chosen you. A 5★ Leviathan has arrived!',r:{mon:'leviathan'}},
  'gift-prismane-v145':{i:'🦄',from:'The Rift Post Office',title:'Gift: Prismane',body:'A rainbow has trotted all the way to your mailbox. A 5★ Prismane has arrived, with love!',r:{mon:'prismane'}},
@@ -3614,8 +3634,8 @@ const toaNext=h=>(h?S.toa.h:S.toa.f)+1;
 function toaFloorOpen(f,h){return (h?S.toa.f>=100:true)&&f<=toaNext(h);}
 function toaReward(f,h){const m=h?2:1;const r={gold:Math.round((600+f*80)*m),gems:0,mystic:0,radiant:0,rune:null};
  if(f%10===0)r.rune={grade:f>=20||h?6:5,rar:f>=20||h?4:3};else if(f%5===0){r.mystic=1*m;r.rune={grade:Math.min(6,4+Math.floor(f/40)+(h?1:0)),rar:Math.min(4,2+(h?1:0))};}else{r.gems=(10+Math.floor(f/5))*m;if(f%2===0)r.rune={grade:Math.min(6,3+Math.floor(f/30)+(h?1:0)),rar:Math.min(4,1+Math.floor(f/40)+(h?1:0))};}
- if(f===50||f===100)r.radiant=1*m;return r;}
-function toaRewardText(f,h){const r=toaReward(f,h);const p=[`💰 ${fmt(r.gold)}`];if(r.gems)p.push(`💎 ${r.gems}`);if(r.mystic)p.push(`📜 ${r.mystic} Mystic`);if(r.radiant)p.push(`🌟 ${r.radiant} Radiant (rare)`);if(r.rune)p.push(`💠 ${r.rune.grade}★ ${RRAR[r.rune.rar].n} rune`);return p.join(' · ');}
+ if(f===50||f===100)r.radiant=1*m;r.hh=(f===25||f===75)?1*m:0;return r;}
+function toaRewardText(f,h){const r=toaReward(f,h);const p=[`💰 ${fmt(r.gold)}`];if(r.gems)p.push(`💎 ${r.gems}`);if(r.mystic)p.push(`📜 ${r.mystic} Mystic`);if(r.radiant)p.push(`🌟 ${r.radiant} Radiant (rare)`);if(r.hh)p.push(`🌗 ${r.hh} Heaven & Hell Scroll`);if(r.rune)p.push(`💠 ${r.rune.grade}★ ${RRAR[r.rune.rar].n} rune`);return p.join(' · ');}
 function toaCfg(f,h){h=h?1:0;const rng=seeded(31337+f*101+h*7);const lvl=h?Math.min(70,55+Math.round(f*.15)):Math.min(60,8+Math.round(f*.52));
  const k=h?1.9+f*.009:1+f*.011,em=[+(k*1.15).toFixed(3),+(1+(k-1)*.75).toFixed(3),+(1+(k-1)*.8).toFixed(3)],spd=Math.round(h?14+f*.22:f*.18);const stars=h?6:Math.min(6,2+Math.floor(f/20));
  const pool=SUMMONABLE.map(d=>d.id).filter(id=>id!=='jellybop');const boss=f%10===0;const waves=[];
@@ -3644,7 +3664,7 @@ function rewardV14(cfg,R,runes){let first=false,extra='';
   if(first){R.gems+=T.gems;S.dung[D.id]=cfg.ti+1;}runes.push(dungeonDrop(cfg));if(Math.random()<(cfg.ti>=2?0.5:0.35))runes.push(dungeonDrop(cfg));
   if(cfg.ti===3)runes.push(newRune({set:pick(D.sets),grade:6,rar:4}));S.stats.dungeons=(S.stats.dungeons||0)+1;if(cfg.ti===3)S.stats.insane=(S.stats.insane||0)+1;prog('event');}
  else if(cfg.type==='toa'){toaMonth();const f=cfg.f,h=cfg.h?1:0;first=f===toaNext(h);R.gold=Math.round((300+cfg.lvl*40)*rnd(.9,1.1));
-  if(first){const r=toaReward(f,h);R.gold+=r.gold;R.gems+=r.gems;R.mystic+=r.mystic;if(r.radiant)R.radiant=(R.radiant||0)+r.radiant;if(r.rune)runes.push(newRune({grade:r.rune.grade,rar:r.rune.rar}));
+  if(first){const r=toaReward(f,h);R.gold+=r.gold;R.gems+=r.gems;R.mystic+=r.mystic;if(r.radiant)R.radiant=(R.radiant||0)+r.radiant;if(r.hh)R.hh=(R.hh||0)+r.hh;if(r.rune)runes.push(newRune({grade:r.rune.grade,rar:r.rune.rar}));
    if(h){S.toa.h=f;S.toa.bestH=Math.max(S.toa.bestH||0,f);}else{S.toa.f=f;S.toa.best=Math.max(S.toa.best||0,f);}if(f===100)extra=h?'🏆 Tower of Ascension (Hard) conquered!':'🏆 Floor 100! ToA Hard mode unlocked.';}
   S.stats.toa=(S.stats.toa||0)+1;}
  return{first,extra};}
@@ -3715,7 +3735,8 @@ const SHOP=[
  {id:'common5',i:'📃',n:'5 Common Scrolls',d:'Summons 1–3★ monsters',c:60,f:()=>{S.scrolls.common+=5;}},
  {id:'mana',i:'💰',n:'Mana Chest',d:'60,000 mana (gold) for rune upgrades',c:120,f:()=>{S.gold+=60000;}},
  {id:'runes',i:'💠',n:'Rune Pack',d:'3 random 5★ runes (Rare or better)',c:150,f:()=>{for(let i=0;i<3;i++)newRune({grade:5,rar:rollRar(2,4)});}},
- {id:'radiant',i:'🌟',n:'Radiant Scroll',d:'Guaranteed 4★ or 5★ (see Odds)',c:900,f:()=>{S.scrolls.radiant++;}},
+ {id:'radiant',i:'🌟',n:'Radiant Scroll',d:'Guaranteed 4★ or 5★ Fire/Water/Wind (see Odds)',c:900,f:()=>{S.scrolls.radiant++;}},
+ {id:'hh',i:'🌗',n:'Heaven & Hell Scroll',d:'Summons a 3–5★ Heaven or Hell monster (see Odds)',c:300,f:()=>{S.scrolls.hh=(S.scrolls.hh||0)+1;}},
  {id:'essence',i:'🧪',n:'Essence Bundle',d:'8 Low, 4 Mid and 2 High essences of EVERY element (for awakening)',c:350,f:()=>{const E=essState();for(const e in E){E[e][0]+=8;E[e][1]+=4;E[e][2]+=2;}}},
 ];
 /* =================== SHOP (v1.4.2: play-money store, TEST MODE) ===================
@@ -3762,13 +3783,13 @@ function renderShop(){shopState();const t=UI.shopTab||'crystals';
  return h;}
 /* posted odds: per rarity and per monster, for every scroll; sums shown */
 function oddsRows(type){const rt=RATES[type];const [f5,f4]=bannerNow();const rows=[];
- rt.forEach((p,i)=>{if(!p)return;const st=i+1;const ids=byRar(st).map(d=>d.id);const per={};ids.forEach(id=>per[id]=p/ids.length);
+ rt.forEach((p,i)=>{if(!p)return;const st=i+1;const ids=poolFor(type,st).map(d=>d.id);const per={};ids.forEach(id=>per[id]=p/ids.length);
   if(type==='featured'&&st===5){ids.forEach(id=>per[id]=p*.5/ids.length);per[f5]=(per[f5]||0)+p*.5;}
   if(type==='featured'&&st===4){ids.forEach(id=>per[id]=p*.6/ids.length);per[f4]=(per[f4]||0)+p*.4;}
   rows.push({st,p,per});});return rows;}
-function oddsHtml(){const types=['mystic','featured','common','radiant'];
- return`<div class="card odds" id="oddsPanel"><div class="sec">📊 Drop Odds</div><p class="mut">Exact chances for every summon. Pity: a 5★ is guaranteed by Mystic/Featured summon #${PITY} (yours: <b id="oddsPity">${S.pity}/${PITY}</b>). Every 10× Mystic/Featured summon contains at least one 4★ or better. Starter Pack scrolls use the Mystic odds.</p>
- ${types.map(t=>{const rows=oddsRows(t);const tot=rows.reduce((a,r)=>a+r.p,0);return`<details ${t==='mystic'?'open':''} id="odds-${t}"><summary><b>${SCROLLS[t].i} ${SCROLLS[t].n}</b> · cost ${t==='mystic'?`💎${SUMMON_CR} or 1 scroll`:t==='featured'?`💎${FEAT_CR}`:'scroll only'}</summary>
+function oddsHtml(){const types=['mystic','featured','hh','common','radiant'];
+ return`<div class="card odds" id="oddsPanel"><div class="sec">📊 Drop Odds</div><p class="mut">Exact chances for every summon. Pity: a 5★ is guaranteed by Mystic/Featured summon #${PITY} (yours: <b id="oddsPity">${S.pity}/${PITY}</b>). Heaven &amp; Hell Scrolls have their own pity (yours: <b id="oddsPityHH">${S.pityHH||0}/${PITY}</b>). Every 10× Mystic, Featured or Heaven &amp; Hell summon contains at least one 4★ or better. Heaven &amp; Hell Scrolls pull Heaven/Hell only; every other scroll pulls Fire/Water/Wind only. Starter Pack scrolls use the Mystic odds.</p>
+ ${types.map(t=>{const rows=oddsRows(t);const tot=rows.reduce((a,r)=>a+r.p,0);return`<details ${t==='mystic'?'open':''} id="odds-${t}"><summary><b>${SCROLLS[t].i} ${SCROLLS[t].n}</b> · cost ${t==='mystic'?`💎${SUMMON_CR} or 1 scroll`:t==='featured'?`💎${FEAT_CR}`:'scroll only'} · ${scrollEls(t).map(e=>ELEM[e].i).join('')}</summary>
   <table class="rates">${rows.map(r=>`<tr><td>${starsHtml(r.st)} ${RNAME[r.st]}</td><td style="text-align:right" data-p="${r.p}">${r.p}%</td></tr><tr><td colspan="2" class="mut" style="font-size:12px">${Object.entries(r.per).map(([id,q])=>`${MD[id].n} ${(+q.toFixed(4))}%`).join(' · ')}</td></tr>`).join('')}<tr><td><b>Total</b></td><td style="text-align:right" class="otot"><b>${+tot.toFixed(4)}%</b></td></tr></table></details>`;}).join('')}</div>`;}
 /* purchase flow: (region) -> age gate -> parent approval (under 16) -> TEST MODE confirm -> grant */
 function packById(id){return id==='pass'?PASS:id==='starter'?STARTER:CR_PACKS.find(p=>p.id===id);}
@@ -4108,7 +4129,8 @@ function victory(){B.over=true;B.actor=null;renderBattle();sfx('win');setCam(nul
   if(E.id==='jelly'){jelly=2+tier;jellyStars=[2,3,4][tier];xp*=2;}
   if(E.id==='crystal'){R.gems+=[30,60,100][tier];if(Math.random()<[0.2,0.35,0.5][tier])R.mystic+=1;}
   S.stats.events++;prog('event');}
- grant({...R,jelly,jellyStars});const ess=essDrop(cfg),essT=essText(ess);
+ grant({...R,jelly,jellyStars});let hhMon=null;if(cfg.type==='campaign'&&Math.random()<HH_DROP){const hp=hhLowPool();if(hp.length){const d=pick(hp);hhMon=addMon(d.id,d.rar);}} // v1.6.0: 1-2★ Heaven/Hell story drop
+ const ess=essDrop(cfg),essT=essText(ess);
  const ups=B.allies.map(u=>{const m=u.m;const b=m.lvl;if(monByUid(m.uid))addXp(m,xp);return{m,b};});
  S.stats.wins++;prog('win');save();
  const R2={...R};if(jelly){R2.jelly=jelly;R2.jellyStars=jellyStars;}
@@ -4116,7 +4138,7 @@ function victory(){B.over=true;B.actor=null;renderBattle();sfx('win');setCam(nul
  const ov=document.createElement('div');ov.className='b-over';
  ov.innerHTML=`<div class="modal"><div class="vtitle" style="color:#ffd166">VICTORY!</div><div class="vstars">${[1,2,3].map(i=>i<=stars?'★':'<span class="no">★</span>').join('')}</div>
  ${first?'<div class="tag live" style="margin:4px">FIRST CLEAR!</div>':''}<p style="margin:6px 0"><b>${rewardText(R2)}</b></p>
- ${extraMsg?`<div class="tag live" style="margin:4px">${extraMsg}</div>`:''}${essT?`<div class="vess" id="vEss">🧪 Essences: ${essT}</div>`:''}${runes.length?`<div class="vrunes" id="vRunes"><div class="mut">💠 Rune drop${runes.length>1?'s':''}:</div>${runes.map(runeLine).join('')}</div>`:''}
+ ${extraMsg?`<div class="tag live" style="margin:4px">${extraMsg}</div>`:''}${hhMon?`<div class="vhh" id="vHH">🌗 Monster drop: ${spi(hhMon.id)} <b>${MD[hhMon.id].n}</b> ${starsHtml(hhMon.stars)}</div>`:''}${essT?`<div class="vess" id="vEss">🧪 Essences: ${essT}</div>`:''}${runes.length?`<div class="vrunes" id="vRunes"><div class="mut">💠 Rune drop${runes.length>1?'s':''}:</div>${runes.map(runeLine).join('')}</div>`:''}
  <div class="mut" style="margin-top:6px">+${xp} XP each</div><div class="lvlrow">${ups.map(({m,b})=>`<div>${avHtml(artId(m),40,'',m.stars,m.lvl>b?'cheer':'idle')}${m.lvl>b?`<span class="up">Lv ${b} ➜ ${m.lvl} ⬆️</span>`:`Lv ${m.lvl}${m.lvl>=maxLvl(m)?' MAX':''}`}</div>`).join('')}</div>
  <div class="row-btns c"><button class="btn ghost" id="bBack" onclick="exitBattle()">Back</button><button class="btn" id="bReplay" onclick="startBattle(${cfgCall(cfg)})">↻ Replay${cfg.en?' · ⚡'+cfg.en:''}</button>${nextBtn}</div></div>`;
  later(()=>{const bt=$('#battle');if(bt)bt.appendChild(ov);},600);}
