@@ -699,6 +699,66 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
 @media (hover:hover){.mc.unown:hover{filter:brightness(.6) saturate(.7)}}
 .rline{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;margin:6px 0;padding:6px 9px;border-radius:9px;background:#0006;font-size:13px;color:#fff}.rline b{color:#ffe48a}.rline .rel{margin-left:auto;letter-spacing:2px}
 .vhh{margin:6px auto;padding:6px 10px;border-radius:10px;background:linear-gradient(135deg,#d9a93a55,#7a4bd655);display:inline-block}
+
+/* =================== v1.6.2 REAR CAMERA BATTLE =================== */
+#battle.rear .b-field{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,.95fr) minmax(0,1.05fr);column-gap:0;overflow:visible}
+#battle.rear .brow{display:flex;justify-content:space-evenly;align-items:flex-end;gap:0;grid-column:1;position:relative;z-index:1}
+#battle.rear .brow.enemy{grid-row:2;align-items:center;padding:0 4%}
+#battle.rear .brow.ally{grid-row:3;padding:0 3% 2px}
+#battle.rear .unit{flex:1 1 0;max-width:none;align-self:auto}
+#battle.rear .unit.boss{flex:1.7 1 0}
+#battle.rear .brow.ally .unit:nth-child(even){translate:0 -12%}
+#battle.rear .brow.enemy .unit:nth-child(even){translate:0 -10%}
+#battle.rear .brow.ally .unit .fl{transform:none}
+#battle.rear .brow.ally .unit .shd{bottom:-1%;height:15%;left:10%;right:10%}
+#battle.rear .rfwrap{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+#battle.rear .rfloor{position:absolute;left:-25%;right:-25%;top:18%;bottom:-6%;transform:perspective(520px) rotateX(50deg);transform-origin:50% 100%;pointer-events:none;z-index:0;
+ background:repeating-linear-gradient(90deg,#ffffff16 0 1px,transparent 1px 7.5%),repeating-linear-gradient(0deg,#ffffff12 0 1px,transparent 1px 9%),linear-gradient(#ffffff08,#ffffff1c);
+ -webkit-mask:linear-gradient(transparent,#000 22%);mask:linear-gradient(transparent,#000 22%);border-radius:40% 40% 0 0}
+#battle.rear .rfloor i{position:absolute;border-radius:50%}
+#battle.rear .rf-e{left:30%;right:30%;top:14%;height:24%;border:2px solid #ff5a7a66;box-shadow:0 0 18px #ff5a7a33 inset}
+#battle.rear .rf-a{left:22%;right:22%;bottom:6%;height:30%;border:2px solid #5ad0ff66;box-shadow:0 0 18px #5ad0ff33 inset}
+#battle.rear .rf-s{left:0;right:0;top:52%;height:3%;border-radius:0;background:linear-gradient(90deg,transparent,#c9a8ff88 30%,#fff9 50%,#c9a8ff88 70%,transparent);filter:blur(1px)}
+#battle.rear .plate{padding:3px 3px 2px;border-width:1.5px;border-radius:8px;width:auto;min-width:0;max-width:calc(var(--sz,64px)*1.2);margin:0 auto}
+#battle.rear .unit .un{font-size:9.5px}#battle.rear .unit .un b{font-size:8.5px}
+#battle.rear .bar.hp{height:9px;margin-top:1px}#battle.rear .hpt{font-size:8px;line-height:9px}
+#battle.rear .bar.atb{height:3px}
+#battle.rear .plate .pst{font-size:8px;line-height:10px;top:-7px}
+#battle.rear .brow.enemy .plate{max-width:calc(var(--sz,64px)*1.45)}
+#battle.rear .unit .uadv{font-size:9px}
+#battle.rear .b-msg{position:relative;z-index:2}
+@media (prefers-reduced-motion:reduce){#battle.rear .rfloor{transform:none;opacity:.5}}
+
+/* =================== v1.6.2 MONSTER STAGE =================== */
+.mstage{position:relative;clear:both;height:min(300px,46vh);min-height:230px;margin:-38px -4px 8px;border-radius:16px;overflow:hidden;touch-action:pan-y;isolation:isolate}
+.mstage .ms-bg{position:absolute;inset:0;background:radial-gradient(120% 75% at 50% 66%,color-mix(in srgb,var(--elc) 55%,#000) 0%,#1a1030 58%,#0d0820 100%)}
+.mstage .ms-rays{position:absolute;left:50%;top:64%;width:620px;height:620px;margin:-310px 0 0 -310px;border-radius:50%;opacity:.32;background:repeating-conic-gradient(color-mix(in srgb,var(--elc) 35%,transparent) 0 6deg,transparent 6deg 18deg);-webkit-mask:radial-gradient(#000 8%,transparent 62%);mask:radial-gradient(#000 8%,transparent 62%);animation:msspin 44s linear infinite;will-change:transform}
+@keyframes msspin{to{transform:rotate(360deg)}}
+.mstage .ms-motes i{position:absolute;bottom:22%;width:5px;height:5px;border-radius:50%;background:var(--elc);box-shadow:0 0 8px var(--elc);opacity:0;animation:msmote 5s linear infinite}
+.mstage .ms-motes i:nth-child(1){left:14%;animation-delay:-.4s}.mstage .ms-motes i:nth-child(2){left:26%;animation-delay:-2.1s}.mstage .ms-motes i:nth-child(3){left:38%;animation-delay:-3.6s}.mstage .ms-motes i:nth-child(4){left:52%;animation-delay:-1.2s}
+.mstage .ms-motes i:nth-child(5){left:64%;animation-delay:-4.4s}.mstage .ms-motes i:nth-child(6){left:74%;animation-delay:-2.8s}.mstage .ms-motes i:nth-child(7){left:84%;animation-delay:-.9s}.mstage .ms-motes i:nth-child(8){left:46%;animation-delay:-3.1s}
+@keyframes msmote{10%{opacity:.9}100%{transform:translateY(-170px);opacity:0}}
+.mstage .ms-ped{position:absolute;left:50%;bottom:64px;width:min(230px,62%);height:90px;transform:translateX(-50%)}
+.mstage .ms-ped i{position:absolute;left:0;right:0}
+.mstage .ms-lit{bottom:40px;left:14%!important;right:14%!important;height:230px;background:linear-gradient(to top,color-mix(in srgb,var(--elc) 45%,transparent),transparent);clip-path:polygon(16% 100%,84% 100%,100% 0,0 0);opacity:.32}
+.mstage .ms-face{top:30px;height:42px;border-radius:0 0 50% 50%/0 0 100% 100%;background:linear-gradient(90deg,#1b1233,#3d2c66 45%,#1b1233)}
+.mstage .ms-top{top:0;height:62px;border-radius:50%;background:radial-gradient(60% 60% at 50% 40%,#8a78b8,#4a3a78 70%,#2e2250);box-shadow:0 0 0 3px color-mix(in srgb,var(--elc) 70%,#fff),0 0 24px var(--elc)}
+.mstage .ms-gly{top:9px;height:44px;left:14%!important;right:14%!important;border-radius:50%;border:2px dashed color-mix(in srgb,var(--elc) 70%,#fff);opacity:.55;animation:msspin 20s linear infinite reverse}
+.mstage .ms-mon{position:absolute;left:50%;bottom:92px;width:min(190px,52%);aspect-ratio:120/128;transform:translateX(-50%);cursor:pointer;z-index:2}
+.mstage .ms-sh{position:absolute;left:22%;right:22%;bottom:-6px;height:18px;border-radius:50%;background:radial-gradient(closest-side,#000c,#0000);animation:mssh 3s ease-in-out infinite}
+@keyframes mssh{50%{transform:scale(.85);opacity:.7}}
+.mstage .ms-b{position:absolute;inset:0;animation:msbob 3s ease-in-out infinite}
+@keyframes msbob{50%{transform:translateY(-9px)}}
+.mstage .ms-b img.sp{position:absolute;inset:0;width:100%;height:100%}
+.mstage.unown .ms-b img.sp{filter:brightness(.32) saturate(.45) contrast(1.1)}
+.mstage.unown .ms-rays,.mstage.unown .ms-motes{opacity:.12}
+.mstage .ms-arr{position:absolute;top:38%;width:44px;height:56px;border-radius:12px;background:#0006;border:1px solid #fff3;color:#fff;font-size:24px;z-index:3;cursor:pointer;display:grid;place-items:center}
+.mstage .ms-arr.l{left:6px}.mstage .ms-arr.r{right:6px}
+.mstage .ms-info{position:absolute;left:0;right:0;bottom:4px;text-align:center;z-index:3;text-shadow:0 2px 4px #000}
+.mstage .ms-info h3{font-size:22px;margin:0}
+.mhead.mh2{margin-bottom:6px}
+@media (prefers-reduced-motion:reduce){.mstage .ms-rays,.mstage .ms-b,.mstage .ms-sh,.mstage .ms-motes i,.mstage .ms-gly{animation:none!important}}
+@media (orientation:landscape) and (max-height:540px){.mstage{height:200px;min-height:0}.mstage .ms-mon{width:110px;bottom:60px}.mstage .ms-ped{bottom:40px;height:60px;width:160px}}
 </style>
 </head>
 <body>
@@ -721,7 +781,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.6.1';
+const VERSION='1.6.2';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -1643,6 +1703,10 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.6.2',date:'Oct 21, 2026',title:'🎥 New Battle Camera & Monster View',sections:[
+  ['🎥 Battle Camera',['Battles are now seen from behind your team: your monsters line up across the bottom, shown from the back, and the enemy team faces you across a tilted arena floor.','Attackers dash up the field to their target and shrink or grow with distance; big hits and critical hits give the screen a small shake.','Name plates and HP bars are more compact so every monster stays in view, and the turn bar still shows who acts next.']],
+  ['🖼️ Monster View',['Opening a monster now shows it big on a lit pedestal with its element glow, a shadow and a gentle idle animation. Tap it to see its attack pose.','Use the arrows (or swipe) to step to the next monster, in your Monsters list and in the Monsterpedia.','Monsterpedia entries you do not own yet are still drawn dark.']],
+  ['⚙️ Settings',['Turning effects off, Reduce Motion and fast-forward still skip the extra motion.']]]},
  {v:'1.6.1',date:'Oct 20, 2026',title:'💠 Rune & Dungeon Rework',sections:[
   ['💠 Rune Sets',['All 12 rune sets have new names and retuned bonuses: Heartwood (HP +12%), Ironbark (DEF +12%), Falcon (Crit Chance +10%), Lodestar (Accuracy +18%), Anchor (Resist +18%), Haven (Immunity for 2 turns at the start of battle), Quickstep (SPD +22%), Emberedge (Crit Damage +35%), Fang (ATK +30%), Tempo (18% extra-turn chance), Sapdrinker (heal 30% of damage dealt), Gongstrike (20% Stun chance).','Rune grades are now Plain, Charged, Gleaming, Exalted and Astral.','Slots 1, 3 and 5 now offer a choice of flat main stat: slot 1 ATK or HP, slot 3 DEF or ATK, slot 5 HP or DEF.','Rune main stats and substat rolls have been rebalanced.']],
   ['🏰 Dungeons',['The Rune Dungeons are now the Golem Bastion (Heartwood, Ironbark, Anchor, Quickstep, Fang), the Wyrm Hollow (Tempo, Falcon, Emberedge) and the Marrow Grove (Gongstrike, Sapdrinker, Lodestar, Haven).','The 100-floor tower is now the Rift Spire.']],
@@ -2643,10 +2707,13 @@ for(const id in LEVV){const hb=MD[id]&&MD[id].el==='hell';if(hb)LEVV[id].blk=1; 
 const AURA={fire:['#ff4d1f','#ffb03d'],water:['#1f8fff','#3de0d0'],wind:['#2fd16b','#f5e663'],heaven:['#ffffff','#ffd166'],hell:['#8a3dff','#12041f']};elAlias(AURA);
 function mixc(a,b,t){const p=x=>[1,3,5].map(i=>parseInt(x.substr(i,2),16));const A=p(a),B2=p(b);return'#'+A.map((v,i)=>Math.round(v+(B2[i]-v)*t).toString(16).padStart(2,'0')).join('');}
 const SPR={c:{}};
+function backWrap(svg){return svg.replace(/<svg([^>]*)>/,'<svg$1><defs><filter id="bkf"><feColorMatrix type="matrix" values=".55 0 0 0 0 0 .55 0 0 0 0 0 .6 0 0 0 0 0 1 0"/></filter></defs><g filter="url(#bkf)">').replace(/<\/svg>$/,'</g></svg>');}
 function sprSrc(id,face){const k=id+'|'+(face||'idle')+(ART[id]&&ART[id].svg&&SPR.still?'|s':'');return SPR.c[k]||(SPR.c[k]='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(sprSvg(id,face||'idle')));}
 const spi=id=>`<img class="spi" src="${sprSrc(id)}" alt="">`;
 function sprImg(id,face,cls){return`<img class="sp ${cls||''}" src="${sprSrc(id,face)}" alt="" draggable="false">`;}
-function sprSvg(id,face){if(ART[id]&&ART[id].svg)return ART[id].svg(face);
+// v1.6.2 rear camera: face 'b:<face>' draws the monster seen from behind (no face; tail, wings, cape, hair and shell come in front of the body)
+function sprSvg(id,face){let bk=false;if(face&&face.slice(0,2)==='b:'){bk=true;face=face.slice(2);}
+ if(ART[id]&&ART[id].svg)return bk?backWrap(ART[id].svg(face==='attack'||face==='hit'?face:'idle')):ART[id].svg(face);
  const a=ART[id]||{},d=MD[awBase(id)]||{el:'fire'};const [B,L,D]=a.p||['#9b8cff','#e0dbff','#5a4bb0'];const A=a.a||L,E=a.e||'#2a1640',boss=!!a.boss;
  const H=a.h||a.p,F=a.f||H[0];const OL=a.ol||mixc(D,'#140820',.6);const S=`stroke="${OL}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"`;
  const mir=s=>s+`<g transform="matrix(-1 0 0 1 120 0)">${s}</g>`;const hx=60,hy=boss?44:47,R=boss?27:29,fx=63,ey=hy+3;
@@ -2810,7 +2877,20 @@ function sprSvg(id,face){if(ART[id]&&ART[id].svg)return ART[id].svg(face);
   defs=defs.replace('</defs>',`<radialGradient id="aw"><stop offset="0" stop-color="#ffffff" stop-opacity=".9"/><stop offset=".45" stop-color="${a.awc}" stop-opacity=".55"/><stop offset="1" stop-color="${a.awc}" stop-opacity="0"/></radialGradient></defs>`);
   glow=`<ellipse cx="60" cy="${hy+18}" rx="58" ry="62" fill="url(#aw)" opacity="${ch||atk?.95:.75}"/>`;
   if(!a.rb)front+=[[14,26,3.2],[106,34,2.8],[102,98,2.4],[12,90,2.2],[88,2,2]].map(([x,y,r],i)=>`<path d="M${x} ${y-r*2} L${x+r*.45} ${y-r*.45} L${x+r*2} ${y} L${x+r*.45} ${y+r*.45} L${x} ${y+r*2} L${x-r*.45} ${y+r*.45} L${x-r*2} ${y} L${x-r*.45} ${y-r*.45}Z" fill="${i%2?'#ffffff':a.awc}"/>`).join('');}
- const content=glow+back+body+ears+head+top+faceS+front;
+ let content;
+ if(!bk)content=glow+back+body+ears+head+top+faceS+front;
+ else{const esc=x=>String(x).replace(/[.*+?^${}()|[\]\\#]/g,'\\$&');
+  // no belly / chest patches from behind
+  let bb=body.replace(new RegExp('<ellipse[^>]*fill="'+esc(L)+'" opacity="\\.85"/>','g'),'').replace(/<path d="M5[0-9] 8[0-9] q4 3 8 0[^"]*"[^>]*\/>/g,'');
+  const hairTop=TP.some(t=>t==='hair'||t==='hair2'||t==='hair3'||t==='hood')||BK.includes('hairback');
+  let tp=top.replace(new RegExp('<circle cx="[0-9.]+" cy="[0-9.]+" r="22" fill="'+esc(F)+'"/>','g'),'');
+  // back of the head: hair-coloured cap for haired monsters, otherwise the head colour with a soft nape shadow
+  const cap=isJ?'':`<ellipse cx="${hx}" cy="${hy}" rx="${R-1}" ry="${R-1}" fill="${hairTop?hair:'url(#h)'}" ${S}/>${hairTop?`<path d="M${hx-R+4} ${hy-6} Q${hx} ${hy-R-6} ${hx+R-4} ${hy-6}" stroke="${mixc(hair,'#ffffff',.35)}" stroke-width="2" fill="none" opacity=".7"/><path d="M${hx-10} ${hy-R+6} Q${hx-4} ${hy+8} ${hx-12} ${hy+R-4} M${hx+10} ${hy-R+6} Q${hx+4} ${hy+8} ${hx+12} ${hy+R-4}" stroke="${hairD}" stroke-width="1.6" fill="none" opacity=".7"/>`:''}`;
+  const nape=isJ?'':`<ellipse cx="${hx}" cy="${hy+R-6}" rx="${R-8}" ry="7" fill="#000" opacity=".18"/><path d="M${hx} ${hy+R} L${hx} ${hy+R+22}" stroke="#000" stroke-opacity=".16" stroke-width="3" stroke-linecap="round"/>`;
+  const keep=['bubbles','bolts','runes','spout','coins'];let fr='';
+  if(AC.some(x=>keep.includes(x))){const f0=front;fr=f0.split(/(?=<)/).filter(x=>!/#c9304a|pearl|#f4efe2|#ff8a3d|#6a8f2a/.test(x)).join('');}
+  // the back layer (tail, wings, cape, shell, back hair) sits nearest the camera, so it is drawn last
+  content=glow+bb+ears+head+cap+nape+tp+back+(AC.includes('scarf')||AC.includes('bowtie')||AC.includes('collar')||AC.includes('pearls')?'':fr);}
  return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -12 120 128">${defs}${a.ovk||''}${boss?`<g transform="translate(60 112) scale(1.04) translate(-60 -112)">${content}</g>`:content}${a.ovf||''}</svg>`;}
 
 /* ---------- custom sprites (ART[id].svg) ---------- */
@@ -3252,18 +3332,34 @@ function renderMonsters(){const sub=UI.monSub;
 function dexCardOld(d){return S.dex[d.id]?`<div class="mc r${d.rar} el-${d.el} ${d.th?d.th.cls:''}" data-id="${d.id}" onclick="openDex('${d.id}')">${avHtml(d.id,0,'',d.rar)}${starsHtml(d.rar)}<div class="nm">${d.n}</div></div>`:`<div class="mc r${d.rar}" data-id="${d.id}" onclick="toast('Not discovered yet! Keep summoning. 🌀')"><div class="av pf unknown ${frc(d.rar)}">${sprImg(d.id)}</div>${starsHtml(d.rar)}<div class="nm">???</div></div>`;}
 const dexOwn=(id,aw)=>S.mons.some(m=>m.id===id&&(!aw||m.aw));
 function dexCardHtml(d){if(d.uniq)return dexCardOld(d);const own=dexOwn(d.id);return`<div class="mc r${d.rar} el-${d.el} ${d.th?d.th.cls:''} ${own?'own':'unown'}" data-id="${d.id}" data-own="${own?1:0}" onclick="openDex('${d.id}')">${avHtml(d.id,0,'',d.rar)}${starsHtml(d.rar)}<div class="nm">${d.n}</div></div>`;}
-function dexAwCardHtml(d){if(!d||d.uniq||!canAwaken(d.id))return'';const own=dexOwn(d.id,1);return`<div class="mc dexaw r${d.rar} el-${d.el} ${own?'own':'unown'}" data-aw="${d.id}" data-own="${own?1:0}" onclick="openDex('${d.id}')">${avHtml(d.id+'_aw',0,'',d.rar)}${starsHtml(d.rar)}<div class="nm">✦ ${AWK[d.id].n}</div></div>`;}
+function dexAwCardHtml(d){if(!d||d.uniq||!canAwaken(d.id))return'';const own=dexOwn(d.id,1);return`<div class="mc dexaw r${d.rar} el-${d.el} ${own?'own':'unown'}" data-aw="${d.id}" data-own="${own?1:0}" onclick="openDex('${d.id}',1)">${avHtml(d.id+'_aw',0,'',d.rar)}${starsHtml(d.rar)}<div class="nm">✦ ${AWK[d.id].n}</div></div>`;}
 function dexLinesHtml(){const ek=Object.keys(ELEM),lines=LINES.slice().sort((a,b)=>MD[a].rar-MD[b].rar||ek.indexOf(MD[a].el)-ek.indexOf(MD[b].el));
  const rest=DEXLIST.filter(d=>!d.vof&&!LINES.includes(d.id)).sort((a,b)=>a.rar-b.rar);
  return lines.map(l=>{const vs=lineOf(l);const got=vs.filter(d=>S.dex[d.id]).length;return`<div class="dexline" data-line="${l}"><div class="dlh">${MD[l].n} line <span class="mut">${got}/${vs.length} found</span></div><div class="dlg">${ek.map(e=>{const d=vs.find(x=>x.el===e);return d?dexCardHtml(d):`<div class="mc soon el-${e}"><div class="soonx">${ELEM[e].i}</div><div class="nm">Coming soon</div></div>`;}).join('')}</div><div class="dlg2">${ek.map(e=>dexAwCardHtml(vs.find(x=>x.el===e))||'<div></div>').join('')}</div></div>`;}).join('')
   +(rest.length?`<div class="dexline"><div class="dlh">Others</div><div class="mgrid">${rest.map(dexCardHtml).join('')}</div>${rest.some(d=>dexAwCardHtml(d))?`<div class="awgrid">${rest.map(dexAwCardHtml).join('')}</div>`:''}</div>`:'');}
 function pasHtml(p){return`<div class="skill pas"><b>${p.i} ${p.n}</b><span class="cdtag pt">Passive</span><br>${p.d}</div>`;}
 function skillHtml(sk){const tgt={e:'Single enemy',ae:'All enemies',a:'Single ally',aa:'All allies',s:'Self'}[sk.t];return`<div class="skill"><b>${sk.i} ${sk.n}</b>${sk.every?'<span class="cdtag">♾️ Every turn</span>':sk.cd?`<span class="cdtag">⏳ Cooldown ${sk.cd}</span>`:'<span class="cdtag">Basic</span>'}<br>${sk.d}<br><span class="mut">🎯 ${tgt}${sk.fx.length?' · '+sk.fx.map(f=>FX[f[0]].i+' '+FX[f[0]].n).join(', '):''}</span></div>`;}
-function openDex(id){const d=MD[id];const b=baseStats(id,1,d.rar);
- openModal(`<div class="mhead el-${d.el}">${avHtml(d.id,0,'',d.rar)}<div><h3>${d.n}</h3>${starsHtml(d.rar)} <span class="mut">${RNAME[d.rar]} · ${ELEM[d.el].i} ${ELEM[d.el].n}</span><br><span class="mut">Leader: ${leadText(d.lead)}</span></div></div>${d.uniq?'':`<div class="mut ownline" style="margin:4px 0">${dexOwn(d.id)?'✅ In your collection':'🔒 Not in your collection yet'}${canAwaken(d.id)?(dexOwn(d.id,1)?' · ✦ Awakened form owned':' · ✦ Awakened form not owned yet'):''}</div>`}<p class="desc">"${d.desc}"</p>
- <table class="stat-t">${['hp','atk','def','spd'].map(k=>`<tr><td>${STATN[k]} (Lv1)</td><td>${b[k]}</td></tr>`).join('')}<tr><td>Crit Chance / Damage</td><td>${b.cr}% / ${b.cd}%</td></tr><tr><td>Resist / Accuracy</td><td>${b.res}% / ${b.acc}%</td></tr></table>${d.skills.map(skillHtml).join('')}${(d.passives||[]).map(pasHtml).join('')}${canAwaken(d.id)?awDexHtml(d.id):''}`,'dex');}
+function openDex(id,aw){closeModal('dex');const d=MD[id];const b=baseStats(id,1,d.rar);aw=!!aw&&!d.uniq&&canAwaken(id);
+ openModal(`${monStage(aw?id+'_aw':d.id,d.el,{unown:!d.uniq&&!dexOwn(d.id,aw?1:0),nav:d.uniq?'':`dexNav('${id}',${aw?1:0},`,title:`<h3>${aw?'✦ '+AWK[id].n:d.n}</h3>`,sub:`${aw?`<div class="mut">Awakened form of ${d.n}</div>`:''}${starsHtml(d.rar)}`})}<div class="mhead mh2 el-${d.el}"><div><span class="mut">${RNAME[d.rar]} · ${ELEM[d.el].i} ${ELEM[d.el].n}</span><br><span class="mut">Leader: ${leadText(d.lead)}</span></div></div>${d.uniq?'':`<div class="mut ownline" style="margin:4px 0">${dexOwn(d.id)?'✅ In your collection':'🔒 Not in your collection yet'}${canAwaken(d.id)?(dexOwn(d.id,1)?' · ✦ Awakened form owned':' · ✦ Awakened form not owned yet'):''}</div>`}<p class="desc">"${d.desc}"</p>
+ <table class="stat-t">${['hp','atk','def','spd'].map(k=>`<tr><td>${STATN[k]} (Lv1)</td><td>${b[k]}</td></tr>`).join('')}<tr><td>Crit Chance / Damage</td><td>${b.cr}% / ${b.cd}%</td></tr><tr><td>Resist / Accuracy</td><td>${b.res}% / ${b.acc}%</td></tr></table>${d.skills.map(skillHtml).join('')}${(d.passives||[]).map(pasHtml).join('')}${canAwaken(d.id)?awDexHtml(d.id):''}`,'dex');stageSwipe();}
+// v1.6.2 monster view: big monster on a lit stage (element glow, pedestal, shadow, idle bob); arrows / swipe step through the list
+function monStage(art,el,o){const c=(ELEM[el]&&ELEM[el].c)||'#9b8cff';o=o||{};
+ return`<div class="mstage el-${el} ${o.unown?'unown':''}" style="--elc:${c}"><div class="ms-bg"></div><div class="ms-rays"></div><div class="ms-motes">${'<i></i>'.repeat(8)}</div>
+ <div class="ms-ped"><i class="ms-lit"></i><i class="ms-face"></i><i class="ms-top"></i><i class="ms-gly"></i></div>
+ <div class="ms-mon" onclick="stagePoke(this,'${art}')"><div class="ms-sh"></div><div class="ms-b">${sprImg(art,'idle')}</div></div>
+ ${o.nav?`<button class="ms-arr l" aria-label="Previous monster" onclick="${o.nav}-1)">‹</button><button class="ms-arr r" aria-label="Next monster" onclick="${o.nav}1)">›</button>`:''}
+ <div class="ms-info">${o.title||''}${o.sub||''}</div></div>`;}
+function stagePoke(el,art){const im=el.querySelector('img.sp');if(!im)return;im.src=sprSrc(art,'attack');if(el.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches)el.animate([{transform:'none'},{transform:'translateY(-12px) scale(1.06)'},{transform:'none'}],{duration:420});setTimeout(()=>{im.src=sprSrc(art,'idle');},420);}
+function stageSwipe(){const st=document.querySelector('.modal .mstage');if(!st||st._sw)return;st._sw=1;let x0=null;
+ st.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+ st.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<45)return;const b=st.querySelector(dx<0?'.ms-arr.r':'.ms-arr.l');if(b)b.click();},{passive:true});}
+function monNavList(){return S.mons.filter(m=>MD[m.id]);}
+function monNav(uid,dir){const L=monNavList();if(!L.length)return;const i=L.findIndex(m=>m.uid===uid);const n=L[(i+dir+L.length)%L.length];if(n)openMon(n.uid);}
+// Monsterpedia: every non-unique entry (and its awakened form) in book order
+function dexNavList(){const o=[];DEXLIST.filter(d=>!d.uniq&&!d.vof).forEach(d=>{o.push([d.id,0]);if(canAwaken(d.id))o.push([d.id,1]);});return o;}
+function dexNav(id,aw,dir){const L=dexNavList();const i=L.findIndex(x=>x[0]===id&&x[1]===aw);const n=L[(i+dir+L.length)%L.length];if(n)openDex(n[0],n[1]);}
 function openMon(uid){const m=monByUid(uid);if(!m)return;closeModal('mon');const d=MD[m.id];const st=monStats(m);const ml=maxLvl(m);const ti=S.team.indexOf(uid);
- openModal(`<div class="mhead el-${d.el}">${avHtml(artId(m),0,'',m.stars)}<div style="flex:1;min-width:0"><h3 id="monName">${monName(m)}${m.aw?` <span class="awbadge">✦ Awakened</span>`:''}</h3>${m.aw?`<div class="mut" style="margin-top:-4px">Awakened from ${d.n}</div>`:''}${starsHtml(m.stars)} <span class="mut">${d.th?`<b class="uqtag">${d.th.t}</b> · Unique`:'Natural '+d.rar+'★ '+RNAME[d.rar]} · ${ELEM[d.el].n}</span>
+ openModal(`${monStage(artId(m),d.el,{nav:`monNav(${uid},`,title:`<h3 id="monName">${monName(m)}${m.aw?` <span class="awbadge">✦ Awakened</span>`:''}</h3>`,sub:`${m.aw?`<div class="mut">Awakened from ${d.n}</div>`:''}${starsHtml(m.stars)}`})}<div class="mhead mh2 el-${d.el}"><div style="flex:1;min-width:0"><span class="mut">${d.th?`<b class="uqtag">${d.th.t}</b> · Unique`:'Natural '+d.rar+'★ '+RNAME[d.rar]} · ${ELEM[d.el].n}</span>
   <div class="mut" style="margin-top:4px">Lv <b>${m.lvl}</b> / ${ml} · Power <b>${fmt(power(m))}</b></div><div class="xpbar"><i style="width:${m.lvl>=ml?100:m.xp/xpNeed(m.lvl)*100}%"></i></div><div class="mut">${m.lvl>=ml?(m.stars>=6?'MAX LEVEL — fully ascended ✨':'MAX LEVEL — ready to Star Up!'):`XP ${m.xp}/${xpNeed(m.lvl)}`}</div></div></div>
  <p class="desc">"${d.desc}"</p>
  <div class="row-btns"><button class="btn" id="btnRunes" onclick="openRuneSlot(${uid},1)">💠 Runes</button><button class="btn green" id="btnPower" onclick="openPowerUp(${uid})" ${m.lvl>=ml&&!skCan(m)?'disabled':''}>⬆️ Power Up</button><button class="btn gold" id="btnStar" onclick="openStarUp(${uid})" ${m.stars>=6?'disabled':''}>⭐ Star Up</button>${canAwaken(m.id)&&!m.aw?`<button class="btn awk" id="btnAwaken" onclick="openAwaken(${uid})">🌟 Awaken</button>`:''}
@@ -3271,7 +3367,7 @@ function openMon(uid){const m=monByUid(uid);if(!m)return;closeModal('mon');const
  ${statPanelHtml(st)}
  ${monRunesHtml(m,st)}
  <div class="sec">👑 Leader Skill</div><p class="mut">${leadText(d.lead)}</p>
- <div class="sec">📖 Skills</div>${d.skills.map(skillHtml).join('')}${(d.passives||[]).map(pasHtml).join('')}${d.extra?d.extra(m):''}${m.aw&&canAwaken(m.id)?`<div class="skill pas awsk"><b>🌟 Awakening bonus</b><br>${awSkText(m.id)}</div>`:''}`,'mon');}
+ <div class="sec">📖 Skills</div>${d.skills.map(skillHtml).join('')}${(d.passives||[]).map(pasHtml).join('')}${d.extra?d.extra(m):''}${m.aw&&canAwaken(m.id)?`<div class="skill pas awsk"><b>🌟 Awakening bonus</b><br>${awSkText(m.id)}</div>`:''}`,'mon');stageSwipe();}
 function toggleLock(uid){const m=monByUid(uid);if(!m)return;if(MD[m.id].uniq){m.lock=true;toast('⛓️ This monster is bound to you forever.');return;}m.lock=!m.lock;save();openMon(uid);render();}
 function fodderXp(f){let x=40*f.stars*f.stars+f.lvl*25;if(f.id==='jellybop')x*=6;return x;}
 let PK=null;
@@ -3864,18 +3960,18 @@ function startBattle(cfg){const team=S.team.map(monByUid).filter(Boolean);
  if(!team.length){closeAllModals();toast('Pick a team first! 🛡️');setTab('team');return;}
  if(cfg.en&&!spendEnergy(cfg.en))return;
  closeAllModals();if(B)B.closed=true;const oldB=$('#battle');if(oldB)oldB.remove();
- B={cfg,uc:0,wave:0,allies:[],enemies:[],speed:S.settings.speed,auto:S.settings.auto,over:false,deaths:0,awaiting:false,actor:null,sel:0,closed:false};
+ B={rear:true,cfg,uc:0,wave:0,allies:[],enemies:[],speed:S.settings.speed,auto:S.settings.auto,over:false,deaths:0,awaiting:false,actor:null,sel:0,closed:false};
  B.allies=team.map(m=>mkUnit('p',{id:m.id,m}));
  const lead=MD[team[0].id].lead;B.reap=null;
  if(lead)B.allies.forEach(u=>{if(['cr','cd','res','acc'].includes(lead.s))u[lead.s]+=lead.v;else{u[lead.s]+=Math.round(u.b[lead.s]*lead.v/100);if(lead.s==='hp')u.maxHp=u.hp;}}); // leader: % of BASE stats
  B.allies.forEach(u=>{if(u.will)u.fx.push({id:'immune',t:2,fresh:false});}); // Haven set (id 'will')
  S.stats.battles++;save();
- const el=document.createElement('div');el.id='battle';
+ const el=document.createElement('div');el.id='battle';el.className='rear';
  el.innerHTML=`${sceneHtml(cfg,S.settings.vfx===false)}
  <div class="b-top"><button class="btn sm ghost" id="bFlee" aria-label="Retreat" onclick="fleeBattle()">🏳️<span class="lbl"> Retreat</span></button><div class="wave"><div style="font-size:11px;opacity:.85">${cfg.name}</div><span id="bWave"></span></div>
  <div style="display:flex;gap:6px"><button class="btn sm" id="bAuto" aria-label="Auto battle" onclick="toggleAuto()"></button><button class="btn sm" id="bSpeed" aria-label="Battle speed" onclick="cycleSpeed()"></button></div></div>
  <div class="b-order" id="bOrder" aria-label="Turn order"></div>
- <div class="b-field" id="bField"><div class="brow enemy" id="bEnemies"></div><div class="b-msg" id="bMsg">${lead?`👑 Leader: ${leadText(lead)}`:''}</div><div class="brow ally" id="bAllies"></div></div>
+ <div class="b-field" id="bField"><div class="rfwrap" aria-hidden="true"><div class="rfloor"><i class="rf-e"></i><i class="rf-s"></i><i class="rf-a"></i></div></div><div class="brow enemy" id="bEnemies"></div><div class="b-msg" id="bMsg">${lead?`👑 Leader: ${leadText(lead)}`:''}</div><div class="brow ally" id="bAllies"></div></div>
  <div class="b-bottom"><div class="b-skills" id="bSkills"></div><div class="b-desc" id="bDesc"></div></div>`;
  document.body.appendChild(el);const scn=el.querySelector('.scene');if(scn)scn.insertAdjacentHTML('beforeend','<div class="dk"></div>');vxSetup(el);ambStart(el);sprPreload(cfg,team);
  const sa=slotCls(B.allies);$('#bAllies').innerHTML=B.allies.map(u=>unitHtml(u,sa.get(u))).join('');
@@ -3886,12 +3982,18 @@ function slotCls(list){const bi=list.findIndex(u=>u.boss),m=new Map();
  const L=[['sfs'],['sf1','sb2'],['sf1','sbs','sf2'],['sf1','sb1','sf2','sb2']][Math.min(4,list.length)-1]||[];list.forEach((u,i)=>m.set(u,L[i]||'sb2'));return m;}
 function unitHtml(u,slot){const a=ART[u.art||u.id]||{},r=Math.random(),fly=!!a.wings||(a.body==='none'&&a.head!=='jelly'),jig=a.head==='jelly';
  return`<div class="unit el-${u.el} ${MD[u.id]&&MD[u.id].xl?'xl':''} ${u.boss?'boss':''} ${u.th?u.th.cls:''} ${u.side==='e'?'en':'al'} ${slot||''}" id="u${u.bid}" onclick="tapUnit(${u.bid})"><span class="uadv"></span>
- <div class="av"><div class="aura" style="animation-delay:${(-r*2.4).toFixed(2)}s"></div><div class="shd"></div><div class="mv"><div class="bd${fly?' fly':jig?' jig':''}" style="animation-delay:${(-r*3).toFixed(2)}s;animation-duration:${(2.3+r*.9).toFixed(2)}s"><div class="br${u.boss||u.th?' hv':''}" style="--bdl:${(-Math.random()*4).toFixed(2)}s;--bdu:${((u.boss||u.th?3.6:2.6)+Math.random()*(u.boss||u.th?.9:1)).toFixed(2)}s"><div class="fl" style="animation-delay:${(-r*1.9).toFixed(2)}s;animation-duration:${(1.7+r*.6).toFixed(2)}s"><img class="sp" src="${sprSrc(u.art||u.id)}" alt="" draggable="false"><img class="sp bl" src="${sprSrc(u.art||u.id,'blink')}" alt="" draggable="false" style="animation-delay:${(-Math.random()*5).toFixed(2)}s;animation-duration:${(3.4+Math.random()*2.6).toFixed(2)}s"></div></div></div></div><span class="elb">${ELEM[u.el].i}</span></div>
+ <div class="av"><div class="aura" style="animation-delay:${(-r*2.4).toFixed(2)}s"></div><div class="shd"></div><div class="mv"><div class="bd${fly?' fly':jig?' jig':''}" style="animation-delay:${(-r*3).toFixed(2)}s;animation-duration:${(2.3+r*.9).toFixed(2)}s"><div class="br${u.boss||u.th?' hv':''}" style="--bdl:${(-Math.random()*4).toFixed(2)}s;--bdu:${((u.boss||u.th?3.6:2.6)+Math.random()*(u.boss||u.th?.9:1)).toFixed(2)}s"><div class="fl" style="animation-delay:${(-r*1.9).toFixed(2)}s;animation-duration:${(1.7+r*.6).toFixed(2)}s"><img class="sp" src="${uSrc(u)}" alt="" draggable="false"><img class="sp bl" src="${sprSrc(u.art||u.id,'blink')}" alt="" draggable="false" style="animation-delay:${(-Math.random()*5).toFixed(2)}s;animation-duration:${(3.4+Math.random()*2.6).toFixed(2)}s"></div></div></div></div><span class="elb">${ELEM[u.el].i}</span></div>
  <div class="plate ${frx(u.id,u.stars)}"><div class="pst">${'★'.repeat(Math.max(1,Math.min(6,u.stars)))}</div><div class="un">${u.boss?'⚠️':''}<b>Lv${u.lvl}</b>${u.n}</div><div class="bar hp"><i class="gh"></i><i class="hpf"></i><span class="hpt"></span></div><div class="bar atb"><i></i></div></div><div class="ufx"></div></div>`;}
-function sprPreload(cfg,team){const ids=new Set(team.map(m=>artId(m)));cfg.waves.forEach(w=>w.forEach(x=>ids.add(x.id)));B.pre=[];
+// v1.6.2 rear camera: your team is drawn from behind
+const uSrc=(u,f)=>sprSrc(u.art||u.id,(u.side==='p'&&B&&B.rear?'b:':'')+(f||'idle'));
+function sprPreload(cfg,team){const ids=new Set(team.map(m=>artId(m)));if(B&&B.rear)team.forEach(m=>['idle','attack','hit','ko'].forEach(f=>{const im=new Image();im.src=sprSrc(artId(m),'b:'+f);}));cfg.waves.forEach(w=>w.forEach(x=>ids.add(x.id)));B.pre=[];
  ids.forEach(id=>['idle','blink','attack','hit','ko','cheer'].forEach(f=>{const im=new Image();im.src=sprSrc(id,f);if(im.decode)im.decode().catch(()=>{});B.pre.push(im);}));}
 // size sprites to the space actually available (portrait / landscape / desktop)
 function fitUnits(){const f=$('#bField'),A=$('#bAllies'),E=$('#bEnemies');if(!f||!A||!E)return;const pl=f.querySelector('.plate');const ph=(pl?pl.offsetHeight:44)+2;
+ if(B&&B.rear){const ra=A.getBoundingClientRect(),re=E.getBoundingClientRect();if(!ra.height||!re.height)return;const nA=Math.max(2,A.children.length),nE=Math.max(2,E.children.length),hb=E.classList.contains('hb');
+  const sa=Math.max(30,Math.min(ra.width/nA*.84,(ra.height-ph)/1.067*.92,150)),se=Math.max(28,Math.min(re.width/(hb?nE+.8:nE)*.8,(re.height-ph)/1.067*.92,sa*.8,124));
+  const szb=Math.max(se,Math.min(re.width*.5,(re.height-ph)/1.067*.95,sa*1.25,200));
+  A.style.setProperty('--sz',Math.floor(sa)+'px');E.style.setProperty('--sz',Math.floor(se)+'px');E.style.setProperty('--szb',Math.floor(szb)+'px');return;}
  const ra=A.getBoundingClientRect(),re=E.getBoundingClientRect();if(!ra.height||!re.height)return;const hb=E.classList.contains('hb');
  const fit=(cw,h)=>Math.max(30,Math.min(cw*.96,(h-ph+5)/1.067,136));const rowH=Math.min(ra.height,re.height)/2-4;
  const sa=fit(ra.width/2-3,rowH),se=fit((hb?re.width*.8/2.1:re.width/2)-3,rowH);
@@ -3910,7 +4012,7 @@ function float(u,text,cls,idx){const c=cardOf(u),f=$('#bField');if(!c||!f)return
 const noMo=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mvOf=u=>{const c=cardOf(u);return c&&c.querySelector('.mv');};
 function setFace(u,f,ms){const c=cardOf(u),im=c&&c.querySelector('img.sp');if(!im)return;clearTimeout(u._ft);
- const set=x=>{const src=sprSrc(u.art||u.id,x);if(im.getAttribute('src')!==src)im.src=src;c.classList.toggle('busy',x!=='idle');};set(u.hp<=0?'ko':f);
+ const set=x=>{const src=uSrc(u,x);if(im.getAttribute('src')!==src)im.src=src;c.classList.toggle('busy',x!=='idle');};set(u.hp<=0?'ko':f);
  if(ms&&u.hp>0)u._ft=setTimeout(()=>{if(cardOf(u)===c)set(u.hp<=0?'ko':'idle');},ms/(B?B.speed:1));}
 function moveAnim(u,kf,dur,opt){const m=mvOf(u);if(!m||!m.animate||noMo())return null;const c=cardOf(u);c.classList.add('acting');
  const a=m.animate(kf,Object.assign({duration:dur/(B?B.speed:1),easing:'ease-out'},opt||{}));a.onfinish=()=>c.classList.remove('acting');return a;}
@@ -3919,22 +4021,25 @@ function avRect(u){const c=cardOf(u),a=c&&c.querySelector('.av');return a&&a.get
 // melee: wind-up → lunge (arrives at HIT) → hold for extra hits → recoil home
 function dashAnim(u,t,hits){const A=avRect(u),T=avRect(t);if(!A||!T||u===t)return castAnim(u);
  let dx=T.left+T.width/2-(A.left+A.width/2),dy=(T.bottom-A.bottom)*.9;const dist=Math.hypot(dx,dy)||1,k=Math.max(0,1-(T.width*.42)/dist);dx*=k;dy*=k;
- const back=dx>0?-10:10,hold=Math.min(260,((hits||1)-1)*110),D=560+hold,o=x=>x/D;
- moveAnim(u,[{transform:'none'},{transform:`translate(${back}px,2px) scale(1.1,.88)`,offset:o(120)},{transform:`translate(${dx*.5}px,${dy*.5-16}px) scale(.92,1.08)`,offset:o(200)},
-  {transform:`translate(${dx}px,${dy}px) scale(1.12,.9)`,offset:o(272)},{transform:`translate(${dx*.96}px,${dy}px) scale(1)`,offset:o(310+hold)},
-  {transform:`translate(${dx*.4}px,${dy*.4-14}px) scale(.95,1.05)`,offset:o(430+hold)},{transform:'scale(1.08,.92)',offset:o(515+hold)},{transform:'none'}],D,{easing:'linear'});}
+ const ds=B&&B.rear?Math.max(.55,Math.min(1.7,T.width/A.width)):1,dm=(1+ds)/2;if(B&&B.rear){dy=(T.bottom-A.bottom)*k+T.height*.12;}const back=B&&B.rear?0:dx>0?-10:10,hold=Math.min(260,((hits||1)-1)*110),D=560+hold,o=x=>x/D;
+ moveAnim(u,[{transform:'none'},{transform:`translate(${back}px,2px) scale(1.1,.88)`,offset:o(120)},{transform:`translate(${dx*.5}px,${dy*.5-16}px) scale(${.92*dm},${1.08*dm})`,offset:o(200)},
+  {transform:`translate(${dx}px,${dy}px) scale(${1.12*ds},${.9*ds})`,offset:o(272)},{transform:`translate(${dx*.96}px,${dy}px) scale(${ds})`,offset:o(310+hold)},
+  {transform:`translate(${dx*.4}px,${dy*.4-14}px) scale(${.95*(1+(ds-1)*.4)},${1.05*(1+(ds-1)*.4)})`,offset:o(430+hold)},{transform:'scale(1.08,.92)',offset:o(515+hold)},{transform:'none'}],D,{easing:'linear'});}
 // pounce: the sprite itself arcs onto the target (the canvas draws only its trail)
 function leapAnim(u,t){const A=avRect(u),T=avRect(t);if(!A||!T)return castAnim(u);const dx=T.left+T.width/2-(A.left+A.width/2),dy=T.top+T.height/2-(A.top+A.height/2);
  const ay=Math.min(0,dy)-70*VX.k,kf=[{transform:'scale(1.1,.86)',offset:0}];
  for(const p of [.2,.4,.6,.8,1]){const q=p*p,x=q*q*dx+2*(1-q)*q*dx/2,y=2*(1-q)*q*ay+q*q*dy;kf.push({transform:`translate(${x}px,${y}px) rotate(${(dx>0?1:-1)*(p<1?-12+p*30:0)}deg)`,offset:p*HIT/720});}
  kf.push({transform:`translate(${dx*.75}px,${dy*.6-36}px) scale(.95,1.05)`,offset:(HIT+180)/720},{transform:'scale(1.12,.88)',offset:(HIT+380)/720},{transform:'none',offset:1});moveAnim(u,kf,720,{easing:'linear'});}
 // ranged / AoE / support: lean into the cast
-function castAnim(u,sup){const d=u.side==='p'?1:-1;return sup?hopAnim(u,18,520):moveAnim(u,[{transform:'none'},{transform:`translate(${-7*d}px,1px) scale(1.06,.92) rotate(${-4*d}deg)`,offset:.3},{transform:`translate(${9*d}px,-6px) scale(.96,1.06) rotate(${5*d}deg)`,offset:.55},{transform:`translate(${4*d}px,0)`,offset:.75},{transform:'none'}],560);}
+function castAnim(u,sup){const d=u.side==='p'?1:-1;if(!sup&&B&&B.rear)return moveAnim(u,[{transform:'none'},{transform:`translateY(${4*d}px) scale(1.07,.9)`,offset:.3},{transform:`translateY(${-16*d}px) scale(.95,1.07)`,offset:.55},{transform:`translateY(${-6*d}px)`,offset:.75},{transform:'none'}],560);return sup?hopAnim(u,18,520):moveAnim(u,[{transform:'none'},{transform:`translate(${-7*d}px,1px) scale(1.06,.92) rotate(${-4*d}deg)`,offset:.3},{transform:`translate(${9*d}px,-6px) scale(.96,1.06) rotate(${5*d}deg)`,offset:.55},{transform:`translate(${4*d}px,0)`,offset:.75},{transform:'none'}],560);}
 function hitAnim(t){const c=cardOf(t);if(!c)return;const s=B?B.speed:1,fl=c.querySelector('.fl');
  if(fl&&fl.animate)fl.animate([{filter:'brightness(2.6) saturate(.3)'},{filter:'brightness(1.5)',offset:.4},{filter:'none'}],{duration:260/s});
- setFace(t,'hit',420);if(t.hp>0&&!t._sink){const d=t.side==='p'?-1:1;moveAnim(t,[{transform:'none'},{transform:`translate(${d*12}px,-3px) rotate(${d*7}deg) scale(.96,1.03)`,offset:.22},{transform:`translate(${d*5}px,0) rotate(${d*2}deg)`,offset:.6},{transform:'none'}],360);}} // WAAPI: no forced reflow
+ setFace(t,'hit',420);if(t.hp>0&&!t._sink){const d=t.side==='p'?-1:1,rr=B&&B.rear;moveAnim(t,[{transform:'none'},{transform:rr?`translate(0,${-d*10}px) scale(${t.side==='p'?1.04:.94},${t.side==='p'?.97:1.04})`:`translate(${d*12}px,-3px) rotate(${d*7}deg) scale(.96,1.03)`,offset:.22},{transform:`translate(${d*5}px,0) rotate(${d*2}deg)`,offset:.6},{transform:'none'}],360);}} // WAAPI: no forced reflow
 function koAnim(t){setFace(t,'ko');const m=mvOf(t);if(!m||!m.animate||noMo())return;const d=t.side==='p'?1:-1; // slump toward the middle of the field (never off-screen)
  m.animate([{transform:'none'},{transform:`translate(${d*8}px,-14px) rotate(${d*8}deg)`,offset:.3},{transform:`translate(${d*2}px,4px) rotate(${d*16}deg) scale(.94,.62)`}],{duration:640/(B?B.speed:1),easing:'cubic-bezier(.5,0,.8,.6)',fill:'forwards'});}
+// small screen shake on big hits (off for reduced motion, effects-off and fast-forward)
+function shakeField(p){const f=$('#bField');if(!f||!f.animate||noMo()||!B||B.speed>3||S.settings.vfx===false)return;
+ f.animate([{transform:'none'},{transform:`translate(${-p}px,${p*.6}px)`},{transform:`translate(${p}px,${-p*.4}px)`},{transform:`translate(${-p*.5}px,${p*.3}px)`},{transform:'none'}],{duration:260/B.speed,easing:'linear'});}
 function setCam(u){const sc=$('#battle .scene');if(sc)sc.style.setProperty('--cam',u?(u.side==='p'?1:-1):0);}
 function flashField(col){const f=$('#bField');if(!f)return;const el=document.createElement('div');el.className='b-flash';el.style.background=`radial-gradient(circle,${col}66,transparent 70%)`;f.appendChild(el);setTimeout(()=>el.remove(),600);}
 
@@ -4083,7 +4188,7 @@ function strike(u,t,sk,h){const em=elemMod(u.el,t.el);const cr=Math.min(100,eff(
  if(u.despair&&h===0&&t.hp>0&&Math.random()<0.20)addFx(u,t,'stun',1,100,'despair'); // Gongstrike set (id 'despair')
  if(h===0&&em>0)float(t,'▲ Advantage','advt',h+1);if(h===0&&u.ign>=1&&eff(t,'def')>0)float(t,'🗡️ Ignores DEF','crim',h+(em>0?2:1));if(h===0&&glance)float(t,'Glancing','info',h+1);
  if(u.side==='p'){if(crit)S.stats.crits++;if(d>S.stats.maxHit)S.stats.maxHit=d;}
- sfx(crit?'crit':'hit');hitAnim(t);return d;}
+ sfx(crit?'crit':'hit');hitAnim(t);if(crit||d>=t.maxHp*.3)shakeField(crit?6:4);return d;}
 function hurt(t,d,src){if(t.hp<=0)return;t.hp=Math.max(0,t.hp-d);
  if(t.mech&&t.mech.enrage&&!t.enr&&t.hp>0&&t.hp<t.maxHp/2){t.enr=1;t.atk=Math.round(t.atk*1.4);t.spd=Math.round(t.spd*1.25);float(t,'😡 ENRAGED!','crim',1);setMsg(`${spi(t.id)} ${t.n} is enraged!`);}if(t.hp===0){t.fx=[];t.atb=0;t.owed=0;if(t.side==='p')B.deaths++;
   const tk=!!(src&&src.reap&&src.side!==t.side); // 'reap' passive: killing blow → target taken (no revive) + one bonus turn
