@@ -759,6 +759,35 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
 .mhead.mh2{margin-bottom:6px}
 @media (prefers-reduced-motion:reduce){.mstage .ms-rays,.mstage .ms-b,.mstage .ms-sh,.mstage .ms-motes i,.mstage .ms-gly{animation:none!important}}
 @media (orientation:landscape) and (max-height:540px){.mstage{height:200px;min-height:0}.mstage .ms-mon{width:110px;bottom:60px}.mstage .ms-ped{bottom:40px;height:60px;width:160px}}
+
+/* =================== v1.6.3 SPIRE GATES =================== */
+.gsel{background:linear-gradient(135deg,#3a2a78,#140d33)}
+.gcards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+@media (max-width:560px){.gcards{grid-template-columns:1fr}}
+.gcard{position:relative;display:block;width:100%;height:190px;border-radius:18px;overflow:hidden;border:2px solid #fff3;padding:0;cursor:pointer;color:#fff;text-align:left;font:inherit;box-shadow:0 6px 18px #0008}
+.gcard.hv{background:linear-gradient(#7fc8ff,#cfe9ff 45%,#ffe9a8)}.gcard.hl{background:linear-gradient(#1a0612,#3a0a14 40%,#ff4a1a)}
+.gcard.on{border-color:#ffd166;box-shadow:0 0 0 2px #ffd166,0 0 18px #ffd16688}.gcard.hl.on{border-color:#ff8a3d;box-shadow:0 0 0 2px #ff8a3d,0 0 18px #ff6a2a88}
+.gcard:disabled{filter:grayscale(.6) brightness(.7);cursor:not-allowed}
+.gcard .gart{position:absolute;inset:0;width:100%;height:100%}
+.gcard .glbl{position:absolute;left:0;right:0;bottom:0;padding:30px 12px 10px;background:linear-gradient(transparent,#000a 45%);display:flex;flex-direction:column;gap:3px;text-shadow:0 2px 3px #000}
+.gcard .gnm{font-size:18px}.gcard.hv .gnm{color:#fff8d8}.gcard.hl .gnm{color:#ffb38a}
+.gcard .gdesc{font-size:11px;opacity:.95}.gcard .gp{font-size:11px}
+.gcard .gbar{height:7px;border-radius:4px;background:#0007;overflow:hidden}.gcard .gbar i{display:block;height:100%}
+.gcard.hv .gbar i{background:linear-gradient(90deg,#ffd65a,#fff)}.gcard.hl .gbar i{background:linear-gradient(90deg,#ff3a1a,#ffb03d)}
+.gcard .emb{animation:gemb 3s linear infinite}@keyframes gemb{to{transform:translateY(-120px);opacity:0}}
+.gmap{border-radius:16px;padding:6px 6px 10px;margin-top:10px;position:relative;overflow:hidden}
+.gmap.hv{background:linear-gradient(#ffe9a8,#bfe3ff 50%,#7fc0ff)}
+.gmap.hl{background:linear-gradient(#2a0a2a,#14040a 60%,#6a1408)}
+.gmap .gmh{text-align:center;font-weight:900;font-size:15px;padding:4px 0 6px;text-shadow:0 1px 2px #0008}
+.gmap.hv .gmh{color:#5a3a00;text-shadow:0 1px 0 #fff}.gmap.hl .gmh{color:#ffb38a}
+.gmap.hv .tfloor{background:linear-gradient(#ffffffee,#e8eefcdd);color:#3a3060;border-color:#fff;box-shadow:0 4px 0 #b8c4e6}
+.gmap.hv .tfloor .mut{color:#4a4270}
+.gmap.hv .tfloor.boss{background:linear-gradient(#fff4c8,#ffd65a);border-color:#c89a1a}
+.gmap.hl .tfloor{background:linear-gradient(#3a2a2a,#1a1010);color:#ffd8c8;border-color:#6a2a1a;box-shadow:0 4px 0 #0a0404}
+.gmap.hl .tfloor.boss{background:linear-gradient(#5a0a0a,#2a0404);border-color:#ff5a2a}
+.gmap.hl .tfloor.scorch{border-color:#ff8a3d}
+.gmap.hl .tfloor.cur{outline:3px solid #ff8a3d;box-shadow:0 0 16px #ff6a2a}
+@media (prefers-reduced-motion:reduce){.gcard .emb{animation:none}}
 </style>
 </head>
 <body>
@@ -781,7 +810,7 @@ body.mo-reduced .world *,body.mo-off .world *,body.lite .world .spk i{animation:
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.6.2';
+const VERSION='1.6.3';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -1684,6 +1713,8 @@ const ACH=[
  ['area3','💡','Lights On','Defeat the Umbral Sovereign',s=>!!s.camp['3-4'],{radiant:1,gems:300}],
  ['perfect','💯','Flawless','Earn 3 stars on 10 stages',s=>Object.values(s.camp).filter(v=>v>=3).length>=10,{gems:150}],
  ['star','⭐','Star Climber','Star-up a monster',s=>s.stats.starUps>=1,{gems:100}],
+ ['gatehv','☁️','Gatekeeper',"Reach 100F of Heaven's Gate",s=>(s.toa.best||0)>=100||(s.toa.f||0)>=100,{gems:200}],
+ ['gatehl','🔥','Gatebreaker',"Reach B100 of Hell's Gate",s=>(s.toa.bestH||0)>=100||(s.toa.h||0)>=100,{gems:500}],
  ['crit100','🎯','Critical Thinker','Land 100 critical hits',s=>s.stats.crits>=100,{gems:100}],
  ['big','💥','Big Number Go Brrr','Deal 3,000+ damage in a single hit',s=>s.stats.maxHit>=3000,{gems:150}],
  ['glyph10','🔧','Rune Tinkerer','Upgrade runes 10 times',s=>s.stats.glyphUps>=10,{gold:15000}],
@@ -1703,6 +1734,11 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.6.3',date:'Oct 22, 2026',title:"🗼 Heaven's Gate & Hell's Gate",sections:[
+  ['🗼 Two Gates',["The Rift Spire now has two gates. Heaven's Gate climbs 100 floors up (1F to 100F) and is the gentler climb. Hell's Gate descends 100 floors down (B1 to B100) and is the hardest climb in the game.","Hell's Gate opens once you reach Heaven's Gate 50F. Both gates reset at the start of every month, and your highest floors are kept."]],
+  ['👹 Bosses & Floors',["Heaven's Gate bosses have one special mechanic (two on 100F). Hell's Gate bosses have two from B10 and all three from B60.","Every 5th non-boss floor of Hell's Gate is Scorched: every monster on both sides loses 4% of its max HP at the start of its turn."]],
+  ['🎁 Rewards',["Heaven's Gate pays what the Normal Spire paid, including a Heaven & Hell Scroll on 25F and 75F.","Hell's Gate pays much more: 2.5x gold and gems, a rune on every floor, 2 Arcane Scrolls every 5th floor, 6★ runes and 50 💎 on boss floors, 2 Radiant Scrolls on B50 and B100, 2 Heaven & Hell Scrolls on B25 and B75 plus one more on B100, and 500 💎 for reaching B100.","Reach the end of a gate for a 🏅 badge that month, plus the new Gatekeeper and Gatebreaker achievements."]],
+  ['💾 Your Save',["Your Normal Spire floors this month are now Heaven's Gate floors and your Hard floors are Hell's Gate floors. Floors you already cleared are not paid again; the new rewards start from your next floor."]]]},
  {v:'1.6.2',date:'Oct 21, 2026',title:'🎥 New Battle Camera & Monster View',sections:[
   ['🎥 Battle Camera',['Battles are now seen from behind your team: your monsters line up across the bottom, shown from the back, and the enemy team faces you across a tilted arena floor.','Attackers dash up the field to their target and shrink or grow with distance; big hits and critical hits give the screen a small shake.','Name plates and HP bars are more compact so every monster stays in view, and the turn bar still shows who acts next.']],
   ['🖼️ Monster View',['Opening a monster now shows it big on a lit pedestal with its element glow, a shadow and a gentle idle animation. Tap it to see its attack pose.','Use the arrows (or swipe) to step to the next monster, in your Monsters list and in the Monsterpedia.','Monsterpedia entries you do not own yet are still drawn dark.']],
@@ -2909,12 +2945,14 @@ const SCN={
  keep:{n:"Golem Bastion",sky:['#2a1a08','#8a5a1a','#f0c070'],sun:'#fff0b0',far:['castle','#5a3a14'],mid:['columns','#3a240c'],near:['banners','#1a1006'],gnd:['#b08a4a','#5a4020'],det:'tiles',dc:'#ffe08a',fog:'#ffe0a0',fogA:.15,pt:'dust',pc:['#ffe8b0','#fff6d8'],rays:'#fff0b0'},
  lair:{n:"Wyrm Hollow",sky:['#140408','#4a0c1a','#a2282a'],sun:null,far:['cavewall','#3a0a14'],mid:['bones','#220610'],near:['stalac','#0c0206'],gnd:['#4a1a18','#1a0808'],det:'gold',dc:'#ffd166',fog:'#ff7a4a',fogA:.16,pt:'ember',pc:['#ffb03d','#ff3a2a'],glow:'#ff3a2a'},
  necro:{n:'Marrow Grove',sky:['#050812','#1a2240','#4a5a7a'],sun:'#e8f0ff',moon:1,far:['castle','#1a2034'],mid:['tombs','#0e1222'],near:['deadtrees','#05070e'],gnd:['#2a3040','#0e1018'],det:'cracks',dc:'#7cf0c8',fog:'#9ad8c8',fogA:.3,pt:'wisp',pc:['#7cf0c8','#b8fff0']},
+ heaven:{n:"Heaven's Gate",sky:['#fff1b8','#9fd6ff','#e8f6ff'],sun:'#ffffff',far:['cloudsea','#ffffff'],mid:['tower','#e0b84a'],near:['clouds','#ffffff'],gnd:['#fff6dc','#d8c08a'],det:'tiles',dc:'#ffe08a',fog:'#ffffff',fogA:.3,pt:'dust',pc:['#fff6c8','#ffffff'],rays:'#fff6c8'},
+ cinderpit:{n:"Hell's Gate",sky:['#0c0306','#2a0612','#7a1a0a'],sun:null,far:['cavewall','#1a0408'],mid:['crags','#12030a'],near:['stalac','#060103'],gnd:['#2a0e0a','#0a0303'],det:'lava',dc:'#ff6a2a',fog:'#ff4a1a',fogA:.2,pt:'ember',pc:['#ffb03d','#ff3a1a','#ffd166'],glow:'#ff3a1a'},
  tower:{n:'Rift Spire',sky:['#0a1440','#3a5ad8','#a8e0ff'],sun:'#ffffff',far:['cloudsea','#e0f0ff'],mid:['tower','#2a2a6a'],near:['clouds','#ffffff'],gnd:['#6a7ad8','#2a2a7a'],det:'tiles',dc:'#cfe6ff',fog:'#ffffff',fogA:.25,pt:'dust',pc:['#ffffff','#cfe6ff'],rays:'#ffffff'},
  crystal:{n:'Crystal Cavern',sky:['#060a24','#1f3a8a','#3a7bd5'],sun:null,far:['crystals','#2a4aa0'],mid:['crystals2','#1a2a6a'],near:['stalac','#0a1030'],gnd:['#2a3a7a','#121a40'],det:'shards',dc:'#a5f3ff',fog:'#a5f3ff',fogA:.15,pt:'star',pc:['#a5f3ff','#ffffff']},
  candy:{n:'Jelly Grove',sky:['#ff9ad5','#ffd6a5','#fff3d0'],sun:'#ffffff',far:['candy','#ff7ab8'],mid:['forest','#e86aa0'],near:['ferns','#b8407a'],gnd:['#ffc6dc','#f598b8'],det:'sprinkles',dc:'#ffffff',fog:'#ffffff',fogA:.25,pt:'bubble',pc:['#ffffff','#ffd6f0']},
 };
 const AREA_SCN=['lava','coast','peaks','rift'];
-function sceneKey(cfg){if(!cfg)return'forest';if(cfg.scene){const k=String(cfg.scene);return k==='toa'?'tower':k.startsWith('dkeep')?'keep'+(k.endsWith('i')?'!':''):k.startsWith('dlair')?'lair'+(k.endsWith('i')?'!':''):k.startsWith('dnecro')?'necro'+(k.endsWith('i')?'!':''):k;}
+function sceneKey(cfg){if(!cfg)return'forest';if(cfg.scene){const k=String(cfg.scene);return k==='toa'?'tower':k==='gheaven'?'heaven':k==='ghell'?'cinderpit':k.startsWith('dkeep')?'keep'+(k.endsWith('i')?'!':''):k.startsWith('dlair')?'lair'+(k.endsWith('i')?'!':''):k.startsWith('dnecro')?'necro'+(k.endsWith('i')?'!':''):k;}
  if(cfg.type==='event')return{gold:'keep',glyph:'rift',jelly:'candy',crystal:'crystal'}[EVENTS[cfg.ei].id]||'forest';
  return (AREA_SCN[cfg.a]||'forest')+(cfg.d===2?'!':cfg.d===1?'~':'');}
 function silhouette(type,col,seed){const r=seeded(seed);let d='M0 100 ';const P=(x,y)=>`L${x.toFixed(1)} ${y.toFixed(1)} `;let extra='';
@@ -3728,31 +3766,54 @@ const storyOpen=d=>!d||!!campMap(d-1)['3-4'];
 function storyBossMech(a,d){return d===1?'enrage':d===2?['enrage','regen','fast','all'][a]:null;}
 function storyRewards(cfg){const D=STORYD[cfg.d];return{gold:Math.round((200+cfg.lvl*60)*D.gold),gems:cfg.s===4?40*D.gems:5*D.gems};}
 
-/* =================== RIFT SPIRE (id toa) (100 floors, Hard after 100, monthly reset) =================== */
+/* =================== RIFT SPIRE (id toa): v1.6.3 two gates, 100 floors each, monthly reset ===================
+   h=0 Heaven's Gate (climb up 1F..100F, easier; old Normal progress S.toa.f)  h=1 Hell's Gate (descend B1..B100, harder; old Hard progress S.toa.h) */
 const monthKey=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');};
-function toaMonth(){const k=monthKey();if(S.toa.m!==k){const o=S.toa;S.toa={m:k,f:0,h:0,best:Math.max(o.best||0,o.f||0),bestH:Math.max(o.bestH||0,o.h||0),last:o.m||''};return true;}return false;}
+function toaMonth(){const k=monthKey();if(S.toa.m!==k){const o=S.toa;S.toa={m:k,f:0,h:0,best:Math.max(o.best||0,o.f||0),bestH:Math.max(o.bestH||0,o.h||0),last:o.m||'',bdg:{}};return true;}if(!S.toa.bdg)S.toa.bdg={};return false;}
+const GATE=[{n:"Heaven's Gate",i:'☁️',cls:'hv'},{n:"Hell's Gate",i:'🔥',cls:'hl'}];
+const gateName=h=>GATE[h?1:0].n,flab=(f,h)=>h?'B'+f:f+'F';
 const toaNext=h=>(h?S.toa.h:S.toa.f)+1;
-function toaFloorOpen(f,h){return (h?S.toa.f>=100:true)&&f<=toaNext(h);}
-function toaReward(f,h){const m=h?2:1;const r={gold:Math.round((600+f*80)*m),gems:0,mystic:0,radiant:0,rune:null};
- if(f%10===0)r.rune={grade:f>=20||h?6:5,rar:f>=20||h?4:3};else if(f%5===0){r.mystic=1*m;r.rune={grade:Math.min(6,4+Math.floor(f/40)+(h?1:0)),rar:Math.min(4,2+(h?1:0))};}else{r.gems=(10+Math.floor(f/5))*m;if(f%2===0)r.rune={grade:Math.min(6,3+Math.floor(f/30)+(h?1:0)),rar:Math.min(4,1+Math.floor(f/40)+(h?1:0))};}
- if(f===50||f===100)r.radiant=1*m;r.hh=(f===25||f===75)?1*m:0;return r;}
+const hellOpen=()=>S.toa.f>=50||S.toa.h>0; // opens at Heaven 50F; anyone with old Hard progress keeps it open
+function toaFloorOpen(f,h){return (h?hellOpen():true)&&f<=toaNext(h);}
+const scorched=(f,h)=>!!h&&f%5===0&&f%10!==0;
+// boss mechanics: Heaven one each (100F: two); Hell two from B10, all three from B60
+const MECH2={enrage:'shield',regen:'enrage',shield:'regen',fast:'enrage'};
+function gateMech(f,h){const B0=TOA_BOSS[f/10-1];if(!h)return f===100?'shield+regen':B0.mech;if(f>=60||B0.mech==='all')return'all';return B0.mech+'+'+MECH2[B0.mech];}
+const mechKeys=k=>k==='all'?['enrage','regen','shield']:String(k).split('+');
+const mechTag=k=>k==='all'?`${BMECH.all.i} ${BMECH.all.n}`:mechKeys(k).map(x=>BMECH[x].i).join('');
+function toaReward(f,h){
+ if(!h){const r={gold:600+f*80,gems:0,mystic:0,radiant:0,rune:null};
+  if(f%10===0)r.rune={grade:f>=20?6:5,rar:f>=20?4:3};else if(f%5===0){r.mystic=1;r.rune={grade:Math.min(6,4+Math.floor(f/40)),rar:2};}else{r.gems=10+Math.floor(f/5);if(f%2===0)r.rune={grade:Math.min(6,3+Math.floor(f/30)),rar:Math.min(4,1+Math.floor(f/40))};}
+  if(f===50||f===100)r.radiant=1;r.hh=(f===25||f===75)?1:0;return r;}
+ const r={gold:Math.round((600+f*80)*2.5),gems:0,mystic:0,radiant:0,rune:null};
+ if(f%10===0){r.rune={grade:6,rar:4};r.gems=50;}else if(f%5===0){r.mystic=2;r.rune={grade:f>=40?6:5,rar:3};}else{r.gems=Math.round((10+Math.floor(f/5))*2.5);r.rune={grade:Math.min(6,4+Math.floor(f/30)),rar:Math.min(4,2+Math.floor(f/40))};}
+ if(f===50||f===100)r.radiant=2;r.hh=(f===25||f===75)?2:f===100?1:0;if(f===100)r.gems+=500;return r;}
 function toaRewardText(f,h){const r=toaReward(f,h);const p=[`💰 ${fmt(r.gold)}`];if(r.gems)p.push(`💎 ${r.gems}`);if(r.mystic)p.push(`📜 ${r.mystic} Arcane`);if(r.radiant)p.push(`🌟 ${r.radiant} Radiant (rare)`);if(r.hh)p.push(`🌗 ${r.hh} Heaven & Hell Scroll`);if(r.rune)p.push(`💠 ${r.rune.grade}★ ${RRAR[r.rune.rar].n} rune`);return p.join(' · ');}
-function toaCfg(f,h){h=h?1:0;const rng=seeded(31337+f*101+h*7);const lvl=h?Math.min(70,55+Math.round(f*.15)):Math.min(60,8+Math.round(f*.52));
- const k=h?1.9+f*.009:1+f*.011,em=[+(k*1.15).toFixed(3),+(1+(k-1)*.75).toFixed(3),+(1+(k-1)*.8).toFixed(3)],spd=Math.round(h?14+f*.22:f*.18);const stars=h?6:Math.min(6,2+Math.floor(f/20));
+function toaCfg(f,h){h=h?1:0;const rng=seeded(31337+f*101+h*7);
+ const lvl=h?Math.min(72,40+Math.round(f*.32)):Math.min(56,6+Math.round(f*.5));
+ const k=h?1.6+f*.013:1+f*.0095,em=[+(k*1.15).toFixed(3),+(1+(k-1)*.75).toFixed(3),+(1+(k-1)*.8).toFixed(3)],spd=Math.round(h?10+f*.24:f*.15);
+ const stars=h?(f<=30?5:6):Math.min(6,2+Math.floor(f/22)),res=h&&f>=50?25:null;
  const pool=SUMMONABLE.map(d=>d.id).filter(id=>id!=='jellybop');const boss=f%10===0;const waves=[];
- for(let w=0;w<3;w++){const wave=[];const n=boss&&w===2?2:3;for(let i=0;i<n;i++){const id=pool[Math.floor(rng()*pool.length)];wave.push({id,lvl:lvl+(w>1?1:0),stars:Math.max(MD[id].rar,stars),em,spd});}
-  if(boss&&w===2){const B0=TOA_BOSS[f/10-1];const bm=h?'all':B0.mech;wave.splice(1,0,{id:B0.id,lvl:lvl+2,stars:Math.max(MD[B0.id].rar,stars),boss:1,hpm:h?2.6+f/60:3.2+f/40,em:[em[0],em[1]*(h?.92:1.1),em[2]*1.05],spd:spd+10,mech:bm,res:40+(h?30:0)});}
+ for(let w=0;w<3;w++){const wave=[];const n=boss&&w===2?2:3;for(let i=0;i<n;i++){const id=pool[Math.floor(rng()*pool.length)];const e={id,lvl:lvl+(w>1?1:0),stars:Math.max(MD[id].rar,stars),em,spd};if(res)e.res=res;wave.push(e);}
+  if(boss&&w===2){const B0=TOA_BOSS[f/10-1];wave.splice(1,0,{id:B0.id,lvl:lvl+2,stars:Math.max(MD[B0.id].rar,stars),boss:1,hpm:h?2.8+f/50:3.0+f/45,em:[em[0],em[1]*(h?.92:1.1),em[2]*1.05],spd:spd+10+(h&&f===100?20:0),mech:gateMech(f,h),res:40+(h?30:0)});}
   waves.push(wave);}
- return{type:'toa',f,h,lvl,waves,scene:'toa',name:`🗼 Rift Spire${h?' (Hard)':''} · Floor ${f}${boss?' (BOSS)':''}`,bg:'linear-gradient(135deg,#7ad7ff,#4b3ad8 55%,#120a3a)'};}
-function toaHtml(){toaMonth();const h=UI.toaH?1:0;const nf=toaNext(h);const reset=new Date();reset.setMonth(reset.getMonth()+1,1);reset.setHours(0,0,0,0);
- const lo=UI.toaPg?clamp(UI.toaPg,1,91):Math.max(1,Math.min(91,Math.floor((Math.min(nf,100)-1)/10)*10+1));const floors=[];for(let f=lo+9;f>=lo;f--)floors.push(f);
- return`<div class="card toa-head" style="background:linear-gradient(135deg,#7ad7ff,#4b3ad8 55%,#120a3a)"><div class="sec" style="color:#fff">🗼 Rift Spire ${h?'<span class="tag insane">HARD</span>':''}</div>
- <p style="font-size:14px">100 floors, a boss every 10th floor. Resets monthly: <b class="cnt" data-cd="${+reset}">${fmtDur(+reset-Date.now())}</b>. Best: ${S.toa.best||0}${S.toa.bestH?` · Hard ${S.toa.bestH}`:''}.</p>
- <div class="chips"><button class="chip ${h?'':'on'}" id="toaN" onclick="UI.toaH=0;UI.toaPg=0;render()">Normal · ${S.toa.f}/100</button><button class="chip ${h?'on':''}" id="toaH" ${S.toa.f>=100?'':'disabled'} onclick="UI.toaH=1;UI.toaPg=0;render()">${S.toa.f>=100?'':'🔒 '}Hard · ${S.toa.h}/100</button></div></div>
- <div class="toa-list">${floors.map(f=>{const done=f<nf,cur=f===nf,op=toaFloorOpen(f,h);const boss=f%10===0;return`<div class="tfloor ${done?'done':''} ${cur?'cur':''} ${boss?'boss':''}" id="toa${f}" onclick="${op?`openToa(${f},${h})`:`toast('🔒 Clear the floor below first')`}"><b>${boss?'👹 ':''}${f}F</b><span class="mut">${done?'✅ Cleared':toaRewardText(f,h)}</span>${boss?`<span class="tag">${BMECH[h?'all':TOA_BOSS[f/10-1].mech].i} ${MD[TOA_BOSS[f/10-1].id].n}</span>`:''}</div>`;}).join('')}</div>
- <div class="row-btns c"><button class="btn sm ghost" id="toaDown" onclick="UI.toaPg=${Math.max(1,lo-10)};render()" ${lo<=1?'disabled':''}>▼ Floors ${Math.max(1,lo-10)}–${Math.max(10,lo-1)}</button><button class="btn sm ghost" id="toaUp" onclick="UI.toaPg=${Math.min(91,lo+10)};render()" ${lo>=91?'disabled':''}>▲ Floors ${Math.min(91,lo+10)}–${Math.min(100,lo+19)}</button></div>`;}
-function openToa(f,h){if(!toaFloorOpen(f,h)){toast('🔒 Locked');return;}const cfg=toaCfg(f,h);const done=f<toaNext(h);const boss=f%10===0;const mech=boss?BMECH[h?'all':TOA_BOSS[f/10-1].mech]:null;
- openModal(`<h3>${cfg.name}</h3><p class="mut">Enemy Lv ${cfg.lvl} · 3 waves${boss?' · ⚠️ Boss floor':''}</p>${mech?`<div class="card">${mech.i} <b>${mech.n}:</b> ${mech.d}</div>`:''}${wavePreview(cfg)}
+ return{type:'toa',f,h,lvl,waves,scorch:scorched(f,h),scene:h?'ghell':'gheaven',name:`${GATE[h].i} ${gateName(h)} · Floor ${flab(f,h)}${boss?' (BOSS)':''}${scorched(f,h)?' 🔥 Scorched':''}`,bg:h?'linear-gradient(135deg,#ff5a1a,#3a0a14 55%,#0c0306)':'linear-gradient(135deg,#fff1b8,#8fd0ff 55%,#4b6ad8)'};}
+// gate art (code-drawn SVG)
+function gateArt(h){return h?`<svg class="gart" viewBox="0 0 360 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M0 0 L70 0 L60 60 L90 110 L55 170 L100 230 L70 300 L0 300Z M360 0 L290 0 L305 70 L265 120 L300 180 L255 240 L290 300 L360 300Z" fill="#0c0306"/><path d="M80 140 L110 160 L95 190 M280 110 L255 150 L275 175" stroke="#ff6a2a" stroke-width="3" fill="none"/><path d="M125 270 L125 150 L180 110 L235 150 L235 270Z" fill="#120a0c" stroke="#2a2228" stroke-width="7"/><path d="M125 150 L118 128 L134 142Z M180 110 L180 84 L190 106Z M235 150 L242 128 L226 142Z" fill="#3a3238"/><path d="M145 270 L145 165 M165 270 L165 150 M195 270 L195 150 M215 270 L215 165" stroke="#3a3238" stroke-width="5"/><ellipse cx="180" cy="290" rx="150" ry="26" fill="#ff5a1a" opacity=".7"/><ellipse cx="180" cy="292" rx="90" ry="14" fill="#ffd166" opacity=".8"/><g fill="#ffb03d"><circle class="emb" cx="120" cy="280" r="3"/><circle class="emb" cx="200" cy="270" r="2.5" style="animation-delay:-1s"/><circle class="emb" cx="250" cy="285" r="3" style="animation-delay:-2s"/></g></svg>`
+ :`<svg class="gart" viewBox="0 0 360 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="#fff8d8" opacity=".55"><path d="M180 0 L120 300 L240 300Z"/><path d="M180 0 L40 300 L80 300Z" opacity=".5"/><path d="M180 0 L320 300 L280 300Z" opacity=".5"/></g><g stroke="#c8961a" stroke-width="5" fill="none"><path d="M120 200 L120 90 Q180 20 240 90 L240 200"/><path d="M140 200 L140 100 M160 200 L160 82 M180 200 L180 76 M200 200 L200 82 M220 200 L220 100"/></g><ellipse cx="180" cy="48" rx="34" ry="9" fill="none" stroke="#fff3b0" stroke-width="4"/><g fill="#ffffff"><circle cx="40" cy="215" r="34"/><circle cx="90" cy="205" r="40"/><circle cx="150" cy="222" r="36"/><circle cx="215" cy="218" r="40"/><circle cx="275" cy="206" r="38"/><circle cx="330" cy="220" r="34"/><rect x="0" y="220" width="360" height="80"/></g><g fill="#eef4ff"><circle cx="70" cy="140" r="14"/><circle cx="88" cy="134" r="18"/><circle cx="108" cy="142" r="12"/><circle cx="270" cy="120" r="12"/><circle cx="288" cy="114" r="16"/><circle cx="306" cy="122" r="11"/></g></svg>`;}
+function toaHtml(){toaMonth();const ho=hellOpen();if(UI.toaH&&!ho)UI.toaH=0;const h=UI.toaH?1:0;const nf=toaNext(h);const reset=new Date();reset.setMonth(reset.getMonth()+1,1);reset.setHours(0,0,0,0);const bd=S.toa.bdg||{};
+ const lo=UI.toaPg?clamp(UI.toaPg,1,91):Math.max(1,Math.min(91,Math.floor((Math.min(nf,100)-1)/10)*10+1));const floors=[];for(let f=lo+9;f>=lo;f--)floors.push(f);if(h)floors.reverse(); // Heaven: higher floors on top; Hell: deeper floors below
+ const card=(g)=>{const on=g===h,lock=g&&!ho,done=g?S.toa.h:S.toa.f;return`<button class="gcard ${GATE[g].cls} ${on?'on':''}" id="${g?'toaH':'toaN'}" ${lock?'disabled':''} onclick="UI.toaH=${g};UI.toaPg=0;render()">${gateArt(g)}<span class="glbl"><b class="gnm">${lock?'🔒 ':''}${GATE[g].i} ${GATE[g].n}${bd[g?'hl':'hv']?' 🏅':''}</b>
+  <span class="gdesc">${g?'Descend B1 → B100. Two-mechanic bosses, Scorched floors, much richer rewards.':'Climb 1F → 100F. The gentler climb, one boss mechanic each.'}</span>
+  <span class="gbar"><i style="width:${done}%"></i></span><span class="gp">${done} / 100 floors${lock?' · opens at Heaven\'s Gate 50F':''}</span></span></button>`;};
+ return`<div class="card toa-head gsel"><div class="sec" style="color:#fff">🗼 Rift Spire</div>
+ <p style="font-size:14px">Two gates, 100 floors each, a boss every 10th floor. Both reset monthly: <b class="cnt" data-cd="${+reset}">${fmtDur(+reset-Date.now())}</b>. Highest reached: ${S.toa.best||0}F${S.toa.bestH?` · B${S.toa.bestH}`:''}.</p>
+ <div class="gcards">${card(0)}${card(1)}</div></div>
+ <div class="gmap ${GATE[h].cls}"><div class="gmh">${GATE[h].i} ${gateName(h)} ${h?'⬇️':'⬆️'}</div><div class="toa-list">${floors.map(f=>{const done=f<nf,cur=f===nf,op=toaFloorOpen(f,h);const boss=f%10===0,sc=scorched(f,h);return`<div class="tfloor ${done?'done':''} ${cur?'cur':''} ${boss?'boss':''} ${sc?'scorch':''}" id="toa${f}" onclick="${op?`openToa(${f},${h})`:`toast('🔒 ${h?'Clear the floor above first':'Clear the floor below first'}')`}"><b>${boss?'👹 ':''}${sc?'🔥 ':''}${flab(f,h)}</b><span class="mut">${done?(h?'😈 Cleared':'🪽 Cleared'):toaRewardText(f,h)}</span>${boss?`<span class="tag">${mechTag(gateMech(f,h))} ${MD[TOA_BOSS[f/10-1].id].n}</span>`:''}</div>`;}).join('')}</div></div>
+ <div class="row-btns c">${h?`<button class="btn sm ghost" id="toaDown" onclick="UI.toaPg=${Math.max(1,lo-10)};render()" ${lo<=1?'disabled':''}>▲ Back up B${Math.max(1,lo-10)}–B${Math.max(10,lo-1)}</button><button class="btn sm ghost" id="toaUp" onclick="UI.toaPg=${Math.min(91,lo+10)};render()" ${lo>=91?'disabled':''}>▼ Deeper B${Math.min(91,lo+10)}–B${Math.min(100,lo+19)}</button>`
+  :`<button class="btn sm ghost" id="toaDown" onclick="UI.toaPg=${Math.max(1,lo-10)};render()" ${lo<=1?'disabled':''}>▼ Floors ${Math.max(1,lo-10)}–${Math.max(10,lo-1)}</button><button class="btn sm ghost" id="toaUp" onclick="UI.toaPg=${Math.min(91,lo+10)};render()" ${lo>=91?'disabled':''}>▲ Floors ${Math.min(91,lo+10)}–${Math.min(100,lo+19)}</button>`}</div>`;}
+function openToa(f,h){if(!toaFloorOpen(f,h)){toast('🔒 Locked');return;}const cfg=toaCfg(f,h);const done=f<toaNext(h);const boss=f%10===0;const mk=boss?mechKeys(gateMech(f,h)):[];
+ openModal(`<h3>${cfg.name}</h3><p class="mut">Enemy Lv ${cfg.lvl} · 3 waves${boss?' · ⚠️ Boss floor':''}</p>${mk.map(k=>`<div class="card">${BMECH[k].i} <b>${BMECH[k].n}:</b> ${BMECH[k].d}</div>`).join('')}${cfg.scorch?`<div class="card">🔥 <b>Scorched floor:</b> every monster (yours and theirs) loses 4% of its max HP at the start of each of its turns.</div>`:''}${wavePreview(cfg)}
  <div class="card" style="margin-top:10px"><b>${done?'Cleared this month':'Reward'}:</b> <span class="mut">${done?'Replays give gold only.':toaRewardText(f,h)}</span></div><div class="mut">Your team:</div>${teamStrip()}
  <div class="row-btns c"><button class="btn ghost" onclick="closeModal();setTab('team')">Edit Team</button><button class="btn gold" id="btnFight" onclick="startBattle(toaCfg(${f},${h}))">⚔️ Battle!</button></div>`,'toa');}
 
@@ -3766,7 +3827,7 @@ function rewardV14(cfg,R,runes){let first=false,extra='';
   if(cfg.ti===3)runes.push(newRune({set:pick(D.sets),grade:6,rar:4}));S.stats.dungeons=(S.stats.dungeons||0)+1;if(cfg.ti===3)S.stats.insane=(S.stats.insane||0)+1;prog('event');}
  else if(cfg.type==='toa'){toaMonth();const f=cfg.f,h=cfg.h?1:0;first=f===toaNext(h);R.gold=Math.round((300+cfg.lvl*40)*rnd(.9,1.1));
   if(first){const r=toaReward(f,h);R.gold+=r.gold;R.gems+=r.gems;R.mystic+=r.mystic;if(r.radiant)R.radiant=(R.radiant||0)+r.radiant;if(r.hh)R.hh=(R.hh||0)+r.hh;if(r.rune)runes.push(newRune({grade:r.rune.grade,rar:r.rune.rar}));
-   if(h){S.toa.h=f;S.toa.bestH=Math.max(S.toa.bestH||0,f);}else{S.toa.f=f;S.toa.best=Math.max(S.toa.best||0,f);}if(f===100)extra=h?'🏆 Rift Spire (Hard) conquered!':'🏆 Floor 100! Rift Spire Hard mode unlocked.';}
+   if(h){S.toa.h=f;S.toa.bestH=Math.max(S.toa.bestH||0,f);}else{S.toa.f=f;S.toa.best=Math.max(S.toa.best||0,f);}if(!S.toa.bdg)S.toa.bdg={};if(f===100){S.toa.bdg[h?'hl':'hv']=1;extra=h?"🏆 Hell's Gate conquered! B100 reached. 🏅":"🏆 Heaven's Gate 100F reached! 🏅";}else if(!h&&f===50&&!S.toa.h)extra="🔥 Hell's Gate is now open!";}
   S.stats.toa=(S.stats.toa||0)+1;}
  return{first,extra};}
 
@@ -3775,7 +3836,7 @@ function rewardV14(cfg,R,runes){let first=false,extra='';
 const PLACES=[
  ['gate','battle','Battle Gate','⚔️',22,20,'Story · Dungeons · Tower'],
  ['arena','events','Event Arena','🎪',52,13,'Daily event dungeons'],
- ['tower','toa','Rift Spire','🗼',82,19,'100 floors · monthly'],
+ ['tower','toa','Rift Spire','🗼',82,19,'2 gates · monthly'],
  ['summon','summon','Summoning Circle','🌀',50,38,'Summon monsters'],
  ['altar','monsters','Monster Altar','🐾',19,45,'Your monsters'],
  ['portal','dungeons','Rune Portal','🌌',81,44,'Rune dungeons'],
@@ -3941,7 +4002,7 @@ function mkUnit(side,spec){const d=MD[spec.id];const ms=spec.m?monStats(spec.m):
  if(spec.spd)u.spd+=spec.spd;
  if(spec.boss){u.hp=Math.round(u.hp*(spec.hpm||4.5));u.atk=Math.round(u.atk*1.15);u.def=Math.round(u.def*1.1);u.spd+=4;}
  if(spec.hpAbs)u.hp=spec.hpAbs;if(spec.spdAbs)u.spd=spec.spdAbs;if(spec.res!=null)u.res=Math.max(u.res,spec.res);if(spec.acc!=null)u.acc=Math.max(u.acc,spec.acc);
- if(spec.mech){u.mech={};(spec.mech==='all'?['enrage','regen','shield']:[spec.mech]).forEach(k=>u.mech[k]=1);}if(spec.insane)u.insane=1;
+ if(spec.mech){u.mech={};(spec.mech==='all'?['enrage','regen','shield']:String(spec.mech).split('+')).forEach(k=>u.mech[k]=1);}if(spec.insane)u.insane=1;
  u.maxHp=u.hp;return u;}
 function eff(u,s){let v=u[s];const h=id=>u.fx.some(f=>f.id===id);
  if(s==='atk'){if(h('atkUp'))v*=1.5;if(h('atkDown'))v*=0.5;}
@@ -4090,6 +4151,7 @@ function startTurn(u){B.tn=(B.tn||0)+1;if(B.tn>TURN_CAP&&!B.over){B.timeUp=1;ban
  const dots=u.fx.filter(f=>f.id==='dot').length;
  if(dots){const d=Math.max(1,Math.round(u.maxHp*0.05*dots));hurt(u,d);float(u,`-${fmt(d)} ☠️`,'dot');}
  if(u.hp>0&&u.fx.some(f=>f.id==='regen'))heal(u,Math.round(u.maxHp*0.12));
+ if(u.hp>0&&B.cfg&&B.cfg.scorch){const d=Math.max(1,Math.round(u.maxHp*0.04));hurt(u,d);float(u,`-${fmt(d)} 🔥`,'dot');} // v1.6.3 Hell's Gate Scorched floors (both sides)
  if(u.hp>0&&u.mech&&u.mech.regen)heal(u,Math.round(u.maxHp*(u.mech.shield?0.02:0.03)));
  renderBattle();
  if(u.hp<=0){u.atb=0;B.actor=null;later(nextTurn,500);return;}
@@ -4244,7 +4306,7 @@ function victory(){B.over=true;B.actor=null;renderBattle();sfx('win');setCam(nul
  const ups=B.allies.map(u=>{const m=u.m;const b=m.lvl;if(monByUid(m.uid))addXp(m,xp);return{m,b};});
  S.stats.wins++;prog('win');save();
  const R2={...R};if(jelly){R2.jelly=jelly;R2.jellyStars=jellyStars;}
- const nextBtn=cfg.type==='campaign'?(()=>{let a=cfg.a,s=cfg.s+1;if(s>4){a++;s=0;}return a<AREAS.length&&stageUnlocked(a,s,cfg.d||0)?`<button class="btn gold" id="bNext" onclick="startBattle(campaignCfg(${a},${s},${cfg.d||0}))">Next Stage ▶</button>`:'';})():cfg.type==='toa'&&cfg.f<100?`<button class="btn gold" id="bNext" onclick="startBattle(toaCfg(${cfg.f+1},${cfg.h?1:0}))">Next Floor ▶</button>`:'';
+ const nextBtn=cfg.type==='campaign'?(()=>{let a=cfg.a,s=cfg.s+1;if(s>4){a++;s=0;}return a<AREAS.length&&stageUnlocked(a,s,cfg.d||0)?`<button class="btn gold" id="bNext" onclick="startBattle(campaignCfg(${a},${s},${cfg.d||0}))">Next Stage ▶</button>`:'';})():cfg.type==='toa'&&cfg.f<100?`<button class="btn gold" id="bNext" onclick="startBattle(toaCfg(${cfg.f+1},${cfg.h?1:0}))">${cfg.h?'Go Deeper ▼':'Next Floor ▲'}</button>`:'';
  const ov=document.createElement('div');ov.className='b-over';
  ov.innerHTML=`<div class="modal"><div class="vtitle" style="color:#ffd166">VICTORY!</div><div class="vstars">${[1,2,3].map(i=>i<=stars?'★':'<span class="no">★</span>').join('')}</div>
  ${first?'<div class="tag live" style="margin:4px">FIRST CLEAR!</div>':''}<p style="margin:6px 0"><b>${rewardText(R2)}</b></p>
