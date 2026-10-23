@@ -843,6 +843,21 @@ body.lite .scene.bg2 .b2g,body.lite .scene.bg2 .b2cl,body.lite .scene.bg2 .b2au,
 #battle .scene .ly.far2{filter:blur(2.2px)}
 #battle .scene .ly.far{filter:blur(1.1px)}
 #battle .scene .b2.far{filter:blur(1.4px)}
+/* ===== v1.7.1 SW-style battle motion ===== */
+.bar.hp i.hpf{transition:transform .08s ease-out}
+.bar.hp i.gh{transition:transform .38s cubic-bezier(.3,0,.3,1) .32s}
+.unit.active .av::after{animation:swRing .28s cubic-bezier(.2,1.4,.4,1),swRingP 1.1s ease-in-out .28s infinite}
+@keyframes swRing{from{transform:scale(.3);opacity:0}}
+@keyframes swRingP{50%{opacity:.6;transform:scale(1.06)}}
+.sw-dim{position:absolute;inset:-10%;background:radial-gradient(ellipse at 50% 55%,#05031088,#050310e6);pointer-events:none;z-index:0;opacity:0}
+.sw-puff{position:absolute;left:50%;bottom:8%;width:70%;aspect-ratio:1;margin-left:-35%;border-radius:50%;pointer-events:none;background:radial-gradient(circle,#fffbe6ee 0,#ffe9a8aa 30%,#c8b8ff55 55%,transparent 72%);animation:swPuff .62s ease-out backwards;opacity:0}
+@keyframes swPuff{0%{opacity:0;transform:scale(.2)}25%{opacity:1;transform:scale(.7)}100%{opacity:0;transform:scale(1.5) translateY(-18%)}}
+.float.dmg,.float.glance,.float.heal,.float.dot{animation-name:swPop}
+.float.crit{animation-name:swCrit;font-size:32px;color:#ffd23f}
+.float .clbl{display:block;font-size:13px;letter-spacing:.06em;color:#fff3a0;margin-bottom:1px;text-transform:uppercase}
+@keyframes swPop{0%{opacity:0;transform:translate(-50%,8px) scale(.3)}9%{opacity:1;transform:translate(calc(-50% + var(--ax,0px)*.2),-18px) scale(1.45)}18%{transform:translate(calc(-50% + var(--ax,0px)*.35),-24px) scale(.92,1.08)}28%{transform:translate(calc(-50% + var(--ax,0px)*.5),-30px) scale(1)}75%{opacity:1;transform:translate(calc(-50% + var(--ax,0px)*.85),-44px) scale(1)}100%{opacity:0;transform:translate(calc(-50% + var(--ax,0px)),-52px) scale(.9)}}
+@keyframes swCrit{0%{opacity:0;transform:translate(-50%,8px) scale(.2) rotate(-8deg)}10%{opacity:1;transform:translate(calc(-50% + var(--ax,0px)*.2),-22px) scale(1.5) rotate(4deg)}20%{transform:translate(calc(-50% + var(--ax,0px)*.35),-28px) scale(.92,1.1) rotate(-2deg)}30%{transform:translate(calc(-50% + var(--ax,0px)*.5),-34px) scale(1.1)}78%{opacity:1;transform:translate(calc(-50% + var(--ax,0px)*.85),-50px) scale(1.05)}100%{opacity:0;transform:translate(calc(-50% + var(--ax,0px)),-60px) scale(.95)}}
+body.mo-off .sw-dim,body.mo-off .sw-puff{display:none}
 </style>
 </head>
 <body>
@@ -871,7 +886,7 @@ body.lite .scene.bg2 .b2g,body.lite .scene.bg2 .b2cl,body.lite .scene.bg2 .b2au,
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.7.0';
+const VERSION='1.7.1';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -3975,6 +3990,10 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.7.1',date:'Oct 23, 2026',title:"⚔️ Snappier Battles",sections:[
+  ['💨 Battle Motion',["Monsters breathe and hover all the time, dash straight to their target for melee hits and dash back, and wind up in place for spells, shots and heals.","Big monsters glide instead of dashing."]],
+  ['💥 Impact',["Hits flash white with a quick shudder and knockback. Multi-hit skills land one hit at a time, each with its own number.","Critical hits pop a big yellow number with a 'Critical' label and a short camera zoom. Big area skills dim the battlefield.","HP bars drop at once and a trailing bar catches up. Defeated monsters collapse in a puff of light."]],
+  ['⏩ Faster Turns',["Turns chain faster, and every motion follows your 1x / 2x / 3x speed setting. Nothing about damage or balance changed."]]]},
  {v:'1.7.0',date:'Oct 23, 2026',title:"😇 Angels & Demons 😈",sections:[
   ['🎨 115 Brand-New Painted Monsters',["50 Angels, 50 Demons and 15 special picks join the game, each in Fire, Water, Wind, Heaven and Hell versions (575 in all), with hand-painted art.","Every version has its own skills, stats by star level, and an awakened form with its own painting."]],
   ['🔁 A Fresh Roster',["The painted monsters now fill every summon, the Monsterpedia, the story, dungeons, events and the Rift Spire.","Monsters you already own become a painted monster of the same star rating and element. They keep their level, runes, glyphs, skill levels and awakening."]],
@@ -6411,7 +6430,7 @@ function slotCls(list){const bi=list.findIndex(u=>u.boss),m=new Map();
  const L=[['sfs'],['sf1','sb2'],['sf1','sbs','sf2'],['sf1','sb1','sf2','sb2']][Math.min(4,list.length)-1]||[];list.forEach((u,i)=>m.set(u,L[i]||'sb2'));return m;}
 function unitHtml(u,slot){const a=ART[u.art||u.id]||{},r=Math.random(),fly=!!a.wings||(a.body==='none'&&a.head!=='jelly'),jig=a.head==='jelly';
  return`<div class="unit el-${u.el} ${MD[u.id]&&MD[u.id].xl?'xl':''} ${u.boss?'boss':''} ${u.th?u.th.cls:''} ${u.side==='e'?'en':'al'} ${slot||''}" id="u${u.bid}" onclick="tapUnit(${u.bid})"><span class="uadv"></span>
- <div class="av"><div class="aura" style="animation-delay:${(-r*2.4).toFixed(2)}s"></div><div class="shd"></div><div class="mv"><div class="bd${fly?' fly':jig?' jig':''}" style="animation-delay:${(-r*3).toFixed(2)}s;animation-duration:${(2.3+r*.9).toFixed(2)}s"><div class="br${u.boss||u.th?' hv':''}" style="--bdl:${(-Math.random()*4).toFixed(2)}s;--bdu:${((u.boss||u.th?3.6:2.6)+Math.random()*(u.boss||u.th?.9:1)).toFixed(2)}s"><div class="fl" style="animation-delay:${(-r*1.9).toFixed(2)}s;animation-duration:${(1.7+r*.6).toFixed(2)}s"><img class="sp${paintSrc(u.art||u.id)?' pt':''}" src="${uSrc(u)}" onerror="backMiss(this)" alt="" draggable="false"><img class="sp bl${paintSrc(u.art||u.id)?' pt':''}" src="${sprSrc(u.art||u.id,'blink')}" alt="" draggable="false" style="animation-delay:${(-Math.random()*5).toFixed(2)}s;animation-duration:${(3.4+Math.random()*2.6).toFixed(2)}s"></div></div></div></div><span class="elb">${ELEM[u.el].i}</span></div>
+ <div class="av"><div class="aura" style="animation-delay:${(-r*2.4).toFixed(2)}s"></div><div class="shd"></div><div class="mv"><div class="bd${fly?' fly':jig?' jig':''}" style="animation-delay:${(-r*3).toFixed(2)}s;animation-duration:${(2.3+r*.9).toFixed(2)}s"><div class="br${u.boss||u.th||fly?' hv':''}" style="--bdl:${(-Math.random()*4).toFixed(2)}s;--bdu:${((u.boss||u.th||fly?1.8:1.1)+Math.random()*(u.boss||u.th||fly?.5:.4)).toFixed(2)}s"><div class="fl" style="animation-delay:${(-r*1.9).toFixed(2)}s;animation-duration:${(1.7+r*.6).toFixed(2)}s"><img class="sp${paintSrc(u.art||u.id)?' pt':''}" src="${uSrc(u)}" onerror="backMiss(this)" alt="" draggable="false"><img class="sp bl${paintSrc(u.art||u.id)?' pt':''}" src="${sprSrc(u.art||u.id,'blink')}" alt="" draggable="false" style="animation-delay:${(-Math.random()*5).toFixed(2)}s;animation-duration:${(3.4+Math.random()*2.6).toFixed(2)}s"></div></div></div></div><span class="elb">${ELEM[u.el].i}</span></div>
  <div class="plate ${frx(u.id,u.stars)}"><div class="pst">${'★'.repeat(Math.max(1,Math.min(6,u.stars)))}</div><div class="un">${u.boss?'⚠️':''}<b>Lv${u.lvl}</b>${u.n}</div><div class="bar hp"><i class="gh"></i><i class="hpf"></i><span class="hpt"></span></div><div class="bar atb"><i></i></div></div><div class="ufx"></div></div>`;}
 // v1.6.2 rear camera: your team is drawn from behind
 const uSrc0=(u,f)=>{const id=u.art||u.id;if(paintSrc(id)&&u.side==='p'){const b=paintBack(id);return BACK_MISS.has(b)?paintSrc(id):b;}return sprSrc(id,(u.side==='p'&&B&&B.rear?'b:':'')+(f||'idle'));}; // v1.7.0: your painted team shows its back art (front art until that exists)
@@ -6434,10 +6453,6 @@ function spawnWave(){B.enemies=B.cfg.waves[B.wave].map(sp=>mkUnit('e',sp));const
  const boss=B.enemies.some(u=>u.boss);banner(boss?'⚠️ BOSS WAVE ⚠️':`Wave ${B.wave+1}/${B.cfg.waves.length}`);renderBattle();}
 function banner(t){const f=$('#bField');if(!f)return;const el=document.createElement('div');el.className='b-banner';el.textContent=t;f.appendChild(el);setTimeout(()=>el.remove(),1200);}
 function setMsg(t){const m=$('#bMsg');if(m)m.innerHTML=t;}
-// numbers live on a field-level layer so a lunging attacker never covers them
-function float(u,text,cls,idx){const c=cardOf(u),f=$('#bField');if(!c||!f)return;const el=document.createElement('div');el.className='float '+cls;el.textContent=text;
- const r=c.getBoundingClientRect(),fr=f.getBoundingClientRect(),i=idx||0;
- el.style.animationDelay=(i*0.13)+'s';el.style.left=(r.left-fr.left+r.width/2+Math.random()*30-15)+'px';el.style.top=(r.top-fr.top+r.height*(.1+(i%3)*.09))+'px';f.appendChild(el);setTimeout(()=>el.remove(),1500+i*130);}
 /* ---- sprite life: faces + WAAPI motions (transform-only, scaled with battle speed) ---- */
 const noMo=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mvOf=u=>{const c=cardOf(u);return c&&c.querySelector('.mv');};
@@ -6448,25 +6463,58 @@ function moveAnim(u,kf,dur,opt){const m=mvOf(u);if(!m||!m.animate||noMo())return
  const a=m.animate(kf,Object.assign({duration:dur/(B?B.speed:1),easing:'ease-out'},opt||{}));a.onfinish=()=>c.classList.remove('acting');return a;}
 function hopAnim(u,h,dur){return moveAnim(u,[{transform:'none'},{transform:'scale(1.12,.86)',offset:.18},{transform:`translateY(${-(h||14)}px) scale(.92,1.1)`,offset:.5},{transform:'scale(1.14,.85)',offset:.82},{transform:'none'}],dur||440);}
 function avRect(u){const c=cardOf(u),a=c&&c.querySelector('.av');return a&&a.getBoundingClientRect();}
-// melee: wind-up → lunge (arrives at HIT) → hold for extra hits → recoil home
-function dashAnim(u,t,hits){const A=avRect(u),T=avRect(t);if(!A||!T||u===t)return castAnim(u);
- let dx=T.left+T.width/2-(A.left+A.width/2),dy=(T.bottom-A.bottom)*.9;const dist=Math.hypot(dx,dy)||1,k=Math.max(0,1-(T.width*.42)/dist);dx*=k;dy*=k;
- const ds=B&&B.rear?Math.max(.55,Math.min(1.7,T.width/A.width)):1,dm=(1+ds)/2;if(B&&B.rear){dy=(T.bottom-A.bottom)*k+T.height*.12;}const back=B&&B.rear?0:dx>0?-10:10,hold=Math.min(260,((hits||1)-1)*110),D=560+hold,o=x=>x/D;
- moveAnim(u,[{transform:'none'},{transform:`translate(${back}px,2px) scale(1.1,.88)`,offset:o(120)},{transform:`translate(${dx*.5}px,${dy*.5-16}px) scale(${.92*dm},${1.08*dm})`,offset:o(200)},
-  {transform:`translate(${dx}px,${dy}px) scale(${1.12*ds},${.9*ds})`,offset:o(272)},{transform:`translate(${dx*.96}px,${dy}px) scale(${ds})`,offset:o(310+hold)},
-  {transform:`translate(${dx*.4}px,${dy*.4-14}px) scale(${.95*(1+(ds-1)*.4)},${1.05*(1+(ds-1)*.4)})`,offset:o(430+hold)},{transform:'scale(1.08,.92)',offset:o(515+hold)},{transform:'none'}],D,{easing:'linear'});}
 // pounce: the sprite itself arcs onto the target (the canvas draws only its trail)
 function leapAnim(u,t){const A=avRect(u),T=avRect(t);if(!A||!T)return castAnim(u);const dx=T.left+T.width/2-(A.left+A.width/2),dy=T.top+T.height/2-(A.top+A.height/2);
  const ay=Math.min(0,dy)-70*VX.k,kf=[{transform:'scale(1.1,.86)',offset:0}];
  for(const p of [.2,.4,.6,.8,1]){const q=p*p,x=q*q*dx+2*(1-q)*q*dx/2,y=2*(1-q)*q*ay+q*q*dy;kf.push({transform:`translate(${x}px,${y}px) rotate(${(dx>0?1:-1)*(p<1?-12+p*30:0)}deg)`,offset:p*HIT/720});}
  kf.push({transform:`translate(${dx*.75}px,${dy*.6-36}px) scale(.95,1.05)`,offset:(HIT+180)/720},{transform:'scale(1.12,.88)',offset:(HIT+380)/720},{transform:'none',offset:1});moveAnim(u,kf,720,{easing:'linear'});}
-// ranged / AoE / support: lean into the cast
-function castAnim(u,sup){const d=u.side==='p'?1:-1;if(!sup&&B&&B.rear)return moveAnim(u,[{transform:'none'},{transform:`translateY(${4*d}px) scale(1.07,.9)`,offset:.3},{transform:`translateY(${-16*d}px) scale(.95,1.07)`,offset:.55},{transform:`translateY(${-6*d}px)`,offset:.75},{transform:'none'}],560);return sup?hopAnim(u,18,520):moveAnim(u,[{transform:'none'},{transform:`translate(${-7*d}px,1px) scale(1.06,.92) rotate(${-4*d}deg)`,offset:.3},{transform:`translate(${9*d}px,-6px) scale(.96,1.06) rotate(${5*d}deg)`,offset:.55},{transform:`translate(${4*d}px,0)`,offset:.75},{transform:'none'}],560);}
-function hitAnim(t){const c=cardOf(t);if(!c)return;const s=B?B.speed:1,fl=c.querySelector('.fl');
- if(fl&&fl.animate)fl.animate([{filter:'brightness(2.6) saturate(.3)'},{filter:'brightness(1.5)',offset:.4},{filter:'none'}],{duration:260/s});
- setFace(t,'hit',420);if(t.hp>0&&!t._sink){const d=t.side==='p'?-1:1,rr=B&&B.rear;moveAnim(t,[{transform:'none'},{transform:rr?`translate(0,${-d*10}px) scale(1.12,.84)`:`translate(${d*12}px,-3px) rotate(${d*7}deg) scale(.96,1.03)`,offset:.22},{transform:`translate(${d*5}px,0) rotate(${d*2}deg)`,offset:.6},{transform:'none'}],360);}} // WAAPI: no forced reflow
-function koAnim(t){setFace(t,'ko');const m=mvOf(t);if(!m||!m.animate||noMo())return;const d=t.side==='p'?1:-1; // slump toward the middle of the field (never off-screen)
- m.animate([{transform:'none'},{transform:`translate(${d*8}px,-14px) rotate(${d*8}deg)`,offset:.3},{transform:`translate(${d*2}px,4px) rotate(${d*16}deg) scale(.94,.62)`}],{duration:640/(B?B.speed:1),easing:'cubic-bezier(.5,0,.8,.6)',fill:'forwards'});}
+/* ===== v1.7.1 SW-style battle motion (visual only; every duration is divided by B.speed) ===== */
+const SWT={turnPause:280,between:200,after:520,afterMulti:780,dash:200,glide:460,back:210,backBig:420,windup:300,windupSup:240,hitGap:150,flash:100,knock:300,crit:760,die:620,dimTail:320};
+const swSp=()=>B&&B.speed||1;
+function swIsBig(u){const d=MD[u.id];return !!(u.boss||(d&&d.xl));}
+// v1.7.1: painted Attack / Defense / HP monsters without their own VFX recipe hit single targets up close (basic attack; HP role also its 2nd skill)
+function swMelee(u,sk){if(SKVFX[sk.n]||sk.t!=='e'||!(sk.m>0)||sk.ringsaw||sk.motion)return false;const d=MD[u.id],r=d&&d.role;if(!d||!d.painted||!/^(Attack|Defense|HP)$/.test(r||''))return false;const i=u.skills.indexOf(sk);return i===0||(r==='HP'&&i===1);}
+function swBig(sk){return (sk.t==='ae'&&sk.m>0)||(sk.cd>=4&&sk.m>0)||(sk.t==='aa'&&sk.cd>=5);}
+function swLayer(cls){const f=$('#bField');if(!f)return null;const el=document.createElement('div');el.className=cls;const rf=f.querySelector('.rfwrap');if(rf&&rf.nextSibling)f.insertBefore(el,rf.nextSibling);else f.appendChild(el);return el;}
+function swDim(ms){if(noMo()||S.settings.vfx===false)return;const el=swLayer('sw-dim');if(!el||!el.animate)return el&&el.remove();const s=swSp(),D=Math.max(300,ms)/s;
+ el.animate([{opacity:0},{opacity:1,offset:Math.min(.4,160/s/D)},{opacity:1,offset:Math.max(.5,1-260/s/D)},{opacity:0}],{duration:D,easing:'ease-in-out'}).onfinish=()=>el.remove();}
+// crit / big-hit camera: eased push-in toward the target + dim, then ease back. Uses the separate `scale` property so it never fights the shake (transform).
+function swCam(t){const f=$('#bField'),c=cardOf(t);if(!f||!c||!f.animate||noMo()||S.settings.vfx===false||(B&&B.speed>3))return;const now=performance.now();if(now-(B._swCam||0)<SWT.crit/swSp())return;B._swCam=now;
+ const r=c.getBoundingClientRect(),fr=f.getBoundingClientRect();f.style.transformOrigin=`${(r.left-fr.left+r.width/2).toFixed(0)}px ${(r.top-fr.top+r.height/2).toFixed(0)}px`;
+ const s=Math.min(swSp(),1.6),D=SWT.crit/s; // crit cam stays readable at 2x/3x (eased, never jerky)
+ f.animate([{scale:'1'},{scale:'1.09',offset:.28,easing:'ease-in-out'},{scale:'1.09',offset:.5,easing:'cubic-bezier(.4,0,.2,1)'},{scale:'1'}],{duration:D,easing:'cubic-bezier(.2,.7,.3,1)'});swDim(SWT.crit*.9*swSp()/s);}
+// melee: tiny crouch, eased dash straight to the target (no walk), strike squash, hold for extra hits, eased dash home. Big monsters glide.
+function dashAnim(u,t,hits,big){const A=avRect(u),T=avRect(t);if(!A||!T||u===t)return castAnim(u);
+ let dx=T.left+T.width/2-(A.left+A.width/2),dy=(T.bottom-A.bottom)*.9;const dist=Math.hypot(dx,dy)||1,k=Math.max(0,1-(T.width*.42)/dist);dx*=k;dy*=k;
+ const ds=B&&B.rear?Math.max(.55,Math.min(1.7,T.width/A.width)):1;if(B&&B.rear){dy=(T.bottom-A.bottom)*k+T.height*.12;}
+ const imp=big?SWT.glide+HIT-SWT.dash:HIT,go=big?SWT.glide:SWT.dash,st=imp-go,hold=Math.min(300,((hits||1)-1)*SWT.hitGap),bk=big?SWT.backBig:SWT.back,D=imp+60+hold+bk+70,o=x=>Math.min(1,x/D),cr=big?'scale(1.04,.96)':`translate(${dx>0?-8:8}px,2px) scale(1.08,.9)`;
+ moveAnim(u,[{transform:'none',easing:'ease-in'},{transform:cr,offset:o(st*.7),easing:'linear'},{transform:cr,offset:o(st),easing:big?'cubic-bezier(.45,0,.25,1)':'cubic-bezier(.15,.7,.25,1)'},
+  {transform:`translate(${dx}px,${dy}px) scale(${1.1*ds},${.9*ds})`,offset:o(imp),easing:'ease-out'},{transform:`translate(${dx*.97}px,${dy}px) scale(${ds})`,offset:o(imp+60+hold),easing:'cubic-bezier(.4,0,.2,1)'},
+  {transform:'scale(1.06,.94)',offset:o(imp+60+hold+bk),easing:'ease-out'},{transform:'none'}],D,{easing:'linear'});}
+// ranged / magic / AoE / heal: stay in place; wind-up (lean back + scale pulse + glow), release snap, settle
+function castAnim(u,sup,W){W=W||SWT.windup;const d=u.side==='p'?1:-1,rr=B&&B.rear,D=W+HIT+180,o=x=>Math.min(1,x/D),c=cardOf(u),fl=c&&c.querySelector('.fl');
+ const lean=rr?`translateY(${5*d}px) scale(1.06,.93)`:`translate(${-6*d}px,1px) scale(1.06,.93) rotate(${-4*d}deg)`,rel=rr?`translateY(${-12*d}px) scale(.96,1.06)`:`translate(${8*d}px,-5px) scale(.96,1.06) rotate(${4*d}deg)`;
+ if(fl&&fl.animate&&!noMo())fl.animate([{filter:'none'},{filter:`brightness(1.35) drop-shadow(0 0 10px ${ELEM[u.el]?ELEM[u.el].c:'#ffd166'})`,offset:o(W)},{filter:'none'}],{duration:(W+260)/swSp(),easing:'ease-in-out'});
+ return moveAnim(u,sup?[{transform:'none'},{transform:'scale(1.08,.92)',offset:o(W*.5)},{transform:'translateY(-10px) scale(1.05,1.05)',offset:o(W)},{transform:'translateY(-14px) scale(.97,1.05)',offset:o(W+120)},{transform:'scale(1.06,.94)',offset:o(W+HIT)},{transform:'none'}]
+  :[{transform:'none',easing:'ease-out'},{transform:lean,offset:o(W*.75),easing:'ease-in-out'},{transform:`${lean} scale(1.03)`,offset:o(W),easing:'cubic-bezier(.2,.8,.3,1)'},{transform:rel,offset:o(W+90),easing:'ease-out'},{transform:'translate(0,0) scale(1.02,.98)',offset:o(W+HIT)},{transform:'none'}],D,{easing:'linear'});}
+// hit: white flash ~100ms + shudder + small knockback easing back ~200ms; multi-hits play 150ms apart
+function hitAnim(t){const c=cardOf(t);if(!c)return;const now=performance.now();if(now-(t._hqT||0)>30)t._hq=0;t._hqT=now;const i=t._hq++;
+ const go=()=>{if(!B||cardOf(t)!==c)return;const s=swSp(),fl=c.querySelector('.fl');
+  if(fl&&fl.animate)fl.animate([{filter:'brightness(0) invert(1)'},{filter:'brightness(0) invert(1)',offset:.6},{filter:'none'}],{duration:(SWT.flash+60)/s});
+  setFace(t,'hit',420);if(t.hp>0&&!t._sink&&!noMo()){const d=t.side==='p'?-1:1,rr=B.rear,kb=rr?`translate(0,${-d*9}px)`:`translate(${d*12}px,-2px)`,kb2=rr?`translate(3px,${-d*8}px)`:`translate(${d*9}px,1px)`;
+   moveAnim(t,[{transform:'none',easing:'ease-out'},{transform:kb+' scale(.95,1.04)',offset:.15},{transform:kb2+' scale(1.03,.97)',offset:.25},{transform:kb+' scale(.98,1.02)',offset:.35,easing:'cubic-bezier(.3,0,.2,1)'},{transform:'none'}],SWT.knock);}};
+ if(i)setTimeout(go,i*SWT.hitGap/swSp());else go();}
+// death: flash, collapse and shrink to nothing with a puff of light (slot stays empty; revive() cancels this)
+function koAnim(t){setFace(t,'ko');const c=cardOf(t),m=mvOf(t);if(!c||!m||!m.animate||noMo())return;const s=swSp(),fl=c.querySelector('.fl'),dl=(t._hq>1?(t._hq-1)*SWT.hitGap:0)/s;
+ if(fl&&fl.animate)fl.animate([{filter:'brightness(0) invert(1)'},{filter:'brightness(0) invert(1)',offset:.3},{filter:'brightness(1.6)'}],{duration:SWT.die*.5/s,delay:dl});
+ m.animate([{transform:'none',opacity:1},{transform:'translateY(-4px) scale(1.08,.94)',opacity:1,offset:.18},{transform:'translateY(2px) scale(1.15,.45)',opacity:.85,offset:.55},{transform:'translateY(4px) scale(.15,.05)',opacity:0}],{duration:SWT.die/s,delay:dl,easing:'cubic-bezier(.5,0,.7,.4)',fill:'forwards'});
+ const av=c.querySelector('.av');if(av&&S.settings.vfx!==false){const p=document.createElement('div');p.className='sw-puff';p.style.animationDuration=(SWT.die/s)+'ms';p.style.animationDelay=(dl+SWT.die*.25/s)+'ms';av.appendChild(p);setTimeout(()=>p.remove(),dl+SWT.die*1.4/s);}}
+// numbers live on a field-level layer so a lunging attacker never covers them; pop + arc up + stack; crits big yellow with a 'Critical' label
+function float(u,text,cls,idx){const c=cardOf(u),f=$('#bField');if(!c||!f)return;const el=document.createElement('div');el.className='float '+cls;el.textContent=text;
+ const r=c.getBoundingClientRect(),fr=f.getBoundingClientRect(),i=idx||0,s=swSp(),num=/^(crit|dmg|glance|heal|dot)/.test(cls),crit=/^crit/.test(cls);
+ if(crit){const lb=document.createElement('small');lb.className='clbl';lb.textContent='Critical';el.prepend(lb);swCam(u);}
+ if(num){el.style.setProperty('--ax',((Math.random()<.5?-1:1)*(10+Math.random()*16)).toFixed(0)+'px');el.style.animationDuration=(1200/Math.max(1,s*.75)).toFixed(0)+'ms';}
+ el.style.animationDelay=(i*SWT.hitGap/1000/s).toFixed(3)+'s';el.style.left=Math.max(crit?124:56,Math.min(fr.width-(crit?124:56),r.left-fr.left+r.width/2+Math.random()*20-10))+'px';if(num&&r.left-fr.left+r.width/2<fr.width*.3)el.style.setProperty('--ax',Math.abs(parseFloat(el.style.getPropertyValue('--ax'))||14)+'px');else if(num&&r.left-fr.left+r.width/2>fr.width*.7)el.style.setProperty('--ax',-Math.abs(parseFloat(el.style.getPropertyValue('--ax'))||14)+'px');el.style.top=(r.top-fr.top+r.height*(.1+(i%3)*.09))+'px';f.appendChild(el);setTimeout(()=>el.remove(),1500+i*SWT.hitGap);}
 // small screen shake on big hits (off for reduced motion, effects-off and fast-forward)
 function shakeField(p){const f=$('#bField');if(!f||!f.animate||noMo()||!B||B.speed>3||S.settings.vfx===false)return;
  f.animate([{transform:'none'},{transform:`translate(${-p}px,${p*.6}px)`},{transform:`translate(${p}px,${-p*.4}px)`},{transform:`translate(${-p*.5}px,${p*.3}px)`},{transform:'none'}],{duration:260/B.speed,easing:'linear'});}
@@ -6527,7 +6575,7 @@ function startTurn(u){B.tn=(B.tn||0)+1;if(B.tn>TURN_CAP&&!B.over){B.timeUp=1;ban
  if(u.fx.some(f=>f.id==='stun'||f.id==='freeze')){const fz=!u.fx.some(f=>f.id==='stun');float(u,fz?'Frozen! 🧊':'Stunned! 💫','info');setMsg(`${spi(u.id)} ${u.n} is ${fz?'frozen solid':'stunned'}!`);later(()=>endTurn(u),750);return;}
  setCam(u);hopAnim(u);
  if(u.side==='p'&&!B.auto){B.awaiting=true;B.sel=0;setMsg(`${spi(u.id)} ${u.n}'s turn!`);renderBattle();return;}
- later(()=>aiAct(u),u.side==='p'?350:600);}
+ later(()=>aiAct(u),SWT.turnPause);}
 function endTurn(u){if(!B||B.over)return;u.atb=u._ga||0;u._ga=0;if(u.glow)glowPulse(u);
  if(!u.bonus){u.fx.forEach(f=>{if(f.fresh)f.fresh=false;else f.t--;});u.fx=u.fx.filter(f=>f.t>0);} // a bonus turn is "free": buffs don't tick
  const wasBonus=u.bonus;u.bonus=false;B.awaiting=false;B.actor=null;const h=B.reap;B.reap=null;renderBattle();
@@ -6539,14 +6587,14 @@ function endTurn(u){if(!B||B.over)return;u.atb=u._ga||0;u._ga=0;if(u.glow)glowPu
  if(u.owed>0&&u.hp>0&&foesOf(u).length){if(u.chain<MAXCHAIN){u.owed--;u.chain++;later(()=>bonusTurn(u),380);return;}u.owed=0;}
  if(B.wave>=B.cfg.waves.length-1&&!foesOf(u).length)u.owed=0; // final wave cleared: victory, nothing to carry
  if(!wasBonus&&!(u.owed>0)&&u.hp>0&&foesOf(u).length&&((u.violent&&Math.random()<0.18)||(u.mech&&u.mech.fast&&Math.random()<0.3))){later(()=>bonusTurn(u,u.violent?'violent':'fast'),380);return;} // Tempo set (id 'violent') / boss frenzy: never chains
- later(nextTurn,320);}
+ later(nextTurn,SWT.between);}
 const MAXCHAIN=8,MAXOWED=2;
 // kill passive ('reap'): extra turn bookkeeping lives in endTurn (owed / chain)
 function bonusTurn(u,kind){if(!B||B.over)return;if(u.hp<=0||!foesOf(u).length){if(u.hp>0&&!kind)u.owed++;later(nextTurn,100);return;}
  B.actor=u;u.bonus=true;u.atb=100;S.stats.bonusTurns=(S.stats.bonusTurns||0)+1;if(kind){float(u,kind==='violent'?'🌀 Tempo: extra turn!':'⚡ Frenzy: acts again!','info',0);setMsg(`${spi(u.id)} ${u.n} ${kind==='violent'?'acts again (Tempo)':'is too fast: it acts again'}!`);}else{float(u,TX.extra,'crim',0);setMsg(TX.extraMsg(u));}
  setCam(u);hopAnim(u,20);renderBattle();
  if(u.side==='p'&&!B.auto){B.awaiting=true;B.sel=0;renderBattle();return;}
- later(()=>aiAct(u),u.side==='p'?380:600);}
+ later(()=>aiAct(u),SWT.turnPause);}
 function validTargets(u,sk){switch(sk.t){case'e':case'ae':return foesOf(u);case'a':case'aa':return friendsOf(u);default:return[u];}}
 const isHealSkill=sk=>sk.heal&&sk.t!=='s';
 function aiAct(u){if(!B||B.over||u.hp<=0)return;const foes=foesOf(u),friends=friendsOf(u);if(!foes.length){endTurn(u);return;}
@@ -6574,14 +6622,18 @@ function tapUnit(bid){if(!B)return;const t=allUnits().find(x=>x.bid===bid);if(!t
  const u=B.actor;const sk=u.skills[B.sel];
  if(!validTargets(u,sk).includes(t)){toast((sk.t==='e'||sk.t==='ae'?'Pick a glowing enemy 🎯':'Pick a glowing ally 💚')+'<br>'+unitInfo(t));return;}useSkill(u,B.sel,t);}
 function useSkill(u,si,tgt){B.awaiting=false;const sk=u.skills[si];u.cds[si]=sk.every?0:sk.cd;setMsg(`${spi(u.id)} ${u.n} uses <span style="color:${u.th&&(sk.cd||sk.every)?u.th.sc:'#ffd166'}">${sk.i} ${sk.n}</span>!`);
- renderBattle();skillMotion(u,sk,tgt);vxPlay(u,sk,vxTargets(u,sk,tgt));if(sk.cast)sk.cast(u,foesOf(u));
- later(()=>{resolveSkill(u,sk,tgt);renderBattle();later(()=>endTurn(u),sk.after||(sk.h>3?900:600));},sk.hitAt||HIT);}
+ renderBattle();const W=skillMotion(u,sk,tgt)||0,vt=vxTargets(u,sk,tgt);if(W)later(()=>vxPlay(u,sk,vt),W);else vxPlay(u,sk,vt);if(sk.cast)sk.cast(u,foesOf(u));
+ if(swBig(sk))swDim(W+(sk.hitAt||HIT)+SWT.dimTail);
+ later(()=>{resolveSkill(u,sk,tgt);renderBattle();later(()=>endTurn(u),sk.after||(sk.h>3?SWT.afterMulti:SWT.after));},W+(sk.hitAt||HIT));}
 // pick the body motion that matches the skill's VFX recipe
 function skillMotion(u,sk,tgt){const rc=(SKVFX[sk.n]||[]).map(r=>r[0]),off=sk.m>0;
- if(sk.motion){sk.motion(u,tgt);return;}
- setFace(u,off?'attack':'cheer',HIT+560);
+ if(sk.motion){sk.motion(u,tgt);return 0;}
+ if(sk.ringsaw||rc.includes('ringsaw')){castAnim(u,!off,100);setFace(u,off?'attack':'cheer',HIT+560);return 0;} // Halo Saw keeps its own timing (hitAt)
+ const big=swIsBig(u);
  const t=sk.t==='e'&&tgt&&tgt.hp>0&&tgt.side!==u.side?tgt:null;
- if(t&&rc.includes('dive'))leapAnim(u,t);else if(t&&off&&rc.some(k=>k==='slash'||k==='bite'||k==='bonk')&&!rc.includes('proj')&&!rc.includes('beam'))dashAnim(u,t,sk.h);else castAnim(u,!off);}
+ if(t&&rc.includes('dive')){setFace(u,'attack',HIT+560);leapAnim(u,t);return 0;}
+ if(t&&off&&((rc.some(k=>k==='slash'||k==='bite'||k==='bonk')&&!rc.includes('proj')&&!rc.includes('beam'))||swMelee(u,sk))){const W=big?SWT.glide-SWT.dash:0;setFace(u,'attack',W+HIT+560);dashAnim(u,t,sk.h,big);return W;}
+ const W=off?SWT.windup:SWT.windupSup;setFace(u,off?'attack':'cheer',W+HIT+560);castAnim(u,!off,W);return W;}
 function resolveSkill(u,sk,tgt){const foes=foesOf(u),friends=friendsOf(u);
  if(!sk.selfAfter)(sk.self||[]).forEach(([id,t])=>addFx(u,u,id,t,100)); // selfAfter: self-buff lands after the damage
  if(sk.selfHeal&&u.hp>0)heal(u,Math.round(u.maxHp*sk.selfHeal)); // v1.5.0
@@ -6720,7 +6772,8 @@ function vxShake(px){const f=$('#bField');if(!f||!f.animate||VX.lite)return;cons
  f.animate([{transform:'none'},{transform:`translate(${-px}px,${px/2}px)`},{transform:`translate(${px}px,${-px/2}px)`},{transform:`translate(${-px/2}px,${px/3}px)`},{transform:'none'}],{duration:320/s});}
 function vxPos(u){const c=cardOf(u),av=c&&c.querySelector('.av');if(!av||!VX.cv)return null;const r=av.getBoundingClientRect(),b=VX.cv.getBoundingClientRect();
  return{x:r.left-b.left+r.width/2,y:r.top-b.top+r.height/2,r:Math.max(14,r.width/2)};}
-function skillVfx(u,sk){const v=SKVFX[sk.n];if(v)return v;const c=ELEM[u.el].c;// generic fallback (all shipped skills have their own entry)
+function skillVfx(u,sk){const v=SKVFX[sk.n];if(v)return v;const c=ELEM[u.el].c;if(swMelee(u,sk))return[['slash',{n:Math.max(1,sk.h||1),gap:SWT.hitGap,c,c2:'#ffffff',r:1.2}]]; // v1.7.1 melee roles strike up close
+ // generic fallback (all shipped skills have their own entry)
  return sk.heal?[['ring',{c:'#7cff9e',plus:'💚'}]]:sk.m>0?(sk.t==='ae'?[['burst',{c,rays:10}]]:[['proj',{s:'orb',c}]]):[['aura',{c}]];}
 function vxTargets(u,sk,tgt){return sk.t==='ae'?foesOf(u):sk.t==='aa'?friendsOf(u):sk.t==='s'?[u]:[tgt||u];}
 function vxPlay(u,sk,tgts){try{if(!VX.cv||!B||B.speed>3||document.hidden)return;const f=vxPos(u);if(!f)return;const T=tgts.map(t=>{const p=vxPos(t);if(p)p.u=t;return p;}).filter(Boolean);if(!T.length)T.push(f);
