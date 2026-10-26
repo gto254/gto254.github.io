@@ -886,7 +886,7 @@ body.mo-off .sw-dim,body.mo-off .sw-puff{display:none}
    RIFT TAMERS — an original monster-summoning, turn-based RPG
    All monsters, names, and art (emoji + CSS) are original to this game.
    ===================================================================== */
-const VERSION='1.7.1';
+const VERSION='1.7.2';
 const SAVE_KEY='riftTamers.save.v1';
 
 /* ---------- utils ---------- */
@@ -3898,7 +3898,9 @@ const STORYD=[
  {n:'Hell',k:'x',lv:45,em:[2.6,1.75,2.1],bm:[2.2,1.45,1.6],spd:20,rune:2,gold:3.5,gems:3,c:'red',mech:2},
 ];
 // v1.4.1 story toughness per difficulty x chapter (area): [HP multipliers],[ATK multipliers]. Longer fights, not one-shots.
-const STORY_SC=[[[1,1.05,1.55,2],[1,1,1.08,1.12]],[[2.1,2.15,2.2,2.3],[1.1,1.1,1.12,1.15]],[[2.4,2.3,2,1.8],[1.05,1.05,1,1]]];
+const STORY_SC=[[[1,1.05,1.35,1.6],[1,1,1.04,1.06]],[[2.1,2.15,2.2,2.3],[1.1,1.1,1.12,1.15]],[[2.4,2.3,2,1.8],[1.05,1.05,1,1]]];
+// v1.7.2: story-only easing per difficulty (Normal, Hard, Hell). Rewards unchanged (they use level, which is unchanged).
+const STORY_EASE=[{hp:.7,atk:.7,def:.9,spd:-4,boss:.85},{hp:.85,atk:.85,def:.93,spd:-2,boss:.92},{hp:1,atk:1,def:1,spd:0,boss:1}];
 const storySc=(a,d)=>{const T=STORY_SC[d||0]||STORY_SC[0];return[T[0][a]||T[0][T[0].length-1],T[1][a]||T[1][T[1].length-1]];};
 // Rift Spire: 100 floors (+ Hard after floor 100), a boss every 10th floor, monthly reset.
 const TOA_BOSS=[
@@ -3990,6 +3992,8 @@ const TIPS=[
  "Weekends open every event dungeon at once. Plan your snacks accordingly.",
 ];
 const PATCHES=[
+ {v:'1.7.2',date:'Oct 26, 2026',title:"🗺️ Easier Story",sections:[
+  ['🗺️ Story Mode',["Story mode is now easier: Normal enemies have about 30% less HP and ATK, a bit less DEF and SPD, and late chapters and bosses ramp up more gently.","Hard story is about 15% easier. Hell story, dungeons, Rift Spire and raids are unchanged, and all rewards stay the same."]]]},
  {v:'1.7.1',date:'Oct 23, 2026',title:"⚔️ Snappier Battles",sections:[
   ['💨 Battle Motion',["Monsters breathe and hover all the time, dash straight to their target for melee hits and dash back, and wind up in place for spells, shots and heals.","Big monsters glide instead of dashing."]],
   ['💥 Impact',["Hits flash white with a quick shudder and knockback. Multi-hit skills land one hit at a time, each with its own number.","Critical hits pop a big yellow number with a 'Critical' label and a short camera zoom. Big area skills dim the battlefield.","HP bars drop at once and a trailing bar catches up. Defeated monsters collapse in a puff of light."]],
@@ -5845,10 +5849,10 @@ function renderAdventure(){const d=UI.sd||0;const dchips=`<div class="chips sdif
  const a=UI.area,A=AREAS[a];const offs=[-70,10,70,0,-40];const M=campMap(d);
  return`<div class="row-btns" style="margin:0 0 10px"><button class="btn ghost sm" onclick="UI.area=null;render()">← Map</button></div><div class="area" style="background:${A.bg};cursor:default"><span class="bossi">${sprImg(A.boss)}</span><h3>${A.i} ${A.n}</h3><p style="font-size:14px;max-width:75%">${A.desc}</p><p style="font-weight:800;margin-top:4px">⭐ ${areaStars(a,d)}/15 · <span class="tag ${STORYD[d].c}">${STORYD[d].n}</span></p></div>
  <div class="path">${[0,1,2,3,4].map(s=>{const un=stageUnlocked(a,s,d),st=M[a+'-'+s]||0;const isNext=un&&!st;return`<div class="node ${s===4?'boss':''} ${st?'cleared':''} ${un?'':'locked'} ${isNext?'next':''}" id="node${a}-${s}" style="transform:translateX(${offs[s]}px)" onclick="${un?`openStage(${a},${s},${d})`:`toast('🔒 Clear the previous stage first!')`}">${s===4?sprImg(A.boss):`<span>${a+1}-${s+1}</span>`}<span class="stars">${st?'★'.repeat(st)+'<span style="color:#0005">'+'★'.repeat(3-st)+'</span>':''}</span></div>`;}).join('')}</div>`;}
-function campaignCfg(a,s,d){d=d||0;const D=STORYD[d];const A=AREAS[a];const rng=seeded(7919+a*131+s*17+d*977);const lvl=Math.min(d===2?70:65,A.lv+(a===0?Math.round(s*1.5):s*2)+D.lv);const extra=a>=3?1:0,xs=d?Math.min(6,2+d+Math.floor(a/2)):0;const nW=s===4||d?3:2;const waves=[];const [SH,SA]=storySc(a,d);
+function campaignCfg(a,s,d){d=d||0;const D=STORYD[d];const A=AREAS[a];const rng=seeded(7919+a*131+s*17+d*977);const lvl=Math.min(d===2?70:65,A.lv+(a===0?Math.round(s*1.5):s*2)+D.lv);const extra=a>=3?1:0,xs=d?Math.min(6,2+d+Math.floor(a/2)):0;const nW=s===4||d?3:2;const waves=[];const [SH0,SA0]=storySc(a,d);const E=STORY_EASE[d]||STORY_EASE[2];const SH=SH0*E.hp,SA=SA0*E.atk,SD=E.def;
  for(let w=0;w<nW;w++){const bossW=s===4&&w===nW-1;const n=bossW?2:Math.min(4,2+(s>=1?1:0)+(s>=3&&w===nW-1?1:0));const wave=[];
-  for(let i=0;i<n;i++){const id=A.pool[Math.floor(rng()*A.pool.length)];wave.push(d?{id,lvl:lvl+(w>0?1:0),stars:Math.max(MD[id].rar,xs),em:[D.em[0]*SH,D.em[1]*SA,D.em[2]],spd:D.spd}:{id,lvl:lvl+(w>0?1:0),stars:Math.min(6,MD[id].rar+extra),em:[SH,SA,1]});}
-  if(bossW)wave.splice(1,0,d?{id:A.boss,lvl:lvl+2,stars:Math.max(MD[A.boss].rar,xs),boss:1,hpm:(a===0?3.5:4.5)*D.bm[0],em:[SH,D.em[1]*D.bm[1]*SA,D.em[2]*D.bm[2]],spd:D.spd+6,mech:storyBossMech(a,d),res:20+d*15,acc:d*15}:{id:A.boss,lvl:lvl+2,stars:MD[A.boss].rar,boss:1,hpm:a===0?3.5:4.5,em:[SH,SA,1]});waves.push(wave);}
+  for(let i=0;i<n;i++){const id=A.pool[Math.floor(rng()*A.pool.length)];wave.push(d?{id,lvl:lvl+(w>0?1:0),stars:Math.max(MD[id].rar,xs),em:[D.em[0]*SH,D.em[1]*SA,D.em[2]*SD],spd:D.spd+E.spd}:{id,lvl:lvl+(w>0?1:0),stars:Math.min(6,MD[id].rar+extra),em:[SH,SA,SD],spd:E.spd});}
+  if(bossW)wave.splice(1,0,d?{id:A.boss,lvl:lvl+2,stars:Math.max(MD[A.boss].rar,xs),boss:1,hpm:(a===0?3.5:4.5)*D.bm[0]*E.boss,em:[SH,D.em[1]*D.bm[1]*SA,D.em[2]*D.bm[2]*SD],spd:D.spd+6+E.spd,mech:storyBossMech(a,d),res:20+d*15,acc:d*15}:{id:A.boss,lvl:lvl+2,stars:MD[A.boss].rar,boss:1,hpm:(a===0?3.5:4.5)*E.boss,em:[SH,SA,SD],spd:E.spd});waves.push(wave);}
  return{type:'campaign',a,s,d,lvl,waves,name:`${d?STORYD[d].n+' · ':''}${A.n} ${a+1}-${s+1}${s===4?' (BOSS)':''}`,bg:A.bg};}
 function eventCfg(ei,tier){const E=EVENTS[ei];const T=TIERS[tier];const rng=seeded(555+ei*71+tier*13+dayNum());const waves=[];
  for(let w=0;w<3;w++){const wave=[];const n=w===2?2:3;for(let i=0;i<n;i++){const id=E.pool[Math.floor(rng()*E.pool.length)];wave.push({id,lvl:T.lv+w,stars:Math.min(6,MD[id].rar+(tier===2?1:0))});}
